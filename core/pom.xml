@@ -12,6 +12,6 @@
 
     <artifactId>core</artifactId>
     <name>POC Core</name>
-    <description>Centrale module</description>
+    <description>Central module</description>
 
 </project>

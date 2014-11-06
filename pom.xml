@@ -8,7 +8,7 @@
     <artifactId>poc</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>POC Base</name>
-    <description>Web probeersels</description>
+    <description>Proof of Concept</description>
     <packaging>pom</packaging>
     <inceptionYear>2014</inceptionYear>
 
@@ -20,8 +20,8 @@
 
 	<modules>
         <module>core</module>
-        <module>web</module>
         <module>rest</module>
+        <module>web</module>
     </modules>
 
     <properties>
@@ -30,11 +30,28 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j</artifactId>
+        </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
