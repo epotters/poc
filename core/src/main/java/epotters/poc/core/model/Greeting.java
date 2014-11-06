@@ -10,6 +10,10 @@ public class Greeting {
     this.content = content;
   }
 
+  public void greet(Person person) {
+
+  }
+
   public long getId() {
     return id;
   }
