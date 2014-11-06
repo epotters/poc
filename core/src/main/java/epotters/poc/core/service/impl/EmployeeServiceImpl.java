@@ -20,7 +20,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   public List<Employee> getEmployees() {
     return new ArrayList<Employee>();
-  };
+  }
 
 
 }

@@ -9,12 +9,15 @@ import epotters.poc.core.service.PersonService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 
 /**
  * Created by epotters on 9-10-2014.
  */
+
+@Entity
 public class PersonServiceImpl implements PersonService {
 
   private PersonDao personDao;
@@ -29,7 +32,8 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public Person getPerson(Long id) {
-    return null;
+
+    return personDao.getPerson(id);
   }
 
 
@@ -54,4 +58,5 @@ public class PersonServiceImpl implements PersonService {
   public void setPersonDao(PersonDao personDao) {
     this.personDao = personDao;
   }
+
 }
