@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJarLocking="false" antiResourceLocking="false"
-     override="true" privileged="false" docBase="../abzwebapps/melder-dossier-web-1.0.war">
+     override="true" privileged="false" docBase="../abzwebapps/poc-web-1.0.war">
 
 </Context>

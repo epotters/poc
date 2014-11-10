@@ -16,8 +16,8 @@ public class Company {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  Long id;
-  String name;
+  private Long id;
+  private String name;
 
 
   public Long getId() {
