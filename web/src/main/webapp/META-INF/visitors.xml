@@ -2,47 +2,4 @@
 <Context antiJarLocking="false" antiResourceLocking="false"
      override="true" privileged="false" docBase="../abzwebapps/melder-dossier-web-1.0.war">
 
-
-    <!--
-        <Realm className="org.apache.catalina.realm.JNDIRealm" debug="99"
-            connectionURL="ldap://ADP-BSP.NL:389"
-
-            userBase="OU=Internen,OU=Standaard,OU=Gebruikers,DC=ADP-BSP,DC=NL"
-            userSubtree="false"
-
-            roleBase="OU=ABZ Groups,DC=ADP-BSP,DC=NL"
-            userRoleName="member"
-            roleName="cn"
-            roleSearch="(member={0})"
-            roleSubtree="false"
-
-        />
-
-
-
-
-    samaccountname: awollaars
-    userprincipalname: awollaars@ADP-BSP.NL
-
-
-            <Resource name="mail/MelderDossier" type="javax.mail.Session" auth="Container"
-                mail.smtp.host="abzzste1.adp-bsp.nl"
-                mail.transport.protocol="smtp"
-                mail.port="25"
-                mail.smtp.from="no-reply.mobielschademelden.dev@abz.nl"
-             />
-
-            <Resource name="jdbc/MelderDossier" type="javax.sql.DataSource" auth="Container"
-                driverClassName="oracle.jdbc.OracleDriver"
-                url="jdbc:oracle:thin:@oracle01.adp-bsp.nl:1521:ABZ2DEV"
-                username="osupport_user"
-                password="osupport_user"
-                maxActive="15"
-                maxIdle="1"
-                maxWait="10000"
-                validationQuery="select count(*) from dual"
-            />
-
-            -->
-
 </Context>

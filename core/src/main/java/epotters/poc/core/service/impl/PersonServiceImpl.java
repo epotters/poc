@@ -3,9 +3,7 @@ package epotters.poc.core.service.impl;
 
 import epotters.poc.core.dao.PersonDao;
 import epotters.poc.core.model.Person;
-
 import epotters.poc.core.service.PersonService;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
