@@ -22,7 +22,7 @@
         <module>rest</module>
         <module>web</module>
 
-        <module>selenium</module>
+        <!-- module>selenium</module -->
         <module>evernote</module>
     </modules>
 
