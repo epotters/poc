@@ -18,7 +18,7 @@
 
 
     <properties>
-        <start-class>rest.Application</start-class>
+        <start-class>poc.rest.Application</start-class>
     </properties>
 
 
