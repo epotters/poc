@@ -1,4 +1,4 @@
-package poc.rest.repository;
+package poc.core.repository;
 
 
 import poc.core.model.Person;

@@ -2,7 +2,7 @@ package poc.rest;
 
 
 import poc.core.model.Person;
-import poc.rest.repository.PersonRepository;
+import poc.core.repository.PersonRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -27,6 +27,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class Application extends SpringBootServletInitializer {
 
+  private static Class<Application> applicationClass = Application.class;
+
+
   public static void main(String[] args) {
 
     ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
@@ -34,7 +37,6 @@ public class Application extends SpringBootServletInitializer {
     PersonRepository repository = context.getBean(PersonRepository.class);
 
     // Do stuff
-
     Person person = new Person();
     person.setFirstName("Eelko");
     person.setLastName("Potters");
@@ -44,11 +46,10 @@ public class Application extends SpringBootServletInitializer {
     context.close();
   }
 
+
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
     return application.sources(applicationClass);
   }
-
-  private static Class<Application> applicationClass = Application.class;
 
 }

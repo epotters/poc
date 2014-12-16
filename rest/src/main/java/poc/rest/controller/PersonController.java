@@ -20,10 +20,4 @@ public class PersonController {
     return personService.getPerson(id);
   }
 
-
-/*
-  public void setPersonService(PersonService personService){
-    this.personService = personService;
-  }
-*/
 }
