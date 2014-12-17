@@ -3,9 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <bean id="restApp" class="rest.Application" lazy-init="false"></bean>
+    <bean id="restApp" class="poc.rest.Application" lazy-init="false"></bean>
 
-
-    <!-- bean id="personService" class="epotters.poc.core.service.PersonService" lazy-init="true"></bean -->
+    <bean id="personService" class="poc.core.service.impl.PersonServiceImpl" lazy-init="true"></bean>
 
 </beans>

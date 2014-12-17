@@ -9,14 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>POC Evernote</name>
-    <artifactId>evernote</artifactId>
+    <name>POC Batch Jobs</name>
+    <artifactId>batch</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.evernote</groupId>
-            <artifactId>evernote-api</artifactId>
-            <version>1.25.1</version>
-        </dependency>
-    </dependencies>
+
 </project>
