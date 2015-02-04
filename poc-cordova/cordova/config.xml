@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
+<widget xmlns="http://www.w3.org/ns/widgets"
+        android-packageName="nl.abz.os"
+        ios-CFBundleIdentifier="nl.verzekeraars.mobielschademelden"
+        version="2.9.0">
+
+
+  <name>mobielschademelden</name>
+
+  <description>
+    Mobielschademelden app van het Verbond van Verzekeraars.
+  </description>
+
+  <author href="http://www.seps.nl" email="secretariaat@seps.nl">Stichting EPS</author>
+
+  <!--
+      Enable individual API permissions here.
+      The "device" permission is required for the 'deviceready' event.
+  -->
+  <feature name="http://api.phonegap.com/1.0/device"/>
+
+  <!--
+      If you do not want any permissions to be added to your app, add the
+      following tag to your config.xml; you will still have the INTERNET
+      permission on your app, which PhoneGap requires.
+  -->
+  <preference name="permissions" value="none"/>
+
+  <!-- Customize your app and platform with the preference element. -->
+  <!-- <preference name="phonegap-version"      value="3.4.0" /> -->      <!-- all: current version of PhoneGap -->
+  <preference name="orientation" value="default"/>
+  <!-- all: default means both landscape and portrait are enabled -->
+  <preference name="target-device" value="universal"/>
+  <!-- all: possible values handset, tablet, or universal -->
+  <preference name="fullscreen" value="true"/>
+  <!-- all: hides the status bar at the top of the screen -->
+  <preference name="webviewbounce" value="true"/>
+  <!-- ios: control whether the screen 'bounces' when scrolled beyond the top -->
+  <preference name="prerendered-icon" value="true"/>
+  <!-- ios: if icon is prerendered, iOS will not apply it's gloss to the app's icon on the user's home screen -->
+  <preference name="stay-in-webview" value="false"/>
+  <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
+  <preference name="ios-statusbarstyle" value="black-opaque"/>
+  <!-- ios: black-translucent will appear black because the PhoneGap webview doesn't go beneath the status bar -->
+  <preference name="detect-data-types" value="true"/>
+  <!-- ios: controls whether data types (such as phone no. and dates) are automatically turned into links by the system -->
+  <preference name="exit-on-suspend" value="false"/>
+  <!-- ios: if set to true, app will terminate when home button is pressed -->
+  <preference name="show-splash-screen-spinner" value="true"/>
+  <!-- ios: if set to false, the spinner won't appear on the splash screen during app loading -->
+  <preference name="auto-hide-splash-screen" value="true"/>
+  <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
+  <preference name="disable-cursor" value="false"/>
+  <!-- blackberry: prevents a mouse-icon/cursor from being displayed on the app -->
+  <preference name="android-minSdkVersion" value="11"/>
+  <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
+  <preference name="android-installLocation" value="auto"/>
+  <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
+  <preference name="android-versionCode" value="2009000"/>
+
+
+  <!-- Plugins can also be added here. -->
+  <!--
+      <gap:plugin name="Example" />
+      A list of available plugins are available at https://build.phonegap.com/docs/plugins
+  -->
+  <plugin name="org.apache.cordova.camera"/>
+  <plugin name="org.apache.cordova.console"/>
+  <plugin name="org.apache.cordova.device"/>
+  <plugin name="org.apache.cordova.inappbrowser"/>
+
+
+  <platform name="android">
+
+    <icon src="resources/icon/android/icon.png" density="ldpi"/>
+    <icon src="resources/icon/android/icon.png" density="mdpi"/>
+    <icon src="resources/icon/android/icon.png" density="hdpi"/>
+    <icon src="resources/icon/android/icon.png" density="xhdpi"/>
+
+
+    <!-- you can use any density that exists in the Android project -->
+    <splash src="resources/splash/android/splash-land-hdpi.png" density="land-hdpi"/>
+    <splash src="resources/splash/android/splash-land-ldpi.png" density="land-ldpi"/>
+    <splash src="resources/splash/android/splash-land-mdpi.png" density="land-mdpi"/>
+    <splash src="resources/splash/android/splash-land-xhdpi.png" density="land-xhdpi"/>
+
+    <splash src="resources/splash/android/splash-port-hdpi.png" density="port-hdpi"/>
+    <splash src="resources/splash/android/splash-port-ldpi.png" density="port-ldpi"/>
+    <splash src="resources/splash/android/splash-port-mdpi.png" density="port-mdpi"/>
+    <splash src="resources/splash/android/splash-port-xhdpi.png" density="port-xhdpi"/>
+
+  </platform>
+
+
+  <platform name="ios">
+    <!-- iOS 8.0+ -->
+    <!-- iPhone 6 Plus  -->
+    <icon src="resources/icon/ios/icon-60@3x.png" width="180" height="180"/>
+    <!-- iOS 7.0+ -->
+    <!-- iPhone / iPod Touch  -->
+    <icon src="resources/icon/ios/icon-60.png" width="60" height="60"/>
+    <icon src="resources/icon/ios/icon-60@2x.png" width="120" height="120"/>
+    <!-- iPad -->
+    <icon src="resources/icon/ios/icon-76.png" width="76" height="76"/>
+    <icon src="resources/icon/ios/icon-76@2x.png" width="152" height="152"/>
+    <!-- iOS 6.1 -->
+    <!-- Spotlight Icon -->
+    <icon src="resources/icon/ios/icon-40.png" width="40" height="40"/>
+    <icon src="resources/icon/ios/icon-40@2x.png" width="80" height="80"/>
+    <!-- iPhone / iPod Touch -->
+    <icon src="resources/icon/ios/icon.png" width="57" height="57"/>
+    <icon src="resources/icon/ios/icon@2x.png" width="114" height="114"/>
+    <!-- iPad -->
+    <icon src="resources/icon/ios/icon-72.png" width="72" height="72"/>
+    <icon src="resources/icon/ios/icon-72@2x.png" width="144" height="144"/>
+    <!-- iPhone Spotlight and Settings Icon -->
+    <icon src="resources/icon/ios/icon-small.png" width="29" height="29"/>
+    <icon src="resources/icon/ios/icon-small@2x.png" width="58" height="58"/>
+    <!-- iPad Spotlight and Settings Icon -->
+    <icon src="resources/icon/ios/icon-50.png" width="50" height="50"/>
+    <icon src="resources/icon/ios/icon-50@2x.png" width="100" height="100"/>
+
+
+    <!-- images are determined by width and height. The following are supported -->
+    <splash src="resources/splash/ios/Default~iphone.png" width="320" height="480"/>
+    <splash src="resources/splash/ios/Default@2x~iphone.png" width="640" height="960"/>
+    <splash src="resources/splash/ios/Default-Portrait~ipad.png" width="768" height="1024"/>
+    <splash src="resources/splash/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
+    <splash src="resources/splash/ios/Default-Landscape~ipad.png" width="1024" height="768"/>
+    <splash src="resources/splash/ios/Default-Landscape@2x~ipad.png" width="2048" height="1496"/>
+    <splash src="resources/splash/ios/Default-568h@2x.png" width="640" height="1136"/>
+    <splash src="resources/splash/ios/Default-667h.png" width="750" height="1334"/>
+    <splash src="resources/splash/ios/Default-736h.png" width="1242" height="2208"/>
+    <splash src="resources/splash/ios/Default-Landscape-736h.png" width="2208" height="1242"/>
+
+  </platform>
+
+
+  <!--
+      Define access to external domains.
+
+      <access />            - a blank access tag denies access to all external resources.
+      <access origin="*" /> - a wildcard access tag allows access to all external resource.
+  -->
+  <access origin="*"/>
+
+</widget>
