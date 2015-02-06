@@ -12,9 +12,8 @@ import java.util.List;
 /**
  * Created by epotters on 6-11-2014.
  */
-@RepositoryRestResource(collectionResourceRel = "people", path = "people")
 public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
 
-  List<Person> findByLastName(@Param("name") String name);
+  List<Person> findByLastName(String name);
 
 }
