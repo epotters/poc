@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class VisitorServiceImplTest {
+public class PersonServiceImplTest {
 
   @Test
   public void dummy() {
