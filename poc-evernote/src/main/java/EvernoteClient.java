@@ -24,7 +24,6 @@ import java.util.List;
 
 public class EvernoteClient {
 
-
   private static final String AUTH_TOKEN =
       "S=s2:U=73f79:E=152ae3f5e29:C=14b568e3030:P=1cd:A=en-devtoken:V=2:H=b1d38f0d9707794532dbb049a6c0e305";
 
