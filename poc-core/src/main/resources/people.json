@@ -1,0 +1,38 @@
+[
+  {
+    "_class": "poc.model.Person",
+    "firstname": "Eelko",
+    "prefix" : "",
+    "lastname": "Potters",
+    "gender": "male",
+    "birthDate" : "1967-03-23 09:15",
+    "birthPlace": "Leiden"
+  },
+  {
+    "_class": "poc.model.Person",
+    "firstname": "Jacobine",
+    "prefix" : "",
+    "lastname": "Bijkerk",
+    "gender": "female",
+    "birthDate" : "1971-08-20 22:45",
+    "birthPlace": "Hoevelaken"
+  },
+  {
+    "_class": "poc.model.Person",
+    "firstname": "Milan",
+    "prefix" : "",
+    "lastname": "Potters",
+    "gender": "male",
+    "birthDate" : "2003-11-26 18:00",
+    "birthPlace": "Utrecht"
+  },
+  {
+    "_class": "poc.model.Person",
+    "firstname": "Senna",
+    "prefix" : "",
+    "lastname": "Potters",
+    "gender": "female",
+    "birthDate" : "2007-09-26 07:15",
+    "birthPlace": "Utrecht"
+  }
+]
