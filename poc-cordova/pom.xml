@@ -15,6 +15,7 @@
   <properties>
     <app.name>poc</app.name>
     <project.parent.version>0.1-SNAPSHOT</project.parent.version>
+    <cordova.version>4.2.0</cordova.version>
 
     <keystore.location>C:\workspace\ongeval-support\trunk\documents\android\mobielschademelden.keystore</keystore.location>
     <keystore.locationMac>/Users/teamblack/Work/ongeval-support/documents/android/mobielschademelden.keystore</keystore.locationMac>
@@ -27,7 +28,6 @@
 
 
   <dependencies>
-    <!--
         <dependency>
           <groupId>nl.xs4all.epotters</groupId>
           <artifactId>poc-web</artifactId>
@@ -35,8 +35,6 @@
           <classifier>cordova</classifier>
           <type>war</type>
         </dependency>
-    -->
-
   </dependencies>
 
   <build>
@@ -56,12 +54,13 @@
                 </copy>
                 <chmod file="target/cordova/platforms/android/cordova/build" perm="755"/>
                 <chmod file="target/cordova/platforms/android/cordova/run" perm="755"/>
-                <chmod file="target/cordova/platforms/android/cordova/abzbuild.sh" perm="755"/>
+                <chmod file="target/cordova/build-scripts/android/cordova-buid.sh" perm="755"/>
 
                 <chmod file="target/cordova/platforms/ios/cordova/build" perm="755"/>
                 <chmod file="target/cordova/platforms/ios/cordova/run" perm="755"/>
-                <chmod file="target/cordova/platforms/ios/cordova/abzbuild.sh" perm="755"/>
+
                 <chmod file="target/cordova/platforms/ios/cordova/lib/copy-www-build-step.sh" perm="755"/>
+                <chmod file="target/cordova/build-scripts/ios/cordova-buid.sh" perm="755"/>
 
               </target>
             </configuration>
@@ -204,7 +203,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>${basedir}/target/cordova/platforms/android/cordova/abzbuild.bat</executable>
+                  <executable>${basedir}/target/cordova/build-scripts/android/cordova-build.bat</executable>
                   <arguments>
                     <argument>--release</argument>
                   </arguments>
@@ -261,7 +260,7 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>${basedir}/target/cordova/platforms/android/cordova/abzbuild.sh</executable>
+                  <executable>${basedir}/target/cordova/build-scripts/android/cordova-build.sh</executable>
                   <arguments>
                     <argument>--release</argument>
                   </arguments>
@@ -317,8 +316,8 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                  <executable>platforms/ios/cordova/abzbuild.sh</executable>
-                </configuration>
+                <executable>${basedir}/target/cordova/build-scripts/ios/cordova-build.sh</executable>
+              </configuration>
               </execution>
             </executions>
           </plugin>
