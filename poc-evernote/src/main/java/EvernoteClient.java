@@ -150,7 +150,7 @@ public class EvernoteClient {
       Date dateCreated = new Date(note.getCreated());
       SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-      System.out.println(" * " + dateFormatter.format(dateCreated) +  " " + note.getTitle() +  "(" + note.getGuid() + ")");
+      System.out.println(" * " + dateFormatter.format(dateCreated) +  " " + note.getTitle() +  " (" + note.getGuid() + ")");
 
       // Note fullNote = noteStore.getNote(note.getGuid(), true, true, false, false);
       // System.out.println(fullNote.getContent());

@@ -17,6 +17,7 @@ public class Employee extends Person {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+
   private Company company;
 
 

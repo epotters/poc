@@ -32,12 +32,12 @@ USE `poc`;
 
 CREATE TABLE IF NOT EXISTS `person` (
   `id`         INT(11)     NOT NULL,
-  `firstName`  VARCHAR(60) NOT NULL,
-  `prefix`     VARCHAR(20) NOT NULL,
+  `firstName`  VARCHAR(60),
+  `prefix`     VARCHAR(20),
   `lastName`   VARCHAR(60) NOT NULL,
   `gender`     TEXT        NOT NULL,
-  `birthDate`  DATE        NOT NULL,
-  `birthPlace` VARCHAR(60) NOT NULL,
+  `birthDate`  DATE,
+  `birthPlace` VARCHAR(60),
   PRIMARY KEY (`id`)
 )
   ENGINE =InnoDB
