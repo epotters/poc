@@ -1,4 +1,4 @@
-package poc.core.repository;
+package poc.core.config;
 
 
 import org.springframework.context.annotation.Bean;

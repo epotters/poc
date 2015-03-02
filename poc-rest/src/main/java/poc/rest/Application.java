@@ -35,19 +35,6 @@ public class Application extends SpringBootServletInitializer {
 
     LOG.info("Starting main application");
 
-    ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-
-    LOG.debug("Saving some initial data");
-    PersonRepository repository = context.getBean(PersonRepository.class);
-
-    // Do stuff
-    Person person = new Person();
-    person.setFirstName("Eelko");
-    person.setLastName("Potters");
-
-    repository.save(person);
-
-    context.close();
   }
 
 

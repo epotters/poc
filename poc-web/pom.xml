@@ -28,6 +28,12 @@
       <version>3.2.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>nl.xs4all.epotters</groupId>
+      <artifactId>poc-core</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+
   </dependencies>
 
 </project>
