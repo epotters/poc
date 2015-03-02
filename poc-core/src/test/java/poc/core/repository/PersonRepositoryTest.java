@@ -5,11 +5,6 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import poc.core.model.Person;
-import poc.core.repository.PersonRepository;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,23 +23,29 @@ public class PersonRepositoryTest {
   @Test
   public void savePerson() throws Exception {
 
+    final Long id = new Long(100);
     final String firstName = "Eelko";
     final String lastName = "Potters";
 
-    List<Person> people = new ArrayList<Person>();
-    people = personRepository.findByLastName(lastName);
+    Person person = personRepository.findOne(id);
 
-    assertEquals(0, people.size());
+    assertEquals(null, person);
 
-    Person person = new Person();
-    person.setFirstName(firstName);
-    person.setLastName(lastName);
+    Person newPerson = new Person();
 
+    newPerson.setId(id);
+    newPerson.setFirstName(firstName);
+    newPerson.setLastName(lastName);
     personRepository.save(person);
 
-    people = personRepository.findByLastName(lastName);
+    person = personRepository.findOne(id);
+    assertEquals(person.getFirstName(), newPerson.getFirstName());
+    assertEquals(person.getLastName(), newPerson.getLastName());
 
-    assertEquals(1, people.size());
+    personRepository.delete(id);
+    person = personRepository.findOne(id);
+    assertEquals(null, person);
+
   }
 
 }

@@ -12,8 +12,9 @@ public class GreetingServiceImpl implements GreetingService {
   private static final String template = "Hello, %s!";
   private final AtomicLong counter = new AtomicLong();
 
+
   public Greeting getGreeting(String name) {
 
-    return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    return new Greeting(counter.incrementAndGet(), GreetingGenerator.generate() + " " + String.format(template, name));
   }
 }

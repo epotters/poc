@@ -26,7 +26,7 @@
     <module>poc-batch</module>
 
     <module>poc-sencha</module>
-    <module>poc-cordova</module>
+    <!-- module>poc-cordova</module -->
     <module>poc-evernote</module>
 
     <module>poc-integration-tests</module>

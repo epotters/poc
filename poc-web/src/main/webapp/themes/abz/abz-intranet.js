@@ -1,3 +1,3 @@
 var nl = {};
-    nl.abz = {};
-    nl.abz.intranet = {};
+nl.abz = {};
+nl.abz.intranet = {};

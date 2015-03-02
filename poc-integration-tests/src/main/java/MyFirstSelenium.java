@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 
-public class MyFirstSelenium  {
+public class MyFirstSelenium {
 
   public static void main(String[] args) {
 

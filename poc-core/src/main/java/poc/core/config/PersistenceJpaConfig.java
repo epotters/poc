@@ -19,9 +19,6 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 
-
-
-
 /**
  * Created by epotters on 17-11-2014.
  */
@@ -32,6 +29,11 @@ import java.util.Properties;
 @EnableSpringDataWebSupport
 public class PersistenceJpaConfig {
 
+
+  private static final String DB_TYPE_MYSQL = "mysql";
+  private static final String DB_TYPE_H2 = "h2";
+  private static final String DATABASE_TYPE = DB_TYPE_H2;
+
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
@@ -39,14 +41,23 @@ public class PersistenceJpaConfig {
 
     em.setPackagesToScan("poc.core.model");
 
-    // em.setDataSource(dataSourceMySql());
-    em.setDataSource(dataSourceH2());
+    em.setDataSource(dataSource());
     JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
     em.setJpaVendorAdapter(vendorAdapter);
 
     em.setJpaProperties(additionalProperties());
 
     return em;
+  }
+
+
+  @Bean
+  public DataSource dataSource() {
+    if (DATABASE_TYPE.equals(DB_TYPE_MYSQL)) {
+      return dataSourceMySql();
+    } else { // defaults to H2 database
+      return dataSourceH2();
+    }
   }
 
 
@@ -88,13 +99,14 @@ public class PersistenceJpaConfig {
 
   protected Properties additionalProperties() {
     Properties properties = new Properties();
+    if (DATABASE_TYPE.equals(DB_TYPE_MYSQL)) {
+      properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+      properties.setProperty("hibernate.hbm2ddl.auto", "");
+    } else { // defaults to H2 database
+      properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+      properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+    }
 
-    // properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-    // properties.setProperty("hibernate.hbm2ddl.auto", "");
-
-
-    properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-    properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
     return properties;
   }

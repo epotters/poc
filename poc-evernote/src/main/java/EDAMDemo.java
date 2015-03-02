@@ -12,13 +12,6 @@
   http://dev.evernote.com/documentation/cloud/
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.security.MessageDigest;
-import java.util.Iterator;
-import java.util.List;
-
 import com.evernote.auth.EvernoteAuth;
 import com.evernote.auth.EvernoteService;
 import com.evernote.clients.ClientFactory;
@@ -29,20 +22,23 @@ import com.evernote.edam.error.EDAMSystemException;
 import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
-import com.evernote.edam.type.Data;
-import com.evernote.edam.type.Note;
-import com.evernote.edam.type.NoteSortOrder;
-import com.evernote.edam.type.Notebook;
-import com.evernote.edam.type.Resource;
-import com.evernote.edam.type.ResourceAttributes;
-import com.evernote.edam.type.Tag;
+import com.evernote.edam.type.*;
 import com.evernote.thrift.transport.TTransportException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.MessageDigest;
+import java.util.Iterator;
+import java.util.List;
 
 public class EDAMDemo {
 
-  /***************************************************************************
+  /**
+   * ************************************************************************
    * You must change the following values before running this sample code *
-   ***************************************************************************/
+   * *************************************************************************
+   */
 
   // Real applications authenticate with Evernote using OAuth, but for the
   // purpose of exploring the API, you can get a developer token that allows
@@ -52,13 +48,38 @@ public class EDAMDemo {
       "S=s2:U=73f79:E=152ae3f5e29:C=14b568e3030:P=1cd:A=en-devtoken:V=2:H=b1d38f0d9707794532dbb049a6c0e305";
 
   // NoteStoreURL = "https://www.evernote.com/shard/s2/notestore";
-  /***************************************************************************
+  /**
+   * ************************************************************************
    * You shouldn't need to change anything below here to run sample code *
-   ***************************************************************************/
+   * *************************************************************************
+   */
 
   private UserStoreClient userStore;
   private NoteStoreClient noteStore;
   private String newNoteGuid;
+
+  /**
+   * Intialize UserStore and NoteStore clients. During this step, we
+   * authenticate with the Evernote web service. All of this code is boilerplate
+   * - you can copy it straight into your application.
+   */
+  public EDAMDemo(String token) throws Exception {
+    // Set up the UserStore client and check that we can speak to the server
+    EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.PRODUCTION, token);
+    ClientFactory factory = new ClientFactory(evernoteAuth);
+    userStore = factory.createUserStoreClient();
+
+    boolean versionOk = userStore.checkVersion("Evernote EDAMDemo (Java)",
+        com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
+        com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
+    if (!versionOk) {
+      System.err.println("Incompatible Evernote client protocol version");
+      System.exit(1);
+    }
+
+    // Set up the NoteStore client
+    noteStore = factory.createNoteStoreClient();
+  }
 
   /**
    * Console entry point.
@@ -106,26 +127,46 @@ public class EDAMDemo {
   }
 
   /**
-   * Intialize UserStore and NoteStore clients. During this step, we
-   * authenticate with the Evernote web service. All of this code is boilerplate
-   * - you can copy it straight into your application.
+   * Helper method to read the contents of a file on disk and create a new Data
+   * object.
    */
-  public EDAMDemo(String token) throws Exception {
-    // Set up the UserStore client and check that we can speak to the server
-    EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.PRODUCTION, token);
-    ClientFactory factory = new ClientFactory(evernoteAuth);
-    userStore = factory.createUserStoreClient();
-
-    boolean versionOk = userStore.checkVersion("Evernote EDAMDemo (Java)",
-        com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
-        com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
-    if (!versionOk) {
-      System.err.println("Incompatible Evernote client protocol version");
-      System.exit(1);
+  private static Data readFileAsData(String fileName) throws Exception {
+    String filePath = new File(EDAMDemo.class.getResource(
+        EDAMDemo.class.getCanonicalName() + ".class").getPath()).getParent()
+        + File.separator + fileName;
+    // Read the full binary contents of the file
+    FileInputStream in = new FileInputStream(filePath);
+    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+    byte[] block = new byte[10240];
+    int len;
+    while ((len = in.read(block)) >= 0) {
+      byteOut.write(block, 0, len);
     }
+    in.close();
+    byte[] body = byteOut.toByteArray();
 
-    // Set up the NoteStore client
-    noteStore = factory.createNoteStoreClient();
+    // Create a new Data object to contain the file contents
+    Data data = new Data();
+    data.setSize(body.length);
+    data.setBodyHash(MessageDigest.getInstance("MD5").digest(body));
+    data.setBody(body);
+
+    return data;
+  }
+
+  /**
+   * Helper method to convert a byte array to a hexadecimal string.
+   */
+  public static String bytesToHex(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    for (byte hashByte : bytes) {
+      int intVal = 0xff & hashByte;
+      if (intVal < 0x10) {
+        sb.append('0');
+      }
+      sb.append(Integer.toHexString(intVal));
+    }
+    return sb.toString();
   }
 
   /**
@@ -137,7 +178,6 @@ public class EDAMDemo {
 
     // First, get a list of all notebooks
     List<Notebook> notebooks = noteStore.listNotebooks();
-
 
 
     for (Notebook notebook : notebooks) {
@@ -319,48 +359,5 @@ public class EDAMDemo {
     }
 
     System.out.println();
-  }
-
-  /**
-   * Helper method to read the contents of a file on disk and create a new Data
-   * object.
-   */
-  private static Data readFileAsData(String fileName) throws Exception {
-    String filePath = new File(EDAMDemo.class.getResource(
-        EDAMDemo.class.getCanonicalName() + ".class").getPath()).getParent()
-        + File.separator + fileName;
-    // Read the full binary contents of the file
-    FileInputStream in = new FileInputStream(filePath);
-    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-    byte[] block = new byte[10240];
-    int len;
-    while ((len = in.read(block)) >= 0) {
-      byteOut.write(block, 0, len);
-    }
-    in.close();
-    byte[] body = byteOut.toByteArray();
-
-    // Create a new Data object to contain the file contents
-    Data data = new Data();
-    data.setSize(body.length);
-    data.setBodyHash(MessageDigest.getInstance("MD5").digest(body));
-    data.setBody(body);
-
-    return data;
-  }
-
-  /**
-   * Helper method to convert a byte array to a hexadecimal string.
-   */
-  public static String bytesToHex(byte[] bytes) {
-    StringBuilder sb = new StringBuilder();
-    for (byte hashByte : bytes) {
-      int intVal = 0xff & hashByte;
-      if (intVal < 0x10) {
-        sb.append('0');
-      }
-      sb.append(Integer.toHexString(intVal));
-    }
-    return sb.toString();
   }
 }

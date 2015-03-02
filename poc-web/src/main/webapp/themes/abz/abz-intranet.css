@@ -2,7 +2,6 @@
 ABZ Intranet styles
 ***************************************************************************************************/
 
-
 html, body {
     margin: 0;
     border: 0px;
@@ -77,7 +76,6 @@ body {
     margin-top: 40px;
 }
 
-
 #site-title {
     float: right;
 
@@ -94,8 +92,6 @@ body {
     text-transform: uppercase;
     text-shadow: 1px 1px 2px #52657a;
 }
-
-
 
 /* User box */
 
@@ -121,7 +117,6 @@ body {
 #user * {
     font-size: 12px;
 }
-
 
 #user .portrait-border {
     background: white;
@@ -164,7 +159,6 @@ body {
     background-color: silver;
 }
 
-
 /* Menubar */
 
 #menubar {
@@ -188,14 +182,12 @@ body {
     float: right;
 }
 
-
 #menubar .menu {
     display: inline-block;
     box-sizing: border-box;
     height: 100%;
     background: transparent;
 }
-
 
 .menu-item {
     /* display: inline-block; */
@@ -230,10 +222,9 @@ body {
 
 #menubar .menu .menu-item a:hover {
     background-color: #984A13;
-    background-image: linear-gradient(center top , #984A13, #DD7A35);
+    background-image: linear-gradient(center top, #984A13, #DD7A35);
     box-shadow: 1px 1px 0 #985813 inset, -1px -1px 0 #985813 inset;
 }
-
 
 /* Search box */
 
@@ -275,7 +266,6 @@ body {
     cursor: pointer;
 }
 
-
 #content {
     min-height: 480px;
     padding-bottom: 36px;
@@ -284,7 +274,6 @@ body {
 #content .wrapper {
     padding: 12px;
 }
-
 
 #footer {
     background: gray;

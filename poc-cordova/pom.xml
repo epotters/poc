@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>poc</artifactId>
     <groupId>nl.xs4all.epotters</groupId>
@@ -17,8 +18,10 @@
     <project.parent.version>0.1-SNAPSHOT</project.parent.version>
     <cordova.version>4.2.0</cordova.version>
 
-    <keystore.location>C:\workspace\ongeval-support\trunk\documents\android\mobielschademelden.keystore</keystore.location>
-    <keystore.locationMac>/Users/teamblack/Work/ongeval-support/documents/android/mobielschademelden.keystore</keystore.locationMac>
+    <keystore.location>C:\workspace\ongeval-support\trunk\documents\android\mobielschademelden.keystore
+    </keystore.location>
+    <keystore.locationMac>/Users/teamblack/Work/ongeval-support/documents/android/mobielschademelden.keystore
+    </keystore.locationMac>
     <keystore.password>ongevalsupport</keystore.password>
     <keystore.keypass>ongevalsupport</keystore.keypass>
     <keystore.alias>mobielschademelden</keystore.alias>
@@ -28,13 +31,13 @@
 
 
   <dependencies>
-        <dependency>
-          <groupId>nl.xs4all.epotters</groupId>
-          <artifactId>poc-web</artifactId>
-          <version>0.1-SNAPSHOT</version>
-          <classifier>cordova</classifier>
-          <type>war</type>
-        </dependency>
+    <dependency>
+      <groupId>nl.xs4all.epotters</groupId>
+      <artifactId>poc-web</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <classifier>cordova</classifier>
+      <type>war</type>
+    </dependency>
   </dependencies>
 
   <build>
@@ -118,7 +121,9 @@
                 <phase>package</phase>
                 <configuration>
                   <target>
-                    <copy file="target/cordova/platforms/android/ant-build/CordovaApp-release-unsigned.apk" tofile="target/cordova/platforms/android/ant-build/#{app.name}-release-signed.apk" overwrite="true"/>
+                    <copy file="target/cordova/platforms/android/ant-build/CordovaApp-release-unsigned.apk"
+                          tofile="target/cordova/platforms/android/ant-build/#{app.name}-release-signed.apk"
+                          overwrite="true"/>
                   </target>
                 </configuration>
                 <goals>
@@ -316,8 +321,8 @@
                   <goal>exec</goal>
                 </goals>
                 <configuration>
-                <executable>${basedir}/target/cordova/build-scripts/ios/cordova-build.sh</executable>
-              </configuration>
+                  <executable>${basedir}/target/cordova/build-scripts/ios/cordova-build.sh</executable>
+                </configuration>
               </execution>
             </executions>
           </plugin>
