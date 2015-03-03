@@ -1,9 +1,7 @@
 package poc.core.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.annotation.Nullable;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -18,7 +16,10 @@ public class Person {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+
   private String firstName;
+
+
   private String prefix;
   private String lastName;
 

@@ -1,8 +1,11 @@
 package poc.core.config;
 
 
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -41,7 +44,7 @@ public class PersistenceJpaConfig {
 
     em.setPackagesToScan("poc.core.model");
 
-    em.setDataSource(dataSource());
+    em.setDataSource(primaryDataSource());
     JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
     em.setJpaVendorAdapter(vendorAdapter);
 
@@ -51,10 +54,10 @@ public class PersistenceJpaConfig {
   }
 
 
-  @Bean
+
   public DataSource dataSource() {
     if (DATABASE_TYPE.equals(DB_TYPE_MYSQL)) {
-      return dataSourceMySql();
+      return primaryDataSource();
     } else { // defaults to H2 database
       return dataSourceH2();
     }
@@ -62,6 +65,22 @@ public class PersistenceJpaConfig {
 
 
   @Bean
+  @Primary
+  @ConfigurationProperties(prefix = "datasource.primary")
+  public DataSource primaryDataSource() {
+    return DataSourceBuilder.create().build();
+  }
+
+
+/*
+@Bean
+@ConfigurationProperties(prefix="datasource.secondary")
+public DataSource secondaryDataSource() {
+    return DataSourceBuilder.create().build();
+}
+*/
+
+/*
   public DataSource dataSourceMySql() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName("com.mysql.jdbc.Driver");
@@ -70,8 +89,9 @@ public class PersistenceJpaConfig {
     dataSource.setPassword("123456");
     return dataSource;
   }
+*/
 
-  @Bean
+
   public DataSource dataSourceH2() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName("org.h2.Driver");

@@ -2,6 +2,7 @@ package poc.rest;
 
 
 import org.apache.log4j.Logger;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableJpaRepositories
 @Import(RepositoryRestMvcConfiguration.class)
 
+
 @EnableWebMvc
 public class Application extends SpringBootServletInitializer {
 
@@ -30,6 +32,8 @@ public class Application extends SpringBootServletInitializer {
   public static void main(String[] args) {
 
     LOG.info("Starting main application");
+
+    SpringApplication.run(Application.class, args);
 
   }
 
