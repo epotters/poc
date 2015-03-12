@@ -1,7 +1,11 @@
 package poc.core.model;
 
 import javax.annotation.Nullable;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import java.util.Date;
 
 
@@ -18,8 +22,6 @@ public class Person {
 
 
   private String firstName;
-
-
   private String prefix;
   private String lastName;
 
@@ -27,6 +29,12 @@ public class Person {
 
   private Date birthDate;
   private String birthPlace;
+
+
+  public Person(String firstName, String lastName) {
+    this.lastName = lastName;
+    this.firstName = firstName;
+  }
 
 
   public Long getId() {
@@ -96,5 +104,19 @@ public class Person {
 
   public void setBirthPlace(String birthPlace) {
     this.birthPlace = birthPlace;
+  }
+
+
+  @Override
+  public String toString() {
+    return "Person{" +
+        "id=" + id +
+        ", firstName='" + firstName + '\'' +
+        ", prefix='" + prefix + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", gender='" + gender + '\'' +
+        ", birthDate=" + birthDate +
+        ", birthPlace='" + birthPlace + '\'' +
+        '}';
   }
 }

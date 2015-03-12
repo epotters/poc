@@ -3,8 +3,12 @@ package poc.core.service.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import poc.core.dao.PersonDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import poc.core.model.Person;
+import poc.core.repository.PersonRepository;
 import poc.core.service.PersonService;
 
 import java.util.List;
@@ -19,41 +23,44 @@ public class PersonServiceImpl implements PersonService {
 
   private static final Log LOG = LogFactory.getLog(PersonServiceImpl.class);
 
-  private PersonDao personDao;
+
+  @Autowired
+  PersonRepository personRepository;
 
 
   @Override
   public List<Person> getPersons() {
-    return null;
+
+    int pageNumber = 5;
+    int pageSize = 50;
+
+    Sort sort = new Sort(
+        new Sort.Order(Sort.Direction.ASC, "id"),
+        new Sort.Order(Sort.Direction.DESC, "fullName")
+    );
+    PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sort);
+
+    Page<Person> page = personRepository.findAll(pageRequest);
+    return page.getContent();
   }
 
 
   @Override
   public Person getPerson(Long id) {
-
-    return personDao.getPerson(id);
+    return personRepository.findOne(id);
   }
 
 
   @Override
   public Person savePerson(Person person) {
-    return null;
+    return personRepository.save(person);
   }
 
 
   @Override
   public Person deletePerson(Person person) {
+    personRepository.delete(person);
     return null;
-  }
-
-
-  public PersonDao getPersonDao() {
-    return personDao;
-  }
-
-
-  public void setPersonDao(PersonDao personDao) {
-    this.personDao = personDao;
   }
 
 }

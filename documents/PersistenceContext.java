@@ -30,7 +30,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 
 @EnableSpringDataWebSupport
-public class PersistenceJpaConfig {
+public class PersistenceContext {
 
 
   private static final String DB_TYPE_MYSQL = "mysql";
@@ -126,8 +126,6 @@ public DataSource secondaryDataSource() {
       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
       properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
     }
-
-
     return properties;
   }
 
