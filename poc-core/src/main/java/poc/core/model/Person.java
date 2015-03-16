@@ -30,6 +30,8 @@ public class Person {
   private Date birthDate;
   private String birthPlace;
 
+  public Person() {}
+
 
   public Person(String firstName, String lastName) {
     this.lastName = lastName;

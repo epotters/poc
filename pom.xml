@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.2.1.RELEASE</version>
+    <version>1.2.2.RELEASE</version>
   </parent>
 
   <groupId>nl.xs4all.epotters</groupId>
@@ -22,13 +22,10 @@
     <module>poc-core</module>
     <module>poc-rest</module>
     <module>poc-web</module>
-
     <module>poc-batch</module>
-
     <module>poc-sencha</module>
     <!-- module>poc-cordova</module -->
     <module>poc-evernote</module>
-
     <module>poc-integration-tests</module>
   </modules>
 
@@ -37,7 +34,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <spring.boot.version>1.2.1.RELEASE</spring.boot.version>
+    <spring.boot.version>1.2.2.RELEASE</spring.boot.version>
     <start-class>Application</start-class>
   </properties>
 
@@ -98,6 +95,12 @@
     </dependency>
 
     <!-- Test -->
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
