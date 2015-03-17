@@ -4,7 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.TestContext;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.context.ContextConfiguration;
 import poc.core.model.Person;
 
 
@@ -12,8 +13,10 @@ import poc.core.model.Person;
  * Created by eelko on 06-02-2015.
  */
 
+
+@ContextConfiguration(locations = {"classpath:testContext.xml"})
+@EnableJpaRepositories(value="poc.core.repository")
 @RunWith(MockitoJUnitRunner.class)
-// @ContextConfiguration(classes = {TestContext.class})
 public class PersonRepositoryTest {
 
 
