@@ -48,6 +48,9 @@
   <bean id="securityExpressionHandler"
         class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
 
+  <bean id="securityService"
+        class="poc.core.service.impl.SecurityServiceImpl"/>
+
   <bean id="proxyAuthenticationHeaderFilter"
         class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
     <property name="principalRequestHeader" value="PROXY_REMOTE_USER"/>
