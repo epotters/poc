@@ -33,7 +33,7 @@ public class Application extends SpringBootServletInitializer {
 
     LOG.info("Starting main application");
 
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(applicationClass, args);
 
   }
 
