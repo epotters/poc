@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,25 +11,33 @@ import java.util.List;
  */
 public class MySecondSeleniumTest {
 
-    private static final String URL = "https://mijn.ing.nl/internetbankieren/SesamLoginServlet";
     private static final WebDriver driver = new HtmlUnitDriver(true);
-    private static final int SLEEP_DURATION = 100;
+
+    private static final String URL = "https://mijn.ing.nl/internetbankieren/SesamLoginServlet";
+    private static final int SLEEP_DURATION = 120;
+
+    private static final String USERNAME = "q9nt3qtg";
+    private static final String PASSWORD = "P@mpl0n@";
 
 
     public static void main(String[] args) {
 
-        // And now use this to visit ING Telebankieren
         driver.get(URL);
-        System.out.println("Page title is: " + driver.getTitle());
 
         try {
-            Thread.sleep(30);
+            Thread.sleep(SLEEP_DURATION);
+            System.out.println("Waking up after sleep");
         } catch(Exception e) {
 
             System.out.println("Error while waiting for the page to load");
         }
 
-        login("q9nt3qtg", "P@mpl0n@");
+        System.out.println("On login page: " + driver.getTitle());
+
+
+
+        Assert.assertEquals("Not on login page", "Inloggen Mijn ING", driver.getTitle());
+        login(USERNAME, PASSWORD);
 
 
         System.out.println("After login, the page title is: " + driver.getTitle());
@@ -39,13 +48,11 @@ public class MySecondSeleniumTest {
         link.click();
 
 
-        System.out.println("Click link, the page title is: " + driver.getTitle());
-
-        // Vul de velden: rekening startDate-input endDate-input downloadFormat
+        // download();
 
 
-        // Klik op de knop Download
-        WebElement downloadLink = driver.findElement(By.linkText("Download"));
+        // System.out.println("Click link, the page title is: " + driver.getTitle());
+
 
 
 
@@ -68,6 +75,31 @@ public class MySecondSeleniumTest {
         passwordField.sendKeys(password);
 
         loginFormEl.submit();
+
+    }
+
+
+    private static void download() {
+        // Vul de velden: rekening startDate-input endDate-input downloadFormat
+        WebElement downloadFormEl = driver.findElement(By.id("login"));
+
+
+        WebElement startDateFormEl = driver.findElement(By.id("startDate-input"));
+        startDateFormEl.sendKeys("01-01-2015");
+        WebElement endDateFormEl = driver.findElement(By.id("endDate-input"));
+        endDateFormEl.sendKeys("21-12-2015");
+        WebElement downloadFormatFormEl = driver.findElement(By.id("downloadFormat"));
+        downloadFormatFormEl.sendKeys("0"); // <option value="0">Kommagescheiden IBAN (jjjjmmdd)</option>
+
+
+        // Klik op de knop Download
+        WebElement downloadLink = driver.findElement(By.linkText("Download"));
+        downloadLink.click();
+
+        WebElement notification = driver.findElement(By.id("notification"));
+        notification.isDisplayed();
+
+
     }
 
 
