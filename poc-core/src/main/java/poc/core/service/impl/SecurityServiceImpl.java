@@ -1,9 +1,8 @@
 package poc.core.service.impl;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import poc.core.model.Account;
+import poc.core.domain.Account;
 import poc.core.service.SecurityService;
 
 

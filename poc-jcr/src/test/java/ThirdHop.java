@@ -2,11 +2,9 @@
  * Created by eelko on 13-12-2015.
  */
 
-import javax.jcr.*;
-
 import org.apache.jackrabbit.core.TransientRepository;
 
-import java.io.FileInputStream;
+import javax.jcr.*;
 import java.io.InputStream;
 
 /**

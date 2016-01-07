@@ -42,7 +42,7 @@ public class PersistenceContext {
 
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 
-    em.setPackagesToScan("poc.core.model");
+      em.setPackagesToScan("poc.core.domain");
 
     em.setDataSource(primaryDataSource());
     JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();

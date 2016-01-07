@@ -1,4 +1,4 @@
-package poc.core.model;
+package poc.core.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;

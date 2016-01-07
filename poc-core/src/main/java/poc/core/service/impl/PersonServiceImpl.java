@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import poc.core.model.Person;
+import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
 import poc.core.service.PersonService;
 

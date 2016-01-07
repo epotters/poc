@@ -1,7 +1,7 @@
 package poc.core.service.impl;
 
 
-import poc.core.model.Greeting;
+import poc.core.domain.Greeting;
 import poc.core.service.GreetingService;
 
 import java.util.concurrent.atomic.AtomicLong;

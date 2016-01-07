@@ -1,6 +1,6 @@
 package poc.core.service;
 
-import poc.core.model.Person;
+import poc.core.domain.Person;
 
 import java.util.List;
 

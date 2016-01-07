@@ -1,4 +1,4 @@
-package poc.core.model;
+package poc.core.domain;
 
 
 /**
