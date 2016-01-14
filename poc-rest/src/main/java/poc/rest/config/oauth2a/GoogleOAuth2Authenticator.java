@@ -1,4 +1,4 @@
-package poc.rest.config;
+package poc.rest.config.oauth2a;
 
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.security.oauth2.client.DefaultOAuth2RequestAuthenticator;

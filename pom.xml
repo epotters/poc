@@ -26,6 +26,7 @@
     <module>poc-sencha</module>
     <!-- module>poc-cordova</module -->
     <module>poc-evernote</module>
+      <module>poc-jcr</module>
     <module>poc-integration-tests</module>
   </modules>
 
