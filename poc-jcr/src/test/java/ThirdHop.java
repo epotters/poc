@@ -4,7 +4,16 @@
 
 import org.apache.jackrabbit.core.TransientRepository;
 
-import javax.jcr.*;
+import javax.jcr.ImportUUIDBehavior;
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
+import javax.jcr.Value;
 import java.io.InputStream;
 
 /**

@@ -12,7 +12,7 @@ import javax.servlet.ServletRegistration.Dynamic;
 
 
 /**
- * Created by epotters on 15-12-2014.
+ * Created by epotters on 2014-12-15
  */
 public class WebAppInitializer implements WebApplicationInitializer {
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
 
+
 @RequestMapping("/people")
 @RestController
 public class PersonController {
