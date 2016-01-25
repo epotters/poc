@@ -5,10 +5,11 @@ import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoRestTemplateCustomizer;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.test.context.ContextConfiguration;
+
+import org.springframework.cloud.security.oauth2.resource.UserInfoRestTemplateCustomizer;
 import poc.rest.config.oauth2a.CustomOAuth2RestTemplate;
 
 
@@ -19,7 +20,7 @@ public class Application extends SpringBootServletInitializer {
 
     private static Logger LOG = Logger.getLogger(Application.class);
 
-    UserInfoRestTemplateCustomizer customOauth2Template = new CustomOAuth2RestTemplate();
+    // UserInfoRestTemplateCustomizer customOauth2Template = new CustomOAuth2RestTemplate();
 
 
     public static void main(String[] args) {

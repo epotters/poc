@@ -22,59 +22,59 @@ import poc.core.domain.Person;
 
 @ContextConfiguration(classes = {poc.core.config.CoreContext.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PersonRepositoryTest {
 
-    private static final Log LOG = LogFactory.getLog(PersonRepositoryTest.class);
+  private static final Log LOG = LogFactory.getLog(PersonRepositoryTest.class);
 
-    @Autowired
-    private PersonRepository personRepository;
+  @Autowired
+  private PersonRepository personRepository;
 
-    @Before
-    public void prepareTests() {
+  @Before
+  public void prepareTests() {
 
-        LOG.debug("@prepareTests");
+    LOG.debug("@prepareTests");
 
+  }
+
+  @Test
+  public void isRepositoryAvailable() {
+    LOG.debug("@isRepositoryAvailable");
+    Assert.assertNotNull(personRepository);
+  }
+
+
+  @Test
+  public void savePeople() throws Exception {
+
+    // Save a couple of people
+    personRepository.save(new Person("Jack", "Bauer"));
+    personRepository.save(new Person("Chloe", "O'Brian"));
+    personRepository.save(new Person("Kim", "Bauer"));
+    personRepository.save(new Person("David", "Palmer"));
+    personRepository.save(new Person("Michelle", "Dessler"));
+
+    // Fetch all customers
+    System.out.println("People found with findAll():");
+    System.out.println("-------------------------------");
+    for (Person person : personRepository.findAll()) {
+      System.out.println(person);
     }
+    System.out.println();
 
-    @Test
-    public void isRepositoryAvailable() {
-        LOG.debug("@isRepositoryAvailable");
-        Assert.assertNotNull(personRepository);
+    // Fetch an individual customer by ID
+    Person person = personRepository.findOne(1L);
+    System.out.println("Person found with findOne(1L):");
+    System.out.println("--------------------------------");
+    System.out.println(person);
+    System.out.println();
+
+    // Fetch customers by last name
+    System.out.println("Person found with findByLastName('Bauer'):");
+    System.out.println("--------------------------------------------");
+    for (Person bauer : personRepository.findByLastName("Bauer")) {
+      System.out.println(bauer);
     }
-
-
-    @Test
-    public void savePeople() throws Exception {
-
-        // Save a couple of people
-        personRepository.save(new Person("Jack", "Bauer"));
-        personRepository.save(new Person("Chloe", "O'Brian"));
-        personRepository.save(new Person("Kim", "Bauer"));
-        personRepository.save(new Person("David", "Palmer"));
-        personRepository.save(new Person("Michelle", "Dessler"));
-
-        // Fetch all customers
-        System.out.println("People found with findAll():");
-        System.out.println("-------------------------------");
-        for (Person person : personRepository.findAll()) {
-            System.out.println(person);
-        }
-        System.out.println();
-
-        // Fetch an individual customer by ID
-        Person person = personRepository.findOne(1L);
-        System.out.println("Person found with findOne(1L):");
-        System.out.println("--------------------------------");
-        System.out.println(person);
-        System.out.println();
-
-        // Fetch customers by last name
-        System.out.println("Person found with findByLastName('Bauer'):");
-        System.out.println("--------------------------------------------");
-        for (Person bauer : personRepository.findByLastName("Bauer")) {
-            System.out.println(bauer);
-        }
-    }
+  }
 }

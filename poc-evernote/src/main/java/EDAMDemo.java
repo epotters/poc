@@ -22,7 +22,13 @@ import com.evernote.edam.error.EDAMSystemException;
 import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
-import com.evernote.edam.type.*;
+import com.evernote.edam.type.Data;
+import com.evernote.edam.type.Note;
+import com.evernote.edam.type.NoteSortOrder;
+import com.evernote.edam.type.Notebook;
+import com.evernote.edam.type.Resource;
+import com.evernote.edam.type.ResourceAttributes;
+import com.evernote.edam.type.Tag;
 import com.evernote.thrift.transport.TTransportException;
 
 import java.io.ByteArrayOutputStream;
