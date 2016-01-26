@@ -91,12 +91,6 @@
       <artifactId>h2</artifactId>
     </dependency>
 
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-log4j</artifactId>
-    </dependency>
-
 
     <!-- Code generation -->
     <dependency>

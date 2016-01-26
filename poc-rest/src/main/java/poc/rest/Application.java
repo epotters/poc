@@ -1,7 +1,8 @@
 package poc.rest;
 
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -17,7 +18,7 @@ import poc.rest.config.oauth2a.CustomOAuth2RestTemplate;
 @EnableOAuth2Sso
 public class Application extends SpringBootServletInitializer {
 
-    private static Logger LOG = Logger.getLogger(Application.class);
+  private static final Log LOG = LogFactory.getLog(Application.class);
 
     UserInfoRestTemplateCustomizer customOauth2Template = new CustomOAuth2RestTemplate();
 
