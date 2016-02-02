@@ -15,21 +15,22 @@ import poc.rest.config.oauth2a.CustomOAuth2RestTemplate;
 
 @ContextConfiguration(classes = {poc.core.config.CoreContext.class, poc.rest.config.RestContext.class})
 @SpringBootApplication
-@EnableOAuth2Sso
+// @EnableOAuth2Sso
+// ??? @EnableOAuth2Client
 public class Application extends SpringBootServletInitializer {
 
   private static final Log LOG = LogFactory.getLog(Application.class);
 
-    UserInfoRestTemplateCustomizer customOauth2Template = new CustomOAuth2RestTemplate();
+  UserInfoRestTemplateCustomizer customOauth2Template = new CustomOAuth2RestTemplate();
 
 
-    public static void main(String[] args) {
-        LOG.info("Starting main application");
-        SpringApplication.run(Application.class, args);
-    }
+  public static void main(String[] args) {
+    LOG.info("Starting main application");
+    SpringApplication.run(Application.class, args);
+  }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    return application.sources(Application.class);
+  }
 }
