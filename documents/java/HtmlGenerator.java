@@ -25,12 +25,10 @@ import java.util.Vector;
 
 
 public class HtmlGenerator {
-  private static final Log LOG = LogFactory.getLog(HtmlGenerator.class);
-
   public static final String MODE_WEBAPP = "webapp";
   public static final String MODE_WHITE_LABEL = "whiteLabel";
   public static final String MODE_APP = "phonegap";
-
+  private static final Log LOG = LogFactory.getLog(HtmlGenerator.class);
   private static final String INDEX_VAR_CACHE_MANIFEST = "${cacheManifest}";
   private static final String INDEX_VAR_MIN_JS = "${minJs}";
   private static final String INDEX_VAR_VERSION = "${version}";
@@ -58,7 +56,7 @@ public class HtmlGenerator {
   private static final String NGVA_VAR_BASE_URL = "${baseUrl}";
   private static final String NGVA_VAR_LOGO_SRC = "${logoSrc}";
   private static final String NGVA_VAR_INTRO_SRC = "${introSrc}";
-  
+
   private static final String DEELNEMERS_VAR_PAGE_CONTENT = "${page.content}";
 
   private Properties properties;
@@ -141,7 +139,8 @@ public class HtmlGenerator {
   private String nvgaTargetFolder() {
     return properties.getProperty("nvgaTarget");
   }
-  
+
+
   private String deelnemersSourceFolder() {
     return properties.getProperty("deelnemersSource");
   }
@@ -150,7 +149,8 @@ public class HtmlGenerator {
   private String deelnemersTargetFolder() {
     return properties.getProperty("deelnemersTarget");
   }
-  
+
+
   private String deelnemersTemplate() {
     return properties.getProperty("deelnemersTemplate");
   }
@@ -206,11 +206,9 @@ public class HtmlGenerator {
       bodyClass = "white-label-app";
     }
 
-    String searchList[] = new String[] { INDEX_VAR_CACHE_MANIFEST, INDEX_VAR_MIN_JS, INDEX_VAR_VERSION, INDEX_VAR_BASE_URL,
-        INDEX_VAR_PAGE_BASE_URL, INDEX_VAR_PAGE_SRC, INDEX_VAR_BODY_CLASS, INDEX_VAR_JQUERY_VERSION,
-        INDEX_VAR_JQUERY_VALIDATION_VERSION, INDEX_VAR_JQUERY_MOBILE_VERSION, INDEX_VAR_CORDOVA_VERSION };
-    String replacementList[] = new String[] { cacheManifest, minJs, version, baseUrl, pageBaseUrl, pageSrc, bodyClass,
-        jqueryVersion(), jqueryValidationVersion(), jqueryMobileVersion(), cordovaVersion() };
+    String searchList[] = new String[] { INDEX_VAR_CACHE_MANIFEST, INDEX_VAR_MIN_JS, INDEX_VAR_VERSION, INDEX_VAR_BASE_URL, INDEX_VAR_PAGE_BASE_URL, INDEX_VAR_PAGE_SRC, INDEX_VAR_BODY_CLASS, INDEX_VAR_JQUERY_VERSION, INDEX_VAR_JQUERY_VALIDATION_VERSION,
+        INDEX_VAR_JQUERY_MOBILE_VERSION, INDEX_VAR_CORDOVA_VERSION };
+    String replacementList[] = new String[] { cacheManifest, minJs, version, baseUrl, pageBaseUrl, pageSrc, bodyClass, jqueryVersion(), jqueryValidationVersion(), jqueryMobileVersion(), cordovaVersion() };
     indexTemplate = StringUtils.replaceEach(indexTemplate, searchList, replacementList);
 
     indexTemplate = checkIfDef(indexTemplate, "debug", debugMode());
@@ -222,7 +220,6 @@ public class HtmlGenerator {
     FileUtils.writeStringToFile(indexFile, indexTemplate);
     LOG.info("index target:" + indexFile);
   }
- 
 
 
   protected boolean isAppMode(String mode) {
@@ -259,14 +256,13 @@ public class HtmlGenerator {
     pages.add(new Page("p06-samenvatting", "Samenvatting", 6, true, null, "form", "form"));
     pages.add(new Page("p07-akkoordverklaring", "Akkoordverklaring", 7, true, null, "form", "form"));
     pages.add(new Page("een-ogenblik-geduld", "Een ogenblik geduld", null, false, null, "message", "dialog"));
-    pages.add(new Page("mobiel-schade-melden-niet-mogelijk", "Mobiel schade melden is niet mogelijk", null, false, null,
-        "message", "exit"));
+    pages.add(new Page("mobiel-schade-melden-niet-mogelijk", "Mobiel schade melden is niet mogelijk", null, false, null, "message", "exit"));
     pages.add(new Page("schademelding-verzonden", "Schademelding verzonden", null, false, null, "message", "plain"));
     pages.add(new Page("schademelding-verzonden-WBF1", "Schademelding verzonden", null, false, null, "message", "plain"));
     pages.add(new Page("schademelding-verzonden-WBF2", "Schademelding verzonden", null, false, null, "message", "plain"));
     pages.add(new Page("schademelding-verzonden-WBF4", "Schademelding verzonden", null, false, null, "message", "plain"));
     pages.add(new Page("schademelding-verzonden-WBF5", "Schademelding verzonden", null, false, null, "message", "plain"));
-    
+
     if (isWhiteLabelMode(mode)) {
       pages.add(new Page("white-label-niet-mogelijk", "Ga naar Mobielschademelden.nl", null, false, null, "message", "dialog"));
     }
@@ -287,10 +283,8 @@ public class HtmlGenerator {
 
       String pageStatus = createStatus(pages, index);
 
-      String searchList[] = new String[] { PAGE_VAR_PAGE_NAME, PAGE_VAR_PAGE_TITLE, PAGE_VAR_PAGE_TYPE, PAGE_VAR_NEXT_PAGE_TITLE,
-          PAGE_VAR_PAGE_STATUS, PAGE_VAR_PAGE_CONTENT };
-      String replacementList[] = new String[] { page.getName(), page.getTitle(), page.getType(), nextPageTitle, pageStatus,
-          pageContent };
+      String searchList[] = new String[] { PAGE_VAR_PAGE_NAME, PAGE_VAR_PAGE_TITLE, PAGE_VAR_PAGE_TYPE, PAGE_VAR_NEXT_PAGE_TITLE, PAGE_VAR_PAGE_STATUS, PAGE_VAR_PAGE_CONTENT };
+      String replacementList[] = new String[] { page.getName(), page.getTitle(), page.getType(), nextPageTitle, pageStatus, pageContent };
 
       pageSrc += StringUtils.replaceEach(pageTemplate, searchList, replacementList);
     }
@@ -330,9 +324,9 @@ public class HtmlGenerator {
           currentPageFound = true;
         }
 
-        status += "<a href=\"" + url + "\" data-role=\"button\" data-icon=\"" + dataIcon + "\" "
-            + "data-iconpos=\"notext\" data-theme=\"" + dataTheme + "\" class=\"status " + page.getName() + "-status\" "
-            + "title=\"" + page.getTitle() + "\">" + page.getTitle() + "</a>\n";
+        status +=
+            "<a href=\"" + url + "\" data-role=\"button\" data-icon=\"" + dataIcon + "\" " + "data-iconpos=\"notext\" data-theme=\"" + dataTheme + "\" class=\"status " + page.getName() + "-status\" " + "title=\"" + page.getTitle() + "\">" + page.getTitle()
+                + "</a>\n";
       }
     }
 
@@ -389,10 +383,9 @@ public class HtmlGenerator {
       }
     };
 
-    Iterator<File> whiteLabelCSSFilesIterator = FileUtils.iterateFiles(nvgaSourceFolder(), whiteLabelCSSFileFilter,
-        TrueFileFilter.INSTANCE);
+    Iterator<File> whiteLabelCSSFilesIterator = FileUtils.iterateFiles(nvgaSourceFolder(), whiteLabelCSSFileFilter, TrueFileFilter.INSTANCE);
 
-    for (; whiteLabelCSSFilesIterator.hasNext();) {
+    for (; whiteLabelCSSFilesIterator.hasNext(); ) {
       File whiteLabelCSSFile = whiteLabelCSSFilesIterator.next();
       File profileFolder = whiteLabelCSSFile.getParentFile();
       String profileName = profileFolder.getName();
@@ -422,17 +415,17 @@ public class HtmlGenerator {
     Iterator<File> introFilesIterator = FileUtils.iterateFiles(nvgaSourceFolder(), nvgaIntroFileFilter, TrueFileFilter.INSTANCE);
     String profileList = "";
 
-    for (; introFilesIterator.hasNext();) {
+    for (; introFilesIterator.hasNext(); ) {
       profileList += createNVGAIntroIndex(introFilesIterator.next());
     }
 
     createNVGAList(profileList);
   }
-  
-  
+
+
   /**
    * Builds a static deelnemers page html
-   * 
+   *
    * @throws IOException
    */
   public void buildDeelnemers() throws IOException {
@@ -440,14 +433,14 @@ public class HtmlGenerator {
     LOG.info("Deelnemers target=" + deelnemersTargetFolder());
 
     File deelnemersTemplate = new File(deelnemersTemplate());
-    
+
     String deelnemersPage = FileUtils.readFileToString(deelnemersTemplate);
-    
+
     List<String> profiles = new LinkedList<String>();
 
     File directory = new File(deelnemersSourceFolder());
     File[] files = directory.listFiles();
-    
+
     for (int i = 0; i < files.length; i++) {
 
       File file = files[i];
@@ -455,22 +448,22 @@ public class HtmlGenerator {
       if (file.isDirectory()) {
 
         File profileJson = new File(file.getPath(), "profile.json");
-        
-        if(profileJson.canRead()) {
-          
+
+        if (profileJson.canRead()) {
+
           JSONObject jsonObject;
-          
+
           try {
             jsonObject = (JSONObject) new JSONParser().parse(FileUtils.readFileToString(profileJson));
-            
+
             String profileName = (String) jsonObject.get("profiel-scherm-naam");
-            if(StringUtils.isNotBlank(profileName) && !profiles.contains(profileName)){
+            if (StringUtils.isNotBlank(profileName) && !profiles.contains(profileName)) {
               profiles.add(profileName);
             }
           }
           catch (ParseException e) {
             LOG.error("Error parsing profile.json for folder: " + file.getName() + " in path: " + file.getPath());
-          }          
+          }
         }
       }
     }
@@ -483,28 +476,28 @@ public class HtmlGenerator {
     String abc = "";
     String src = "";
 
-    for(String profileName : profiles) {
-      
-      if(StringUtils.isNotBlank(profileName)) {
-        
+    for (String profileName : profiles) {
+
+      if (StringUtils.isNotBlank(profileName)) {
+
         abc = profileName.substring(0, 1);
-        
+
         if (!abc.equals(prevAbc)) {
           src += "<div class=\"abc\"><a name=\"" + abc + "\">" + abc + "</a></div>\n";
         }
-  
+
         src += "<div class=\"profile\">" + profileName + "</div><br />\n";
         prevAbc = abc;
-      
+
       }
     }
-    
+
     deelnemersPage = StringUtils.replace(deelnemersPage, DEELNEMERS_VAR_PAGE_CONTENT, src);
-    
+
     File file = new File(deelnemersTargetFolder(), "deelnemers.html");
-    
+
     FileUtils.writeStringToFile(file, deelnemersPage);
-    
+
   }
 
 
@@ -516,8 +509,7 @@ public class HtmlGenerator {
 
     String pageTitle = "Intropagina";
     String baseUrl = "../";
-    String logoUrl = "<div class=\"image\"><img src=\"" + baseUrl + "profiles/" + profileName + "/" + profileName + "-logo.png"
-        + "\" /></div>\n";
+    String logoUrl = "<div class=\"image\"><img src=\"" + baseUrl + "profiles/" + profileName + "/" + profileName + "-logo.png" + "\" /></div>\n";
     String introText = "<div class=\"intro-text\">" + FileUtils.readFileToString(profileIntroFile) + "</div>\n";
     String introTemplate = FileUtils.readFileToString(nvgaTemplateFile());
 

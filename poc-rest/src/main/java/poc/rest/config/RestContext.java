@@ -1,5 +1,7 @@
 package poc.rest.config;
 
+
+import poc.core.config.CoreContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import poc.core.config.CoreContext;
 
 import java.util.Locale;
 
@@ -17,10 +18,9 @@ import java.util.Locale;
  */
 
 @Configuration
-@Import({CoreContext.class})
-@ComponentScan(basePackages = {"poc.rest.controller", "poc.rest.service"})
+@Import({ CoreContext.class })
+@ComponentScan(basePackages = { "poc.rest.controller", "poc.rest.service" })
 public class RestContext {
-
 
   @Bean
   public LocaleResolver localeResolver() {
@@ -29,6 +29,7 @@ public class RestContext {
     return slr;
   }
 
+
   @Bean
   public ReloadableResourceBundleMessageSource messageSource() {
     ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -36,6 +37,5 @@ public class RestContext {
     messageSource.setCacheSeconds(3600); // Refresh cache once per hour
     return messageSource;
   }
-
 
 }

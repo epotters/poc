@@ -1,8 +1,10 @@
 package poc.jobs.bibliotheek;
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
 
 /**
  * Created by eelko on 14-02-2015.
@@ -13,9 +15,11 @@ public class DataCollector {
 
   private HtmlUnitDriver driver;
 
+
   public DataCollector() {
     init();
   }
+
 
   public static void main(String args[]) {
 
@@ -24,6 +28,7 @@ public class DataCollector {
     collector.collect();
   }
 
+
   private void init() {
 
     driver = new HtmlUnitDriver(true);
@@ -31,11 +36,13 @@ public class DataCollector {
 
   }
 
+
   public void collect() {
     System.out.println("Logging in " + SOURCE_NAME);
     login();
     driver.quit();
   }
+
 
   private void login() {
     // String url = "http://www.bibliotheekutrecht.nl/mijn-menu.html";
@@ -46,9 +53,7 @@ public class DataCollector {
     String userNameFieldName = "newlener";
     String passwordFieldName = "pinkode";
 
-
     driver.get(url);
-
 
     System.out.println("Find the login fields and set username and password");
 
@@ -63,11 +68,9 @@ public class DataCollector {
     // Now submit the form. WebDriver will find the form for us from the element
     passwordField.submit();
 
-
     System.out.println("Page title is: " + driver.getTitle());
     System.out.println("Page URL is: " + driver.getCurrentUrl());
 
   }
-
 
 }

@@ -5,6 +5,7 @@ import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 
+
 /**
  * Second hop example. Stores, retrieves, and removes example content.
  */
@@ -39,7 +40,8 @@ public class SecondHop {
       // Remove content
       root.getNode("hello").remove();
       session.save();
-    } finally {
+    }
+    finally {
       session.logout();
     }
   }

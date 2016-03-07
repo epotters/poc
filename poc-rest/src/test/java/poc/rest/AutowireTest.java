@@ -1,5 +1,8 @@
 package poc.rest;
 
+
+import poc.core.repository.PersonRepository;
+import poc.rest.controller.PersonController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -13,18 +16,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import poc.core.repository.PersonRepository;
-import poc.rest.controller.PersonController;
+
 
 /**
  * Created by eelko on 08-01-2016.
  */
-@ContextConfiguration(classes = {poc.rest.config.RestContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@ContextConfiguration(classes = { poc.rest.config.RestContext.class })
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AutowireTest {
-
 
   private static final Log LOG = LogFactory.getLog(AutowireTest.class);
 
@@ -34,6 +34,7 @@ public class AutowireTest {
   @Autowired
   private PersonController personController;
 
+
   @Before
   public void prepareTests() {
 
@@ -41,12 +42,12 @@ public class AutowireTest {
 
   }
 
+
   @Test
   public void doesAutowireWork() {
     LOG.debug("@doesAutowireWork");
     Assert.assertNotNull(personRepository);
     Assert.assertNotNull(personController);
   }
-
 
 }

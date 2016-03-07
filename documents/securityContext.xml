@@ -15,21 +15,20 @@
   <security:http pattern="/welcome/**" security="none"/>
 
 
-
   <security:http auto-config="false" use-expressions="true" entry-point-ref="authenticationEntryPoint"
                  access-denied-page="/error?httpError=403">
 
     <security:form-login login-page="/login" default-target-url="/home" authentication-failure-url="/login?error"
-                         login-processing-url="/j_security_check" />
+                         login-processing-url="/j_security_check"/>
 
     <security:logout logout-url="/j_spring_security_logout" logout-success-url="/login?logout" delete-cookies="JSESSIONID"/>
 
-    <security:session-management invalid-session-url="/login?error" />
+    <security:session-management invalid-session-url="/login?error"/>
 
     <security:remember-me key="myAppKey" user-service-ref="securityService"/>
 
 
-    <security:custom-filter ref="proxyAuthenticationHeaderFilter" position="PRE_AUTH_FILTER" />
+    <security:custom-filter ref="proxyAuthenticationHeaderFilter" position="PRE_AUTH_FILTER"/>
 
     <security:intercept-url pattern="/error" access="permitAll"/>
     <security:intercept-url pattern="/administrator/**" access="hasRole('ROLE_ADMIN')"/>
@@ -70,8 +69,8 @@
     <security:authentication-provider ref="preAuthenticatedAuthenticationProvider"/>
     <security:authentication-provider>
       <security:user-service>
-        <security:user name="jimi" password="jimispassword" authorities="ROLE_USER, ROLE_ADMIN" />
-        <security:user name="bob" password="bobspassword" authorities="ROLE_USER" />
+        <security:user name="jimi" password="jimispassword" authorities="ROLE_USER, ROLE_ADMIN"/>
+        <security:user name="bob" password="bobspassword" authorities="ROLE_USER"/>
       </security:user-service>
     </security:authentication-provider>
   </security:authentication-manager>

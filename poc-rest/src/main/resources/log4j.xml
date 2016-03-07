@@ -2,39 +2,39 @@
 <!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/docs/api/org/apache/log4j/xml/log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d - %-5p - %-50.50c - %m%n"/>
-        </layout>
-    </appender>
+  <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d - %-5p - %-50.50c - %m%n"/>
+    </layout>
+  </appender>
 
-    <appender name="FILE" class="org.apache.log4j.FileAppender">
-        <param name="File" value="target/log4j.log"/>
-        <param name="Append" value="False"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d - %-5p - %-50.50c - %m%n"/>
-        </layout>
-    </appender>
+  <appender name="FILE" class="org.apache.log4j.FileAppender">
+    <param name="File" value="target/log4j.log"/>
+    <param name="Append" value="False"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d - %-5p - %-50.50c - %m%n"/>
+    </layout>
+  </appender>
 
-    <appender name="FILE-POC" class="org.apache.log4j.FileAppender">
-        <param name="File" value="target/log4j-poc.log"/>
-        <param name="Append" value="False"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d - %-5p - %-50.50c - %m%n"/>
-        </layout>
-    </appender>
+  <appender name="FILE-POC" class="org.apache.log4j.FileAppender">
+    <param name="File" value="target/log4j-poc.log"/>
+    <param name="Append" value="False"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d - %-5p - %-50.50c - %m%n"/>
+    </layout>
+  </appender>
 
-    <logger name="poc">
-        <appender-ref ref="FILE-POC"/>
-    </logger>
+  <logger name="poc">
+    <appender-ref ref="FILE-POC"/>
+  </logger>
 
-    <logger name="org.hibernate.SQL">
-        <appender-ref ref="FILE-POC"/>
-    </logger>
+  <logger name="org.hibernate.SQL">
+    <appender-ref ref="FILE-POC"/>
+  </logger>
 
-    <root>
-        <level value="ALL"/>
-        <appender-ref ref="STDOUT"/>
-    </root>
+  <root>
+    <level value="ALL"/>
+    <appender-ref ref="STDOUT"/>
+  </root>
 
 </log4j:configuration>

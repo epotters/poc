@@ -29,7 +29,8 @@ public class HtmlGeneratorTest {
     htmlGenerator.buildIndex(HtmlGenerator.MODE_APP, "../phonegap/index.html");
     //htmlGenerator.buildIndex(HtmlGenerator.MODE_WEBAPP, "test.html");
   }
-  
+
+
   @Test()
   public void whiteLabelTest() throws IOException {
     htmlGenerator.buildWhiteLabels();

@@ -1,10 +1,10 @@
 package poc.rest.config;
 
 
+import poc.rest.Application;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import poc.rest.Application;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

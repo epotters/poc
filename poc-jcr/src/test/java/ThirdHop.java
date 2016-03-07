@@ -2,6 +2,7 @@
  * Created by eelko on 13-12-2015.
  */
 
+
 import org.apache.jackrabbit.core.TransientRepository;
 
 import javax.jcr.ImportUUIDBehavior;
@@ -15,6 +16,7 @@ import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Value;
 import java.io.InputStream;
+
 
 /**
  * Third Jackrabbit example application. Imports an example XML file
@@ -54,10 +56,12 @@ public class ThirdHop {
 
       //output the repository content
       dump(root);
-    } finally {
+    }
+    finally {
       session.logout();
     }
   }
+
 
   /**
    * Recursively outputs the contents of the given node.
@@ -80,7 +84,8 @@ public class ThirdHop {
         for (int i = 0; i < values.length; i++) {
           System.out.println(property.getPath() + " = " + values[i].getString());
         }
-      } else {
+      }
+      else {
         // A single-valued property
         System.out.println(property.getPath() + " = " + property.getString());
       }

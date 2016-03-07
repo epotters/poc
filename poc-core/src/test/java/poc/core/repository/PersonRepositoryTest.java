@@ -1,5 +1,7 @@
 package poc.core.repository;
 
+
+import poc.core.domain.Person;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -13,16 +15,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import poc.core.domain.Person;
 
 
 /**
  * Created by eelko on 2015-02-06
  */
 
-@ContextConfiguration(classes = {poc.core.config.CoreContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@ContextConfiguration(classes = { poc.core.config.CoreContext.class })
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PersonRepositoryTest {
 
@@ -31,12 +31,14 @@ public class PersonRepositoryTest {
   @Autowired
   private PersonRepository personRepository;
 
+
   @Before
   public void prepareTests() {
 
     LOG.debug("@prepareTests");
 
   }
+
 
   @Test
   public void isRepositoryAvailable() {

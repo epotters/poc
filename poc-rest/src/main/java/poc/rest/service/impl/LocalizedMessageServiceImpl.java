@@ -1,16 +1,17 @@
 package poc.rest.service.impl;
 
+
+import poc.rest.service.LocalizedMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
-import poc.rest.service.LocalizedMessageService;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 
 /**
  * Created by epotters on 2016-02-01
@@ -21,6 +22,7 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
   @Autowired
   private MessageSource messageSource;
+
 
   @Override
   public String getMessage(String key) {
@@ -34,11 +36,11 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
     return LocaleContextHolder.getLocale();
   }
 
+
   @Override
   public List<Locale> availableLocales() {
     List<Locale> locales = new ArrayList<>();
     Locale[] allAvailableLocales = Locale.getAvailableLocales();
-
 
     for (Locale locale : allAvailableLocales) {
       try {
@@ -46,13 +48,12 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
         System.out.println(msg + " - " + locale.getDisplayName());
 
         locales.add(locale);
-      } catch (NoSuchMessageException nsme) {
+      }
+      catch (NoSuchMessageException nsme) {
         System.out.println("No resource bundle found for " + locale.getDisplayName());
       }
     }
     return locales;
   }
-
-
 
 }

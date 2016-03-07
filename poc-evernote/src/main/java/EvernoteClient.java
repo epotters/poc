@@ -33,12 +33,12 @@ public class EvernoteClient {
 
   private static final Log LOG = LogFactory.getLog(EvernoteClient.class);
 
-  private static final String AUTH_TOKEN =
-      "S=s2:U=73f79:E=152ae3f5e29:C=14b568e3030:P=1cd:A=en-devtoken:V=2:H=b1d38f0d9707794532dbb049a6c0e305";
+  private static final String AUTH_TOKEN = "S=s2:U=73f79:E=152ae3f5e29:C=14b568e3030:P=1cd:A=en-devtoken:V=2:H=b1d38f0d9707794532dbb049a6c0e305";
 
   private UserStoreClient userStore;
   private NoteStoreClient noteStore;
   private String newNoteGuid;
+
 
   /**
    * Intialize UserStore and NoteStore clients. During this step, we
@@ -51,9 +51,7 @@ public class EvernoteClient {
     ClientFactory factory = new ClientFactory(evernoteAuth);
     userStore = factory.createUserStoreClient();
 
-    boolean versionOk = userStore.checkVersion("Evernote EDAMDemo (Java)",
-        com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
-        com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
+    boolean versionOk = userStore.checkVersion("Evernote EDAMDemo (Java)", com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR, com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
     if (!versionOk) {
       System.err.println("Incompatible Evernote client protocol version");
       System.exit(1);
@@ -62,6 +60,7 @@ public class EvernoteClient {
     // Set up the NoteStore client
     noteStore = factory.createNoteStoreClient();
   }
+
 
   /**
    * Console entry point
@@ -73,8 +72,7 @@ public class EvernoteClient {
     }
     if ("your developer token".equals(token)) {
       System.err.println("Please fill in your developer token");
-      System.err
-          .println("To get a developer token, go to https://sandbox.evernote.com/api/DeveloperToken.action");
+      System.err.println("To get a developer token, go to https://sandbox.evernote.com/api/DeveloperToken.action");
       return;
     }
 
@@ -86,42 +84,45 @@ public class EvernoteClient {
       Notebook notebook = client.getNotebookByName(notebookName);
       client.listNotesInNotebook(notebook);
 
-
       // client.listNotes();
       // client.createNote();
       // client.searchNotes();
       // client.updateNoteTag();
 
-    } catch (EDAMUserException e) {
+    }
+    catch (EDAMUserException e) {
       // These are the most common error types that you'll need to
       // handle
       // EDAMUserException is thrown when an API call fails because a
       // paramter was invalid.
       if (e.getErrorCode() == EDAMErrorCode.AUTH_EXPIRED) {
         System.err.println("Your authentication token is expired!");
-      } else if (e.getErrorCode() == EDAMErrorCode.INVALID_AUTH) {
-        System.err.println("Your authentication token is invalid!");
-      } else if (e.getErrorCode() == EDAMErrorCode.QUOTA_REACHED) {
-        System.err.println("Your authentication token is invalid!");
-      } else {
-        System.err.println("Error: " + e.getErrorCode().toString()
-            + " parameter: " + e.getParameter());
       }
-    } catch (EDAMSystemException e) {
+      else if (e.getErrorCode() == EDAMErrorCode.INVALID_AUTH) {
+        System.err.println("Your authentication token is invalid!");
+      }
+      else if (e.getErrorCode() == EDAMErrorCode.QUOTA_REACHED) {
+        System.err.println("Your authentication token is invalid!");
+      }
+      else {
+        System.err.println("Error: " + e.getErrorCode().toString() + " parameter: " + e.getParameter());
+      }
+    }
+    catch (EDAMSystemException e) {
       System.err.println("System error: " + e.getErrorCode().toString());
-    } catch (TTransportException t) {
+    }
+    catch (TTransportException t) {
       System.err.println("Networking error: " + t.getMessage());
     }
   }
+
 
   /**
    * Helper method to read the contents of a file on disk and create a new Data
    * object.
    */
   private static Data readFileAsData(String fileName) throws Exception {
-    String filePath = new File(EvernoteClient.class.getResource(
-        EvernoteClient.class.getCanonicalName() + ".class").getPath()).getParent()
-        + File.separator + fileName;
+    String filePath = new File(EvernoteClient.class.getResource(EvernoteClient.class.getCanonicalName() + ".class").getPath()).getParent() + File.separator + fileName;
     // Read the full binary contents of the file
     FileInputStream in = new FileInputStream(filePath);
     ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -142,6 +143,7 @@ public class EvernoteClient {
     return data;
   }
 
+
   /**
    * Helper method to convert a byte array to a hexadecimal string.
    */
@@ -156,6 +158,7 @@ public class EvernoteClient {
     }
     return sb.toString();
   }
+
 
   /**
    * Retrieve and display a list of the user's notes.
@@ -174,6 +177,7 @@ public class EvernoteClient {
     System.out.println();
   }
 
+
   private Notebook getNotebookByName(String name) throws Exception {
     List<Notebook> notebooks = noteStore.listNotebooks();
     for (Notebook notebook : notebooks) {
@@ -184,6 +188,7 @@ public class EvernoteClient {
     }
     return null;
   }
+
 
   private void listNotesInNotebook(Notebook notebook) throws Exception {
 
@@ -204,10 +209,10 @@ public class EvernoteClient {
       // Note fullNote = noteStore.getNote(note.getGuid(), true, true, false, false);
       // System.out.println(fullNote.getContent());
 
-
       System.out.println();
     }
   }
+
 
   /**
    * Create a new note containing a little text and the Evernote icon.
@@ -250,12 +255,9 @@ public class EvernoteClient {
     // (ENML). The full ENML specification can be found in the Evernote API
     // Overview
     // at http://dev.evernote.com/documentation/cloud/chapters/ENML.php
-    String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        + "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
-        + "<en-note>"
-        + "<span style=\"color:green;\">Here's the Evernote logo:</span><br/>"
-        + "<en-media type=\"image/png\" hash=\"" + hashHex + "\"/>"
-        + "</en-note>";
+    String content =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">" + "<en-note>" + "<span style=\"color:green;\">Here's the Evernote logo:</span><br/>" + "<en-media type=\"image/png\" hash=\""
+            + hashHex + "\"/>" + "</en-note>";
     note.setContent(content);
 
     // Finally, send the new note to Evernote using the createNote method
@@ -264,10 +266,10 @@ public class EvernoteClient {
     Note createdNote = noteStore.createNote(note);
     newNoteGuid = createdNote.getGuid();
 
-    System.out.println("Successfully created a new note with GUID: "
-        + newNoteGuid);
+    System.out.println("Successfully created a new note with GUID: " + newNoteGuid);
     System.out.println();
   }
+
 
   /**
    * Search a user's notes and display the results.
@@ -311,13 +313,12 @@ public class EvernoteClient {
       // is included.
       // To get the note content and/or binary resources, call getNote()
       // using the note's GUID.
-      Note fullNote = noteStore.getNote(note.getGuid(), true, true, false,
-          false);
-      System.out.println("Note contains " + fullNote.getResourcesSize()
-          + " resources");
+      Note fullNote = noteStore.getNote(note.getGuid(), true, true, false, false);
+      System.out.println("Note contains " + fullNote.getResourcesSize() + " resources");
       System.out.println();
     }
   }
+
 
   /**
    * Update the tags assigned to a note. This method demonstrates how only
@@ -360,8 +361,7 @@ public class EvernoteClient {
     // To prove that we didn't destroy the note, let's fetch it again and
     // verify that it still has 1 resource.
     note = noteStore.getNote(newNoteGuid, false, false, false, false);
-    System.out.println("After update, note has " + note.getResourcesSize()
-        + " resource(s)");
+    System.out.println("After update, note has " + note.getResourcesSize() + " resource(s)");
     System.out.println("After update, note tags are: ");
     for (String tagGuid : note.getTagGuids()) {
       Tag tag = noteStore.getTag(tagGuid);

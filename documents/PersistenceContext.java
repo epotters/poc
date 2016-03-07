@@ -32,17 +32,17 @@ import java.util.Properties;
 @EnableSpringDataWebSupport
 public class PersistenceContext {
 
-
   private static final String DB_TYPE_MYSQL = "mysql";
   private static final String DB_TYPE_H2 = "h2";
   private static final String DATABASE_TYPE = DB_TYPE_H2;
+
 
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 
-      em.setPackagesToScan("poc.core.domain");
+    em.setPackagesToScan("poc.core.domain");
 
     em.setDataSource(primaryDataSource());
     JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -54,11 +54,11 @@ public class PersistenceContext {
   }
 
 
-
   public DataSource dataSource() {
     if (DATABASE_TYPE.equals(DB_TYPE_MYSQL)) {
       return primaryDataSource();
-    } else { // defaults to H2 database
+    }
+    else { // defaults to H2 database
       return dataSourceH2();
     }
   }
@@ -122,7 +122,8 @@ public DataSource secondaryDataSource() {
     if (DATABASE_TYPE.equals(DB_TYPE_MYSQL)) {
       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
       properties.setProperty("hibernate.hbm2ddl.auto", "");
-    } else { // defaults to H2 database
+    }
+    else { // defaults to H2 database
       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
       properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
     }
