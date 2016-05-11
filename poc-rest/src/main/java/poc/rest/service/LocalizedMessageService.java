@@ -1,6 +1,7 @@
 package poc.rest.service;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -13,8 +14,10 @@ public interface LocalizedMessageService {
 
   public String getMessage(String key);
 
-  public List<Locale> availableLocales();
-
   public Locale currentLocale();
+
+  public List<Locale> customizedLocales() throws IOException;
+
+  public List<Locale> availableLocales();
 
 }

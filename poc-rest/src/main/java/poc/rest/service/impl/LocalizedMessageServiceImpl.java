@@ -4,13 +4,17 @@ package poc.rest.service.impl;
 import poc.rest.service.LocalizedMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 /**
@@ -22,6 +26,9 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
   @Autowired
   private MessageSource messageSource;
+
+  @Autowired
+  ResourcePatternResolver resourceResolver;
 
 
   @Override
@@ -37,23 +44,38 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
   }
 
 
-  @Override
-  public List<Locale> availableLocales() {
+  public List<Locale> customizedLocales() throws IOException {
     List<Locale> locales = new ArrayList<>();
-    Locale[] allAvailableLocales = Locale.getAvailableLocales();
 
-    for (Locale locale : allAvailableLocales) {
-      try {
-        String msg = messageSource.getMessage("person.firstName.label", null, locale);
-        System.out.println(msg + " - " + locale.getDisplayName());
+    String resourcePattern = "classpath:locale/*.properties";
+    String startString = "messages_";
+    String endString = ".properties";
 
-        locales.add(locale);
-      }
-      catch (NoSuchMessageException nsme) {
-        System.out.println("No resource bundle found for " + locale.getDisplayName());
+    Resource[] resources = resourceResolver.getResources(resourcePattern);
+    for (Resource resource : resources) {
+      String fileName = resource.getFilename();
+      if (fileName.startsWith(startString) && fileName.endsWith(endString)) {
+        String languageTag = fileName.substring(startString.length(), fileName.indexOf(endString));
+        locales.add(Locale.forLanguageTag(languageTag));
       }
     }
     return locales;
+  }
+
+
+  public List<String> listKeys() {
+    List<String> keys = new ArrayList<>();
+    ResourceBundle messages = ResourceBundle.getBundle("locale/messages", currentLocale());
+    for (String key : messages.keySet()) {
+      keys.add(key);
+    }
+    return keys;
+  }
+
+
+  @Override
+  public List<Locale> availableLocales() {
+    return Arrays.asList(Locale.getAvailableLocales());
   }
 
 }
