@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,8 +18,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 
 /**
