@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-
+  <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-integration-tests</artifactId>
   <name>POC Integration tests</name>
   <description>Integration tests (Selenium test automation)</description>

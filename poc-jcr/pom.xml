@@ -11,7 +11,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>poc</groupId>
+  <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-jcr</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>POC JCR</name>
@@ -46,20 +46,6 @@
       <artifactId>jackrabbit-core</artifactId>
       <version>${jackrabbit.version}</version>
     </dependency>
-
-    <!--
-    <dependency>
-      <groupId>org.apache.jackrabbit</groupId>
-      <artifactId>jackrabbit-jcr-commons</artifactId>
-      <version>${jackrabbit.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.jackrabbit</groupId>
-      <artifactId>jackrabbit-webdav</artifactId>
-      <version>${jackrabbit.version}</version>
-    </dependency>
-    -->
 
   </dependencies>
 

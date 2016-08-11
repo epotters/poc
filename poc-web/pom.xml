@@ -9,6 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-web</artifactId>
   <name>POC Web</name>
   <description>Web probeersels</description>
@@ -29,7 +30,7 @@
     </dependency>
 
     <dependency>
-      <groupId>nl.xs4all.epotters</groupId>
+      <groupId>nl.xs4all.epotters.poc</groupId>
       <artifactId>poc-core</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>

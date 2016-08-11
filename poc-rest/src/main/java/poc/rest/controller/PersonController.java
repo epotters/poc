@@ -1,6 +1,7 @@
 package poc.rest.controller;
 
 
+
 import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/people")
-// @EnableResourceServer
 public class PersonController {
 
   @Autowired
@@ -47,7 +47,7 @@ public class PersonController {
 
     Page<Person> people = personRepository.findAll(pageable);
 
-    return new ResponseEntity<PagedResources<Person>>(assembler.toResource(people), HttpStatus.OK);
+    return new ResponseEntity<>(assembler.toResource(people), HttpStatus.OK);
   }
 
 }

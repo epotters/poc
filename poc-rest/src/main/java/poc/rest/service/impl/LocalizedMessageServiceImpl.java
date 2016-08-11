@@ -25,10 +25,9 @@ import java.util.ResourceBundle;
 public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
   @Autowired
-  private MessageSource messageSource;
-
-  @Autowired
   ResourcePatternResolver resourceResolver;
+  @Autowired
+  private MessageSource messageSource;
 
 
   @Override

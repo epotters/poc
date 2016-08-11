@@ -3,12 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
-    <artifactId>poc</artifactId>
     <groupId>nl.xs4all.epotters</groupId>
+    <artifactId>poc</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-rest</artifactId>
   <name>POC REST Module</name>
   <packaging>jar</packaging>
@@ -24,8 +26,9 @@
 
 
   <dependencies>
+
     <dependency>
-      <groupId>nl.xs4all.epotters</groupId>
+      <groupId>nl.xs4all.epotters.poc</groupId>
       <artifactId>poc-core</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>

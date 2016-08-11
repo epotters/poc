@@ -8,14 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoRestTemplateCustomizer;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.test.context.ContextConfiguration;
 
 
-@ContextConfiguration(classes = { poc.core.config.CoreContext.class, poc.rest.config.RestContext.class })
+@ContextConfiguration(classes = {poc.core.config.CoreContext.class, poc.rest.config.RestContext.class})
 @SpringBootApplication
-// @EnableOAuth2Sso
-// ??? @EnableOAuth2Client
 public class Application extends SpringBootServletInitializer {
 
   private static final Log LOG = LogFactory.getLog(Application.class);

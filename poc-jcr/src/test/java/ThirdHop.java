@@ -84,8 +84,7 @@ public class ThirdHop {
         for (int i = 0; i < values.length; i++) {
           System.out.println(property.getPath() + " = " + values[i].getString());
         }
-      }
-      else {
+      } else {
         // A single-valued property
         System.out.println(property.getPath() + " = " + property.getString());
       }

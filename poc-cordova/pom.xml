@@ -8,6 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-cordova</artifactId>
   <name>POC Cordova</name>
   <description>Android/iOS Cordova App</description>
@@ -32,7 +33,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>nl.xs4all.epotters</groupId>
+      <groupId>nl.xs4all.epotters.poc</groupId>
       <artifactId>poc-web</artifactId>
       <version>0.1-SNAPSHOT</version>
       <classifier>cordova</classifier>

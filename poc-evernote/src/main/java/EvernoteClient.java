@@ -97,14 +97,11 @@ public class EvernoteClient {
       // paramter was invalid.
       if (e.getErrorCode() == EDAMErrorCode.AUTH_EXPIRED) {
         System.err.println("Your authentication token is expired!");
-      }
-      else if (e.getErrorCode() == EDAMErrorCode.INVALID_AUTH) {
+      } else if (e.getErrorCode() == EDAMErrorCode.INVALID_AUTH) {
         System.err.println("Your authentication token is invalid!");
-      }
-      else if (e.getErrorCode() == EDAMErrorCode.QUOTA_REACHED) {
+      } else if (e.getErrorCode() == EDAMErrorCode.QUOTA_REACHED) {
         System.err.println("Your authentication token is invalid!");
-      }
-      else {
+      } else {
         System.err.println("Error: " + e.getErrorCode().toString() + " parameter: " + e.getParameter());
       }
     }

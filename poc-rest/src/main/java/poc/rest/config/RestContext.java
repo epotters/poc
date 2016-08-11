@@ -18,8 +18,8 @@ import java.util.Locale;
  */
 
 @Configuration
-@Import({ CoreContext.class })
-@ComponentScan(basePackages = { "poc.rest.controller", "poc.rest.service" })
+@Import({poc.core.config.CoreContext.class})
+@ComponentScan(basePackages = {"poc.rest.controller", "poc.rest.service"})
 public class RestContext {
 
   @Bean

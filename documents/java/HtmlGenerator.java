@@ -206,9 +206,9 @@ public class HtmlGenerator {
       bodyClass = "white-label-app";
     }
 
-    String searchList[] = new String[] { INDEX_VAR_CACHE_MANIFEST, INDEX_VAR_MIN_JS, INDEX_VAR_VERSION, INDEX_VAR_BASE_URL, INDEX_VAR_PAGE_BASE_URL, INDEX_VAR_PAGE_SRC, INDEX_VAR_BODY_CLASS, INDEX_VAR_JQUERY_VERSION, INDEX_VAR_JQUERY_VALIDATION_VERSION,
-        INDEX_VAR_JQUERY_MOBILE_VERSION, INDEX_VAR_CORDOVA_VERSION };
-    String replacementList[] = new String[] { cacheManifest, minJs, version, baseUrl, pageBaseUrl, pageSrc, bodyClass, jqueryVersion(), jqueryValidationVersion(), jqueryMobileVersion(), cordovaVersion() };
+    String searchList[] = new String[] {INDEX_VAR_CACHE_MANIFEST, INDEX_VAR_MIN_JS, INDEX_VAR_VERSION, INDEX_VAR_BASE_URL, INDEX_VAR_PAGE_BASE_URL, INDEX_VAR_PAGE_SRC, INDEX_VAR_BODY_CLASS, INDEX_VAR_JQUERY_VERSION, INDEX_VAR_JQUERY_VALIDATION_VERSION,
+        INDEX_VAR_JQUERY_MOBILE_VERSION, INDEX_VAR_CORDOVA_VERSION};
+    String replacementList[] = new String[] {cacheManifest, minJs, version, baseUrl, pageBaseUrl, pageSrc, bodyClass, jqueryVersion(), jqueryValidationVersion(), jqueryMobileVersion(), cordovaVersion()};
     indexTemplate = StringUtils.replaceEach(indexTemplate, searchList, replacementList);
 
     indexTemplate = checkIfDef(indexTemplate, "debug", debugMode());
@@ -283,8 +283,8 @@ public class HtmlGenerator {
 
       String pageStatus = createStatus(pages, index);
 
-      String searchList[] = new String[] { PAGE_VAR_PAGE_NAME, PAGE_VAR_PAGE_TITLE, PAGE_VAR_PAGE_TYPE, PAGE_VAR_NEXT_PAGE_TITLE, PAGE_VAR_PAGE_STATUS, PAGE_VAR_PAGE_CONTENT };
-      String replacementList[] = new String[] { page.getName(), page.getTitle(), page.getType(), nextPageTitle, pageStatus, pageContent };
+      String searchList[] = new String[] {PAGE_VAR_PAGE_NAME, PAGE_VAR_PAGE_TITLE, PAGE_VAR_PAGE_TYPE, PAGE_VAR_NEXT_PAGE_TITLE, PAGE_VAR_PAGE_STATUS, PAGE_VAR_PAGE_CONTENT};
+      String replacementList[] = new String[] {page.getName(), page.getTitle(), page.getType(), nextPageTitle, pageStatus, pageContent};
 
       pageSrc += StringUtils.replaceEach(pageTemplate, searchList, replacementList);
     }
@@ -362,7 +362,7 @@ public class HtmlGenerator {
 
     String postfix = StringUtils.substring(text, varEndPos + StringUtils.length(IF_DEF_END));
 
-    return StringUtils.join(new String[] { prefix, suffix, postfix });
+    return StringUtils.join(new String[] {prefix, suffix, postfix});
   }
 
 
@@ -513,8 +513,8 @@ public class HtmlGenerator {
     String introText = "<div class=\"intro-text\">" + FileUtils.readFileToString(profileIntroFile) + "</div>\n";
     String introTemplate = FileUtils.readFileToString(nvgaTemplateFile());
 
-    String searchList[] = new String[] { NGVA_VAR_PAGE_TITLE, NGVA_VAR_BASE_URL, NGVA_VAR_LOGO_SRC, NGVA_VAR_INTRO_SRC };
-    String replacementList[] = new String[] { pageTitle, baseUrl, logoUrl, introText };
+    String searchList[] = new String[] {NGVA_VAR_PAGE_TITLE, NGVA_VAR_BASE_URL, NGVA_VAR_LOGO_SRC, NGVA_VAR_INTRO_SRC};
+    String replacementList[] = new String[] {pageTitle, baseUrl, logoUrl, introText};
     introTemplate = StringUtils.replaceEach(introTemplate, searchList, replacementList);
 
     File targetFolder = new File(nvgaTargetFolder(), profileName);
@@ -533,8 +533,8 @@ public class HtmlGenerator {
     String introText = "<div class=\"intro-list\"><ul>" + profileList + "</ul></div>\n";
     String nvgaListTemplate = FileUtils.readFileToString(nvgaListTemplateFile());
 
-    String searchList[] = new String[] { NGVA_VAR_PAGE_TITLE, NGVA_VAR_BASE_URL, NGVA_VAR_INTRO_SRC };
-    String replacementList[] = new String[] { pageTitle, baseUrl, introText };
+    String searchList[] = new String[] {NGVA_VAR_PAGE_TITLE, NGVA_VAR_BASE_URL, NGVA_VAR_INTRO_SRC};
+    String replacementList[] = new String[] {pageTitle, baseUrl, introText};
     nvgaListTemplate = StringUtils.replaceEach(nvgaListTemplate, searchList, replacementList);
 
     File nvgaListFile = new File(nvgaTargetFolder(), "nvga.html");

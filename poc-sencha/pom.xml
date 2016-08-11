@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>POC Sencha</name>
+  <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-sencha</artifactId>
 
   <dependencies>
