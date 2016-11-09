@@ -11,9 +11,30 @@ spring:
     rest:
       base-path: /api
 
+management:
+  contextPath: /actuator
 
-# Security (OAuth2)
+
+
+
+
+# Data
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/poc_dev
+    username: poc_dev
+    password: b1vidh
+
+
+
+# Security
 security:
+  user:
+    name: epo
+    password: 12345
+    role: USER
+
+  # Security (OAuth2)
   oauth2:
     client:
       clientId: eb66c494b9c0a6913db6
@@ -30,6 +51,24 @@ security:
     userInfoUri: https://api.github.com/user
     preferTokenInfo: false
     # tokenInfoUri:
+
+
+
+
+# Persistance
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    # validate or create-drop
+    hibernate: ddl-auto: create-drop
+    # See: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes
+    use-new-id-generator-mappings: true
+    show-sql: true
+
 
 
 # Logging
