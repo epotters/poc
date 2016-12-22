@@ -1,28 +1,27 @@
 package poc.core.service.impl;
 
 
-import poc.core.domain.Person;
-import poc.core.repository.PersonRepository;
-import poc.core.service.PersonService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import poc.core.domain.Person;
+import poc.core.repository.PersonRepository;
+import poc.core.service.PersonService;
 
 
 /**
- * Created by epotters on 9-10-2014.
+ * Created by epotters on 2014-10-09
  */
 
 @Component
 public class PersonServiceImpl implements PersonService {
 
-  private static final Log LOG = LogFactory.getLog(PersonServiceImpl.class);
+
 
   @Autowired
   PersonRepository personRepository;

@@ -1,8 +1,6 @@
 package poc.rest;
 
 
-import poc.core.repository.PersonRepository;
-import poc.rest.controller.PersonController;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -17,12 +15,16 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import poc.core.repository.PersonRepository;
+import poc.rest.controller.PersonController;
+
 
 /**
  * Created by eelko on 2016-01-08
  */
-@SpringBootTest(classes = {poc.rest.config.RestContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@SpringBootTest(classes = { poc.rest.config.RestContext.class })
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class })
 @RunWith(SpringRunner.class)
 public class AutowireTest {
 

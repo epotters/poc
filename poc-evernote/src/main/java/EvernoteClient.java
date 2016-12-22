@@ -1,3 +1,8 @@
+package poc.evernote;
+
+
+
+
 import com.evernote.auth.EvernoteAuth;
 import com.evernote.auth.EvernoteService;
 import com.evernote.clients.ClientFactory;
