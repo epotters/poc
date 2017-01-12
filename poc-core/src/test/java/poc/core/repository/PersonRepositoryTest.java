@@ -1,6 +1,9 @@
 package poc.core.repository;
 
 
+import java.time.LocalDate;
+
+import poc.core.domain.Gender;
 import poc.core.domain.Person;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -51,11 +54,11 @@ public class PersonRepositoryTest {
   public void savePeople() throws Exception {
 
     // Save a couple of people
-    personRepository.save(new Person("Jack", "Bauer"));
-    personRepository.save(new Person("Chloe", "O'Brian"));
-    personRepository.save(new Person("Kim", "Bauer"));
-    personRepository.save(new Person("David", "Palmer"));
-    personRepository.save(new Person("Michelle", "Dessler"));
+    personRepository.save(new Person("Jack", "Bauer", Gender.MALE, LocalDate.of(1970, 10, 5)));
+    personRepository.save(new Person("Chloe", "O'Brian", Gender.FEMALE, LocalDate.of(1970, 10, 5)));
+    personRepository.save(new Person("Kim", "Bauer", Gender.FEMALE, LocalDate.of(1985, 3, 5)));
+    personRepository.save(new Person("David", "Palmer", Gender.MALE, LocalDate.of(1970, 10, 5)));
+    personRepository.save(new Person("Michelle", "Dessler", Gender.FEMALE, LocalDate.of(1960, 12, 30)));
 
     // Fetch all customers
     System.out.println("People found with findAll():");

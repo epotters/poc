@@ -1,13 +1,18 @@
 package poc.core.domain;
 
 
+import java.io.Serializable;
+
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 /**
@@ -15,9 +20,11 @@ import javax.persistence.Id;
  */
 
 @Entity
-@Getter
-@Setter
-public class Company {
+@Table(name = "company")
+@Data
+@NoArgsConstructor
+public class Company implements Serializable {
+
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

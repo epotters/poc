@@ -1,26 +1,34 @@
 package poc.core.domain;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.Table;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
 /**
  * Created by epotters on 6-11-2014.
  */
 
+
 @Entity
-@Getter
-@Setter
-@ToString
-public class Person {
+@Table(name = "person")
+@Data
+@NoArgsConstructor
+public class Person implements Serializable {
+
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,16 +40,20 @@ public class Person {
 
   private Gender gender;
 
-  private Date birthDate;
+  private LocalDate birthDate;
   private String birthPlace;
 
 
-  public Person() {
-  }
-
 
   public Person(String firstName, String lastName) {
-    this.lastName = lastName;
-    this.firstName = firstName;
+    setFirstName(firstName);
+    setLastName(lastName);
+  }
+
+  public Person(String firstName, String lastName, Gender gender, LocalDate birthDate) {
+    setFirstName(firstName);
+    setLastName(lastName);
+    setGender(gender);
+    setBirthDate(birthDate);
   }
 }
