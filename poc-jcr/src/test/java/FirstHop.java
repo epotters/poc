@@ -1,7 +1,7 @@
-import org.apache.jackrabbit.core.TransientRepository;
-
 import javax.jcr.Repository;
 import javax.jcr.Session;
+
+import org.apache.jackrabbit.core.TransientRepository;
 
 /**
  * Created by eelko on 13-12-2015.

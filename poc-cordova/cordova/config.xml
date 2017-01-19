@@ -2,9 +2,9 @@
 
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns="http://www.w3.org/ns/widgets"
-        android-packageName="nl.abz.os"
-        ios-CFBundleIdentifier="nl.verzekeraars.mobielschademelden"
-        version="2.9.0">
+    android-packageName="nl.abz.os"
+    ios-CFBundleIdentifier="nl.verzekeraars.mobielschademelden"
+    version="2.9.0">
 
 
   <name>mobielschademelden</name>
@@ -74,22 +74,22 @@
 
   <platform name="android">
 
-    <icon src="resources/icon/android/icon.png" density="ldpi"/>
-    <icon src="resources/icon/android/icon.png" density="mdpi"/>
-    <icon src="resources/icon/android/icon.png" density="hdpi"/>
-    <icon src="resources/icon/android/icon.png" density="xhdpi"/>
+    <icon src="test.resources/icon/android/icon.png" density="ldpi"/>
+    <icon src="test.resources/icon/android/icon.png" density="mdpi"/>
+    <icon src="test.resources/icon/android/icon.png" density="hdpi"/>
+    <icon src="test.resources/icon/android/icon.png" density="xhdpi"/>
 
 
     <!-- you can use any density that exists in the Android project -->
-    <splash src="resources/splash/android/splash-land-hdpi.png" density="land-hdpi"/>
-    <splash src="resources/splash/android/splash-land-ldpi.png" density="land-ldpi"/>
-    <splash src="resources/splash/android/splash-land-mdpi.png" density="land-mdpi"/>
-    <splash src="resources/splash/android/splash-land-xhdpi.png" density="land-xhdpi"/>
+    <splash src="test.resources/splash/android/splash-land-hdpi.png" density="land-hdpi"/>
+    <splash src="test.resources/splash/android/splash-land-ldpi.png" density="land-ldpi"/>
+    <splash src="test.resources/splash/android/splash-land-mdpi.png" density="land-mdpi"/>
+    <splash src="test.resources/splash/android/splash-land-xhdpi.png" density="land-xhdpi"/>
 
-    <splash src="resources/splash/android/splash-port-hdpi.png" density="port-hdpi"/>
-    <splash src="resources/splash/android/splash-port-ldpi.png" density="port-ldpi"/>
-    <splash src="resources/splash/android/splash-port-mdpi.png" density="port-mdpi"/>
-    <splash src="resources/splash/android/splash-port-xhdpi.png" density="port-xhdpi"/>
+    <splash src="test.resources/splash/android/splash-port-hdpi.png" density="port-hdpi"/>
+    <splash src="test.resources/splash/android/splash-port-ldpi.png" density="port-ldpi"/>
+    <splash src="test.resources/splash/android/splash-port-mdpi.png" density="port-mdpi"/>
+    <splash src="test.resources/splash/android/splash-port-xhdpi.png" density="port-xhdpi"/>
 
   </platform>
 
@@ -97,43 +97,43 @@
   <platform name="ios">
     <!-- iOS 8.0+ -->
     <!-- iPhone 6 Plus  -->
-    <icon src="resources/icon/ios/icon-60@3x.png" width="180" height="180"/>
+    <icon src="test.resources/icon/ios/icon-60@3x.png" width="180" height="180"/>
     <!-- iOS 7.0+ -->
     <!-- iPhone / iPod Touch  -->
-    <icon src="resources/icon/ios/icon-60.png" width="60" height="60"/>
-    <icon src="resources/icon/ios/icon-60@2x.png" width="120" height="120"/>
+    <icon src="test.resources/icon/ios/icon-60.png" width="60" height="60"/>
+    <icon src="test.resources/icon/ios/icon-60@2x.png" width="120" height="120"/>
     <!-- iPad -->
-    <icon src="resources/icon/ios/icon-76.png" width="76" height="76"/>
-    <icon src="resources/icon/ios/icon-76@2x.png" width="152" height="152"/>
+    <icon src="test.resources/icon/ios/icon-76.png" width="76" height="76"/>
+    <icon src="test.resources/icon/ios/icon-76@2x.png" width="152" height="152"/>
     <!-- iOS 6.1 -->
     <!-- Spotlight Icon -->
-    <icon src="resources/icon/ios/icon-40.png" width="40" height="40"/>
-    <icon src="resources/icon/ios/icon-40@2x.png" width="80" height="80"/>
+    <icon src="test.resources/icon/ios/icon-40.png" width="40" height="40"/>
+    <icon src="test.resources/icon/ios/icon-40@2x.png" width="80" height="80"/>
     <!-- iPhone / iPod Touch -->
-    <icon src="resources/icon/ios/icon.png" width="57" height="57"/>
-    <icon src="resources/icon/ios/icon@2x.png" width="114" height="114"/>
+    <icon src="test.resources/icon/ios/icon.png" width="57" height="57"/>
+    <icon src="test.resources/icon/ios/icon@2x.png" width="114" height="114"/>
     <!-- iPad -->
-    <icon src="resources/icon/ios/icon-72.png" width="72" height="72"/>
-    <icon src="resources/icon/ios/icon-72@2x.png" width="144" height="144"/>
+    <icon src="test.resources/icon/ios/icon-72.png" width="72" height="72"/>
+    <icon src="test.resources/icon/ios/icon-72@2x.png" width="144" height="144"/>
     <!-- iPhone Spotlight and Settings Icon -->
-    <icon src="resources/icon/ios/icon-small.png" width="29" height="29"/>
-    <icon src="resources/icon/ios/icon-small@2x.png" width="58" height="58"/>
+    <icon src="test.resources/icon/ios/icon-small.png" width="29" height="29"/>
+    <icon src="test.resources/icon/ios/icon-small@2x.png" width="58" height="58"/>
     <!-- iPad Spotlight and Settings Icon -->
-    <icon src="resources/icon/ios/icon-50.png" width="50" height="50"/>
-    <icon src="resources/icon/ios/icon-50@2x.png" width="100" height="100"/>
+    <icon src="test.resources/icon/ios/icon-50.png" width="50" height="50"/>
+    <icon src="test.resources/icon/ios/icon-50@2x.png" width="100" height="100"/>
 
 
     <!-- images are determined by width and height. The following are supported -->
-    <splash src="resources/splash/ios/Default~iphone.png" width="320" height="480"/>
-    <splash src="resources/splash/ios/Default@2x~iphone.png" width="640" height="960"/>
-    <splash src="resources/splash/ios/Default-Portrait~ipad.png" width="768" height="1024"/>
-    <splash src="resources/splash/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
-    <splash src="resources/splash/ios/Default-Landscape~ipad.png" width="1024" height="768"/>
-    <splash src="resources/splash/ios/Default-Landscape@2x~ipad.png" width="2048" height="1496"/>
-    <splash src="resources/splash/ios/Default-568h@2x.png" width="640" height="1136"/>
-    <splash src="resources/splash/ios/Default-667h.png" width="750" height="1334"/>
-    <splash src="resources/splash/ios/Default-736h.png" width="1242" height="2208"/>
-    <splash src="resources/splash/ios/Default-Landscape-736h.png" width="2208" height="1242"/>
+    <splash src="test.resources/splash/ios/Default~iphone.png" width="320" height="480"/>
+    <splash src="test.resources/splash/ios/Default@2x~iphone.png" width="640" height="960"/>
+    <splash src="test.resources/splash/ios/Default-Portrait~ipad.png" width="768" height="1024"/>
+    <splash src="test.resources/splash/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
+    <splash src="test.resources/splash/ios/Default-Landscape~ipad.png" width="1024" height="768"/>
+    <splash src="test.resources/splash/ios/Default-Landscape@2x~ipad.png" width="2048" height="1496"/>
+    <splash src="test.resources/splash/ios/Default-568h@2x.png" width="640" height="1136"/>
+    <splash src="test.resources/splash/ios/Default-667h.png" width="750" height="1334"/>
+    <splash src="test.resources/splash/ios/Default-736h.png" width="1242" height="2208"/>
+    <splash src="test.resources/splash/ios/Default-Landscape-736h.png" width="2208" height="1242"/>
 
   </platform>
 
@@ -141,7 +141,7 @@
   <!--
       Define access to external domains.
 
-      <access />            - a blank access tag denies access to all external resources.
+      <access />            - a blank access tag denies access to all external test.resources.
       <access origin="*" /> - a wildcard access tag allows access to all external resource.
   -->
   <access origin="*"/>

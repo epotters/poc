@@ -6,7 +6,8 @@ public class Data {
   public static final String USERNAME = "admin";
   public static final String PASSWORD = "admin";
 
-  public static final String REPOSITORY_PATH = "C:\\Users\\epotters.SOLERANL\\Dropbox\\Projects\\poc\\poc-jcr\\target\\jackrabbit\\repository\\";
+  public static final String REPOSITORY_PATH =
+      "C:\\Users\\epotters.SOLERANL\\Dropbox\\Projects\\poc\\poc-jcr\\target\\jackrabbit\\repository\\";
   // "/Users/eelko/Work/Projects/poc/poc-jcr/target/jackrabbit/repository/";
 
 

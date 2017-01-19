@@ -21,8 +21,6 @@ import poc.core.service.PersonService;
 @Component
 public class PersonServiceImpl implements PersonService {
 
-
-
   @Autowired
   PersonRepository personRepository;
 

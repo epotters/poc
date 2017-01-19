@@ -22,9 +22,9 @@ import poc.rest.controller.PersonController;
 /**
  * Created by eelko on 2016-01-08
  */
-@SpringBootTest(classes = { poc.rest.config.RestContext.class })
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-    TransactionalTestExecutionListener.class })
+@SpringBootTest(classes = {poc.rest.config.RestContext.class})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class})
 @RunWith(SpringRunner.class)
 public class AutowireTest {
 

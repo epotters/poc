@@ -35,19 +35,15 @@ import bowlon.core.service.impl.GoogleSheetsAnnaliesjesImportServiceImpl;
 //@RunWith(Parameterized.class)
 public class AnnaliesjesImportServiceTest {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AnnaliesjesImportServiceTest.class);
-
   @ClassRule
   public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
-
-  @Rule
-  public final SpringMethodRule springMethodRule = new SpringMethodRule();
-
+  private static final Logger LOG = LoggerFactory.getLogger(AnnaliesjesImportServiceTest.class);
   private static final int LEAGUE_NIGHT = 109;
   private static final int EXPECTED_LEAGUE_NIGHTS = 109;
   private static final int EXPECTED_GAMES = 783;
   private static final int EXPECTED_PLAYER_GAMES = 3506;
-
+  @Rule
+  public final SpringMethodRule springMethodRule = new SpringMethodRule();
   @Autowired
   private LeagueNightRepository leagueNightRepository;
   @Autowired
@@ -97,7 +93,6 @@ public class AnnaliesjesImportServiceTest {
   }
 
 
-
   public void listFiles() throws Exception {
 
     List<String> files = annaliesjesImportService.availableAnnaliesjes();
@@ -106,7 +101,6 @@ public class AnnaliesjesImportServiceTest {
 
     Assert.assertEquals(1, 1);
   }
-
 
 
   public void importScoresForOneNight() throws Exception {

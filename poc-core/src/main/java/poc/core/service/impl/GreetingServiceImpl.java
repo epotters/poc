@@ -1,10 +1,10 @@
 package poc.core.service.impl;
 
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import poc.core.domain.Greeting;
 import poc.core.service.GreetingService;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 
 public class GreetingServiceImpl implements GreetingService {

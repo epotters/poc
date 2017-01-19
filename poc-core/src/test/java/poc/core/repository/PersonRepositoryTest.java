@@ -3,8 +3,6 @@ package poc.core.repository;
 
 import java.time.LocalDate;
 
-import poc.core.domain.Gender;
-import poc.core.domain.Person;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -19,13 +17,17 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import poc.core.domain.Gender;
+import poc.core.domain.Person;
+
 
 /**
  * Created by eelko on 2015-02-06
  */
 
 @SpringBootTest(classes = {poc.core.config.CoreContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class})
 @RunWith(SpringRunner.class)
 public class PersonRepositoryTest {
 

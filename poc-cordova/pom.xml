@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>poc</artifactId>
     <groupId>nl.xs4all.epotters</groupId>
@@ -50,7 +50,7 @@
         <executions>
           <execution>
             <id>copy-src-tree</id>
-            <phase>generate-resources</phase>
+            <phase>generate-test.resources</phase>
             <configuration>
               <target>
                 <copy todir="target/cordova" overwrite="true">
@@ -83,7 +83,7 @@
         <executions>
           <execution>
             <id>unpack</id>
-            <phase>generate-resources</phase>
+            <phase>generate-test.resources</phase>
             <goals>
               <goal>unpack</goal>
             </goals>
@@ -123,8 +123,8 @@
                 <configuration>
                   <target>
                     <copy file="target/cordova/platforms/android/ant-build/CordovaApp-release-unsigned.apk"
-                          tofile="target/cordova/platforms/android/ant-build/#{app.name}-release-signed.apk"
-                          overwrite="true"/>
+                        tofile="target/cordova/platforms/android/ant-build/#{app.name}-release-signed.apk"
+                        overwrite="true"/>
                   </target>
                 </configuration>
                 <goals>

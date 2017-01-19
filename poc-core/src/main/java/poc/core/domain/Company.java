@@ -3,16 +3,14 @@ package poc.core.domain;
 
 import java.io.Serializable;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -24,7 +22,6 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 public class Company implements Serializable {
-
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

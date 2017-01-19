@@ -1,11 +1,11 @@
 package poc.core.domain;
 
 
+import java.util.Collection;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 
 
 /**

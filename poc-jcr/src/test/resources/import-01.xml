@@ -1,12 +1,12 @@
 <xhtml:html xmlns:xhtml="http://www.w3.org/1999/xhtml"
-            xmlns:mathml="http://www.w3.org/1998/Math/MathML">
+    xmlns:mathml="http://www.w3.org/1998/Math/MathML">
   <xhtml:head>
     <xhtml:title>Three Namespaces</xhtml:title>
   </xhtml:head>
   <xhtml:body>
     <xhtml:h1 align="center">An Ellipse and a Rectangle</xhtml:h1>
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg"
-             width="12cm" height="10cm">
+        width="12cm" height="10cm">
       <svg:ellipse rx="110" ry="130"/>
       <svg:rect x="4cm" y="1cm" width="3cm" height="6cm"/>
     </svg:svg>

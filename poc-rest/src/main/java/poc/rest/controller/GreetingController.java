@@ -1,11 +1,12 @@
 package poc.rest.controller;
 
 
-import poc.core.domain.Greeting;
-import poc.core.service.GreetingService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import poc.core.domain.Greeting;
+import poc.core.service.GreetingService;
 
 
 @RestController

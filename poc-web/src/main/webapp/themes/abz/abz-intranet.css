@@ -3,283 +3,283 @@ ABZ Intranet styles
 ***************************************************************************************************/
 
 html, body {
-    margin: 0;
-    border: 0px;
-    padding: 0px;
-    width: 100%;
-    height: 100%;
+  margin: 0;
+  border: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
 }
 
 body {
-    color: #000000;
-    background: url("swirl.png") no-repeat scroll center top #ffffff;
+  color: #000000;
+  background: url("swirl.png") no-repeat scroll center top #ffffff;
 }
 
 .clearing {
-    clear: both;
-    height: 0px;
-    overflow: hidden;
-    background: transparent;
-    visibility: hidden;
+  clear: both;
+  height: 0px;
+  overflow: hidden;
+  background: transparent;
+  visibility: hidden;
 }
 
 #page {
 }
 
 .main-page {
-    padding-left: 24px;
-    padding-right: 24px;
-    min-width: 450px;
-    margin: 0 auto;
-    border-left: 1px solid #efefef;
-    border-right: 1px solid #efefef;
+  padding-left: 24px;
+  padding-right: 24px;
+  min-width: 450px;
+  margin: 0 auto;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
 }
 
 #header {
-    box-sizing: border-box;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2);
 }
 
 #banner {
-    height: 69px;
-    vertical-align: bottom;
+  height: 69px;
+  vertical-align: bottom;
 }
 
 #banner div.banner-box {
-    display: inline-block;
-    border: 0px solid #efefef;
-    margin: 0px;
-    height: 60px;
-    vertical-align: bottom;
-    margin-top: 6px;
+  display: inline-block;
+  border: 0px solid #efefef;
+  margin: 0px;
+  height: 60px;
+  vertical-align: bottom;
+  margin-top: 6px;
 }
 
 #logo {
-    float: left;
-    background: transparent url(abz-solera-logo-060.png) no-repeat;
-    width: 120px;
-    height: 60px;
-    padding: 0px;
-    overflow: hidden;
+  float: left;
+  background: transparent url(abz-solera-logo-060.png) no-repeat;
+  width: 120px;
+  height: 60px;
+  padding: 0px;
+  overflow: hidden;
 }
 
 #logo a {
-    display: block;
-    padding-top: 120px
+  display: block;
+  padding-top: 120px
 }
 
 #site-title {
-    float: left;
-    font-size: 30px;
-    color: silver;
-    padding-left: 24px;
-    margin-top: 40px;
+  float: left;
+  font-size: 30px;
+  color: silver;
+  padding-left: 24px;
+  margin-top: 40px;
 }
 
 #site-title {
-    float: right;
+  float: right;
 
-    margin: 24px 12px 0px 0px;
-    border: 0px solid #52657a;
-    padding: 4px 9px 3px 9px;
-    background-color: #83A0C0;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: inset 2px 2px 3px -1px #52657a;
+  margin: 24px 12px 0px 0px;
+  border: 0px solid #52657a;
+  padding: 4px 9px 3px 9px;
+  background-color: #83A0C0;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: inset 2px 2px 3px -1px #52657a;
 
-    font-size: 18px;
-    font-weight: normal;
-    color: white;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 2px #52657a;
+  font-size: 18px;
+  font-weight: normal;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px #52657a;
 }
 
 /* User box */
 
 #user {
-    display: inline-block;
-    border: 1px solid white;
-    box-sizing: border-box;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-    padding: 6px;
-    margin: 18px;
-    vertical-align: top;
-    width: 240px;
-    color: white;
-    float: right;
+  display: inline-block;
+  border: 1px solid white;
+  box-sizing: border-box;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  margin: 18px;
+  vertical-align: top;
+  width: 240px;
+  color: white;
+  float: right;
 }
 
 #user > div {
-    display: inline-block;
-    float: left;
+  display: inline-block;
+  float: left;
 }
 
 #user * {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 #user .portrait-border {
-    background: white;
-    box-sizing: border-box;
-    margin-right: 12px;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2);
+  background: white;
+  box-sizing: border-box;
+  margin-right: 12px;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2);
 }
 
 #user .portrait {
-    background: silver;
-    width: 36px;
-    height: 48px;
-    margin: 6px;
+  background: silver;
+  width: 36px;
+  height: 48px;
+  margin: 6px;
 }
 
 #user .user-data {
-    margin-right: 18px;
+  margin-right: 18px;
 }
 
 #user .user-displayName {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 #user .user-actions .menu-item {
-    display: block;
-    width: 15px;
-    height: 15px;
-    margin: 2px;
-    padding: 0px;
-    background: #efefef;
-    overflow: hidden;
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 2px;
+  padding: 0px;
+  background: #efefef;
+  overflow: hidden;
 }
 
 #user .user-actions .menu-item a {
-    height: 100%;
-    padding-left: 36px;
+  height: 100%;
+  padding-left: 36px;
 }
 
 #user .user-actions .menu-item a:hover {
-    background-color: silver;
+  background-color: silver;
 }
 
 /* Menubar */
 
 #menubar {
-    display: block;
-    height: 32px !important;
-    background-color: #D67632;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid #984A13;
+  display: block;
+  height: 32px !important;
+  background-color: #D67632;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #984A13;
 }
 
 .navbar {
-    min-height: 32px !important;
+  min-height: 32px !important;
 }
 
 #menubar .left {
-    float: left;
+  float: left;
 }
 
 #menubar .right {
-    float: right;
+  float: right;
 }
 
 #menubar .menu {
-    display: inline-block;
-    box-sizing: border-box;
-    height: 100%;
-    background: transparent;
+  display: inline-block;
+  box-sizing: border-box;
+  height: 100%;
+  background: transparent;
 }
 
 .menu-item {
-    /* display: inline-block; */
-    height: 100%;
-    vertical-align: middle;
-    margin: 0px;
+  /* display: inline-block; */
+  height: 100%;
+  vertical-align: middle;
+  margin: 0px;
 }
 
 .menu-item a {
-    display: block;
-    height: 100%;
+  display: block;
+  height: 100%;
 }
 
 #menubar .menu .menu-item {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #menubar .menu .menu-item a {
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: bold;
-    overflow: hidden;
-    text-align: left;
-    text-shadow: 0 -1px #985813;
-    white-space: nowrap;
-    padding: 0px 24px;
-    vertical-align: middle;
-    text-align: center;
-    text-decoration: none;
-    line-height: 32px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  overflow: hidden;
+  text-align: left;
+  text-shadow: 0 -1px #985813;
+  white-space: nowrap;
+  padding: 0px 24px;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  line-height: 32px;
 }
 
 #menubar .menu .menu-item a:hover {
-    background-color: #984A13;
-    background-image: linear-gradient(center top, #984A13, #DD7A35);
-    box-shadow: 1px 1px 0 #985813 inset, -1px -1px 0 #985813 inset;
+  background-color: #984A13;
+  background-image: linear-gradient(center top, #984A13, #DD7A35);
+  box-shadow: 1px 1px 0 #985813 inset, -1px -1px 0 #985813 inset;
 }
 
 /* Search box */
 
 .search-box {
-    display: inline-block;
-    box-sizing: border-box;
-    vertical-align: top;
-    margin: 4px 6px 3px 24px;
-    border: 1px solid #F09D61;
-    padding: 0px;
-    border-radius: 4px;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2) inset;
-    background: white;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: top;
+  margin: 4px 6px 3px 24px;
+  border: 1px solid #F09D61;
+  padding: 0px;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2) inset;
+  background: white;
 }
 
 .search-box input {
-    display: inline-block;
-    float: left;
-    width: 212px;
-    height: 22px !important;
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px 3px;
-    border: 0px solid green;
-    border-radius: 4px 0px 0px 4px;
-    background: transparent;
+  display: inline-block;
+  float: left;
+  width: 212px;
+  height: 22px !important;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px 3px;
+  border: 0px solid green;
+  border-radius: 4px 0px 0px 4px;
+  background: transparent;
 }
 
 .search-box button.search-button {
-    display: inline-block;
-    float: left;
-    width: 22px;
-    height: 22px;
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px 0px;
-    border: 0px solid green;
-    border-radius: 0px 4px 4px 0px;
-    cursor: pointer;
+  display: inline-block;
+  float: left;
+  width: 22px;
+  height: 22px;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px 0px;
+  border: 0px solid green;
+  border-radius: 0px 4px 4px 0px;
+  cursor: pointer;
 }
 
 #content {
-    min-height: 480px;
-    padding-bottom: 36px;
+  min-height: 480px;
+  padding-bottom: 36px;
 }
 
 #content .wrapper {
-    padding: 12px;
+  padding: 12px;
 }
 
 #footer {
-    background: gray;
+  background: gray;
 }
 
 #footer .main-page {
-    height: 100%;
-    height: 360px;
+  height: 100%;
+  height: 360px;
 }

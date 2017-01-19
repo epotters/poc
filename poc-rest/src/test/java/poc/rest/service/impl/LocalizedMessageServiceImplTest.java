@@ -1,8 +1,10 @@
 package poc.rest.service.impl;
 
 
-import junit.framework.Assert;
-import poc.rest.service.LocalizedMessageService;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +17,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import junit.framework.Assert;
+import poc.rest.service.LocalizedMessageService;
 
 
 /**
@@ -25,7 +26,8 @@ import java.util.Locale;
  */
 
 @SpringBootTest(classes = {poc.rest.config.RestContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+    TransactionalTestExecutionListener.class})
 @RunWith(SpringRunner.class)
 public class LocalizedMessageServiceImplTest {
 

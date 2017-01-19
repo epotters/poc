@@ -1,16 +1,6 @@
 package nl.abz.os;
 
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 public class HtmlGenerator {
@@ -206,9 +206,12 @@ public class HtmlGenerator {
       bodyClass = "white-label-app";
     }
 
-    String searchList[] = new String[] {INDEX_VAR_CACHE_MANIFEST, INDEX_VAR_MIN_JS, INDEX_VAR_VERSION, INDEX_VAR_BASE_URL, INDEX_VAR_PAGE_BASE_URL, INDEX_VAR_PAGE_SRC, INDEX_VAR_BODY_CLASS, INDEX_VAR_JQUERY_VERSION, INDEX_VAR_JQUERY_VALIDATION_VERSION,
-        INDEX_VAR_JQUERY_MOBILE_VERSION, INDEX_VAR_CORDOVA_VERSION};
-    String replacementList[] = new String[] {cacheManifest, minJs, version, baseUrl, pageBaseUrl, pageSrc, bodyClass, jqueryVersion(), jqueryValidationVersion(), jqueryMobileVersion(), cordovaVersion()};
+    String searchList[] = new String[] {INDEX_VAR_CACHE_MANIFEST, INDEX_VAR_MIN_JS, INDEX_VAR_VERSION, INDEX_VAR_BASE_URL,
+        INDEX_VAR_PAGE_BASE_URL, INDEX_VAR_PAGE_SRC, INDEX_VAR_BODY_CLASS, INDEX_VAR_JQUERY_VERSION,
+        INDEX_VAR_JQUERY_VALIDATION_VERSION, INDEX_VAR_JQUERY_MOBILE_VERSION, INDEX_VAR_CORDOVA_VERSION};
+    String replacementList[] =
+        new String[] {cacheManifest, minJs, version, baseUrl, pageBaseUrl, pageSrc, bodyClass, jqueryVersion(),
+            jqueryValidationVersion(), jqueryMobileVersion(), cordovaVersion()};
     indexTemplate = StringUtils.replaceEach(indexTemplate, searchList, replacementList);
 
     indexTemplate = checkIfDef(indexTemplate, "debug", debugMode());
@@ -256,7 +259,9 @@ public class HtmlGenerator {
     pages.add(new Page("p06-samenvatting", "Samenvatting", 6, true, null, "form", "form"));
     pages.add(new Page("p07-akkoordverklaring", "Akkoordverklaring", 7, true, null, "form", "form"));
     pages.add(new Page("een-ogenblik-geduld", "Een ogenblik geduld", null, false, null, "message", "dialog"));
-    pages.add(new Page("mobiel-schade-melden-niet-mogelijk", "Mobiel schade melden is niet mogelijk", null, false, null, "message", "exit"));
+    pages.add(
+        new Page("mobiel-schade-melden-niet-mogelijk", "Mobiel schade melden is niet mogelijk", null, false, null, "message",
+            "exit"));
     pages.add(new Page("schademelding-verzonden", "Schademelding verzonden", null, false, null, "message", "plain"));
     pages.add(new Page("schademelding-verzonden-WBF1", "Schademelding verzonden", null, false, null, "message", "plain"));
     pages.add(new Page("schademelding-verzonden-WBF2", "Schademelding verzonden", null, false, null, "message", "plain"));
@@ -283,8 +288,10 @@ public class HtmlGenerator {
 
       String pageStatus = createStatus(pages, index);
 
-      String searchList[] = new String[] {PAGE_VAR_PAGE_NAME, PAGE_VAR_PAGE_TITLE, PAGE_VAR_PAGE_TYPE, PAGE_VAR_NEXT_PAGE_TITLE, PAGE_VAR_PAGE_STATUS, PAGE_VAR_PAGE_CONTENT};
-      String replacementList[] = new String[] {page.getName(), page.getTitle(), page.getType(), nextPageTitle, pageStatus, pageContent};
+      String searchList[] = new String[] {PAGE_VAR_PAGE_NAME, PAGE_VAR_PAGE_TITLE, PAGE_VAR_PAGE_TYPE, PAGE_VAR_NEXT_PAGE_TITLE,
+          PAGE_VAR_PAGE_STATUS, PAGE_VAR_PAGE_CONTENT};
+      String replacementList[] =
+          new String[] {page.getName(), page.getTitle(), page.getType(), nextPageTitle, pageStatus, pageContent};
 
       pageSrc += StringUtils.replaceEach(pageTemplate, searchList, replacementList);
     }
@@ -324,9 +331,9 @@ public class HtmlGenerator {
           currentPageFound = true;
         }
 
-        status +=
-            "<a href=\"" + url + "\" data-role=\"button\" data-icon=\"" + dataIcon + "\" " + "data-iconpos=\"notext\" data-theme=\"" + dataTheme + "\" class=\"status " + page.getName() + "-status\" " + "title=\"" + page.getTitle() + "\">" + page.getTitle()
-                + "</a>\n";
+        status += "<a href=\"" + url + "\" data-role=\"button\" data-icon=\"" + dataIcon + "\" "
+            + "data-iconpos=\"notext\" data-theme=\"" + dataTheme + "\" class=\"status " + page.getName() + "-status\" "
+            + "title=\"" + page.getTitle() + "\">" + page.getTitle() + "</a>\n";
       }
     }
 
@@ -383,7 +390,8 @@ public class HtmlGenerator {
       }
     };
 
-    Iterator<File> whiteLabelCSSFilesIterator = FileUtils.iterateFiles(nvgaSourceFolder(), whiteLabelCSSFileFilter, TrueFileFilter.INSTANCE);
+    Iterator<File> whiteLabelCSSFilesIterator =
+        FileUtils.iterateFiles(nvgaSourceFolder(), whiteLabelCSSFileFilter, TrueFileFilter.INSTANCE);
 
     for (; whiteLabelCSSFilesIterator.hasNext(); ) {
       File whiteLabelCSSFile = whiteLabelCSSFilesIterator.next();
@@ -412,7 +420,8 @@ public class HtmlGenerator {
       }
     };
 
-    Iterator<File> introFilesIterator = FileUtils.iterateFiles(nvgaSourceFolder(), nvgaIntroFileFilter, TrueFileFilter.INSTANCE);
+    Iterator<File> introFilesIterator =
+        FileUtils.iterateFiles(nvgaSourceFolder(), nvgaIntroFileFilter, TrueFileFilter.INSTANCE);
     String profileList = "";
 
     for (; introFilesIterator.hasNext(); ) {
@@ -509,7 +518,8 @@ public class HtmlGenerator {
 
     String pageTitle = "Intropagina";
     String baseUrl = "../";
-    String logoUrl = "<div class=\"image\"><img src=\"" + baseUrl + "profiles/" + profileName + "/" + profileName + "-logo.png" + "\" /></div>\n";
+    String logoUrl = "<div class=\"image\"><img src=\"" + baseUrl + "profiles/" + profileName + "/" + profileName + "-logo.png"
+        + "\" /></div>\n";
     String introText = "<div class=\"intro-text\">" + FileUtils.readFileToString(profileIntroFile) + "</div>\n";
     String introTemplate = FileUtils.readFileToString(nvgaTemplateFile());
 

@@ -23,7 +23,6 @@ import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.ServiceException;
 
 import bowlon.core.service.AnnaliesjesImportService;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -58,7 +57,6 @@ public abstract class GoogleSpreadsheetAnnaliesjesImportServiceImpl extends Base
     }
     return fileNames;
   }
-
 
 
   public void processAnnaliesje(String fileName, Integer leagueNightToProcess) throws Exception {
@@ -120,8 +118,7 @@ public abstract class GoogleSpreadsheetAnnaliesjesImportServiceImpl extends Base
           data.add(cells);
         }
       }
-    }
-    else {
+    } else {
 
       LOG.debug("Spreadsheet " + spreadsheet.getTitle() + " has no worksheet titled " + sheetTitle);
     }

@@ -1,12 +1,13 @@
 package poc.core.repository;
 
 
-import poc.core.domain.Person;
+import java.io.Serializable;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
-import java.util.List;
+import poc.core.domain.Person;
 
 
 /**

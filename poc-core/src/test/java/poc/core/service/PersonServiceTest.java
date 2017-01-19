@@ -1,11 +1,12 @@
 package poc.core.service;
 
 
-import poc.core.repository.PersonRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import poc.core.repository.PersonRepository;
 
 
 /**

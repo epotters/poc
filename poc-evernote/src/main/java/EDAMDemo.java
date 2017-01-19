@@ -13,6 +13,13 @@
  */
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.MessageDigest;
+import java.util.Iterator;
+import java.util.List;
+
 import com.evernote.auth.EvernoteAuth;
 import com.evernote.auth.EvernoteService;
 import com.evernote.clients.ClientFactory;
@@ -32,13 +39,6 @@ import com.evernote.edam.type.ResourceAttributes;
 import com.evernote.edam.type.Tag;
 import com.evernote.thrift.transport.TTransportException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.security.MessageDigest;
-import java.util.Iterator;
-import java.util.List;
-
 
 public class EDAMDemo {
 
@@ -52,7 +52,8 @@ public class EDAMDemo {
   // purpose of exploring the API, you can get a developer token that allows
   // you to access your own Evernote account. To get a developer token, visit
   // https://sandbox.evernote.com/api/DeveloperToken.action
-  private static final String AUTH_TOKEN = "S=s2:U=73f79:E=152ae3f5e29:C=14b568e3030:P=1cd:A=en-devtoken:V=2:H=b1d38f0d9707794532dbb049a6c0e305";
+  private static final String AUTH_TOKEN =
+      "S=s2:U=73f79:E=152ae3f5e29:C=14b568e3030:P=1cd:A=en-devtoken:V=2:H=b1d38f0d9707794532dbb049a6c0e305";
 
   // NoteStoreURL = "https://www.evernote.com/shard/s2/notestore";
   /**
@@ -77,7 +78,9 @@ public class EDAMDemo {
     ClientFactory factory = new ClientFactory(evernoteAuth);
     userStore = factory.createUserStoreClient();
 
-    boolean versionOk = userStore.checkVersion("Evernote EDAMDemo (Java)", com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR, com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
+    boolean versionOk = userStore
+        .checkVersion("Evernote EDAMDemo (Java)", com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
+            com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
     if (!versionOk) {
       System.err.println("Incompatible Evernote client protocol version");
       System.exit(1);
@@ -140,7 +143,8 @@ public class EDAMDemo {
    * object.
    */
   private static Data readFileAsData(String fileName) throws Exception {
-    String filePath = new File(EDAMDemo.class.getResource(EDAMDemo.class.getCanonicalName() + ".class").getPath()).getParent() + File.separator + fileName;
+    String filePath = new File(EDAMDemo.class.getResource(EDAMDemo.class.getCanonicalName() + ".class").getPath()).getParent()
+        + File.separator + fileName;
     // Read the full binary contents of the file
     FileInputStream in = new FileInputStream(filePath);
     ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -234,7 +238,7 @@ public class EDAMDemo {
     attributes.setFileName(fileName);
     resource.setAttributes(attributes);
 
-    // Now, add the new Resource to the note's list of resources
+    // Now, add the new Resource to the note's list of test.resources
     note.addToResources(resource);
 
     // To display the Resource as part of the note's content, include an
@@ -250,8 +254,9 @@ public class EDAMDemo {
     // Overview
     // at http://dev.evernote.com/documentation/cloud/chapters/ENML.php
     String content =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">" + "<en-note>" + "<span style=\"color:green;\">Here's the Evernote logo:</span><br/>" + "<en-media type=\"image/png\" hash=\""
-            + hashHex + "\"/>" + "</en-note>";
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">"
+            + "<en-note>" + "<span style=\"color:green;\">Here's the Evernote logo:</span><br/>"
+            + "<en-media type=\"image/png\" hash=\"" + hashHex + "\"/>" + "</en-note>";
     note.setContent(content);
 
     // Finally, send the new note to Evernote using the createNote method
@@ -305,10 +310,10 @@ public class EDAMDemo {
       // content
       // and binary resource data are omitted, although resource metadata
       // is included.
-      // To get the note content and/or binary resources, call getNote()
+      // To get the note content and/or binary test.resources, call getNote()
       // using the note's GUID.
       Note fullNote = noteStore.getNote(note.getGuid(), true, true, false, false);
-      System.out.println("Note contains " + fullNote.getResourcesSize() + " resources");
+      System.out.println("Note contains " + fullNote.getResourcesSize() + " test.resources");
       System.out.println();
     }
   }
@@ -321,33 +326,33 @@ public class EDAMDemo {
   private void updateNoteTag() throws Exception {
     // When updating a note, it is only necessary to send Evernote the
     // fields that have changed. For example, if the Note that you
-    // send via updateNote does not have the resources field set, the
-    // Evernote server will not change the note's existing resources.
-    // If you wanted to remove all resources from a note, you would
-    // set the resources field to a new List<Resource> that is empty.
+    // send via updateNote does not have the test.resources field set, the
+    // Evernote server will not change the note's existing test.resources.
+    // If you wanted to remove all test.resources from a note, you would
+    // set the test.resources field to a new List<Resource> that is empty.
 
     // If you are only changing attributes such as the note's title or tags,
     // you can save time and bandwidth by omitting the note content and
-    // resources.
+    // test.resources.
 
     // In this sample code, we fetch the note that we created earlier,
     // including
-    // the full note content and all resources. A real application might
+    // the full note content and all test.resources. A real application might
     // do something with the note, then update a note attribute such as a
     // tag.
     Note note = noteStore.getNote(newNoteGuid, true, true, false, false);
 
-    // Do something with the note contents or resources...
+    // Do something with the note contents or test.resources...
 
     // Now, update the note. Because we're not changing them, we unset
-    // the content and resources. All we want to change is the tags.
+    // the content and test.resources. All we want to change is the tags.
     note.unsetContent();
     note.unsetResources();
 
     // We want to apply the tag "TestTag"
     note.addToTagNames("TestTag");
 
-    // Now update the note. Because we haven't set the content or resources,
+    // Now update the note. Because we haven't set the content or test.resources,
     // they won't be changed.
     noteStore.updateNote(note);
     System.out.println("Successfully added tag to existing note");

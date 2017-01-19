@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:security="http://www.springframework.org/schema/security"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
   <!-- preauthentication -->
@@ -10,7 +10,7 @@
   </security:global-method-security>
 
   <security:http auto-config="false" use-expressions="true" entry-point-ref="http403EntryPoint"
-                 access-denied-page="/error?httpError=403">
+      access-denied-page="/error?httpError=403">
 
     <security:custom-filter position="PRE_AUTH_FILTER" ref="proxyAuthenticationHeaderFilter"/>
 
@@ -20,22 +20,22 @@
   </security:http>
 
   <bean id="securityExpressionHandler"
-        class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
+      class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
 
   <bean id="http403EntryPoint"
-        class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
+      class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
 
 
   <bean id="securityService" class="poc.core.service.impl.SecurityServiceImpl"/>
 
   <bean id="proxyAuthenticationHeaderFilter"
-        class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
+      class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
     <property name="principalRequestHeader" value="PROXY_REMOTE_USER"/>
     <property name="authenticationManager" ref="authenticationManager"/>
   </bean>
 
   <bean id="preAuthenticatedAuthenticationProvider"
-        class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+      class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
     <property name="preAuthenticatedUserDetailsService">
       <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
         <property name="userDetailsService" ref="securityService"/>

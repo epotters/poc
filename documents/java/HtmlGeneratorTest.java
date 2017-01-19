@@ -1,10 +1,10 @@
 package nl.abz.os;
 
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 
 public class HtmlGeneratorTest {

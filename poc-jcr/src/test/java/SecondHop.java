@@ -1,9 +1,9 @@
-import org.apache.jackrabbit.core.TransientRepository;
-
 import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
+
+import org.apache.jackrabbit.core.TransientRepository;
 
 
 /**
