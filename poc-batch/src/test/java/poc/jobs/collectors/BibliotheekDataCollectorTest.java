@@ -1,4 +1,4 @@
-package poc.jobs.bibliotheek;
+package poc.jobs.collectors;
 
 
 import org.apache.commons.logging.Log;
@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * Created by eelko on 2017-01-05
  */
-public class BibliotheekDataCollectorTest {
+public class BibliotheekDataCollectorTest extends BaseDataCollectorTest {
 
   private static final Log LOG = LogFactory.getLog(BibliotheekDataCollectorTest.class);
 
@@ -26,12 +26,10 @@ public class BibliotheekDataCollectorTest {
 
 
   @Test
-  public void collectData() {
+  public void collectData() throws Exception {
 
     LOG.debug("About to collect data from Bibliotheek");
-
     collector.collect();
-
     LOG.debug("Data collected from Bibliotheek");
   }
 }

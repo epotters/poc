@@ -1,4 +1,4 @@
-package poc.jobs.bibliotheek;
+package poc.jobs.collectors;
 
 
 import java.io.File;
@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
@@ -27,50 +28,57 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 /**
  * Created by eelko on 2015-02-14
  */
-public class BibliotheekDataCollectorAlternative {
+public class BibliotheekDataCollector implements DataCollector {
 
-  private static final Log LOG = LogFactory.getLog(BibliotheekDataCollectorAlternative.class);
+  private static final Log LOG = LogFactory.getLog(BibliotheekDataCollector.class);
 
-  private static final String SOURCE_NAME = "Bibliotheek (alt)";
-
-  private final String baseUrl = "http://www.utrechtcat.nl";
-  private final int numberOfBooksPerPage = 50;
-
-  private final String imagesParentPath = "target/jobs/library/images/";
-  private final int coverImageSize = 900;
-
-  private final boolean collectingDetailsEnabled = false;
-  private final boolean downloadingCoverImagesEnabled = false;
+  private final String collectorDisplayName = "Bibliotheek";
+  private final String collectorName = "dutch-library";
 
   private static final String SEP = " - ";
+  private final String baseUrl = "http://www.utrechtcat.nl";
+
+  private final int numberOfBooksPerPage = 50;
+  private final int coverImageSize = 900;
+  private final boolean collectingDetailsEnabled = false;
+  private final boolean downloadingCoverImagesEnabled = false;
+  private final String imagesParentPath = "images/";
+
+  @Value("${collectors.output-path}")
+  private String outputPath;
+  private String collectorOutputPath;
 
   private final WebClient webClient = new WebClient();
 
 
-  public BibliotheekDataCollectorAlternative() {
+  public BibliotheekDataCollector() {
 
-    File imagesParent = new File(imagesParentPath);
+    collectorOutputPath = outputPath + collectorName + "/";
+    LOG.debug("collectorOutputPath: " + collectorOutputPath);
+
+    File imagesParent = new File(collectorOutputPath + imagesParentPath);
     if (!imagesParent.exists()) {
       imagesParent.mkdirs();
     }
+
   }
 
 
-  public void collect() throws Exception {
+  @Override
+  public void collect() throws IOException {
 
-    LOG.debug("Logging in \"" + SOURCE_NAME + "\"");
+    LOG.debug("Logging in \"" + collectorDisplayName + "\"");
     HtmlPage menuPage = login();
-    LOG.debug("Logged in \"" + SOURCE_NAME + "\"");
+    LOG.debug("Logged in \"" + collectorDisplayName + "\"");
     List<HtmlElement> bookElements = collectHistory(menuPage);
 
     LOG.debug("Collected " + bookElements.size() + " books");
-
 
     webClient.close();
   }
 
 
-  private HtmlPage login() throws Exception {
+  private HtmlPage login() throws IOException {
 
     final String loginPageUrl = "http://www.utrechtcat.nl/cgi-bin/bx.pl?event=private&groepfx=10&vestnr=9990";
     final String userName = "20105031598124";
@@ -109,7 +117,7 @@ public class BibliotheekDataCollectorAlternative {
   }
 
 
-  private List<HtmlElement> collectHistory(HtmlPage menuPage) throws Exception {
+  private List<HtmlElement> collectHistory(HtmlPage menuPage) throws IOException {
 
     List<HtmlElement> bookElements = new ArrayList<>();
 
@@ -156,7 +164,7 @@ public class BibliotheekDataCollectorAlternative {
   }
 
 
-  private List<HtmlElement> collectBookElementsOnPage(HtmlPage booksPage) throws Exception {
+  private List<HtmlElement> collectBookElementsOnPage(HtmlPage booksPage) throws IOException {
     List<HtmlElement> bookElements = new ArrayList<>();
     assert (booksPage != null);
 
@@ -196,7 +204,7 @@ public class BibliotheekDataCollectorAlternative {
   <div class="list_buttons"><div class="waardering" id="881802"></div></div>
   </li>
   */
-  private Map<String, String> collectBookData(HtmlElement bookElement) throws Exception {
+  private Map<String, String> collectBookData(HtmlElement bookElement) throws IOException {
 
     Map<String, String> bookData = new HashMap<>();
 
@@ -213,13 +221,13 @@ public class BibliotheekDataCollectorAlternative {
     LOG.debug("Detail URL" + SEP + detailUrl);
 
     HtmlElement coverImage = getCoverImage(bookElement);
+    assert (coverImage != null);
 
     String coverImageUrl = baseUrl + coverImage.getAttribute("src");
     coverImageUrl = coverImageUrl.replace("size=", "size=" + coverImageSize);
     bookData.put("coverImageUrl", coverImageUrl);
     coverImage.setAttribute("src", coverImageUrl);
     LOG.debug("coverImageUrl" + SEP + coverImageUrl);
-
 
     String borrowingDate = getBorrowingDate(bookElement);
     bookData.put("borrowingDate", borrowingDate);
@@ -236,7 +244,7 @@ public class BibliotheekDataCollectorAlternative {
   }
 
 
-  private HtmlElement getCoverImage(HtmlElement bookElement) throws Exception {
+  private HtmlElement getCoverImage(HtmlElement bookElement) throws IOException {
     DomNodeList<HtmlElement> imageElements = bookElement.getElementsByTagName("img");
     for (HtmlElement imageElement : imageElements) {
       if (imageElement.getAttribute("class").equals("list_cover_image")) {

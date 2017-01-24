@@ -1,4 +1,4 @@
-package poc.jobs.bibliotheek;
+package poc.jobs.collectors;
 
 
 import org.apache.commons.logging.Log;
@@ -11,16 +11,16 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 /**
  * Created by eelko on 2015-02-14
  */
-public class BibliotheekDataCollector {
+public class BibliotheekDataCollectorSeleniumDriver {
 
-  private static final Log LOG = LogFactory.getLog(BibliotheekDataCollector.class);
+  private static final Log LOG = LogFactory.getLog(BibliotheekDataCollectorSeleniumDriver.class);
 
   private static String SOURCE_NAME = "Bibliotheek";
 
   private HtmlUnitDriver driver;
 
 
-  public BibliotheekDataCollector() {
+  public BibliotheekDataCollectorSeleniumDriver() {
     init();
   }
 

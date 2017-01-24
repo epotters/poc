@@ -1,4 +1,4 @@
-package poc.jobs.bibliotheek;
+package poc.jobs.collectors;
 
 
 import java.io.IOException;
@@ -16,23 +16,24 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 
 @RunWith(SpringRunner.class)
-public class ImdbDataCollectorTest {
+public class OvChipkaartCollectorTest extends BaseDataCollectorTest {
 
-  private static final Log LOG = LogFactory.getLog(ImdbDataCollectorTest.class);
+  private static final Log LOG = LogFactory.getLog(OvChipkaartCollectorTest.class);
 
-  private ImdbDataCollector collector;
+  private OvChipkaartDataCollector collector;
 
 
   @Before
   public void before() {
     LOG.debug("Setup");
-    collector = new ImdbDataCollector();
+    collector = new OvChipkaartDataCollector();
   }
 
 
   @Test
   public void collectData() throws IOException {
-    LOG.debug("About to collect data from IMDB");
+
+    LOG.debug("About to collect data from OV Chipkaart");
     collector.collect();
   }
 }
