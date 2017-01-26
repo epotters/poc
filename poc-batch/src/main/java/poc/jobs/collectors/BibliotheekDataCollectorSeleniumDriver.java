@@ -17,7 +17,7 @@ public class BibliotheekDataCollectorSeleniumDriver {
 
   private static String SOURCE_NAME = "Bibliotheek";
 
-  private HtmlUnitDriver driver;
+  private HtmlUnitDriver driver = new HtmlUnitDriver(true);
 
 
   public BibliotheekDataCollectorSeleniumDriver() {
@@ -26,8 +26,7 @@ public class BibliotheekDataCollectorSeleniumDriver {
 
 
   private void init() {
-    driver = new HtmlUnitDriver(false);
-    // driver.setJavascriptEnabled(true);
+
   }
 
 

@@ -28,12 +28,16 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 /**
  * Created by eelko on 2015-02-14
  */
-public class BibliotheekDataCollector implements DataCollector {
+public class BibliotheekDataCollector extends BaseDataCollector implements DataCollector {
 
   private static final Log LOG = LogFactory.getLog(BibliotheekDataCollector.class);
 
   private final String collectorDisplayName = "Bibliotheek";
   private final String collectorName = "dutch-library";
+
+  // Account
+  private final String userName = "20105031598124";
+  private final String password = "B@rb3r10";
 
   private static final String SEP = " - ";
   private final String baseUrl = "http://www.utrechtcat.nl";
@@ -81,8 +85,6 @@ public class BibliotheekDataCollector implements DataCollector {
   private HtmlPage login() throws IOException {
 
     final String loginPageUrl = "http://www.utrechtcat.nl/cgi-bin/bx.pl?event=private&groepfx=10&vestnr=9990";
-    final String userName = "20105031598124";
-    final String password = "B@rb3r10";
 
     final String loginFormName = "loginform";
     final String loginFormButtonName = "lener_knop";

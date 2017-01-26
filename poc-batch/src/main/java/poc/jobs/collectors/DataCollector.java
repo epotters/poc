@@ -9,6 +9,6 @@ import java.io.IOException;
  */
 public interface DataCollector {
 
-  void collect() throws IOException;
+  void collect() throws Exception;
 
 }

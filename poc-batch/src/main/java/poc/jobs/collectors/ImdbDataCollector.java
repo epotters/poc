@@ -23,7 +23,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 /**
  * Created by eelko on 2017-01-16
  */
-public class ImdbDataCollector implements DataCollector {
+public class ImdbDataCollector extends BaseDataCollector implements DataCollector {
 
   private static final Log LOG = LogFactory.getLog(ImdbDataCollector.class);
 

@@ -20,7 +20,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 /**
  * Created by eelko on 2017-01-16
  */
-public class OvChipkaartDataCollector implements DataCollector {
+public class OvChipkaartDataCollector extends BaseDataCollector implements DataCollector {
 
   private static final Log LOG = LogFactory.getLog(OvChipkaartDataCollector.class);
 

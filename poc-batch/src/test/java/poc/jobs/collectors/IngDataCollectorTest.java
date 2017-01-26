@@ -31,7 +31,7 @@ public class IngDataCollectorTest extends BaseDataCollectorTest {
 
 
   @Test
-  public void collectData() throws IOException {
+  public void collectData() throws Exception {
     LOG.debug("About to collect data from ING");
     collector.collect();
   }
