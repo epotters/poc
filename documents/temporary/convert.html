@@ -1,0 +1,200 @@
+<div ng-class="{'dropdown-block':cfg.mode =='default', open: state.showList &amp;&amp; cfg.mode =='default'}" ing-rich-select=""
+    radio="false" id="accounts" class="ng-scope dropdown-block">
+  <div ing-rich-select-toggle="" class="ng-scope"><!-- ngIf: cfg.mode == 'default' -->
+    <button ng-if="cfg.mode == 'default'" type="button"
+        class="btn btn-default dropdown-toggle icon-position icon-after icon-position-sm ng-scope" aria-haspopup="true"
+        ng-click="invokerHandler()" ng-keydown="onToggleKeyDown($event)" style="width:100%;"><i aria-hidden="true"
+        class="icon icon-position-icon icon-arrow-a-down"
+        ng-class="{'icon-arrow-a-down':!state.showList, 'icon-arrow-a-up':state.showList}"></i>
+      <div ng-transclude="">
+        <div ing-rich-select-toggle-template="" class="ng-scope"><!-- ngIf: selectedItem -->
+          <div ng-if="selectedItem" class="h-bor-r-1 h-bor-a l-pr-1 l-h-inherit ng-scope"
+              ng-class="{'icon-position icon-before icon-position-xxxl':(selectedItem.image || selectedItem.icon), 'icon-position-ratio-': hasImagesInList &amp;&amp; cfg.imageRatio}">
+            <!-- ngIf: selectedItem.image != undefined --><!-- ngIf: selectedItem.icon != undefined -->
+            <div class="h-bold"><span class="h-float-right l-pl-2"><span
+                data-ng-bind-html="getAsTrustedHtml(selectedItem.prop3)" class="ng-binding"></span> <span class="ng-binding">€ 1.874,15</span></span><span
+                class="h-text-ellipsis ng-binding">Betaalrekening</span></div>
+            <div class="h-line-height-0">
+              <div class="h-inline-block h-max-width-100p font-primary-r-md"><span class="h-text-ellipsis l-mr-2 ng-binding">NL88 INGB 0000 8456 34</span>
+              </div><!-- ngIf: selectedItem.prop5 -->
+              <div ng-if="selectedItem.prop5" class="h-inline-block h-max-width-100p font-primary-r-md ng-scope"><span
+                  class="h-text-ellipsis ng-binding">Hr E M Potters</span></div><!-- end ngIf: selectedItem.prop5 --></div>
+            <!-- ngIf: selectedItem.prop6 || selectedItem.prop7 --></div><!-- end ngIf: selectedItem -->
+          <!-- ngIf: !selectedItem --></div>
+      </div>
+    </button><!-- end ngIf: cfg.mode == 'default' --></div>
+  <ul ng-transclude="" ng-style="dropdownMenuStyle" class="l-mb-0 h-bg-b-base ng-scope dropdown-menu dropdown-menu-default"
+      aria-hidden="true" ng-mouseenter="onListMouse(true)" ng-mouseleave="onListMouse(false)"
+      ng-class="{'dropdown-menu dropdown-menu-default' : cfg.mode == 'default', 'list-group list-group-sm': cfg.mode != 'default'}"
+      ing-rich-select-item-list=""
+      items="[{&quot;index&quot;:-1,&quot;agreementType&quot;:null,&quot;selected&quot;:false,&quot;prop1&quot;:&quot;Alle rekeningen&quot;,&quot;prop2&quot;:&quot;&quot;,&quot;prop3&quot;:&quot;&quot;,&quot;prop4&quot;:&quot;Hiermee downloadt u alle rekeningen tegelijk&quot;,&quot;prop5&quot;:&quot;&quot;},{&quot;index&quot;:0,&quot;agreementType&quot;:&quot;20&quot;,&quot;selected&quot;:true,&quot;prop1&quot;:&quot;Betaalrekening&quot;,&quot;prop2&quot;:&quot;€ 1.874,15&quot;,&quot;prop3&quot;:&quot;&quot;,&quot;prop4&quot;:&quot;NL88 INGB 0000 8456 34&quot;,&quot;prop5&quot;:&quot;Hr E M Potters&quot;},{&quot;index&quot;:1,&quot;agreementType&quot;:&quot;21&quot;,&quot;selected&quot;:false,&quot;prop1&quot;:&quot;En/of rekening&quot;,&quot;prop2&quot;:&quot;€ 93.205,22&quot;,&quot;prop3&quot;:&quot;&quot;,&quot;prop4&quot;:&quot;NL48 INGB 0000 0969 32&quot;,&quot;prop5&quot;:&quot;Hr J A M Potters en/of Hr E M Potters&quot;},{&quot;index&quot;:2,&quot;agreementType&quot;:&quot;20&quot;,&quot;selected&quot;:false,&quot;prop1&quot;:&quot;Betaalrekening&quot;,&quot;prop2&quot;:&quot;€ 5,67&quot;,&quot;prop3&quot;:&quot;&quot;,&quot;prop4&quot;:&quot;NL05 INGB 0005 2160 08&quot;,&quot;prop5&quot;:&quot;Hr E M Potters&quot;},{&quot;index&quot;:3,&quot;agreementType&quot;:&quot;21&quot;,&quot;selected&quot;:false,&quot;prop1&quot;:&quot;En/of rekening&quot;,&quot;prop2&quot;:&quot;€ 93.205,22&quot;,&quot;prop3&quot;:&quot;&quot;,&quot;prop4&quot;:&quot;NL48 INGB 0000 0969 32&quot;,&quot;prop5&quot;:&quot;Hr J A M Potters en/of Hr E M Potters&quot;},{&quot;index&quot;:4,&quot;agreementType&quot;:&quot;22&quot;,&quot;selected&quot;:false,&quot;prop1&quot;:&quot;Jongerenrekening&quot;,&quot;prop2&quot;:&quot;€ 3,25&quot;,&quot;prop3&quot;:&quot;&quot;,&quot;prop4&quot;:&quot;NL77 INGB 0657 6235 20&quot;,&quot;prop5&quot;:&quot;HR M T Potters&quot;}]"
+      order-config="{&quot;createIndexes&quot;:false}" style="bottom: auto; max-height: none; overflow-y: hidden;">
+    <!-- ngRepeat: item in selectorItems -->
+    <li role="presentation" ng-mouseenter="onMouseEnter($index, item)" ng-mouseleave="onMouseLeave($index, item)"
+        ng-class="{active:showActiveClass($index), disabled:item.disabled,divider:item.role=='divider', 'dropdown-menu-header':item.orderIndex &amp;&amp; cfg.mode == 'default', 'list-group-header':item.orderIndex &amp;&amp; cfg.mode == 'radio-list','dropdown-menu-item':cfg.mode == 'default', 'list-group-item':  cfg.mode != 'default'}"
+        ing-rich-select-item="" ng-repeat="item in selectorItems" class="ng-scope dropdown-menu-item">
+      <!-- ngIf: item.role == 'orderIndex' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'default' --><label ng-if="isInputItem(item) &amp;&amp; cfg.mode == 'default'"
+        tabindex="-1" role="menuitem" class="ng-scope">
+
+      <input class="sr-only ng-pristine ng-untouched ng-valid ng-not-empty" type="radio" name="accounts" id="accounts-0"
+          value="0" ng-model="state.selectedIndex" ng-disabled="" ng-click="onClick($index, item)">
+      <div ng-transclude="">
+        <div class="l-pr-1 ng-scope"
+            ng-class="{'icon-position icon-before icon-position-xxxl':(hasImagesInList || hasIconsInList), 'icon-position-ratio-': cfg.imageRatio &amp;&amp; (hasImagesInList || hasIconsInList)}"
+            ing-rich-select-item-template=""><!-- ngIf: item.image != undefined --><!-- ngIf: item.icon != undefined -->
+          <div class="h-bold"><span class="h-float-right l-pl-2"><span data-ng-bind-html="getAsTrustedHtml(item.prop3)"
+              class="ng-binding"></span> <span class="ng-binding"></span></span><span class="h-text-ellipsis ng-binding">Alle rekeningen</span>
+          </div>
+          <div class="h-line-height-0">
+            <div class="h-inline-block h-max-width-100p font-primary-r-md"><span class="h-text-ellipsis l-mr-2 ng-binding">Hiermee downloadt u alle rekeningen tegelijk</span>
+            </div><!-- ngIf: item.prop5 --></div><!-- ngIf: item.prop6 || item.prop7 --></div>
+      </div>
+    </label><!-- end ngIf: isInputItem(item) && cfg.mode == 'default' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'radio-list' --><!-- ngIf: isInputItem(item) && cfg.mode == 'one-item' -->
+    </li><!-- end ngRepeat: item in selectorItems -->
+    <li role="presentation" ng-mouseenter="onMouseEnter($index, item)" ng-mouseleave="onMouseLeave($index, item)"
+        ng-class="{active:showActiveClass($index), disabled:item.disabled,divider:item.role=='divider', 'dropdown-menu-header':item.orderIndex &amp;&amp; cfg.mode == 'default', 'list-group-header':item.orderIndex &amp;&amp; cfg.mode == 'radio-list','dropdown-menu-item':cfg.mode == 'default', 'list-group-item':  cfg.mode != 'default'}"
+        ing-rich-select-item="" ng-repeat="item in selectorItems" class="ng-scope dropdown-menu-item active">
+      <!-- ngIf: item.role == 'orderIndex' --><!-- ngIf: isInputItem(item) && cfg.mode == 'default' --><label
+        ng-if="isInputItem(item) &amp;&amp; cfg.mode == 'default'" tabindex="-1" role="menuitem" class="ng-scope">
+
+      <input class="sr-only ng-pristine ng-untouched ng-valid ng-not-empty" type="radio" name="accounts" id="accounts-1"
+          value="1" ng-model="state.selectedIndex" ng-disabled="" ng-click="onClick($index, item)">
+      <div ng-transclude="">
+        <div class="l-pr-1 ng-scope"
+            ng-class="{'icon-position icon-before icon-position-xxxl':(hasImagesInList || hasIconsInList), 'icon-position-ratio-': cfg.imageRatio &amp;&amp; (hasImagesInList || hasIconsInList)}"
+            ing-rich-select-item-template=""><!-- ngIf: item.image != undefined --><!-- ngIf: item.icon != undefined -->
+          <div class="h-bold"><span class="h-float-right l-pl-2">
+            <span data-ng-bind-html="getAsTrustedHtml(item.prop3)" class="ng-binding"></span>
+            <span class="ng-binding">€ 1.874,15</span></span>
+            <span class="h-text-ellipsis ng-binding">Betaalrekening</span>
+          </div>
+          <div class="h-line-height-0">
+            <div class="h-inline-block h-max-width-100p font-primary-r-md">
+              <span class="h-text-ellipsis l-mr-2 ng-binding">NL88 INGB 0000 8456 34</span>
+            </div><!-- ngIf: item.prop5 -->
+            <div ng-if="item.prop5" class="h-inline-block h-max-width-100p font-primary-r-md ng-scope">
+              <span class="h-text-ellipsis ng-binding">Hr E M Potters</span>
+            </div>
+            <!-- end ngIf: item.prop5 -->
+          </div>
+          <!-- ngIf: item.prop6 || item.prop7 -->
+        </div>
+      </div>
+    </label><!-- end ngIf: isInputItem(item) && cfg.mode == 'default' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'radio-list' --><!-- ngIf: isInputItem(item) && cfg.mode == 'one-item' -->
+    </li><!-- end ngRepeat: item in selectorItems -->
+    <li role="presentation" ng-mouseenter="onMouseEnter($index, item)" ng-mouseleave="onMouseLeave($index, item)"
+        ng-class="{active:showActiveClass($index), disabled:item.disabled,divider:item.role=='divider', 'dropdown-menu-header':item.orderIndex &amp;&amp; cfg.mode == 'default', 'list-group-header':item.orderIndex &amp;&amp; cfg.mode == 'radio-list','dropdown-menu-item':cfg.mode == 'default', 'list-group-item':  cfg.mode != 'default'}"
+        ing-rich-select-item="" ng-repeat="item in selectorItems" class="ng-scope dropdown-menu-item">
+      <!-- ngIf: item.role == 'orderIndex' --><!-- ngIf: isInputItem(item) && cfg.mode == 'default' --><label
+        ng-if="isInputItem(item) &amp;&amp; cfg.mode == 'default'" tabindex="-1" role="menuitem" class="ng-scope">
+
+      <input class="sr-only ng-pristine ng-untouched ng-valid ng-not-empty" type="radio" name="accounts" id="accounts-2"
+          value="2" ng-model="state.selectedIndex" ng-disabled="" ng-click="onClick($index, item)">
+      <div ng-transclude="">
+        <div class="l-pr-1 ng-scope"
+            ng-class="{'icon-position icon-before icon-position-xxxl':(hasImagesInList || hasIconsInList), 'icon-position-ratio-': cfg.imageRatio &amp;&amp; (hasImagesInList || hasIconsInList)}"
+            ing-rich-select-item-template=""><!-- ngIf: item.image != undefined --><!-- ngIf: item.icon != undefined -->
+          <div class="h-bold"><span class="h-float-right l-pl-2"><span data-ng-bind-html="getAsTrustedHtml(item.prop3)"
+              class="ng-binding"></span> <span class="ng-binding">€ 93.205,22</span></span><span
+              class="h-text-ellipsis ng-binding">En/of rekening</span></div>
+          <div class="h-line-height-0">
+            <div class="h-inline-block h-max-width-100p font-primary-r-md"><span class="h-text-ellipsis l-mr-2 ng-binding">NL48 INGB 0000 0969 32</span>
+            </div><!-- ngIf: item.prop5 -->
+            <div ng-if="item.prop5" class="h-inline-block h-max-width-100p font-primary-r-md ng-scope"><span
+                class="h-text-ellipsis ng-binding">Hr J A M Potters en/of Hr E M Potters</span></div>
+            <!-- end ngIf: item.prop5 --></div><!-- ngIf: item.prop6 || item.prop7 --></div>
+      </div>
+    </label><!-- end ngIf: isInputItem(item) && cfg.mode == 'default' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'radio-list' --><!-- ngIf: isInputItem(item) && cfg.mode == 'one-item' -->
+    </li><!-- end ngRepeat: item in selectorItems -->
+    <li role="presentation" ng-mouseenter="onMouseEnter($index, item)" ng-mouseleave="onMouseLeave($index, item)"
+        ng-class="{active:showActiveClass($index), disabled:item.disabled,divider:item.role=='divider', 'dropdown-menu-header':item.orderIndex &amp;&amp; cfg.mode == 'default', 'list-group-header':item.orderIndex &amp;&amp; cfg.mode == 'radio-list','dropdown-menu-item':cfg.mode == 'default', 'list-group-item':  cfg.mode != 'default'}"
+        ing-rich-select-item="" ng-repeat="item in selectorItems" class="ng-scope dropdown-menu-item">
+      <!-- ngIf: item.role == 'orderIndex' --><!-- ngIf: isInputItem(item) && cfg.mode == 'default' --><label
+        ng-if="isInputItem(item) &amp;&amp; cfg.mode == 'default'" tabindex="-1" role="menuitem" class="ng-scope">
+
+      <input class="sr-only ng-pristine ng-untouched ng-valid ng-not-empty" type="radio" name="accounts" id="accounts-3"
+          value="3" ng-model="state.selectedIndex" ng-disabled="" ng-click="onClick($index, item)">
+      <div ng-transclude="">
+        <div class="l-pr-1 ng-scope"
+            ng-class="{'icon-position icon-before icon-position-xxxl':(hasImagesInList || hasIconsInList), 'icon-position-ratio-': cfg.imageRatio &amp;&amp; (hasImagesInList || hasIconsInList)}"
+            ing-rich-select-item-template=""><!-- ngIf: item.image != undefined --><!-- ngIf: item.icon != undefined -->
+          <div class="h-bold"><span class="h-float-right l-pl-2"><span data-ng-bind-html="getAsTrustedHtml(item.prop3)"
+              class="ng-binding"></span> <span class="ng-binding">€ 5,67</span></span><span class="h-text-ellipsis ng-binding">Betaalrekening</span>
+          </div>
+          <div class="h-line-height-0">
+            <div class="h-inline-block h-max-width-100p font-primary-r-md"><span class="h-text-ellipsis l-mr-2 ng-binding">NL05 INGB 0005 2160 08</span>
+            </div><!-- ngIf: item.prop5 -->
+            <div ng-if="item.prop5" class="h-inline-block h-max-width-100p font-primary-r-md ng-scope"><span
+                class="h-text-ellipsis ng-binding">Hr E M Potters</span></div><!-- end ngIf: item.prop5 --></div>
+          <!-- ngIf: item.prop6 || item.prop7 --></div>
+      </div>
+    </label><!-- end ngIf: isInputItem(item) && cfg.mode == 'default' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'radio-list' --><!-- ngIf: isInputItem(item) && cfg.mode == 'one-item' -->
+    </li><!-- end ngRepeat: item in selectorItems -->
+    <li role="presentation" ng-mouseenter="onMouseEnter($index, item)" ng-mouseleave="onMouseLeave($index, item)"
+        ng-class="{active:showActiveClass($index), disabled:item.disabled,divider:item.role=='divider', 'dropdown-menu-header':item.orderIndex &amp;&amp; cfg.mode == 'default', 'list-group-header':item.orderIndex &amp;&amp; cfg.mode == 'radio-list','dropdown-menu-item':cfg.mode == 'default', 'list-group-item':  cfg.mode != 'default'}"
+        ing-rich-select-item="" ng-repeat="item in selectorItems" class="ng-scope dropdown-menu-item">
+      <!-- ngIf: item.role == 'orderIndex' --><!-- ngIf: isInputItem(item) && cfg.mode == 'default' --><label
+        ng-if="isInputItem(item) &amp;&amp; cfg.mode == 'default'" tabindex="-1" role="menuitem" class="ng-scope">
+
+      <input class="sr-only ng-pristine ng-untouched ng-valid ng-not-empty" type="radio" name="accounts" id="accounts-4"
+          value="4" ng-model="state.selectedIndex" ng-disabled="" ng-click="onClick($index, item)">
+      <div ng-transclude="">
+        <div class="l-pr-1 ng-scope"
+            ng-class="{'icon-position icon-before icon-position-xxxl':(hasImagesInList || hasIconsInList), 'icon-position-ratio-': cfg.imageRatio &amp;&amp; (hasImagesInList || hasIconsInList)}"
+            ing-rich-select-item-template=""><!-- ngIf: item.image != undefined --><!-- ngIf: item.icon != undefined -->
+          <div class="h-bold"><span class="h-float-right l-pl-2"><span data-ng-bind-html="getAsTrustedHtml(item.prop3)"
+              class="ng-binding"></span> <span class="ng-binding">€ 93.205,22</span></span><span
+              class="h-text-ellipsis ng-binding">En/of rekening</span></div>
+          <div class="h-line-height-0">
+            <div class="h-inline-block h-max-width-100p font-primary-r-md"><span class="h-text-ellipsis l-mr-2 ng-binding">NL48 INGB 0000 0969 32</span>
+            </div><!-- ngIf: item.prop5 -->
+            <div ng-if="item.prop5" class="h-inline-block h-max-width-100p font-primary-r-md ng-scope"><span
+                class="h-text-ellipsis ng-binding">Hr J A M Potters en/of Hr E M Potters</span></div>
+            <!-- end ngIf: item.prop5 --></div><!-- ngIf: item.prop6 || item.prop7 --></div>
+      </div>
+    </label><!-- end ngIf: isInputItem(item) && cfg.mode == 'default' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'radio-list' --><!-- ngIf: isInputItem(item) && cfg.mode == 'one-item' -->
+    </li><!-- end ngRepeat: item in selectorItems -->
+    <li role="presentation" ng-mouseenter="onMouseEnter($index, item)" ng-mouseleave="onMouseLeave($index, item)"
+        ng-class="{active:showActiveClass($index), disabled:item.disabled,divider:item.role=='divider', 'dropdown-menu-header':item.orderIndex &amp;&amp; cfg.mode == 'default', 'list-group-header':item.orderIndex &amp;&amp; cfg.mode == 'radio-list','dropdown-menu-item':cfg.mode == 'default', 'list-group-item':  cfg.mode != 'default'}"
+        ing-rich-select-item="" ng-repeat="item in selectorItems" class="ng-scope dropdown-menu-item">
+      <!-- ngIf: item.role == 'orderIndex' --><!-- ngIf: isInputItem(item) && cfg.mode == 'default' --><label
+        ng-if="isInputItem(item) &amp;&amp; cfg.mode == 'default'" tabindex="-1" role="menuitem" class="ng-scope">
+
+
+      <input class="sr-only ng-pristine ng-untouched ng-valid ng-not-empty" type="radio" name="accounts" id="accounts-5"
+          value="5" ng-model="state.selectedIndex" ng-disabled="" ng-click="onClick($index, item)">
+      <div ng-transclude="">
+        <div class="l-pr-1 ng-scope"
+            ng-class="{'icon-position icon-before icon-position-xxxl':(hasImagesInList || hasIconsInList), 'icon-position-ratio-': cfg.imageRatio &amp;&amp; (hasImagesInList || hasIconsInList)}"
+            ing-rich-select-item-template="">
+          <!-- ngIf: item.image != undefined -->
+          <!-- ngIf: item.icon != undefined -->
+          <div class="h-bold"><span class="h-float-right l-pl-2">
+<span data-ng-bind-html="getAsTrustedHtml(item.prop3)" class="ng-binding"></span>
+<span class="ng-binding">€ 3,25</span>
+</span>
+
+            <span class="h-text-ellipsis ng-binding">Jongerenrekening</span></div>
+          <div class="h-line-height-0">
+            <div class="h-inline-block h-max-width-100p font-primary-r-md">
+              <span class="h-text-ellipsis l-mr-2 ng-binding">NL77 INGB 0657 6235 20</span>
+            </div>
+            <!-- ngIf: item.prop5 -->
+
+            <div ng-if="item.prop5" class="h-inline-block h-max-width-100p font-primary-r-md ng-scope">
+              <span class="h-text-ellipsis ng-binding">HR M T Potters</span></div><!-- end ngIf: item.prop5 --></div>
+          <!-- ngIf: item.prop6 || item.prop7 --></div>
+      </div>
+    </label>
+      <!-- end ngIf: isInputItem(item) && cfg.mode == 'default' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'radio-list' -->
+      <!-- ngIf: isInputItem(item) && cfg.mode == 'one-item' -->
+    </li>
+    <!-- end ngRepeat: item in selectorItems --></ul>
+</div>
