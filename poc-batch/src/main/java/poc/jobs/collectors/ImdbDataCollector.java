@@ -125,7 +125,12 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
 
     // Is there an error?
     DomElement errorBox = loginResultPage.getElementById("auth-error-message-box");
-    LOG.debug("Error box content:\n" + errorBox.asText());
+    if (errorBox == null) {
+      LOG.debug("No error box found");
+    } else {
+      LOG.debug("Error box content:\n" + errorBox.asText());
+    }
+
     LOG.debug("Login result page title is: " + loginResultPage.getTitleText());
 
     return loginResultPage;
