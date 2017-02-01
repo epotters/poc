@@ -16,24 +16,26 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 
 @RunWith(SpringRunner.class)
-public class OvChipkaartCollectorTest extends BaseDataCollectorTest {
+public class ParkMobileCollectorTest extends BaseDataCollectorTest {
 
-  private static final Log LOG = LogFactory.getLog(OvChipkaartCollectorTest.class);
+  private static final Log LOG = LogFactory.getLog(ParkMobileCollectorTest.class);
 
-  private OvChipkaartDataCollector collector;
+  private ParkMobileDataCollector collector;
 
 
   @Before
   public void before() {
     LOG.debug("Setup");
-    collector = new OvChipkaartDataCollector();
+    collector = new ParkMobileDataCollector();
   }
 
 
   @Test
   public void collectData() throws Exception {
 
-    LOG.debug("About to collect data from OV Chipkaart");
+    LOG.debug("About to collect data from Park Mobile");
     collector.collect();
+
+    LOG.debug("Data collected from Park Mobile");
   }
 }

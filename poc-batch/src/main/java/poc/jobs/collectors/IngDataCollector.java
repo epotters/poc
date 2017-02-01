@@ -2,9 +2,7 @@ package poc.jobs.collectors;
 
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -38,13 +36,12 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
   private final String collectorDisplayName = "Mijn ING Transacties";
   private final String collectorName = "ing-transactions";
 
+  private final String loginPageUrl = "https://mijn.ing.nl";
+
   // User account
   private final String userName = "q9nt3qtg";
   private final String password = "V@l3nc1@";
 
-  @Value("${collectors.output-path}")
-  private String outputPath;
-  private String collectorOutputPath;
 
   private final int exportPeriodInMonths = 12;
 
@@ -59,38 +56,31 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
 
   @Override
   public void collect() throws Exception {
+
     LOG.debug("Logging in \"" + collectorDisplayName + "\"");
 
-    /*
-    try(webClient.close()) {
+    final HtmlPage loginPage = webClient.getPage(loginPageUrl);
 
-    }
-    */
-
-    HtmlPage loginResultPage = login();
+    HtmlPage loginResultPage = login(loginPage);
 
     HtmlPage downloadPage = gotoDownloadPage(loginResultPage);
 
+/*
     HtmlPage downloadResultPage = downloadTransactions(downloadPage);
-
     assert (downloadResultPage != null);
-
     LOG.debug("Download result \"" + downloadResultPage.asText() + "\"");
+*/
 
     webClient.close();
   }
 
 
-  private HtmlPage login() throws IOException {
-
-    final String loginPageUrl = "https://mijn.ing.nl";
+  @Override
+  public HtmlPage login(HtmlPage loginPage) throws Exception {
 
     final String loginFormName = "login";
-
     final String userNameFieldContainerId = "gebruikersnaam";
     final String passwordFieldContainerId = "wachtwoord";
-
-    final HtmlPage loginPage = webClient.getPage(loginPageUrl);
 
     LOG.debug("Login page loaded: " + loginPage.getTitleText());
 
@@ -178,15 +168,9 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
     final String fileFormatValue = "string:CSV";
     final String fileFormatLabel = "Kommagescheiden CSV";
 
-
     final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
 
-
-
     int i = webClient.waitForBackgroundJavaScript(1000);
-
-
-
 
     // Select an account
     HtmlRadioButtonInput accountOptionToChoose = (HtmlRadioButtonInput) downloadPage.getElementById(accountOptionToChooseId);
@@ -207,23 +191,6 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
     HtmlOption optionToSelect = fileFormatField.getOptionByText(fileFormatLabel);
     assert (optionToSelect != null);
     fileFormatField.setSelectedAttribute(optionToSelect, true);
-
-/*
-    LOG.debug("File format field: " + fileFormatField.getTextContent());
-    List<HtmlOption> options = fileFormatField.getOptions();
-    LOG.debug("Found: " + options.size() + " options");
-    HtmlOption optionToSelect = null;
-    for (HtmlOption option : options) {
-      LOG.debug("option.getValueAttribute: " + option.getValueAttribute());
-      if (option.getValueAttribute().equals(fileFormat)) {
-        optionToSelect = option;
-        LOG.debug("Option to select found: " + option.getValueAttribute());
-        break;
-      }
-    }
-    assert (optionToSelect != null);
-    fileFormatField.setSelectedAttribute(optionToSelect, true);
-*/
 
     // <button class="btn btn-primary btn-medium " ng-click="download()">Download</button>
     List<DomElement> buttons = downloadPage.getElementsByName("button");
@@ -253,7 +220,6 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
     while (manager.getJobCount() > 0) {
       LOG.debug("Starting sleep " + i++ + " (" + manager.getJobCount() + " Javascript jobs running");
 
-
       Thread.sleep(interval);
       if (System.currentTimeMillis() - startTime > timeout) {
         LOG.debug("Timeout occurred while waiting");
@@ -265,6 +231,7 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
     }
     return true;
   }
+
 
   private void setAccountSelector(HtmlPage downloadPage, String iban) throws IOException {
 
@@ -281,7 +248,6 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
         break;
       }
     }
-
     assert (radioToSelect != null);
 
     radioToSelect.click();

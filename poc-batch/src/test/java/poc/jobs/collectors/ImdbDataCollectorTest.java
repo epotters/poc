@@ -31,7 +31,7 @@ public class ImdbDataCollectorTest extends BaseDataCollectorTest {
 
 
   @Test
-  public void collectData() throws IOException {
+  public void collectData() throws Exception {
     LOG.debug("About to collect data from IMDB");
     collector.collect();
   }

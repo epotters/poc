@@ -10,18 +10,18 @@ import org.junit.Test;
 /**
  * Created by eelko on 2017-01-05
  */
-public class BibliotheekDataCollectorTest extends BaseDataCollectorTest {
+public class PublicLibraryDataCollectorTest extends BaseDataCollectorTest {
 
-  private static final Log LOG = LogFactory.getLog(BibliotheekDataCollectorTest.class);
+  private static final Log LOG = LogFactory.getLog(PublicLibraryDataCollectorTest.class);
 
-  private BibliotheekDataCollector collector;
+  private PublicLibraryDataCollector collector;
 
 
   @Before
   public void before() {
 
     LOG.debug("Setup before testing");
-    collector = new BibliotheekDataCollector();
+    collector = new PublicLibraryDataCollector();
   }
 
 

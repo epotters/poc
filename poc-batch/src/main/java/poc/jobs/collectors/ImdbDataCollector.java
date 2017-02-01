@@ -27,51 +27,49 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
 
   private static final Log LOG = LogFactory.getLog(ImdbDataCollector.class);
 
+
   private final String collectorDisplayName = "IMDb Watchlist";
   private final String collectorName = "imdb-watchlist";
+
+  private final String loginPageUrl = "https://www.imdb.com/registration/signin";
 
   private final String userName = "epotters@xs4all.nl";
   private final String password = "b1vidh";
 
-  @Value("${collectors.output-path}")
-  private String outputPath;
-  private String collectorOutputPath;
 
-  private final WebClient webClient = new WebClient();
+
 
 
   public ImdbDataCollector() {
-
     collectorOutputPath = outputPath + collectorName + "/";
     LOG.debug("collectorOutputPath: " + collectorOutputPath);
-
   }
 
 
   @Override
-  public void collect() throws IOException {
+  public void collect() throws Exception {
+
     LOG.debug("Logging in \"" + collectorDisplayName + "\"");
 
-    HtmlPage loginPage = chooseLoginOption();
-    HtmlPage loginResult = login(loginPage);
-    HtmlPage watchlistPage = watchlist(loginResult);
+    try (final WebClient webClient = new WebClient()) {
 
-    downloadWatchlist(watchlistPage);
+      LOG.debug("Loading login options page");
+      final HtmlPage signinOptionsPage = webClient.getPage(loginPageUrl);
+      LOG.debug("Current page: " + signinOptionsPage.getTitleText());
 
-    LOG.info("Logged in");
-    webClient.close();
+      final HtmlPage loginPage = chooseLoginOption(signinOptionsPage);
+      final HtmlPage loginResult = login(loginPage);
+      final HtmlPage watchlistPage = goToWatchlist(loginResult);
+
+      downloadWatchlist(watchlistPage);
+
+      LOG.info("Logged in");
+    }
 
   }
 
 
-  private HtmlPage chooseLoginOption() throws IOException {
-
-    String loginPageUrl = "https://www.imdb.com/registration/signin";
-
-    // Go to the login page
-    LOG.debug("Loading login options page");
-    HtmlPage signinOptionsPage = webClient.getPage(loginPageUrl);
-    LOG.debug("Current page: " + signinOptionsPage.getTitleText());
+  private HtmlPage chooseLoginOption(HtmlPage signinOptionsPage) throws IOException {
 
     // Click on the button "Sign in with IMDB"
     DomElement signinOptionsList = signinOptionsPage.getElementById("signin-options");
@@ -94,8 +92,8 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
     return loginPage;
   }
 
-
-  private HtmlPage login(HtmlPage loginPage) throws IOException {
+  @Override
+  public HtmlPage login(HtmlPage loginPage) throws Exception {
 
     final String loginFormName = "signIn";
     final String userNameFieldName = "email";
@@ -134,7 +132,7 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
   }
 
 
-  private HtmlPage watchlist(HtmlPage firstPageAfterLogin) throws IOException {
+  private HtmlPage goToWatchlist(HtmlPage firstPageAfterLogin) throws IOException {
     final String watchlistMenuLabel = "Watchlist";
     HtmlElement watchlistLink = firstPageAfterLogin.getAnchorByText(watchlistMenuLabel);
     assert (watchlistLink != null);

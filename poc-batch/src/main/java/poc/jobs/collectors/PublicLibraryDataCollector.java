@@ -28,19 +28,22 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 /**
  * Created by eelko on 2015-02-14
  */
-public class BibliotheekDataCollector extends BaseDataCollector implements DataCollector {
+public class PublicLibraryDataCollector extends BaseDataCollector implements DataCollector {
 
-  private static final Log LOG = LogFactory.getLog(BibliotheekDataCollector.class);
+  private static final Log LOG = LogFactory.getLog(PublicLibraryDataCollector.class);
 
-  private final String collectorDisplayName = "Bibliotheek";
-  private final String collectorName = "dutch-library";
+  private final String collectorDisplayName = "Openbare Bibliotheek";
+  private final String collectorName = "public-library";
 
-  // Account
+
+  private final String loginPageUrl = "http://www.utrechtcat.nl/cgi-bin/bx.pl?event=private&groepfx=10&vestnr=9990";
+
   private final String userName = "20105031598124";
   private final String password = "B@rb3r10";
 
   private static final String SEP = " - ";
   private final String baseUrl = "http://www.utrechtcat.nl";
+
 
   private final int numberOfBooksPerPage = 50;
   private final int coverImageSize = 900;
@@ -48,14 +51,8 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
   private final boolean downloadingCoverImagesEnabled = false;
   private final String imagesParentPath = "images/";
 
-  @Value("${collectors.output-path}")
-  private String outputPath;
-  private String collectorOutputPath;
 
-  private final WebClient webClient = new WebClient();
-
-
-  public BibliotheekDataCollector() {
+  public PublicLibraryDataCollector() {
 
     collectorOutputPath = outputPath + collectorName + "/";
     LOG.debug("collectorOutputPath: " + collectorOutputPath);
@@ -71,29 +68,30 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
   @Override
   public void collect() throws IOException {
 
-    LOG.debug("Logging in \"" + collectorDisplayName + "\"");
-    HtmlPage menuPage = login();
-    LOG.debug("Logged in \"" + collectorDisplayName + "\"");
-    List<HtmlElement> bookElements = collectHistory(menuPage);
+    try (WebClient webClient = new WebClient()) {
 
-    LOG.debug("Collected " + bookElements.size() + " books");
+      final HtmlPage loginPage = webClient.getPage(loginPageUrl);
+      LOG.debug("Login page loaded: " + loginPage.getTitleText());
 
-    webClient.close();
+      LOG.debug("Logging in \"" + collectorDisplayName + "\"");
+
+      final HtmlPage menuPage = login(loginPage);
+      LOG.debug("Logged in \"" + collectorDisplayName + "\"");
+
+      final List<HtmlElement> bookElements = collectHistory(menuPage, webClient);
+      LOG.debug("Collected " + bookElements.size() + " books");
+    }
+
   }
 
 
-  private HtmlPage login() throws IOException {
-
-    final String loginPageUrl = "http://www.utrechtcat.nl/cgi-bin/bx.pl?event=private&groepfx=10&vestnr=9990";
+  public HtmlPage login(HtmlPage loginPage) throws IOException {
 
     final String loginFormName = "loginform";
     final String loginFormButtonName = "lener_knop";
     final String userNameFieldName = "newlener";
     final String passwordFieldName = "pinkode";
 
-    final HtmlPage loginPage = webClient.getPage(loginPageUrl);
-
-    LOG.debug("Login page loaded: " + loginPage.getTitleText());
 
     final HtmlForm loginForm = loginPage.getFormByName(loginFormName);
     assert (loginForm != null);
@@ -119,7 +117,7 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
   }
 
 
-  private List<HtmlElement> collectHistory(HtmlPage menuPage) throws IOException {
+  private List<HtmlElement> collectHistory(HtmlPage menuPage, WebClient webClient) throws IOException {
 
     List<HtmlElement> bookElements = new ArrayList<>();
 
@@ -149,7 +147,7 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
         bookPage = getBookPageByPageNumber(bookPage, pageNumber);
       }
       LOG.debug("Processing page " + (pageNumber));
-      bookElements.addAll(collectBookElementsOnPage(bookPage));
+      bookElements.addAll(collectBookElementsOnPage(bookPage, webClient));
     }
 
     LOG.info("Books expected: " + totalBooks + ", books collected: " + bookElements.size());
@@ -166,7 +164,7 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
   }
 
 
-  private List<HtmlElement> collectBookElementsOnPage(HtmlPage booksPage) throws IOException {
+  private List<HtmlElement> collectBookElementsOnPage(HtmlPage booksPage, WebClient webClient) throws IOException {
     List<HtmlElement> bookElements = new ArrayList<>();
     assert (booksPage != null);
 
@@ -179,7 +177,7 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
         for (HtmlElement listItemElement : listItemElements) {
           if (listItemElement.getAttribute("class").contains("list_items")) {
             bookElements.add(listItemElement);
-            Map<String, String> bookData = collectBookData(listItemElement);
+            Map<String, String> bookData = collectBookData(listItemElement, webClient);
           }
         }
         break;
@@ -206,7 +204,7 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
   <div class="list_buttons"><div class="waardering" id="881802"></div></div>
   </li>
   */
-  private Map<String, String> collectBookData(HtmlElement bookElement) throws IOException {
+  private Map<String, String> collectBookData(HtmlElement bookElement, WebClient webClient) throws IOException {
 
     Map<String, String> bookData = new HashMap<>();
 
@@ -240,7 +238,8 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
     }
 
     if (collectingDetailsEnabled) {
-      Map<String, String> bookDetails = loadAndProcessDetailsPage(detailUrl);
+
+      Map<String, String> bookDetails = loadAndProcessDetailsPage(detailUrl, webClient);
     }
     return bookData;
   }
@@ -286,7 +285,7 @@ public class BibliotheekDataCollector extends BaseDataCollector implements DataC
   <td class="tdet_inh">Het grote geheim / Hans Kuyper, Martine Letterie &amp; Selma Noort ; met tek. van Saskia Halfmouw</td>
   </tr>
   */
-  private Map<String, String> loadAndProcessDetailsPage(String detailUrl) throws IOException {
+  private Map<String, String> loadAndProcessDetailsPage(String detailUrl, WebClient webClient) throws IOException {
 
     Map<String, String> bookExtraDetails = new HashMap<>();
 
