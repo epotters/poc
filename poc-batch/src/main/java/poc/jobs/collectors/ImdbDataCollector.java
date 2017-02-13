@@ -2,22 +2,13 @@ package poc.jobs.collectors;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Value;
-
-import com.gargoylesoftware.htmlunit.TextPage;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 
 /**
@@ -28,72 +19,97 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
   private static final Log LOG = LogFactory.getLog(ImdbDataCollector.class);
 
 
-  private final String collectorDisplayName = "IMDb Watchlist";
-  private final String collectorName = "imdb-watchlist";
-
-  private final String loginPageUrl = "https://www.imdb.com/registration/signin";
-
-  private final String userName = "epotters@xs4all.nl";
-  private final String password = "b1vidh";
-
-
-
-
-
   public ImdbDataCollector() {
-    collectorOutputPath = outputPath + collectorName + "/";
-    LOG.debug("collectorOutputPath: " + collectorOutputPath);
+    super(AccountType.IMDB);
+  }
+
+
+  public ImdbDataCollector(WebDriver driver) {
+    super(AccountType.IMDB, driver);
+  }
+
+
+  @Override
+  protected void init() {
+    setCollectorName("imdb-watchlist");
+    outputDirectory = createOutputDirectory();
+
+    LOG.debug("Collector name: " + getCollectorName());
+    LOG.debug("Output directory: " + outputDirectory.getPath());
   }
 
 
   @Override
   public void collect() throws Exception {
 
-    LOG.debug("Logging in \"" + collectorDisplayName + "\"");
+    try {
 
-    try (final WebClient webClient = new WebClient()) {
+      login();
+      LOG.debug("After login, the page title is \"" + driver.getTitle() + "\"");
 
-      LOG.debug("Loading login options page");
-      final HtmlPage signinOptionsPage = webClient.getPage(loginPageUrl);
-      LOG.debug("Current page: " + signinOptionsPage.getTitleText());
+      goToWatchlist();
+      LOG.debug("After going to the watchlist, the page title is \" " + driver.getTitle() + "\"");
 
-      final HtmlPage loginPage = chooseLoginOption(signinOptionsPage);
-      final HtmlPage loginResult = login(loginPage);
-      final HtmlPage watchlistPage = goToWatchlist(loginResult);
+      downloadWatchlist();
+      LOG.debug("After download, the page title is \"" + driver.getTitle() + "\"");
 
-      downloadWatchlist(watchlistPage);
-
-      LOG.info("Logged in");
     }
-
+    finally {
+      driver.close();
+    }
   }
 
-
-  private HtmlPage chooseLoginOption(HtmlPage signinOptionsPage) throws IOException {
-
-    // Click on the button "Sign in with IMDB"
-    DomElement signinOptionsList = signinOptionsPage.getElementById("signin-options");
-
-    DomNodeList<HtmlElement> signinOptions = signinOptionsList.getElementsByTagName("a");
-
-    HtmlPage loginPage = null;
-
-    for (HtmlElement signinOption : signinOptions) {
-      LOG.debug("Login option with href " + signinOption.getAttribute("href"));
-      if (signinOption.getAttribute("href").startsWith("https://www.imdb.com/ap/signin")) {
-
-        LOG.debug("Loginbutton found");
-        loginPage = signinOption.click();
-      }
-    }
-    assert (loginPage != null);
-    LOG.info("Login page title: " + loginPage.getTitleText());
-
-    return loginPage;
-  }
 
   @Override
-  public HtmlPage login(HtmlPage loginPage) throws Exception {
+  public void login() throws Exception {
+
+    LOG.debug("About to login to URL: " + getType().getLoginPageUrl());
+    driver.get(getType().getLoginPageUrl());
+    LOG.debug("After getting the login URL, the page title is \"" + driver.getTitle() + "\"");
+
+    chooseLoginOption();
+    LOG.debug("After login option choice, the page title is \"" + driver.getTitle() + "\"");
+
+    submitLoginForm();
+  }
+
+
+  @Override
+  public boolean isLoggedIn() throws Exception {
+    return false;
+  }
+
+
+  @Override
+  public void logout() {
+
+  }
+
+
+  private void chooseLoginOption() throws IOException {
+
+    final String signinOptionsListId = "signin-options";
+    final String baseUrl = "https://www.imdb.com/ap/signin";
+
+    // Click on the button "Sign in with IMDB"
+    List<WebElement> signinOptions = driver.findElements(By.cssSelector("#" + signinOptionsListId + " a"));
+    LOG.debug(signinOptions.size() + " signinOptions found");
+
+    for (WebElement signinOption : signinOptions) {
+      LOG.debug("Login option with href " + signinOption.getAttribute("href"));
+      if (signinOption.getAttribute("href").startsWith(baseUrl)) {
+        LOG.debug("Loginbutton found");
+
+        activateAndWaitForNewPage(signinOption);
+        // signinOption.click();
+        break;
+      }
+    }
+    LOG.info("Login page title: " + driver.getTitle());
+  }
+
+
+  public void submitLoginForm() throws Exception {
 
     final String loginFormName = "signIn";
     final String userNameFieldName = "email";
@@ -101,59 +117,56 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
 
     final String loginButtonId = "signInSubmit";
 
-    final HtmlForm loginForm = loginPage.getFormByName(loginFormName);
+    final WebElement loginForm = driver.findElement(By.name(loginFormName));
     assert (loginForm != null);
     LOG.debug("Login form found");
 
-    final HtmlPasswordInput passwordField = loginForm.getInputByName(passwordFieldName);
+    final WebElement passwordField = loginForm.findElement(By.name(passwordFieldName));
     assert (passwordField != null);
-    passwordField.setValueAttribute(password);
+    passwordField.sendKeys(getAccount().getPassword());
     LOG.debug("passwordField set");
 
-    final HtmlTextInput userNameField = loginForm.getInputByName(userNameFieldName);
+    final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
     assert (userNameField != null);
-    userNameField.setValueAttribute(userName);
+    userNameField.sendKeys(getAccount().getPassword());
     LOG.debug("userNameField set" + userNameField);
 
-    final HtmlSubmitInput submitButton = (HtmlSubmitInput) loginPage.getElementById(loginButtonId);
+    final WebElement submitButton = loginForm.findElement(By.id(loginButtonId));
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
-    final HtmlPage loginResultPage = submitButton.click();
+    activateAndWaitForNewPage(submitButton);
+    // submitButton.click();
 
-    LOG.debug("User name: " + userNameField.getValueAttribute());
+    checkForErrors();
 
-    // Is there an error?
-    DomElement errorBox = loginResultPage.getElementById("auth-error-message-box");
-    if (errorBox == null) {
-      LOG.debug("No error box found");
-    } else {
-      LOG.debug("Error box content:\n" + errorBox.asText());
-    }
-
-    LOG.debug("Login result page title is: " + loginResultPage.getTitleText());
-
-    return loginResultPage;
+    LOG.debug("Login result page is titled: " + driver.getTitle());
   }
 
 
-  private HtmlPage goToWatchlist(HtmlPage firstPageAfterLogin) throws IOException {
+  private void goToWatchlist() throws IOException {
     final String watchlistMenuLabel = "Watchlist";
-    HtmlElement watchlistLink = firstPageAfterLogin.getAnchorByText(watchlistMenuLabel);
+    WebElement watchlistLink = driver.findElement(By.linkText(watchlistMenuLabel));
     assert (watchlistLink != null);
-    return watchlistLink.click();
+    watchlistLink.click();
   }
 
 
-  private void downloadWatchlist(HtmlPage watchlistPage) throws IOException {
-    final String downloadLinkText = "Export this list";
-    HtmlAnchor downloadLink = watchlistPage.getAnchorByText(downloadLinkText);
-    TextPage downloadResult = downloadLink.click();
+  private void checkForErrors() {
+    try {
+      final WebElement errorBox = driver.findElement(By.id("auth-error-message-box"));
+      LOG.debug("Error box content:\n" + errorBox.getText());
+    }
+    catch (Exception e) {
+      LOG.debug("No error box found");
+    }
+  }
 
-    LOG.debug(downloadResult.getContent());
+
+  private void downloadWatchlist() throws IOException {
+    final String downloadLinkText = "Export this list";
+    WebElement downloadLink = driver.findElement(By.linkText(downloadLinkText));
+    downloadLink.click();
   }
 
 }
-
-
-

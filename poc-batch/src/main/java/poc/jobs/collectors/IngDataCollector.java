@@ -2,28 +2,19 @@ package poc.jobs.collectors;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
-import com.gargoylesoftware.htmlunit.TextPage;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptJobManager;
+import com.gargoylesoftware.htmlunit.WebWindowEvent;
 
 
 /**
@@ -33,129 +24,148 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
 
   private static final Log LOG = LogFactory.getLog(IngDataCollector.class);
 
-  private final String collectorDisplayName = "Mijn ING Transacties";
-  private final String collectorName = "ing-transactions";
-
-  private final String loginPageUrl = "https://mijn.ing.nl";
-
-  // User account
-  private final String userName = "q9nt3qtg";
-  private final String password = "V@l3nc1@";
-
-
   private final int exportPeriodInMonths = 12;
-
-  private final WebClient webClient = new WebClient();
 
 
   public IngDataCollector() {
-    collectorOutputPath = outputPath + collectorName + "/";
-    LOG.debug("collectorOutputPath: " + collectorOutputPath);
+    super(AccountType.ING);
+  }
+
+
+  public IngDataCollector(WebDriver driver) {
+    super(AccountType.ING, driver);
+  }
+
+
+  @Override
+  protected void init() {
+    setCollectorName("ing-transactions");
+    outputDirectory = createOutputDirectory();
+
+    LOG.debug("Collector name: " + getCollectorName());
+    LOG.debug("Output directory: " + outputDirectory.getPath());
   }
 
 
   @Override
   public void collect() throws Exception {
 
-    LOG.debug("Logging in \"" + collectorDisplayName + "\"");
+    try {
 
-    final HtmlPage loginPage = webClient.getPage(loginPageUrl);
+      login();
 
-    HtmlPage loginResultPage = login(loginPage);
+      assert (isLoggedIn());
 
-    HtmlPage downloadPage = gotoDownloadPage(loginResultPage);
+      LOG.debug("Logged in");
 
-/*
-    HtmlPage downloadResultPage = downloadTransactions(downloadPage);
-    assert (downloadResultPage != null);
-    LOG.debug("Download result \"" + downloadResultPage.asText() + "\"");
-*/
+      gotoDownloadPage();
 
-    webClient.close();
+      downloadTransactions();
+
+    }
+    finally {
+      driver.close();
+    }
   }
 
 
   @Override
-  public HtmlPage login(HtmlPage loginPage) throws Exception {
+  public void login() throws Exception {
+
+    LOG.debug("Selenium versie");
+
+    driver.get(getType().getLoginPageUrl());
 
     final String loginFormName = "login";
     final String userNameFieldContainerId = "gebruikersnaam";
     final String passwordFieldContainerId = "wachtwoord";
 
-    LOG.debug("Login page loaded: " + loginPage.getTitleText());
+    LOG.debug("Login page loaded: " + driver.getTitle());
 
-    final HtmlForm loginForm = loginPage.getFormByName(loginFormName);
+    final WebElement loginForm = driver.findElement(By.name(loginFormName));
     assert (loginForm != null);
     LOG.debug("Login form found");
 
-    final DomElement userNameFieldContainer = loginPage.getElementById(userNameFieldContainerId);
-
-    final HtmlTextInput userNameField = (HtmlTextInput) userNameFieldContainer.getElementsByTagName("input").get(0);
+    final WebElement userNameFieldContainer = driver.findElement(By.id(userNameFieldContainerId));
+    final WebElement userNameField = userNameFieldContainer.findElement(By.tagName("input"));
     assert (userNameField != null);
-    userNameField.setValueAttribute(userName);
+    setFieldValueUsingJs(userNameField, getAccount().getUsername());
     LOG.debug("userNameField set");
 
-    final DomElement passwordFieldContainer = loginPage.getElementById(passwordFieldContainerId);
-    final HtmlPasswordInput passwordField = (HtmlPasswordInput) passwordFieldContainer.getElementsByTagName("input").get(0);
+    final WebElement passwordFieldContainer = driver.findElement(By.id(passwordFieldContainerId));
+    final WebElement passwordField = passwordFieldContainer.findElement(By.tagName("input"));
     assert (passwordField != null);
-    passwordField.setValueAttribute(password);
+    LOG.debug("Password field found");
+
+    setFieldValueUsingJs(passwordField, getAccount().getPassword());
     LOG.debug("passwordField set");
 
-    final HtmlButton submitButton = (HtmlButton) loginForm.getElementsByTagName("button").get(0);
+    final WebElement submitButton = loginForm.findElement(By.tagName("button"));
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
-    final HtmlPage loginResultPage = submitButton.click();
-    LOG.debug("Login result page title is: " + loginResultPage.getTitleText());
+    // submitButton.click();
+    activateAndWaitForNewPage(submitButton);
+
+    LOG.debug("Login result page title is: " + driver.getTitle());
 
     // Check for error box
-    DomElement errorBox = findErrorBox(loginPage);
+    WebElement errorBox = findErrorBox();
     assert (errorBox == null);
+  }
 
-    return loginResultPage;
+
+  @Override
+  public boolean isLoggedIn() throws Exception {
+    final String cssSelector = "#riaf-identification-uid span strong";
+    WebElement userDisplayNameElement = driver.findElement(By.cssSelector(cssSelector));
+    assert (userDisplayNameElement != null);
+    LOG.debug("UserAccount display name found " + userDisplayNameElement.getText());
+    return (userDisplayNameElement.getText().equals(getAccount().getDisplayName()));
+  }
+
+
+  @Override
+  public void logout() {
+    final String cssSelector = "div.riaf-header-identification a.riaf-link";
+    WebElement logoutButtonElement = driver.findElement(By.cssSelector(cssSelector));
+    assert (logoutButtonElement != null);
+    activateAndWaitForNewPage(logoutButtonElement);
   }
 
 
   // <div class="notification">...</div>
-  private DomElement findErrorBox(HtmlPage loginPage) {
-    DomNodeList<DomElement> divs = loginPage.getElementsByTagName("div");
-    DomElement errorBox = null;
-    for (DomElement div : divs) {
-      if (div.getAttribute("class").equals("notification")) {
-        errorBox = div;
-        LOG.debug("Error on page:\n" + errorBox.asText());
-        break;
-      }
+  private WebElement findErrorBox() {
+    WebElement errorBox = null;
+    List<WebElement> notifications = driver.findElements(By.cssSelector("div.notification"));
+    if (notifications != null && notifications.size() > 0) {
+      errorBox = notifications.get(0);
     }
     return errorBox;
   }
 
 
-  // <a href="/particulier/overzichten/download/index">Af- en bijschrijvingen downloaden</a>
-  private HtmlPage gotoDownloadPage(HtmlPage loginResultPage) throws IOException {
+  private void gotoDownloadPage() throws IOException {
+
+    final String iban = "NL48 INGB 0000 0969 32";
+    // selectIban(iban);
+
     final String downloadLinkLabel = "Af- en bijschrijvingen downloaden";
-    DomElement downloadLink = loginResultPage.getAnchorByText(downloadLinkLabel);
+    final WebElement downloadLink = driver.findElement(By.linkText(downloadLinkLabel));
     assert (downloadLink != null);
-    return downloadLink.click();
+    activateAndWaitForNewPage(downloadLink);
   }
 
 
-  private HtmlPage downloadTransactions(HtmlPage downloadPage) throws Exception {
+  private void downloadTransactions() throws Exception {
 
-    LOG.debug("Download page title \"" + downloadPage.getTitleText() + "\"");
-
-    if (waitForJavascriptToFinish(downloadPage)) {
-      LOG.debug("Javascript finished on downloadpage");
-    }
+    LOG.debug("Download page title \"" + driver.getTitle() + "\"");
 
     // Fields
-    final String accountFieldName = "accounts";
     final String startDateFieldId = "startDate-input";
     final String endDateFieldId = "endDate-input";
-    final String fileFormatFieldId = "downloadFormat";
 
     final String downloadButtonText = "Download";
-
     final String dateFormat = "dd-MM-yyyy";
 
     // Values to set
@@ -170,88 +180,53 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
 
     final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
 
-    int i = webClient.waitForBackgroundJavaScript(1000);
-
     // Select an account
-    HtmlRadioButtonInput accountOptionToChoose = (HtmlRadioButtonInput) downloadPage.getElementById(accountOptionToChooseId);
-    // accountOptionToChoose.click();
+    // selectAccount(accountOptionToChooseId);
 
     // Set start date
-    HtmlTextInput startDateField = (HtmlTextInput) downloadPage.getElementById(startDateFieldId);
-    startDateField.setValueAttribute(startDate.format(dateFormatter));
+    final WebElement startDateField = driver.findElement(By.id(startDateFieldId));
+    startDateField.sendKeys(startDate.format(dateFormatter));
 
     // Set end date
-    HtmlTextInput endDateField = (HtmlTextInput) downloadPage.getElementById(endDateFieldId);
-    endDateField.setValueAttribute(endDate.format(dateFormatter));
+    final WebElement endDateField = driver.findElement(By.id(endDateFieldId));
+    endDateField.sendKeys(endDate.format(dateFormatter));
 
     // Select the file format
-    HtmlSelect fileFormatField = (HtmlSelect) downloadPage.getElementById(fileFormatFieldId);
+    // selectFileFormat(fileFormatLabel);
 
-    LOG.debug("File formet field as XML:\n" + fileFormatField.asXml());
-    HtmlOption optionToSelect = fileFormatField.getOptionByText(fileFormatLabel);
-    assert (optionToSelect != null);
-    fileFormatField.setSelectedAttribute(optionToSelect, true);
-
-    // <button class="btn btn-primary btn-medium " ng-click="download()">Download</button>
-    List<DomElement> buttons = downloadPage.getElementsByName("button");
-    LOG.debug("Found " + buttons.size() + " buttons on the page");
-    DomElement downloadButton = null;
-    for (DomElement button : buttons) {
-      if (button.getTextContent().equals(downloadButtonText)) {
-        downloadButton = button;
-        break;
-      }
-    }
+    final WebElement downloadButton = driver.findElement(By.linkText(downloadButtonText));
     assert (downloadButton != null);
 
-    TextPage download = downloadButton.click();
-    LOG.debug("The download is: " + download.toString());
-
-    return null;
+    activateAndWaitForNewPage(downloadButton);
   }
 
 
-  private boolean waitForJavascriptToFinish(HtmlPage page) throws Exception {
-    int interval = 1000;
-    int timeout = 15000;
-    int i = 0;
-    long startTime = System.currentTimeMillis();
-    JavaScriptJobManager manager = page.getEnclosingWindow().getJobManager();
-    while (manager.getJobCount() > 0) {
-      LOG.debug("Starting sleep " + i++ + " (" + manager.getJobCount() + " Javascript jobs running");
+  private void selectAccount(String accountOptionToChooseId) {
 
-      Thread.sleep(interval);
-      if (System.currentTimeMillis() - startTime > timeout) {
-        LOG.debug("Timeout occurred while waiting");
-        manager.removeAllJobs();
-        LOG.debug("All jobs removed");
-        break;
-        // throw new Exception("Timeout exceeded");
-      }
-    }
-    return true;
+    final String accountFieldId = "accounts";
+
+    WebElement accountChooser = driver.findElement(By.id(accountFieldId));
+    accountChooser.click();
+    WebElement accountOptionToChoose = waitForElementPresence(accountOptionToChooseId);
+    accountOptionToChoose.click();
   }
 
 
-  private void setAccountSelector(HtmlPage downloadPage, String iban) throws IOException {
+  private void selectFileFormat(String fileFormatLabel) {
 
-    final String accountsSelectorId = "accounts";
-    DomElement accountsSelector = downloadPage.getElementById(accountsSelectorId);
+    final String fileFormatFieldId = "downloadFormat";
 
-    DomNodeList<HtmlElement> accountOptionElements = accountsSelector.getElementsByTagName("input");
+    final WebElement fileFormatField = driver.findElement(By.id(fileFormatFieldId));
+    fileFormatField.click();
+    final WebElement optionToSelect = fileFormatField.findElement(By.linkText(fileFormatLabel));
+    assert (optionToSelect != null);
+    optionToSelect.click();
+  }
 
-    HtmlRadioButtonInput radioToSelect = null;
 
-    for (HtmlElement accountOptionElement : accountOptionElements) {
-      if (!accountOptionElement.getAttribute("type").equals("radio") && accountOptionElement.getAttribute("value").equals("")) {
-        radioToSelect = (HtmlRadioButtonInput) accountOptionElement;
-        break;
-      }
-    }
-    assert (radioToSelect != null);
+  void webWindowContentChanged(WebWindowEvent event) throws IOException {
 
-    radioToSelect.click();
-
+    InputStream is = event.getWebWindow().getEnclosedPage().getWebResponse().getContentAsStream();
   }
 
 
@@ -260,4 +235,32 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
     return today.minusMonths(1);
   }
 
+
+  // Select the account to download by its iban
+  private WebElement selectIban(String iban) {
+
+    final String accountsListId = "accounts";
+    WebElement accountsList = driver.findElement(By.id(accountsListId));
+    assert (accountsList != null);
+
+    driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+    List<WebElement> accountElementList = accountsList.findElements(By.cssSelector("div.ng-binding"));
+    LOG.debug("Found a list containing " + accountElementList.size() + " accounts");
+
+    if (accountElementList.size() > 0) {
+      LOG.debug("First account element " + accountElementList.get(0).getText());
+    }
+
+    WebElement elementToClick = null;
+    for (WebElement accountElement : accountElementList) {
+      LOG.debug("IBAN: " + accountElement.getText());
+      if (accountElement.getText().equals(iban)) {
+        elementToClick = accountElement;
+        break;
+      }
+    }
+    assert (elementToClick != null);
+    return elementToClick;
+  }
 }

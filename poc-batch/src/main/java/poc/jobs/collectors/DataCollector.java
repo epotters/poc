@@ -9,8 +9,27 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  */
 public interface DataCollector {
 
-  HtmlPage login(HtmlPage loginPage) throws Exception;
+  void login() throws Exception;
+
+  boolean isLoggedIn() throws Exception;
+
+
+  // void navigate();
+
+
+  // void filter();
+
 
   void collect() throws Exception;
+
+
+  // void compare();
+
+
+  // void save();
+
+
+  void logout();
+
 
 }

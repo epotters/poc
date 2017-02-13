@@ -7,15 +7,14 @@ import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
@@ -28,93 +27,111 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
 
   private static final Log LOG = LogFactory.getLog(OvChipkaartDataCollector.class);
 
-  private final String collectorDisplayName = "OV Chipkaart";
-  private final String collectorName = "ov-chipkaart";
-
-  private final String loginPageUrl = "https://www.ov-chipkaart.nl/mijn-ov-chipkaart.htm";
-  private final String userName = "epotters";
-  private final String password = "kl00st3r4";
 
 
 
   public OvChipkaartDataCollector() {
+    super(AccountType.OV_CHIPCARD);
+  }
 
-    collectorOutputPath = outputPath + collectorName + "/";
-    LOG.debug("collectorOutputPath: " + collectorOutputPath);
+  public OvChipkaartDataCollector(WebDriver driver) {
+    super(AccountType.OV_CHIPCARD, driver);
+  }
+
+  @Override
+  protected void init() {
+    setCollectorName("ov-chipkaart");
+    outputDirectory = createOutputDirectory();
+    LOG.debug("Output directory: " + outputDirectory.getPath());
   }
 
 
   @Override
   public void collect() throws Exception {
-    LOG.debug("Logging in \"" + collectorDisplayName + "\"");
+    LOG.debug("Logging in \"" + getType().getDisplayName() + "\"");
 
-    try (WebClient webClient = new WebClient()) {
+    try {
 
-      final HtmlPage loginPage = webClient.getPage(loginPageUrl);
-      LOG.debug("Login page loaded: " + loginPage.getTitleText());
+      login();
 
-      HtmlPage loginResultPage = login(loginPage);
+      navigateToHistory();
 
-      HtmlPage historyPage = goToHistory(loginResultPage);
+      download();
 
-      download(historyPage);
-
+    }
+    finally {
+      driver.close();
     }
   }
 
+
   @Override
-  public HtmlPage login(HtmlPage loginPage) throws IOException {
+  public void login() {
+
+    driver.get(getType().getLoginPageUrl());
 
     final String loginFormId = "login-form";
     final String userNameFieldName = "username";
     final String passwordFieldName = "password";
     final String loginFormButtonId = "btn-login";
 
-    final HtmlForm loginForm = (HtmlForm) loginPage.getElementById(loginFormId);
-    assert (loginForm != null);
-    LOG.debug("Login form found");
+    final WebElement loginForm = driver.findElement(By.id(loginFormId));
 
-    final HtmlTextInput userNameField = loginForm.getInputByName(userNameFieldName);
+    LOG.debug("Login form found, ready to log in");
+
+    final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
     assert (userNameField != null);
-    userNameField.setValueAttribute(userName);
+    userNameField.sendKeys(getAccount().getUsername());
     LOG.debug("userNameField set");
 
-    final HtmlPasswordInput passwordField = loginForm.getInputByName(passwordFieldName);
+    final WebElement passwordField = loginForm.findElement(By.name(passwordFieldName));
     assert (passwordField != null);
-    passwordField.setValueAttribute(password);
+    passwordField.sendKeys(getAccount().getPassword());
     LOG.debug("passwordField set");
 
-    final HtmlSubmitInput submitButton = (HtmlSubmitInput) loginPage.getElementById(loginFormButtonId);
+    final WebElement submitButton = loginForm.findElement(By.id(loginFormButtonId));
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
-    final HtmlPage loginResultPage = submitButton.click();
-    LOG.debug("After login, the first page title is: " + loginResultPage.getTitleText());
+    activateAndWaitForNewPage(submitButton);
+    // submitButton.click();
+    LOG.debug("After login, the first page title is: " + driver.getTitle());
 
     // Check for error box
-    DomElement errorBox = findErrorBox(loginPage);
+    WebElement errorBox = findErrorBox();
     assert (errorBox == null);
 
     LOG.debug("Logged in successfully");
-    return loginResultPage;
   }
 
 
-  private HtmlPage goToHistory(HtmlPage loginResultPage) throws Exception {
+  @Override
+  public boolean isLoggedIn() throws Exception {
+    return false;
+  }
 
+
+  @Override
+  public void logout() {
+
+  }
+
+
+  private void navigateToHistory() throws Exception {
     LOG.debug("Navigating to the history page");
     final String historyLinkText = "Bekijk OV-reishistorie";
-    final HtmlAnchor historyLink = loginResultPage.getAnchorByText(historyLinkText);
+    final WebElement historyLink = driver.findElement(By.linkText(historyLinkText));
     assert (historyLink != null);
-    return historyLink.click();
+    historyLink.click();
+
   }
 
 
-  private void download(HtmlPage historyPage) throws Exception {
+  private void download() throws Exception {
 
-    LOG.debug("Downloading data from history page (not implemented) \"" + historyPage.getTitleText() + "\"");
+    LOG.debug("Downloading data from history page (not implemented) \"" + driver.getTitle() + "\"");
 
-    historyPage = filterHistory(historyPage, LocalDate.now(), LocalDate.now().minusMonths(1));
+    filterHistory(LocalDate.now(), LocalDate.now().minusMonths(1));
 
     // Click Declaratieoverzicht maken
 
@@ -124,40 +141,34 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
   }
 
 
-  private HtmlPage filterHistory(HtmlPage historyPage, LocalDate startDate, LocalDate endDate) throws Exception {
+  private void filterHistory(LocalDate startDate, LocalDate endDate) throws Exception {
 
     final String dateFilterTypeIdToSelect = "dateFilter";
     final String dateRangeFieldId = "select-period";
     final String submitButtonId = "selected-card";
 
-    HtmlRadioButtonInput dateFilterTypeField = (HtmlRadioButtonInput) historyPage.getElementById(dateFilterTypeIdToSelect);
-    dateFilterTypeField.setChecked(true);
+    WebElement dateFilterTypeField = driver.findElement(By.id(dateFilterTypeIdToSelect));
+    dateFilterTypeField.click();
+
 
     // 02-01-2017 t/m 31-01-2017
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     String dateRangeValue = startDate.format(formatter) + " t/m " + endDate.format(formatter);
 
-    HtmlTextInput dateRangeField = (HtmlTextInput) historyPage.getElementById(dateRangeFieldId);
-    dateRangeField.setValueAttribute(dateRangeValue);
+    WebElement dateRangeField = driver.findElement(By.id(dateRangeFieldId));
+    dateRangeField.sendKeys(dateRangeValue);
 
-    HtmlSubmitInput submitButton = (HtmlSubmitInput) historyPage.getElementById(submitButtonId);
+    WebElement submitButton = driver.findElement(By.id(submitButtonId));
     assert (submitButton != null);
 
-    return submitButton.click();
+    submitButton.click();
   }
 
 
   // <div class="alert alert-info"></div>
-  private DomElement findErrorBox(HtmlPage loginPage) {
-    DomNodeList<DomElement> divs = loginPage.getElementsByTagName("div");
-    DomElement errorBox = null;
-    for (DomElement div : divs) {
-      if (div.getAttribute("class").equals("alert-info")) {
-        errorBox = div;
-        LOG.debug("Error on page:\n" + errorBox.asText());
-        break;
-      }
-    }
+  private WebElement findErrorBox() {
+    WebElement errorBox = driver.findElement(By.cssSelector("div.alert-info"));
+    LOG.debug("Error on page:\n" + errorBox.getText());
     return errorBox;
   }
 

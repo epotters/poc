@@ -10,19 +10,9 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Value;
-
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlImage;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 
 /**
@@ -32,122 +22,142 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
 
   private static final Log LOG = LogFactory.getLog(PublicLibraryDataCollector.class);
 
-  private final String collectorDisplayName = "Openbare Bibliotheek";
-  private final String collectorName = "public-library";
-
-
-  private final String loginPageUrl = "http://www.utrechtcat.nl/cgi-bin/bx.pl?event=private&groepfx=10&vestnr=9990";
-
-  private final String userName = "20105031598124";
-  private final String password = "B@rb3r10";
 
   private static final String SEP = " - ";
   private final String baseUrl = "http://www.utrechtcat.nl";
-
 
   private final int numberOfBooksPerPage = 50;
   private final int coverImageSize = 900;
   private final boolean collectingDetailsEnabled = false;
   private final boolean downloadingCoverImagesEnabled = false;
-  private final String imagesParentPath = "images/";
+  private final String imagesParentPath = "/images";
 
 
   public PublicLibraryDataCollector() {
+    super(AccountType.PUBLIC_LIBRARY);
+  }
 
-    collectorOutputPath = outputPath + collectorName + "/";
-    LOG.debug("collectorOutputPath: " + collectorOutputPath);
+  public PublicLibraryDataCollector(WebDriver driver) {
+    super(AccountType.PUBLIC_LIBRARY, driver);
+  }
 
-    File imagesParent = new File(collectorOutputPath + imagesParentPath);
-    if (!imagesParent.exists()) {
-      imagesParent.mkdirs();
+
+  @Override
+  protected void init() {
+
+    setCollectorName("public-library");
+    outputDirectory = createOutputDirectory();
+    LOG.debug("Output directory: " + outputDirectory.getPath());
+
+    File imagesParent = new File(outputDirectory.getPath() + imagesParentPath);
+    if (!imagesParent.exists() && imagesParent.mkdirs()) {
+      LOG.debug("Images directory created");
     }
-
   }
 
 
   @Override
   public void collect() throws IOException {
+    try {
 
-    try (WebClient webClient = new WebClient()) {
+      login();
+      LOG.debug("Logged in \"" + getType().getDisplayName() + "\"");
 
-      final HtmlPage loginPage = webClient.getPage(loginPageUrl);
-      LOG.debug("Login page loaded: " + loginPage.getTitleText());
+      navigateToHistoryPage();
+      LOG.debug("On history page");
 
-      LOG.debug("Logging in \"" + collectorDisplayName + "\"");
-
-      final HtmlPage menuPage = login(loginPage);
-      LOG.debug("Logged in \"" + collectorDisplayName + "\"");
-
-      final List<HtmlElement> bookElements = collectHistory(menuPage, webClient);
+      final List<WebElement> bookElements = collectHistory();
       LOG.debug("Collected " + bookElements.size() + " books");
     }
-
+    finally {
+      driver.close();
+    }
   }
 
 
-  public HtmlPage login(HtmlPage loginPage) throws IOException {
+  @Override
+  public void login() {
+
+    driver.get(getType().getLoginPageUrl());
+    LOG.debug("Login page loaded: " + driver.getTitle());
+    LOG.debug("Logging in \"" + getType().getDisplayName() + "\"");
 
     final String loginFormName = "loginform";
     final String loginFormButtonName = "lener_knop";
     final String userNameFieldName = "newlener";
     final String passwordFieldName = "pinkode";
 
-
-    final HtmlForm loginForm = loginPage.getFormByName(loginFormName);
+    final WebElement loginForm = driver.findElement(By.name(loginFormName));
     assert (loginForm != null);
     LOG.debug("Login form found");
 
-    final HtmlTextInput userNameField = loginForm.getInputByName(userNameFieldName);
+    final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
     assert (userNameField != null);
-    userNameField.setValueAttribute(userName);
+    userNameField.sendKeys(getAccount().getUsername());
     LOG.debug("userNameField set");
 
-    final HtmlPasswordInput passwordField = loginForm.getInputByName(passwordFieldName);
+    final WebElement passwordField = loginForm.findElement(By.name(passwordFieldName));
     assert (passwordField != null);
-    passwordField.setValueAttribute(password);
+    passwordField.sendKeys(getAccount().getPassword());
     LOG.debug("passwordField set");
 
-    final HtmlSubmitInput submitButton = loginForm.getInputByName(loginFormButtonName);
+    final WebElement submitButton = loginForm.findElement(By.name(loginFormButtonName));
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
-    final HtmlPage loginResultPage = submitButton.click();
-    LOG.debug("Page title is: " + loginResultPage.getTitleText());
-    return loginResultPage;
+    submitButton.click();
+    LOG.debug("After click submit on login page, title is: " + driver.getTitle());
   }
 
 
-  private List<HtmlElement> collectHistory(HtmlPage menuPage, WebClient webClient) throws IOException {
+  @Override
+  public boolean isLoggedIn() throws Exception {
+    return false;
+  }
 
-    List<HtmlElement> bookElements = new ArrayList<>();
 
-    // Go to Borrowing History
+  @Override
+  public void logout() {
+
+  }
+
+
+  private void navigateToHistoryPage() {
+
     final String historyLinkText = "Eerder geleende titels";
-    HtmlAnchor historyLink = menuPage.getAnchorByText(historyLinkText);
+    WebElement historyLink = driver.findElement(By.linkText(historyLinkText));
     String historyPageUrl = historyLink.getAttribute("href");
     historyPageUrl = historyPageUrl.replace("aantal=10", "aantal=" + numberOfBooksPerPage);
-    historyLink.setAttribute("href", historyPageUrl);
-    HtmlPage historyPage = historyLink.click();
 
-    // Get the number of books
-    DomElement resultsBox = historyPage.getElementById("results");
-    DomNodeList<HtmlElement> results = resultsBox.getElementsByTagName("span");
-    final int startIdx = Integer.parseInt(results.get(0).getTextContent());
-    final int endIdx = Integer.parseInt(results.get(1).getTextContent());
-    final int totalBooks = Integer.parseInt(results.get(2).getTextContent());
+    setAttribute(historyLink, "href", historyPageUrl);
+    historyLink.click();
+  }
+
+
+  private List<WebElement> collectHistory() throws IOException {
+
+    List<WebElement> bookElements = new ArrayList<>();
+
+    WebElement resultsBox = driver.findElement(By.id("results"));
+    List<WebElement> results = resultsBox.findElements(By.tagName("span"));
+    assert (results.size() > 2);
+
+    final int startIdx = Integer.parseInt(results.get(0).getText());
+    final int endIdx = Integer.parseInt(results.get(1).getText());
+    final int totalBooks = Integer.parseInt(results.get(2).getText());
     int numberOfPages = totalBooks / numberOfBooksPerPage + (((totalBooks % numberOfBooksPerPage) > 0) ? 1 : 0);
     LOG.info("Found " + totalBooks + " books, divided over " + numberOfPages + " pages of " + numberOfBooksPerPage + " books "
         + "each");
     LOG.debug("Current page starts at number " + startIdx + " and ends at " + endIdx);
 
+
     // Collect all books
-    HtmlPage bookPage = historyPage;
     for (int pageNumber = 1; pageNumber <= (numberOfPages); pageNumber++) {
       if (pageNumber > 1) {
-        bookPage = getBookPageByPageNumber(bookPage, pageNumber);
+        navigateToBookPageByPageNumber(pageNumber);
       }
-      LOG.debug("Processing page " + (pageNumber));
-      bookElements.addAll(collectBookElementsOnPage(bookPage, webClient));
+      LOG.debug("Processing page " + pageNumber);
+      bookElements.addAll(collectBookElementsOnPage());
     }
 
     LOG.info("Books expected: " + totalBooks + ", books collected: " + bookElements.size());
@@ -156,28 +166,28 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
   }
 
 
-  private HtmlPage getBookPageByPageNumber(HtmlPage previousBooksPage, int pageNumber) throws IOException {
+  private void navigateToBookPageByPageNumber(int pageNumber) throws IOException {
     LOG.debug("Retrieving page for book page " + pageNumber);
-    HtmlAnchor pageLink = previousBooksPage.getAnchorByText("" + pageNumber);
+    WebElement pageLink = driver.findElement(By.linkText("" + pageNumber));
     assert (pageLink != null);
-    return pageLink.click();
+    pageLink.click();
   }
 
 
-  private List<HtmlElement> collectBookElementsOnPage(HtmlPage booksPage, WebClient webClient) throws IOException {
-    List<HtmlElement> bookElements = new ArrayList<>();
-    assert (booksPage != null);
+  private List<WebElement> collectBookElementsOnPage() throws IOException {
 
-    DomNodeList<DomElement> listElements = booksPage.getElementsByTagName("ul");
+    List<WebElement> bookElements = new ArrayList<>();
 
-    DomNodeList<HtmlElement> listItemElements;
-    for (DomElement listElement : listElements) {
+    List<WebElement> listElements = driver.findElements(By.tagName("ul"));
+
+    List<WebElement> listItemElements;
+    for (WebElement listElement : listElements) {
       if (listElement.getAttribute("class").contains("list_titels")) {
-        listItemElements = listElement.getElementsByTagName("li");
-        for (HtmlElement listItemElement : listItemElements) {
+        listItemElements = listElement.findElements(By.tagName("li"));
+        for (WebElement listItemElement : listItemElements) {
           if (listItemElement.getAttribute("class").contains("list_items")) {
             bookElements.add(listItemElement);
-            Map<String, String> bookData = collectBookData(listItemElement, webClient);
+            Map<String, String> bookData = collectBookData(listItemElement);
           }
         }
         break;
@@ -204,12 +214,12 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
   <div class="list_buttons"><div class="waardering" id="881802"></div></div>
   </li>
   */
-  private Map<String, String> collectBookData(HtmlElement bookElement, WebClient webClient) throws IOException {
+  private Map<String, String> collectBookData(WebElement bookElement) throws IOException {
 
     Map<String, String> bookData = new HashMap<>();
 
     // Get the title
-    HtmlElement titleElement = bookElement.getElementsByAttribute("a", "class", "title").get(0);
+    WebElement titleElement = bookElement.findElement(By.cssSelector("a .title"));
     final String title = titleElement.getAttribute("title");
     bookData.put("title", title);
     LOG.debug("Title" + SEP + title);
@@ -220,13 +230,15 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
     bookData.put("detailUrl", detailUrl);
     LOG.debug("Detail URL" + SEP + detailUrl);
 
-    HtmlElement coverImage = getCoverImage(bookElement);
+    WebElement coverImage = getCoverImage(bookElement);
     assert (coverImage != null);
 
     String coverImageUrl = baseUrl + coverImage.getAttribute("src");
     coverImageUrl = coverImageUrl.replace("size=", "size=" + coverImageSize);
     bookData.put("coverImageUrl", coverImageUrl);
-    coverImage.setAttribute("src", coverImageUrl);
+
+    // coverImage.setAttribute("src", coverImageUrl);
+
     LOG.debug("coverImageUrl" + SEP + coverImageUrl);
 
     String borrowingDate = getBorrowingDate(bookElement);
@@ -239,15 +251,15 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
 
     if (collectingDetailsEnabled) {
 
-      Map<String, String> bookDetails = loadAndProcessDetailsPage(detailUrl, webClient);
+      Map<String, String> bookDetails = loadAndProcessDetailsPage(detailUrl);
     }
     return bookData;
   }
 
 
-  private HtmlElement getCoverImage(HtmlElement bookElement) throws IOException {
-    DomNodeList<HtmlElement> imageElements = bookElement.getElementsByTagName("img");
-    for (HtmlElement imageElement : imageElements) {
+  private WebElement getCoverImage(WebElement bookElement) throws IOException {
+    List<WebElement> imageElements = bookElement.findElements(By.tagName("img"));
+    for (WebElement imageElement : imageElements) {
       if (imageElement.getAttribute("class").equals("list_cover_image")) {
         return imageElement;
       }
@@ -256,26 +268,18 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
   }
 
 
-  private void downloadCoverImage(HtmlElement imageElement, String coverImageUrl) throws IOException {
+  private void downloadCoverImage(WebElement imageElement, String coverImageUrl) throws IOException {
     String titleNumber = getTextBetweenStrings(coverImageUrl, "key=", ";");
-    HtmlImage htmlImage = (HtmlImage) imageElement;
     String imagePath = imagesParentPath + titleNumber + ".jpg";
     File imageFile = new File(imagePath);
-    htmlImage.saveAs(imageFile);
+
+    // TO DO: Download the image file
   }
 
 
-  private String getBorrowingDate(HtmlElement bookElement) {
-    String borrowingDate = "";
-    DomNodeList<HtmlElement> borrowingDateParentElements = bookElement.getElementsByTagName("span");
-    for (HtmlElement borrowingDateParentElement : borrowingDateParentElements) {
-      if (borrowingDateParentElement.getAttribute("class").equals("leendatum")) {
-        DomElement borrowingDateElement = borrowingDateParentElement.getFirstElementChild();
-        borrowingDate = borrowingDateElement.getTextContent().trim();
-        break;
-      }
-    }
-    return borrowingDate;
+  private String getBorrowingDate(WebElement bookElement) {
+    WebElement borrowingDateElement = bookElement.findElement(By.cssSelector("span.leendatum span.vet"));
+    return borrowingDateElement.getText().trim();
   }
 
 
@@ -285,20 +289,21 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
   <td class="tdet_inh">Het grote geheim / Hans Kuyper, Martine Letterie &amp; Selma Noort ; met tek. van Saskia Halfmouw</td>
   </tr>
   */
-  private Map<String, String> loadAndProcessDetailsPage(String detailUrl, WebClient webClient) throws IOException {
+  private Map<String, String> loadAndProcessDetailsPage(String detailUrl) throws IOException {
 
     Map<String, String> bookExtraDetails = new HashMap<>();
 
-    HtmlPage detailsPage = webClient.getPage(detailUrl);
-    HtmlElement detailsTable = detailsPage.getElementsByIdAndOrName("tdet_detail").get(0).getElementsByTagName("table").get(0);
+    driver.get(detailUrl);
+    WebElement detailsTable = driver.findElement(By.id("tdet_detail")).findElement(By.tagName("table"));
     assert (detailsTable != null);
 
-    DomNodeList<HtmlElement> detailRows = detailsTable.getElementsByTagName("tr");
+    List<WebElement> detailRows = detailsTable.findElements(By.tagName("tr"));
 
     String previousLabel = null;
-    for (HtmlElement detailRow : detailRows) {
-      DomElement labelCell = detailRow.getFirstElementChild();
-      String rawLabel = labelCell.getTextContent();
+    for (WebElement detailRow : detailRows) {
+      final List<WebElement> cells = detailRow.findElements(By.tagName("td"));
+      final WebElement labelCell = cells.get(0);
+      final String rawLabel = labelCell.getText();
       String label = rawLabel.substring(0, rawLabel.length() - 1).trim();
 
       if (label.length() == 0 && previousLabel != null) {
@@ -306,8 +311,8 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
       }
       previousLabel = label;
 
-      DomElement valueCell = labelCell.getNextElementSibling();
-      String valueRaw = valueCell.getTextContent();
+      WebElement valueCell = cells.get(0);
+      String valueRaw = valueCell.getText();
       String value = valueRaw.trim();
       bookExtraDetails.put(label, value);
       LOG.debug(label + SEP + value);
