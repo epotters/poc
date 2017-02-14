@@ -9,6 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 /**
@@ -26,16 +28,6 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
 
   public ImdbDataCollector(WebDriver driver) {
     super(AccountType.IMDB, driver);
-  }
-
-
-  @Override
-  protected void init() {
-    setCollectorName("imdb-watchlist");
-    outputDirectory = createOutputDirectory();
-
-    LOG.debug("Collector name: " + getCollectorName());
-    LOG.debug("Output directory: " + outputDirectory.getPath());
   }
 
 
@@ -75,14 +67,26 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
 
 
   @Override
-  public boolean isLoggedIn() throws Exception {
-    return false;
+  public boolean isLoggedIn() {
+    String loggedInUserCss = "#namUserMenu p.navCategory a";
+    WebElement loggedInUserElement = driver.findElements(By.cssSelector(loggedInUserCss)).get(0);
+    LOG.debug("loggedInUserElement: " + loggedInUserElement.getText());
+    return (loggedInUserElement != null && loggedInUserElement.getText().contains(getAccount().getDisplayName()));
   }
 
 
   @Override
   public void logout() {
+    String loggedInUserCss = "#namUserMenu p.navCategory a";
+    WebElement loggedInUserElement = driver.findElements(By.cssSelector(loggedInUserCss)).get(0);
+    LOG.debug("loggedInUserElement: " + loggedInUserElement.getText());
+    loggedInUserElement.click();
 
+    String logoutLinkText = "Log Out";
+    WebElement logoutLink = driver.findElement(By.linkText(logoutLinkText));
+
+    activateAndWaitForNewPage(logoutLink);
+    assert(!isLoggedIn());
   }
 
 
@@ -99,9 +103,7 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
       LOG.debug("Login option with href " + signinOption.getAttribute("href"));
       if (signinOption.getAttribute("href").startsWith(baseUrl)) {
         LOG.debug("Loginbutton found");
-
         activateAndWaitForNewPage(signinOption);
-        // signinOption.click();
         break;
       }
     }
@@ -114,32 +116,30 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
     final String loginFormName = "signIn";
     final String userNameFieldName = "email";
     final String passwordFieldName = "password";
-
     final String loginButtonId = "signInSubmit";
 
-    final WebElement loginForm = driver.findElement(By.name(loginFormName));
+    final WebElement loginForm = (new WebDriverWait(driver, getDriverWaitTimeOutSecs()))
+        .until(ExpectedConditions.elementToBeClickable(By.name(loginFormName)));
     assert (loginForm != null);
     LOG.debug("Login form found");
+
+    final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
+    assert (userNameField != null);
+    userNameField.sendKeys(getAccount().getUsername());
+    LOG.debug("userNameField set" + userNameField);
 
     final WebElement passwordField = loginForm.findElement(By.name(passwordFieldName));
     assert (passwordField != null);
     passwordField.sendKeys(getAccount().getPassword());
     LOG.debug("passwordField set");
 
-    final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
-    assert (userNameField != null);
-    userNameField.sendKeys(getAccount().getPassword());
-    LOG.debug("userNameField set" + userNameField);
-
     final WebElement submitButton = loginForm.findElement(By.id(loginButtonId));
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
     activateAndWaitForNewPage(submitButton);
-    // submitButton.click();
 
     checkForErrors();
-
     LOG.debug("Login result page is titled: " + driver.getTitle());
   }
 

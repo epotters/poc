@@ -1,7 +1,6 @@
 package poc.jobs.collectors;
 
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -10,14 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 /**
@@ -28,21 +21,13 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
   private static final Log LOG = LogFactory.getLog(OvChipkaartDataCollector.class);
 
 
-
-
   public OvChipkaartDataCollector() {
     super(AccountType.OV_CHIPCARD);
   }
 
+
   public OvChipkaartDataCollector(WebDriver driver) {
     super(AccountType.OV_CHIPCARD, driver);
-  }
-
-  @Override
-  protected void init() {
-    setCollectorName("ov-chipkaart");
-    outputDirectory = createOutputDirectory();
-    LOG.debug("Output directory: " + outputDirectory.getPath());
   }
 
 
@@ -66,17 +51,19 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
 
 
   @Override
-  public void login() {
-
-    driver.get(getType().getLoginPageUrl());
+  public void login() throws Exception {
 
     final String loginFormId = "login-form";
     final String userNameFieldName = "username";
     final String passwordFieldName = "password";
     final String loginFormButtonId = "btn-login";
 
-    final WebElement loginForm = driver.findElement(By.id(loginFormId));
+    driver.get(getType().getLoginPageUrl());
 
+    final WebElement loginForm = (new WebDriverWait(driver, getDriverWaitTimeOutSecs()))
+        .until(ExpectedConditions.elementToBeClickable(By.id(loginFormId)));
+
+    LOG.debug("Login page is titled " + driver.getTitle());
     LOG.debug("Login form found, ready to log in");
 
     final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
@@ -94,26 +81,33 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
     LOG.debug("Fields set, ready to submit");
 
     activateAndWaitForNewPage(submitButton);
-    // submitButton.click();
     LOG.debug("After login, the first page title is: " + driver.getTitle());
 
     // Check for error box
     WebElement errorBox = findErrorBox();
     assert (errorBox == null);
 
+    assert (isLoggedIn());
     LOG.debug("Logged in successfully");
   }
 
 
   @Override
-  public boolean isLoggedIn() throws Exception {
-    return false;
+  public boolean isLoggedIn() {
+    String loggedInUserCss = ".banner nav.global ul li";
+    WebElement loggedInUserElement = driver.findElements(By.cssSelector(loggedInUserCss)).get(1);
+    LOG.debug("loggedInUserElement: " + loggedInUserElement.getText());
+    return (loggedInUserElement != null && loggedInUserElement.getText().contains(getAccount().getDisplayName()));
   }
 
 
   @Override
   public void logout() {
-
+    String logoutLinkText = "Uitloggen";
+    WebElement logoutLink = driver.findElement(By.linkText(logoutLinkText));
+    activateAndWaitForNewPage(logoutLink);
+    assert (!isLoggedIn());
+    LOG.debug("Logout page is titled " + driver.getTitle());
   }
 
 
@@ -123,7 +117,6 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
     final WebElement historyLink = driver.findElement(By.linkText(historyLinkText));
     assert (historyLink != null);
     historyLink.click();
-
   }
 
 
@@ -149,7 +142,6 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
 
     WebElement dateFilterTypeField = driver.findElement(By.id(dateFilterTypeIdToSelect));
     dateFilterTypeField.click();
-
 
     // 02-01-2017 t/m 31-01-2017
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

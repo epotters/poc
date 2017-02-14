@@ -21,7 +21,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 
 import lombok.Getter;
@@ -37,7 +36,6 @@ public class BaseDataCollector {
 
   @Getter
   private AccountType type;
-
 
   private AccountService accountService = new AccountServiceImpl();
 
@@ -64,7 +62,7 @@ public class BaseDataCollector {
 
   BaseDataCollector(AccountType type) {
     this.type = type;
-    assert(accountService != null);
+    assert (accountService != null);
     this.account = accountService.getByType(type);
     this.driver = new HtmlUnitDriver(true);
     turnHtmlUnitLoggingOff();
@@ -74,7 +72,7 @@ public class BaseDataCollector {
 
   BaseDataCollector(AccountType type, WebDriver driver) {
     this.type = type;
-    assert(accountService != null);
+    assert (accountService != null);
     this.account = accountService.getByType(type);
     this.driver = driver;
     init();
@@ -82,7 +80,13 @@ public class BaseDataCollector {
 
 
   protected void init() {
-    this.driverWait = new WebDriverWait(driver, this.getDriverWaitTimeOutSecs());
+    setCollectorName(getType().getName());
+    setCollectorDisplayName(getType().getDisplayName());
+    outputDirectory = createOutputDirectory();
+    LOG.debug("Output directory: " + outputDirectory.getPath());
+
+
+    this.driverWait = new WebDriverWait(driver, getDriverWaitTimeOutSecs());
     LOG.debug("Driverwait set");
 
     assert (getDriverWait() != null);
@@ -215,6 +219,14 @@ public class BaseDataCollector {
 
   protected FileDownloader createFileDownloader() {
     return new FileDownloader(this.getDriver());
+  }
+
+
+  protected void executeJavascript(String script) {
+
+    if (driver instanceof JavascriptExecutor) {
+      ((JavascriptExecutor) driver).executeScript(script);
+    }
   }
 
 }

@@ -17,7 +17,7 @@ public class AllCollectorsLogin {
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);
 
 
-  @Test
+  // @Test
   public void loginAll() {
 
     List<DataCollector> collectors = new ArrayList<>();

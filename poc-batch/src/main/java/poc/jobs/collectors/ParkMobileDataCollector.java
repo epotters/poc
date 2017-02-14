@@ -12,8 +12,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-
 
 /**
  * Created by eelko on 2017-01-16
@@ -22,11 +20,9 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
 
   private static final Log LOG = LogFactory.getLog(ParkMobileDataCollector.class);
 
-
   final int exportPeriodInMonths = 12;
   final String dateFormat = "d-M-yyyy";
   final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
-
 
 
   public ParkMobileDataCollector() {
@@ -38,14 +34,6 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
     super(AccountType.PARK_MOBILE, driver);
   }
 
-  @Override
-  protected void init() {
-
-    setCollectorName("park-mobile");
-    outputDirectory = createOutputDirectory();
-    LOG.debug("Output directory: " + outputDirectory.getPath());
-  }
-
 
   @Override
   public void collect() throws Exception {
@@ -54,11 +42,8 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
 
       LOG.info("Logging in \"" + getType().getDisplayName() + "\"");
 
-
       login();
-
       LOG.info("Logged in");
-      getCurrentUser();
 
       navigateToHistory();
       LOG.info("History found");
@@ -73,7 +58,7 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
 
   }
 
-
+  @Override
   public void login() throws IOException {
 
     driver.get(getType().getLoginPageUrl());
@@ -102,22 +87,33 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
-    submitButton.click();
+    activateAndWaitForNewPage(submitButton);
     LOG.debug("After login, the first page title is: " + driver.getTitle());
-
+    assert (isLoggedIn());
     LOG.info("Logged in successfully");
+
+
+    String script = "alert('Logged in successfully to " + getType().getDisplayName() + ");";
+    executeJavascript(script);
   }
 
 
   @Override
-  public boolean isLoggedIn() throws Exception {
-    return false;
+  public boolean isLoggedIn() {
+    String loggedInUserId = "logged-user";
+    WebElement loggedInUserElement = driver.findElement(By.id(loggedInUserId));
+    LOG.debug("loggedInUserElement: " + loggedInUserElement.getText());
+    return (loggedInUserElement != null && loggedInUserElement.getText().contains(getAccount().getDisplayName()));
   }
 
 
   @Override
   public void logout() {
-
+    String logoutLinkText = "Log uit";
+    WebElement logoutLink = driver.findElement(By.linkText(logoutLinkText));
+    activateAndWaitForNewPage(logoutLink);
+    assert (!isLoggedIn());
+    LOG.debug("Logout page is titled " + driver.getTitle());
   }
 
 
@@ -171,19 +167,4 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
     downloadLink.click();
   }
 
-
-  private boolean getCurrentUser() {
-    final String currentUserBoxId = "logged-user";
-    final WebElement currentUserBox = driver.findElement(By.id(currentUserBoxId));
-    if (currentUserBox == null) {
-      return false;
-    }
-    else {
-      List<WebElement> parts = currentUserBox.findElements(By.tagName("em"));
-      String userDisplayName = parts.get(0).getText();
-      String userName = parts.get(1).getText();
-      LOG.debug("DisplayName: " + userDisplayName + ", UserAccount name: " + userName);
-      return true;
-    }
-  }
 }

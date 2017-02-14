@@ -13,6 +13,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 /**
@@ -21,7 +23,6 @@ import org.openqa.selenium.WebElement;
 public class PublicLibraryDataCollector extends BaseDataCollector implements DataCollector {
 
   private static final Log LOG = LogFactory.getLog(PublicLibraryDataCollector.class);
-
 
   private static final String SEP = " - ";
   private final String baseUrl = "http://www.utrechtcat.nl";
@@ -37,6 +38,7 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
     super(AccountType.PUBLIC_LIBRARY);
   }
 
+
   public PublicLibraryDataCollector(WebDriver driver) {
     super(AccountType.PUBLIC_LIBRARY, driver);
   }
@@ -44,10 +46,7 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
 
   @Override
   protected void init() {
-
-    setCollectorName("public-library");
-    outputDirectory = createOutputDirectory();
-    LOG.debug("Output directory: " + outputDirectory.getPath());
+    super.init();
 
     File imagesParent = new File(outputDirectory.getPath() + imagesParentPath);
     if (!imagesParent.exists() && imagesParent.mkdirs()) {
@@ -78,18 +77,20 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
   @Override
   public void login() {
 
-    driver.get(getType().getLoginPageUrl());
-    LOG.debug("Login page loaded: " + driver.getTitle());
-    LOG.debug("Logging in \"" + getType().getDisplayName() + "\"");
-
     final String loginFormName = "loginform";
     final String loginFormButtonName = "lener_knop";
     final String userNameFieldName = "newlener";
     final String passwordFieldName = "pinkode";
 
-    final WebElement loginForm = driver.findElement(By.name(loginFormName));
+    driver.get(getType().getLoginPageUrl());
+
+    final WebElement loginForm = (new WebDriverWait(driver, getDriverWaitTimeOutSecs()))
+        .until(ExpectedConditions.elementToBeClickable(By.name(loginFormName)));
     assert (loginForm != null);
     LOG.debug("Login form found");
+
+    LOG.debug("Login page loaded: " + driver.getTitle());
+    LOG.debug("Logging in \"" + getType().getDisplayName() + "\"");
 
     final WebElement userNameField = loginForm.findElement(By.name(userNameFieldName));
     assert (userNameField != null);
@@ -105,25 +106,32 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
     assert (submitButton != null);
     LOG.debug("Fields set, ready to submit");
 
-    submitButton.click();
-    LOG.debug("After click submit on login page, title is: " + driver.getTitle());
+    activateAndWaitForNewPage(submitButton);
+    LOG.debug("After login, the page title is: " + driver.getTitle());
+
   }
 
 
   @Override
-  public boolean isLoggedIn() throws Exception {
-    return false;
+  public boolean isLoggedIn() {
+    String loggedInUserCss = "#content_right .module_upper p";
+    WebElement loggedInUserElement = driver.findElements(By.cssSelector(loggedInUserCss)).get(1);
+    LOG.debug("loggedInUserElement: " + loggedInUserElement.getText());
+    return (loggedInUserElement != null && loggedInUserElement.getText().contains(getAccount().getDisplayName()));
   }
 
 
   @Override
   public void logout() {
-
+    String logoutLinkText = "Afmelden";
+    WebElement logoutLink = driver.findElement(By.linkText(logoutLinkText));
+    activateAndWaitForNewPage(logoutLink);
+    assert (!isLoggedIn());
+    LOG.debug("Logout page is titled " + driver.getTitle());
   }
 
 
   private void navigateToHistoryPage() {
-
     final String historyLinkText = "Eerder geleende titels";
     WebElement historyLink = driver.findElement(By.linkText(historyLinkText));
     String historyPageUrl = historyLink.getAttribute("href");
@@ -149,7 +157,6 @@ public class PublicLibraryDataCollector extends BaseDataCollector implements Dat
     LOG.info("Found " + totalBooks + " books, divided over " + numberOfPages + " pages of " + numberOfBooksPerPage + " books "
         + "each");
     LOG.debug("Current page starts at number " + startIdx + " and ends at " + endIdx);
-
 
     // Collect all books
     for (int pageNumber = 1; pageNumber <= (numberOfPages); pageNumber++) {

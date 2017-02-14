@@ -19,23 +19,22 @@ public class AccountOpener {
 
     LOG.info("Starting main application");
 
-
     WebDriver driver = new FirefoxDriver();
 
-    //DataCollector collector = new IngDataCollector(driver);
-    DataCollector collector = new ImdbDataCollector(driver);
+    DataCollector collector = new IngDataCollector(driver);
+    // DataCollector collector = new ImdbDataCollector(driver);
     // DataCollector collector = new OvChipkaartDataCollector(driver);
     // DataCollector collector = new ParkMobileDataCollector(driver);
     // DataCollector collector = new PublicLibraryDataCollector(driver);
 
     try {
-      /*
+
       LOG.info("Logging in");
       collector.login();
       LOG.info("Logged in");
-      */
 
-      collector.collect();
+
+      // collector.collect();
     }
     catch (Exception exception) {
       LOG.info(exception.getMessage());

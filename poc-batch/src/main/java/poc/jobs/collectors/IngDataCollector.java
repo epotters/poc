@@ -38,16 +38,6 @@ public class IngDataCollector extends BaseDataCollector implements DataCollector
 
 
   @Override
-  protected void init() {
-    setCollectorName("ing-transactions");
-    outputDirectory = createOutputDirectory();
-
-    LOG.debug("Collector name: " + getCollectorName());
-    LOG.debug("Output directory: " + outputDirectory.getPath());
-  }
-
-
-  @Override
   public void collect() throws Exception {
 
     try {
