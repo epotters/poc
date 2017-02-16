@@ -17,24 +17,40 @@ public class AllCollectorsLogin {
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);
 
 
-  // @Test
-  public void loginAll() {
+  @Test
+  public void loginAll() throws Exception {
 
     List<DataCollector> collectors = new ArrayList<>();
 
-    collectors.add(new IngDataCollector());
     collectors.add(new ImdbDataCollector());
-    collectors.add(new PublicLibraryDataCollector());
-    collectors.add(new OvChipkaartDataCollector());
-    collectors.add(new ParkMobileDataCollector());
+    // collectors.add(new IngDataCollector());
+    // collectors.add(new OvChipkaartDataCollector());
+    // collectors.add(new ParkMobileDataCollector());
+    // collectors.add(new PublicLibraryDataCollector());
+
 
     for (DataCollector collector : collectors) {
 
-      try {
-        collector.login();
-      } catch(Exception exception) {
-        LOG.error("Unable to login to " + collector.toString());
-      }
+      logInAndOut(collector);
     }
+  }
+
+
+
+  private void logInAndOut(DataCollector collector) throws Exception {
+    String collectorDisplayName = collector.getType().getDisplayName();
+
+    LOG.info("Logging in " + collectorDisplayName);
+    collector.login();
+
+    collector.isLoggedIn();
+    LOG.info("Logged in " + collectorDisplayName);
+
+    LOG.info("Logging out " + collectorDisplayName);
+    collector.logout();
+
+    collector.isLoggedIn();
+    LOG.info("Logged out " + collectorDisplayName);
+
   }
 }

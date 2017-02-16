@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
@@ -156,18 +157,29 @@ public class BaseDataCollector {
   }
 
 
+  protected void clickAndWaitForNewPage(WebElement elementToActivate) {
+    ExpectedCondition<? extends Object> expectedCondition = (webdrv) -> {
+      return elementToActivate.isEnabled();
+    };
+    this.waitForCondition(expectedCondition);
+    elementToActivate.click();
+    LOG.debug("Element clicked, now waiting for the element to go stale");
+    this.waitForCondition(ExpectedConditions.stalenessOf(elementToActivate));
+    LOG.debug("Element is now stale");
+    this.waitForCondition((webdrv) -> {
+      return READYSTATE_COMPLETE.equals(((JavascriptExecutor) webdrv).executeScript(READYSTATE_JS, new Object[0]));
+    });
+  }
+
   protected void activateAndWaitForNewPage(WebElement elementToActivate) {
 
     ExpectedCondition<? extends Object> expectedCondition = (webdrv) -> {
       return elementToActivate.isEnabled();
     };
 
-    this.waitForCondition(expectedCondition);
-    //elementToActivate.sendKeys(Keys.ENTER);
-    //LOG.debug("Element activated, now waiting for the element to go stale");
+    elementToActivate.sendKeys(Keys.ENTER);
+    LOG.debug("Element activated, now waiting for the element to go stale");
 
-    elementToActivate.click();
-    LOG.debug("Element clicked, now waiting for the element to go stale");
     this.waitForCondition(ExpectedConditions.stalenessOf(elementToActivate));
     LOG.debug("Element is now stale");
     this.waitForCondition((webdrv) -> {

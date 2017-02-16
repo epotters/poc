@@ -9,6 +9,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  */
 public interface DataCollector {
 
+  AccountType getType();
+
   void login() throws Exception;
 
   boolean isLoggedIn() throws Exception;
