@@ -27,14 +27,17 @@ public enum AccountType {
   private String sitesPropertyPath = "collectors.sites";
   private String sitePropertyPath = "site";
 
+  private static final String NAME_KEY = "name";
+  private static final String DISPLAY_NAME_KEY = "displayName";
+  private static final String LOGIN_PAGE_URL_KEY = "loginPageUrl";
 
   private AccountType() {
 
     ResourceBundle sites = ResourceBundle.getBundle(sitesPropertyPath);
 
-    this.displayName = sites.getString(buildKeyForType(sitePropertyPath) + "displayName");
-    this.name = sites.getString(buildKeyForType(sitePropertyPath) + "name");
-    this.loginPageUrl = sites.getString(buildKeyForType(sitePropertyPath) + "loginPageUrl");
+    this.name = sites.getString(buildKeyForType(sitePropertyPath) + NAME_KEY);
+    this.displayName = sites.getString(buildKeyForType(sitePropertyPath) + DISPLAY_NAME_KEY);
+    this.loginPageUrl = sites.getString(buildKeyForType(sitePropertyPath) + LOGIN_PAGE_URL_KEY);
   }
 
 
@@ -44,7 +47,6 @@ public enum AccountType {
     String typeName = "";
     boolean isFirst = true;
     for (String namePart : nameParts) {
-
       if (isFirst) {
         typeName = typeName + namePart.toLowerCase();
         isFirst = false;

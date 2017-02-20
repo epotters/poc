@@ -4,11 +4,11 @@ package poc.jobs.collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 
 /**
- * Created by epotters on 2-2-2017.
+ * Created by epotters on 2017-02-02
  */
 public class AccountOpener {
 
@@ -19,13 +19,12 @@ public class AccountOpener {
 
     LOG.info("Starting main application");
 
-    WebDriver driver = new FirefoxDriver();
+    System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Chrome Driver\\chromedriver.exe");
+    WebDriver driver = new ChromeDriver();
 
-    DataCollector collector = new ImdbDataCollector(driver);
-    // DataCollector collector = new IngDataCollector(driver);
-    // DataCollector collector = new OvChipkaartDataCollector(driver);
-    // DataCollector collector = new ParkMobileDataCollector(driver);
-    // DataCollector collector = new PublicLibraryDataCollector(driver);
+    // WebDriver driver = new FirefoxDriver();
+
+    DataCollector collector = getCollector(driver, AccountType.OV_CHIPCARD);
 
     try {
 
@@ -34,23 +33,41 @@ public class AccountOpener {
       LOG.info("Logging in " + collectorDisplayName);
       collector.login();
 
-      collector.isLoggedIn();
+      assert(collector.isLoggedIn());
       LOG.info("Logged in " + collectorDisplayName);
 
       LOG.info("Logging out " + collectorDisplayName);
       collector.logout();
 
-      collector.isLoggedIn();
+      assert(!collector.isLoggedIn());
       LOG.info("Logged out " + collectorDisplayName);
 
-      // collector.collect();
     }
     catch (Exception exception) {
       LOG.info(exception.getMessage());
-    } finally {
+    }
+    finally {
       driver.close();
     }
 
+  }
+
+
+  private static DataCollector getCollector(WebDriver driver, AccountType accountType) {
+    switch (accountType) {
+      case IMDB:
+        return new ImdbDataCollector(driver);
+      case ING:
+        return new IngDataCollector(driver);
+      case OV_CHIPCARD:
+        return new OvChipkaartDataCollector(driver);
+      case PARK_MOBILE:
+        return new ParkMobileDataCollector(driver);
+      case PUBLIC_LIBRARY:
+        return new PublicLibraryDataCollector(driver);
+      default:
+        return null;
+    }
   }
 
 }
