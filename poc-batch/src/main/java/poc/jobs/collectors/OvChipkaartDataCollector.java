@@ -58,10 +58,11 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
     final String passwordFieldName = "password";
     final String loginFormButtonId = "btn-login";
 
+    LOG.debug("About to load login page " + getType().getLoginPageUrl());
     driver.get(getType().getLoginPageUrl());
 
     final WebElement loginForm = (new WebDriverWait(driver, getDriverWaitTimeOutSecs()))
-        .until(ExpectedConditions.elementToBeClickable(By.id(loginFormId)));
+        .until(ExpectedConditions.presenceOfElementLocated(By.id(loginFormId)));
 
     LOG.debug("Login page is titled " + driver.getTitle());
     LOG.debug("Login form found, ready to log in");
@@ -103,8 +104,14 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
 
   @Override
   public void logout() {
-    String logoutLinkText = "Uitloggen";
-    WebElement logoutLink = driver.findElement(By.linkText(logoutLinkText));
+
+
+    String menuItemCssSelector = "div.user label.label";
+    WebElement menuLink = driver.findElements(By.cssSelector(menuItemCssSelector)).get(0);
+    menuLink.click();
+
+    String logoutLinkCssSelector = "div.popup-content a.login";
+    WebElement logoutLink = driver.findElements(By.cssSelector(logoutLinkCssSelector)).get(0);
     activateAndWaitForNewPage(logoutLink);
     assert (!isLoggedIn());
     LOG.debug("Logout page is titled " + driver.getTitle());
@@ -159,8 +166,14 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
 
   // <div class="alert alert-info"></div>
   private WebElement findErrorBox() {
-    WebElement errorBox = driver.findElement(By.cssSelector("div.alert-info"));
-    LOG.debug("Error on page:\n" + errorBox.getText());
+    WebElement errorBox = null;
+    try {
+      errorBox = driver.findElement(By.cssSelector("div.alert-info"));
+      LOG.debug("Error on page:\n" + errorBox.getText());
+    } catch(Exception e) {
+
+      LOG.debug("Error finding error box, assuming there is none");
+    }
     return errorBox;
   }
 

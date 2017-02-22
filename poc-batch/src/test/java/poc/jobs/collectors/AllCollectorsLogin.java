@@ -24,6 +24,7 @@ public class AllCollectorsLogin {
 
     collectors.add(new ImdbDataCollector());
     // collectors.add(new IngDataCollector());
+    // collectors.add(new MyGovernmentDataCollector());
     // collectors.add(new OvChipkaartDataCollector());
     // collectors.add(new ParkMobileDataCollector());
     // collectors.add(new PublicLibraryDataCollector());

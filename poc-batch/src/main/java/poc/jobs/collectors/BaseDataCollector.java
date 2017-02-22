@@ -89,8 +89,9 @@ public class BaseDataCollector {
 
     this.driverWait = new WebDriverWait(driver, getDriverWaitTimeOutSecs());
     LOG.debug("Driverwait set");
-
     assert (getDriverWait() != null);
+
+    createOutputDirectory();
   }
 
 
@@ -101,6 +102,7 @@ public class BaseDataCollector {
 
   File createOutputDirectory() {
     String collectorOutputPath = parentOutputPath + collectorName;
+    assert((new File(parentOutputPath).canWrite()));
     File outputDirectory = new File(collectorOutputPath);
     assert (outputDirectory.exists() | (!outputDirectory.exists() && outputDirectory.mkdirs()));
     return outputDirectory;

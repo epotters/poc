@@ -5,6 +5,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 
 /**
@@ -14,17 +16,22 @@ public class AccountOpener {
 
   private static final Log LOG = LogFactory.getLog(AccountOpener.class);
 
+  private static final String HTML_UNIT = "htmlUnit";
+  private static final String FIREFOX = "firefox";
+  private static final String CHROME = "chrome";
+
 
   public static void main(String[] args) {
 
-    LOG.info("Starting main application");
+    String driverType = FIREFOX;
 
-    System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Chrome Driver\\chromedriver.exe");
-    WebDriver driver = new ChromeDriver();
+    LOG.info("Starting main application with driver " + driverType);
 
-    // WebDriver driver = new FirefoxDriver();
+    WebDriver driver = getWebDriver(driverType);
 
-    DataCollector collector = getCollector(driver, AccountType.OV_CHIPCARD);
+    DataCollector collector = getCollector(driver, AccountType.MY_GOVERNMENT);
+
+    LOG.info("Collector initialized");
 
     try {
 
@@ -33,13 +40,13 @@ public class AccountOpener {
       LOG.info("Logging in " + collectorDisplayName);
       collector.login();
 
-      assert(collector.isLoggedIn());
+      assert (collector.isLoggedIn());
       LOG.info("Logged in " + collectorDisplayName);
 
       LOG.info("Logging out " + collectorDisplayName);
       collector.logout();
 
-      assert(!collector.isLoggedIn());
+      assert (!collector.isLoggedIn());
       LOG.info("Logged out " + collectorDisplayName);
 
     }
@@ -53,12 +60,31 @@ public class AccountOpener {
   }
 
 
+  private static WebDriver getWebDriver(String driverType) {
+
+    switch (driverType) {
+      case FIREFOX:
+        return new FirefoxDriver();
+      case CHROME:
+        String chromeDriverPath = "C:\\Program Files\\Chrome Driver\\chromedriver.exe";
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+        return new ChromeDriver();
+      case HTML_UNIT:
+        return new HtmlUnitDriver(true);
+      default:
+        return new HtmlUnitDriver(true);
+    }
+  }
+
+
   private static DataCollector getCollector(WebDriver driver, AccountType accountType) {
     switch (accountType) {
       case IMDB:
         return new ImdbDataCollector(driver);
       case ING:
         return new IngDataCollector(driver);
+      case MY_GOVERNMENT:
+        return new MyGovernmentDataCollector(driver);
       case OV_CHIPCARD:
         return new OvChipkaartDataCollector(driver);
       case PARK_MOBILE:

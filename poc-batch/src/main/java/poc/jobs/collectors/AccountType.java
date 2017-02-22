@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 public enum AccountType {
 
-  ING, IMDB, OV_CHIPCARD, PARK_MOBILE, PUBLIC_LIBRARY;
+  ING, IMDB, MY_GOVERNMENT, OV_CHIPCARD, PARK_MOBILE, PUBLIC_LIBRARY;
 
   private static final String DOT = ".";
 
