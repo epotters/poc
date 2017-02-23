@@ -10,7 +10,7 @@ import org.junit.Test;
 
 
 /**
- * Created by epotters on 8-2-2017.
+ * Created by epotters on 2017-02-08
  */
 public class AllCollectorsLogin {
 
