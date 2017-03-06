@@ -24,14 +24,23 @@ public class AccountOpener {
   public static void main(String[] args) {
 
     String driverType = FIREFOX;
-
     LOG.info("Starting main application with driver " + driverType);
 
-    WebDriver driver = getWebDriver(driverType);
+    WebDriver driver;
+    for (AccountType accountType : AccountType.values()) {
 
-    DataCollector collector = getCollector(driver, AccountType.MY_GOVERNMENT);
+      driver = getWebDriver(driverType);
 
-    LOG.info("Collector initialized");
+      DataCollector collector = getCollector(driver, accountType);
+      LOG.info("Collector initialized");
+
+      collectorLogin(collector, driver);
+
+    }
+  }
+
+
+  private static void collectorLogin(DataCollector collector, WebDriver driver) {
 
     try {
 
@@ -43,11 +52,13 @@ public class AccountOpener {
       assert (collector.isLoggedIn());
       LOG.info("Logged in " + collectorDisplayName);
 
+      /*
       LOG.info("Logging out " + collectorDisplayName);
       collector.logout();
 
       assert (!collector.isLoggedIn());
       LOG.info("Logged out " + collectorDisplayName);
+      */
 
     }
     catch (Exception exception) {
@@ -56,7 +67,6 @@ public class AccountOpener {
     finally {
       driver.close();
     }
-
   }
 
 
