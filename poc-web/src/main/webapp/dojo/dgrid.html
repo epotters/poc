@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>My first Dojo Dgrid</title>
+
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css" />
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/skins/claro.css">
+
+</head>
+<body class="claro">
+
+<div id="grid"></div>
+
+
+
+<script>
+
+  var dojoConfig = {
+    async: true,
+    dojoBlankHtmlUrl: 'blank.html',
+    packages: ['dojo', {
+      name: 'dgrid',
+      location: 'https://cdn.rawgit.com/SitePen/dgrid/v1.1.0'
+    }, {
+      name: 'dstore',
+      location: 'https://cdn.rawgit.com/SitePen/dstore/v1.1.1'
+    }
+    ]
+  };
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/dojo.js"></script>
+
+<script>
+
+  var columns = {
+    first: 'First Name',
+    last: 'Last Name',
+    dateOfBirth: 'Date of Birth'
+  };
+
+  require([
+    'dstore/RequestMemory',
+    'dgrid/OnDemandGrid'
+  ], function (RequestMemory, OnDemandGrid) {
+    var grid = new OnDemandGrid({
+      collection: new RequestMemory({target: 'data/people.json'}),
+      columns: columns,
+      selectionMode: 'single',
+      cellNavigation: false
+    }, 'grid');
+
+
+    grid.startup();
+  });
+</script>
+</body>
+</html>

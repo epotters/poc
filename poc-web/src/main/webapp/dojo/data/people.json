@@ -1,0 +1,17 @@
+[
+  {
+    "first": "Bob",
+    "last": "Barker",
+    "dateOfBirth": "1997-03-23"
+  },
+  {
+    "first": "Vanna",
+    "last": "White",
+    "dateOfBirth": "1954-12-05"
+  },
+  {
+    "first": "Pat",
+    "last": "Sajak",
+    "dateOfBirth": "2008-06-22"
+  }
+]

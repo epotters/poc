@@ -23,7 +23,7 @@ public class AccountOpener {
 
   public static void main(String[] args) {
 
-    String driverType = FIREFOX;
+    String driverType = HTML_UNIT;
     LOG.info("Starting main application with driver " + driverType);
 
     WebDriver driver;
@@ -32,7 +32,7 @@ public class AccountOpener {
       driver = getWebDriver(driverType);
 
       DataCollector collector = getCollector(driver, accountType);
-      LOG.info("Collector initialized");
+      LOG.info("Collector initialized: " + accountType.getDisplayName());
 
       collectorLogin(collector, driver);
 
