@@ -5,14 +5,17 @@
 
   <title>My first Dojo Dgrid</title>
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/resources/dojo.css" />
   <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css" />
-  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/skins/claro.css">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/skins/claro.css" />
+  <link rel="stylesheet" href="grid-extra.css" />
 
 </head>
 <body class="claro">
 
-<div id="grid"></div>
 
+<div id="people-grid" class="grid"></div>
 
 
 <script>
@@ -36,22 +39,48 @@
 
 <script>
 
-  var columns = {
-    first: 'First Name',
-    last: 'Last Name',
-    dateOfBirth: 'Date of Birth'
+  var type = {
+    name: 'person',
+    namePlural: 'people',
+    label: 'Person',
+    labelPlural: 'People'
   };
 
+  var genderOptions = {m: "Male", f: "Female"};
+
+  var columns = {
+        firstName: 'First Name',
+        prefix: "",
+        lastName: 'Last Name',
+        gender: {
+          label: 'Gender',
+          get: function (object) {
+            return genderOptions[object.gender];
+          }
+        },
+        dateOfBirth: {label: 'Date of Birth'}
+      },
+      dataUrl = 'data/people.json',
+
+      loadingMessage = 'Loading ' + type.labelPlural.toLocaleLowerCase() + '...',
+      noDataMessage = 'No ' + type.labelPlural.toLocaleLowerCase() + ' found.';
+
+
   require([
+    'dojo/_base/declare',
     'dstore/RequestMemory',
-    'dgrid/OnDemandGrid'
-  ], function (RequestMemory, OnDemandGrid) {
-    var grid = new OnDemandGrid({
-      collection: new RequestMemory({target: 'data/people.json'}),
+    'dgrid/OnDemandGrid',
+    'dgrid/extensions/ColumnResizer'
+  ], function (declare, RequestMemory, OnDemandGrid, ColumnResizer) {
+    var grid = new (declare([OnDemandGrid, ColumnResizer]))({
+      collection: new RequestMemory({target: dataUrl}),
       columns: columns,
       selectionMode: 'single',
-      cellNavigation: false
-    }, 'grid');
+      cellNavigation: false,
+      loadingMessage: loadingMessage,
+      noDataMessage: noDataMessage
+
+    }, 'people-grid');
 
 
     grid.startup();
