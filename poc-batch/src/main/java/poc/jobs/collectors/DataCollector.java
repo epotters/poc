@@ -1,9 +1,6 @@
 package poc.jobs.collectors;
 
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
-
 /**
  * Created by epotters on 2017-01-24
  */

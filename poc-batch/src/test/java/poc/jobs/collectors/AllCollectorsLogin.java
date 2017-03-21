@@ -22,7 +22,7 @@ public class AllCollectorsLogin {
 
     List<DataCollector> collectors = new ArrayList<>();
 
-    collectors.add(new ImdbDataCollector());
+    // collectors.add(new ImdbDataCollector());
     // collectors.add(new IngDataCollector());
     // collectors.add(new MyGovernmentDataCollector());
     // collectors.add(new OvChipkaartDataCollector());

@@ -2,7 +2,7 @@ package poc.jobs.collectors;
 
 
 /**
- * Created by epotters on 13-2-2017.
+ * Created by epotters on 2017-02-13
  */
 public interface AccountService {
 

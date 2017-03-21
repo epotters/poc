@@ -5,8 +5,8 @@ import org.springframework.test.context.TestPropertySource;
 
 
 /**
- * Created by epotters on 24-1-2017.
+ * Created by epotters on 2017-01-24
  */
 @TestPropertySource("/application-test.properties")
-public class BaseDataCollectorTest {
+class BaseDataCollectorTest {
 }

@@ -22,6 +22,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
 import lombok.Getter;
@@ -48,7 +49,9 @@ public class BaseDataCollector {
   @Setter
   private String collectorName;
 
-  private String parentOutputPath = "target/collectors/";
+  @Value("${collectors.output-path}")
+  private String parentOutputPath;
+
   File outputDirectory;
 
   @Getter
@@ -102,7 +105,7 @@ public class BaseDataCollector {
 
   File createOutputDirectory() {
     String collectorOutputPath = parentOutputPath + collectorName;
-    assert((new File(parentOutputPath).canWrite()));
+    // assert((new File(parentOutputPath).canWrite()));
     File outputDirectory = new File(collectorOutputPath);
     assert (outputDirectory.exists() | (!outputDirectory.exists() && outputDirectory.mkdirs()));
     return outputDirectory;
@@ -114,6 +117,7 @@ public class BaseDataCollector {
     LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
     java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
     java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
+    java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(Level.INFO);
   }
 
 

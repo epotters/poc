@@ -1,7 +1,7 @@
 
 # Embedded server
 server:
-  contextPath: /poc
+  context-path: /poc
   port: 8002
 
 
@@ -10,21 +10,27 @@ spring:
   data:
     rest:
       base-path: /api
-
-management:
-  contextPath: /actuator
-
-
-
-
-
-# Data
-spring:
+  # Data
   datasource:
     url: jdbc:mysql://localhost:3306/poc_dev
     username: poc_dev
     password: b1vidh
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    # validate or create-drop
+    hibernate:
+      ddl-auto: create-drop
+      # See: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes
+      use-new-id-generator-mappings: true
+    show-sql: true
 
+
+
+management:
+  context-path: /actuator
 
 
 # Security
@@ -43,32 +49,14 @@ security:
       userAuthorizationUri: https://github.com/login/oauth/authorize
       clientAuthenticationScheme: form
 
-      authentiationScheme: query
+      authenticationScheme: query
       tokenName: oauth_token
       scope: profile email
 
-  resource:
-    userInfoUri: https://api.github.com/user
-    preferTokenInfo: false
-    # tokenInfoUri:
-
-
-
-
-# Persistance
-
-spring:
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    generate-ddl: true
-    # validate or create-drop
-    hibernate: ddl-auto: create-drop
-    # See: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes
-    use-new-id-generator-mappings: true
-    show-sql: true
-
+    resource:
+      user-info-uri: https://api.github.com/user
+      # token-info-uri:
+      prefer-token-info: false
 
 
 # Logging

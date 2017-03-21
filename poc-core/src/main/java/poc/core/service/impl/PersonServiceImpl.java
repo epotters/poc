@@ -21,8 +21,15 @@ import poc.core.service.PersonService;
 @Component
 public class PersonServiceImpl implements PersonService {
 
+
+  private PersonRepository personRepository;
+
+
   @Autowired
-  PersonRepository personRepository;
+  PersonServiceImpl(PersonRepository personRepository) {
+    this.personRepository = personRepository;
+    assert(personRepository != null);
+  }
 
 
   @Override

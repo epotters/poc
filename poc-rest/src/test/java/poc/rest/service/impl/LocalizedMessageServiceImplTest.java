@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,10 +15,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import junit.framework.Assert;
 import poc.rest.service.LocalizedMessageService;
 
 
@@ -26,14 +24,17 @@ import poc.rest.service.LocalizedMessageService;
  */
 
 @SpringBootTest(classes = {poc.rest.config.RestContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-    TransactionalTestExecutionListener.class})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 @RunWith(SpringRunner.class)
 public class LocalizedMessageServiceImplTest {
 
-  @Autowired
-  LocalizedMessageService messageService;
+  private LocalizedMessageService messageService;
 
+
+  @Autowired
+  LocalizedMessageServiceImplTest(LocalizedMessageService messageService) {
+    this.messageService = messageService;
+  }
 
   @Before
   public void init() throws IOException {

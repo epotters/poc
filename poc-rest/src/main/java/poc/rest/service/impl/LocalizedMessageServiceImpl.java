@@ -26,7 +26,8 @@ import poc.rest.service.LocalizedMessageService;
 public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
   @Autowired
-  ResourcePatternResolver resourceResolver;
+  private ResourcePatternResolver resourceResolver;
+
   @Autowired
   private MessageSource messageSource;
 

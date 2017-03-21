@@ -1,15 +1,13 @@
 package poc.jobs.collectors;
 
 
-import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 
 /**
- * Created by epotters on 13-2-2017
+ * Created by epotters on 13-2-2017-02-13
  */
 @Component
 public class AccountServiceImpl implements AccountService {
