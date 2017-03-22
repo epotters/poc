@@ -20,15 +20,15 @@
 
   <modules>
     <module>poc-core</module>
+    <module>poc-rest</module>
     <module>poc-web</module>
-    <module>poc-batch</module>
+    <module>poc-jobs</module>
     <module>poc-sencha</module>
     <!-- module>poc-cordova</module -->
     <module>poc-evernote</module>
     <module>poc-jcr</module>
     <module>poc-integration-tests</module>
 
-    <module>poc-rest</module>
   </modules>
 
   <properties>
@@ -48,17 +48,8 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
-      <!--
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-logging</artifactId>
-        </exclusion>
-      </exclusions>
-      -->
     </dependency>
-
-
+    
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
