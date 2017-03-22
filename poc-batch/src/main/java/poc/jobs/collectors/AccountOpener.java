@@ -8,6 +8,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import poc.jobs.collectors.impl.ImdbDataCollector;
+import poc.jobs.collectors.impl.IngDataCollector;
+import poc.jobs.collectors.impl.MyGovernmentDataCollector;
+import poc.jobs.collectors.impl.OvChipkaartDataCollector;
+import poc.jobs.collectors.impl.ParkMobileDataCollector;
+import poc.jobs.collectors.impl.PublicLibraryDataCollector;
+
 
 /**
  * Created by epotters on 2017-02-02
@@ -35,7 +42,6 @@ public class AccountOpener {
       LOG.info("Collector initialized: " + accountType.getDisplayName());
 
       collectorLogin(collector, driver);
-
     }
   }
 

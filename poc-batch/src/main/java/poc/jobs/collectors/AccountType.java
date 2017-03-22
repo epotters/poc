@@ -7,7 +7,7 @@ import lombok.Getter;
 
 
 /**
- * Created by epotters on 13-2-2017.
+ * Created by epotters on 2017-02-13
  */
 public enum AccountType {
 
@@ -31,7 +31,8 @@ public enum AccountType {
   private static final String DISPLAY_NAME_KEY = "displayName";
   private static final String LOGIN_PAGE_URL_KEY = "loginPageUrl";
 
-  private AccountType() {
+
+  AccountType() {
 
     ResourceBundle sites = ResourceBundle.getBundle(sitesPropertyPath);
 
@@ -39,7 +40,6 @@ public enum AccountType {
     this.displayName = sites.getString(buildKeyForType(sitePropertyPath) + DISPLAY_NAME_KEY);
     this.loginPageUrl = sites.getString(buildKeyForType(sitePropertyPath) + LOGIN_PAGE_URL_KEY);
   }
-
 
 
   protected String buildKeyForType(String basePropertyPath) {
@@ -50,7 +50,8 @@ public enum AccountType {
       if (isFirst) {
         typeName = typeName + namePart.toLowerCase();
         isFirst = false;
-      } else {
+      }
+      else {
         typeName = typeName + namePart.substring(0, 1).toUpperCase() + namePart.substring(1).toLowerCase();
       }
     }

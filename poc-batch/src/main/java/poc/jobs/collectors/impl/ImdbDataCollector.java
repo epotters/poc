@@ -1,4 +1,4 @@
-package poc.jobs.collectors;
+package poc.jobs.collectors.impl;
 
 
 import java.io.IOException;
@@ -11,6 +11,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import poc.jobs.collectors.AccountType;
+import poc.jobs.collectors.DataCollector;
 
 
 /**
@@ -35,7 +38,6 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
   public void collect() throws Exception {
 
     try {
-
       login();
       LOG.debug("After login, the page title is \"" + driver.getTitle() + "\"");
 
@@ -44,7 +46,6 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
 
       downloadWatchlist();
       LOG.debug("After download, the page title is \"" + driver.getTitle() + "\"");
-
     }
     finally {
       driver.close();

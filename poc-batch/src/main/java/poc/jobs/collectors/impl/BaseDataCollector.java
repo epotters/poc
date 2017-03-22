@@ -1,4 +1,4 @@
-package poc.jobs.collectors;
+package poc.jobs.collectors.impl;
 
 
 import java.io.File;
@@ -27,6 +27,10 @@ import org.springframework.context.annotation.PropertySource;
 
 import lombok.Getter;
 import lombok.Setter;
+import poc.jobs.collectors.AccountService;
+import poc.jobs.collectors.AccountServiceImpl;
+import poc.jobs.collectors.AccountType;
+import poc.jobs.collectors.UserAccount;
 import poc.jobs.collectors.selenium.FileDownloader;
 
 
@@ -35,6 +39,12 @@ import poc.jobs.collectors.selenium.FileDownloader;
  */
 @PropertySource("/application.properties")
 public class BaseDataCollector {
+
+  private static final Log LOG = LogFactory.getLog(BaseDataCollector.class);
+
+
+  private static final String READYSTATE_COMPLETE = "complete";
+  private static final String READYSTATE_JS = "return document.readyState";
 
   @Getter
   private AccountType type;
@@ -50,7 +60,10 @@ public class BaseDataCollector {
   private String collectorName;
 
   @Value("${collectors.output-path}")
-  private String parentOutputPath;
+  private String parentOutputPath = "target/collectors";
+
+  @Value("${collectors.screenshots-path}")
+  private String screenshotsPath = "screenshots";
 
   File outputDirectory;
 
@@ -89,7 +102,6 @@ public class BaseDataCollector {
     outputDirectory = createOutputDirectory();
     LOG.debug("Output directory: " + outputDirectory.getPath());
 
-
     this.driverWait = new WebDriverWait(driver, getDriverWaitTimeOutSecs());
     LOG.debug("Driverwait set");
     assert (getDriverWait() != null);
@@ -103,7 +115,8 @@ public class BaseDataCollector {
   }
 
 
-  File createOutputDirectory() {
+  private File createOutputDirectory() {
+    assert (parentOutputPath != null);
     String collectorOutputPath = parentOutputPath + collectorName;
     // assert((new File(parentOutputPath).canWrite()));
     File outputDirectory = new File(collectorOutputPath);
@@ -140,15 +153,6 @@ public class BaseDataCollector {
     return (new WebDriverWait(driver, timeout)).until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
   }
 
-  //////////
-
-  private static final Log LOG = LogFactory.getLog(BaseDataCollector.class);
-
-  static final String SCREENSHOTS_PATH = "target/screenshots";
-
-  static final String READYSTATE_COMPLETE = "complete";
-  static final String READYSTATE_JS = "return document.readyState";
-
 
   protected void waitForCondition(ExpectedCondition<? extends Object> expectedCondition) {
     try {
@@ -177,6 +181,7 @@ public class BaseDataCollector {
     });
   }
 
+
   protected void activateAndWaitForNewPage(WebElement elementToActivate) {
 
     ExpectedCondition<? extends Object> expectedCondition = (webdrv) -> {
@@ -201,15 +206,16 @@ public class BaseDataCollector {
         driver = (new Augmenter()).augment(driver);
       }
 
-      File screenshotsDirectory = new File(SCREENSHOTS_PATH);
+      String fullScreenshotsPath = parentOutputPath + screenshotsPath;
+
+      File screenshotsDirectory = new File(fullScreenshotsPath);
       assert (screenshotsDirectory.exists() || (!screenshotsDirectory.exists() && screenshotsDirectory.mkdirs()));
 
-      File screenshot = new File(SCREENSHOTS_PATH + fileName.replaceAll("\\W+", "") + ".png");
+      File screenshot = new File(fullScreenshotsPath + fileName.replaceAll("\\W+", "") + ".png");
       FileOutputStream out = new FileOutputStream(screenshot);
 
       out.write((byte[]) ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
       out.close();
-
     }
     catch (Exception ex) {
       LOG.error("Failed creating screenshot " + ex);

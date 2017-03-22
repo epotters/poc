@@ -15,8 +15,6 @@ import poc.jobs.collectors.AccountServiceImpl;
 public class CollectorsContext {
 
 
-
-
   @Bean
   AccountService accountService() {
     return new AccountServiceImpl();

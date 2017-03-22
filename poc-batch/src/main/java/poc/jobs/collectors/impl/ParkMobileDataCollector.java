@@ -1,4 +1,4 @@
-package poc.jobs.collectors;
+package poc.jobs.collectors.impl;
 
 
 import java.io.IOException;
@@ -10,6 +10,9 @@ import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import poc.jobs.collectors.AccountType;
+import poc.jobs.collectors.DataCollector;
 
 
 /**

@@ -1,4 +1,4 @@
-package poc.jobs.collectors;
+package poc.jobs.collectors.impl;
 
 
 import org.apache.commons.logging.Log;

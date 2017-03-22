@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AccountServiceImpl implements AccountService {
-  private static final String DOT = ".";
 
   private String accountsPropertyPath = "collectors.accounts";
   private String accountPropertyPath = "account";

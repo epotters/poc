@@ -31,7 +31,6 @@ public class AllCollectorsLogin {
 
 
     for (DataCollector collector : collectors) {
-
       logInAndOut(collector);
     }
   }

@@ -1,4 +1,4 @@
-package poc.jobs.collectors;
+package poc.jobs.collectors.impl;
 
 
 import org.apache.commons.logging.Log;
@@ -14,24 +14,26 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 
 @RunWith(SpringRunner.class)
-public class MyGovernmentCollectorTest extends BaseDataCollectorTest {
+public class ParkMobileCollectorTest extends BaseDataCollectorTest {
 
-  private static final Log LOG = LogFactory.getLog(MyGovernmentCollectorTest.class);
+  private static final Log LOG = LogFactory.getLog(ParkMobileCollectorTest.class);
 
-  private MyGovernmentDataCollector collector;
+  private ParkMobileDataCollector collector;
 
 
   @Before
   public void before() {
     LOG.debug("Setup");
-    collector = new MyGovernmentDataCollector();
+    collector = new ParkMobileDataCollector();
   }
 
 
   @Test
   public void collectData() throws Exception {
 
-    LOG.debug("About to collect data from collector");
+    LOG.debug("About to collect data from Park Mobile");
     collector.collect();
+
+    LOG.debug("Data collected from Park Mobile");
   }
 }

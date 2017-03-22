@@ -1,4 +1,4 @@
-package poc.jobs.collectors;
+package poc.jobs.collectors.impl;
 
 
 import java.io.IOException;
@@ -15,6 +15,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.gargoylesoftware.htmlunit.WebWindowEvent;
+
+import poc.jobs.collectors.AccountType;
+import poc.jobs.collectors.DataCollector;
 
 
 /**
