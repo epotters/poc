@@ -11,7 +11,7 @@
 
   <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-batch</artifactId>
-  <name>POC Batch Jobs</name>
+  <name>POC Jobs</name>
 
   <properties>
     <selenium.version>3.0.1</selenium.version>
