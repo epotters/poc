@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Grid in layout</title>
+
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/resources/dojo.css" />
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css" />
+
+  <style type="text/css">
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+
+    #grid {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: auto;
+    }
+
+  </style>
+
+
+  <script type="javascript">
+
+
+    require([
+      "dojo/parser",
+      "dojo/aspect",
+      "dojo/store/Memory",
+      "dgrid/OnDemandGrid",
+      "data/dtuned",
+
+      "dijit/layout/ContentPane",
+      "dijit/layout/BorderContainer",
+      "dijit/form/Button",
+
+      "dojo/domReady!"
+    ], function (parser,
+                 aspect,
+                 Memory,
+                 Grid,
+                 data) {
+
+      parser.parse().then(function () {
+
+        var store = new Memory({data: data});
+        var grid = new Grid({
+          store: store,
+          columns: {
+            Name: "Name",
+            Year: "Year",
+            Artist: "Artist",
+            Album: "Album",
+            Genre: "Genre"
+          }
+        }, "grid");
+
+        button.on("click", function () {
+          grid.resize();
+        });
+
+        aspect.after(button, "resize", function () {
+          console.log("button::resize()");
+        });
+
+      });
+
+    });
+
+
+  </script>
+
+</head>
+<body>
+
+<div
+    style="height:100%;"
+    data-dojo-type="dijit/layout/BorderContainer"
+    data-dojo-props="gutters:true,liveSplitters:true"
+>
+
+  <div
+      data-dojo-type="dijit/layout/ContentPane"
+      data-dojo-props="region:'top',splitter:true"
+  >
+    <button
+        data-dojo-type="dijit/form/Button"
+        data-dojo-id="button"
+    >
+      grid.resize()
+    </button>
+  </div>
+
+  <div
+      data-dojo-type="dijit/layout/ContentPane"
+      data-dojo-props="region:'leading',splitter:true"
+  >leading
+  </div>
+
+  <div
+      data-dojo-type="dijit/layout/ContentPane"
+      data-dojo-props="region:'center'"
+  >
+    <div id="grid"></div>
+  </div>
+
+  <div
+      data-dojo-type="dijit/layout/ContentPane"
+      data-dojo-props="region:'trailing',splitter:true"
+  >trailing
+  </div>
+
+  <div
+      data-dojo-type="dijit/layout/ContentPane"
+      data-dojo-props="region:'bottom',splitter:true"
+  >bottom
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+
+/*
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+*/
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.content {
+  margin: 24px;
+}
+
+.dgrid-no-data {
+  padding: 12px;
+  margin: 36px;
+}
+
+
+.panel {
+  border: 1px solid silver;
+}
+
+.grid-panel .dgrid {
+  border: 0 !important;
+}
+
+
+.form-panel .form-component {
+  margin-bottom: 3px;
+}
+
+.form-panel .form-component label {
+  display: inline-block;
+  width: 120px;
+}
+
+.form-panel .form-component .control {
+  display: inline-block;
+}
+
+/*
+background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+*/
+
+
+
+.form-dialog {
+  width: 360px;
+  height: 240px;"
+}
+
+
+.form-group {
+  padding: 0;
+  margin-bottom: 3px;
+}
+
+.form-group label {
+  display: inline-block;
+  width: 40%;
+  color: gray;
+}
+
+.form-group .dijitTextBox {
+  display: inline-block;
+  width: 59%;
+}
+
+form .toolbar {
+  text-align: right;
+}
+
+
+.dijitDialogSingleChild {
+  height: 100%;
+}

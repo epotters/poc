@@ -1,73 +1,14 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
-
-<title>Grid</title>
-
-<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
-<script>dojoConfig = {async: true, parseOnLoad: false, dojoBlankHtmlUrl:'/blank.html', baseUrl: 'js/',}</script>
-	
-<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/dojo.js"></script>
-
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dijit/themes/claro/claro.css" />
-
-
-<style type="text/css">
-@import "https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojox/grid/resources/claroGrid.css";
-
-/* Grid needs an explicit height by default */
-#gridDiv {
-    height: 40em;
-}
-</style>
-
-
-	
-	<script>
-  require(['dojo/_base/lang', 'dojox/grid/DataGrid', 'dojo/data/ItemFileWriteStore', 'dojo/dom', 'dojo/domReady!'],
-    function(lang, DataGrid, ItemFileWriteStore, dom){
-
-    /* Set up data store */
-    var data = {
-      identifier: "id",
-      items: []
-    };
-    var data_list = [
-      { col1: "normal", col2: false, col3: 'But are not followed by two hexadecimal', col4: 29.91},
-      { col1: "important", col2: false, col3: 'Because a % sign always indicates', col4: 9.33},
-      { col1: "important", col2: false, col3: 'Signs can be selectively', col4: 19.34}
-    ];
-    var rows = 90;
-    for(var i = 0, l = data_list.length; i < rows; i++){
-        data.items.push(lang.mixin({ id: i+1 }, data_list[i%l]));
-    }
-    var store = new ItemFileWriteStore({data: data});
-
-    /* Set up layout */
-    var layout = [[
-      {'name': 'Column 1', 'field': 'id', 'width': '100px'},
-      {'name': 'Column 2', 'field': 'col2', 'width': '100px'},
-      {'name': 'Column 3', 'field': 'col3', 'width': '300px'},
-      {'name': 'Column 4', 'field': 'col4', 'width': '150px'}
-    ]];
-
-    /* Create a new grid */
-    var grid = new DataGrid({
-        id: 'grid',
-        store: store,
-        structure: layout,
-        rowSelector: '20px'});
-
-        /* Append the new grid to the div */
-        grid.placeAt("gridDiv");
-
-        /* Call startup() to render the grid */
-        grid.startup();
-});
-	</script>
+  <title>Dojo Proofs of Concept</title>
 </head>
-<body class="claro">
-    <div id="gridDiv"></div>
-	
+<body>
+
+
+<ul>
+  <li><a href="dgrid.html">Dgrid</a></li>
+  <li><a href="dgrid-in-layout/index.html">Dgrid in layout</a></li>
+</ul>
 </body>
 </html>

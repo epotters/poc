@@ -6,85 +6,57 @@
   <title>My first Dojo Dgrid</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/resources/dojo.css" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/resources/dojo.css" />
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/claro/claro.css" />
+
   <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css" />
   <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/skins/claro.css" />
-  <link rel="stylesheet" href="grid-extra.css" />
+  <link rel="stylesheet" href="dgrid.css" />
 
 </head>
 <body class="claro">
 
+<div class="content">
 
-<div id="people-grid" class="grid"></div>
+
+  <div class="panel grid-panel">
+    <div class="toolbar grid-toolbar" id="people-grid-toolbar"></div>
+    <div id="people-grid" class="grid"></div>
+  </div>
+
+
+
+  <div class="toolbar" id="test-button-toolbar">
+    <button id="context-menu-button">Demo context menu</button>
+    <button id="dialog-form-button">Show form in dialog</button>
+  </div>
+
+</div>
 
 
 <script>
-
   var dojoConfig = {
     async: true,
     dojoBlankHtmlUrl: 'blank.html',
-    packages: ['dojo', {
+    packages: [{
+      name: 'dijit',
+      location: 'http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit'
+    }, {
       name: 'dgrid',
       location: 'https://cdn.rawgit.com/SitePen/dgrid/v1.1.0'
     }, {
       name: 'dstore',
       location: 'https://cdn.rawgit.com/SitePen/dstore/v1.1.1'
+    }, {
+      name: 'dmodel',
+      location: 'https://cdn.rawgit.com/SitePen/dmodel/v0.1.0'
     }
     ]
   };
-
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/dojo.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
+<script src="dgrid.js"></script>
 
-<script>
-
-  var type = {
-    name: 'person',
-    namePlural: 'people',
-    label: 'Person',
-    labelPlural: 'People'
-  };
-
-  var genderOptions = {m: "Male", f: "Female"};
-
-  var columns = {
-        firstName: 'First Name',
-        prefix: "",
-        lastName: 'Last Name',
-        gender: {
-          label: 'Gender',
-          get: function (object) {
-            return genderOptions[object.gender];
-          }
-        },
-        dateOfBirth: {label: 'Date of Birth'}
-      },
-      dataUrl = 'data/people.json',
-
-      loadingMessage = 'Loading ' + type.labelPlural.toLocaleLowerCase() + '...',
-      noDataMessage = 'No ' + type.labelPlural.toLocaleLowerCase() + ' found.';
-
-
-  require([
-    'dojo/_base/declare',
-    'dstore/RequestMemory',
-    'dgrid/OnDemandGrid',
-    'dgrid/extensions/ColumnResizer'
-  ], function (declare, RequestMemory, OnDemandGrid, ColumnResizer) {
-    var grid = new (declare([OnDemandGrid, ColumnResizer]))({
-      collection: new RequestMemory({target: dataUrl}),
-      columns: columns,
-      selectionMode: 'single',
-      cellNavigation: false,
-      loadingMessage: loadingMessage,
-      noDataMessage: noDataMessage
-
-    }, 'people-grid');
-
-
-    grid.startup();
-  });
-</script>
 </body>
 </html>
