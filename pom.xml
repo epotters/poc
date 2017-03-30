@@ -20,7 +20,6 @@
 
   <modules>
     <module>poc-core</module>
-    <module>poc-rest</module>
     <module>poc-web</module>
     <module>poc-jobs</module>
     <module>poc-sencha</module>
@@ -29,6 +28,7 @@
     <module>poc-jcr</module>
     <module>poc-integration-tests</module>
 
+    <module>poc-rest</module>
   </modules>
 
   <properties>
@@ -49,7 +49,7 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
