@@ -1,40 +1,38 @@
 // Data model
 
+
 /*
+ Person = define([
+ "dojo/_base/declare",
+ "dmodel/Model"],
+ function (declare, Model) {
 
-Person = define([
-      "dojo/_base/declare",
-      "dmodel/Model"],
-    function (declare, Model) {
+ return declare(Model, {
+ schema: {
+ id: {
+ type: 'number'
+ },
+ firstName: {
+ type: 'string'
+ },
+ prefix: {
+ type: 'string'
+ },
+ lastName: {
+ type: 'string',
+ required: true
+ },
+ gender: {
+ type: 'string'
+ },
+ dateOfBirth: {
+ type: 'string'
+ }
+ }
+ });
+ });
 
-      return declare(Model, {
-        schema: {
-          id: {
-            type: 'number'
-          },
-          firstName: {
-            type: 'string'
-          },
-          prefix: {
-            type: 'string'
-          },
-          lastName: {
-            type: 'string',
-            required: true
-          },
-          gender: {
-            type: 'string'
-          },
-          dateOfBirth: {
-            type: 'string'
-          }
-        }
-      });
-    });
-
-*/
-
-
+ */
 
 
 var entityType = {
@@ -72,10 +70,8 @@ var columns = {
 
 var entityStore, entityGrid, entityForm, formDialog;
 
-
 // Store
 console.log("About to create a store");
-
 
 require([
   'dstore/RequestMemory'
@@ -85,99 +81,102 @@ require([
 
 
 /*
+
+ // Form
+ console.log("About to create a form");
+
+
  require([
- 'dstore/Rest'
- ], function (Rest) {
- entityStore = new Rest({
- target: dataUrl,
- model: Person
+ "dijit/Dialog",
+ "dijit/form/Form",
+ "dijit/form/TextBox",
+ "dijit/form/Button",
+ "dijit/layout/ContentPane",
+ "dijit/layout/LayoutContainer",
+ "dojo/dom-construct",
+ "dojo/domReady!"
+ ], function (Dialog, Form, TextBox, Button, ContentPane, LayoutContainer, domConstruct) {
+
+ console.log("Creating an Editor Form");
+
+ var formGroupType = 'div';
+
+
+
+ function buildFormGroup(fieldName, fieldLabel) {
+ var formGroup = domConstruct.create(formGroupType, {"class": "form-group"});
+ domConstruct.create("label", {"for": fieldName, 'innerHTML': fieldLabel}, formGroup);
+ new TextBox({
+ name: fieldName,
+ id: fieldName,
+ placeHolder: fieldLabel
+ }).placeAt(formGroup);
+ return formGroup;
+ }
+
+
+ entityForm = new Form();
+
+ var formGroup, fieldName, fieldLabel, fields = [];
+
+ for (fieldName in columns) {
+ if (columns.hasOwnProperty(fieldName)) {
+ if (dojo.isObject(columns[fieldName])) {
+ fieldLabel = columns[fieldName]["label"];
+ } else {
+ fieldLabel = columns[fieldName];
+ }
+ }
+ formGroup = buildFormGroup(fieldName, fieldLabel);
+ fields[fieldName] = formGroup;
+ domConstruct.place(formGroup, entityForm.containerNode);
+
+ }
+ */
+
+/*
+ var layout = new LayoutContainer();
+
+ var center = new ContentPane({region: 'center'});
+ center.addChild(entityForm);
+
+
+ var toolbar = new ContentPane({region: 'bottom'});
+ var okButton = new Button({
+ label: "OK"
  });
+
+ toolbar.addChild(okButton);
+ layout.addChild(center);
+ layout.addChild(toolbar);
+ */
+/*
+ formDialog = new Dialog({
+ title: "Dialog with form",
+ content: entityForm,
+ class: "form-dialog"
  });
+
+
+ entityForm.startup();
+
+ });
+
+ console.log("Form creation started");
+
  */
 
 
-// Grid
-console.log("About to create a form");
 
 
-require([
-  "dijit/Dialog",
-  "dijit/form/Form",
-  "dijit/form/TextBox",
-  "dijit/form/Button",
-  "dijit/layout/ContentPane",
-  "dijit/layout/LayoutContainer",
-  "dojo/dom-construct",
-  "dojo/domReady!"
-], function (Dialog, Form, TextBox, Button, ContentPane, LayoutContainer, domConstruct) {
 
 
-  console.log("Creating an Editor Form");
 
-  var formGroupType = 'div';
-
-  function buildFormGroup(fieldName, fieldLabel) {
-
-    var formGroup = domConstruct.create(formGroupType, {"class": "form-group"});
-    domConstruct.create("label", {"for": fieldName, 'innerHTML': fieldLabel}, formGroup);
-
-    new TextBox({
-      name: fieldName,
-      id: fieldName,
-      placeHolder: fieldLabel
-    }).placeAt(formGroup);
-
-    return formGroup;
-  }
-
-  entityForm = new Form();
-
-  var formGroup, fieldName, fieldLabel, fields = [];
-
-  for (fieldName in columns) {
-    if (columns.hasOwnProperty(fieldName)) {
-      if (dojo.isObject(columns[fieldName])) {
-        fieldLabel = columns[fieldName]["label"];
-      } else {
-        fieldLabel = columns[fieldName];
-      }
-    }
-    formGroup = buildFormGroup(fieldName, fieldLabel);
-    fields[fieldName] = formGroup;
-    domConstruct.place(formGroup, entityForm.containerNode);
-
-  }
-
-  var layout = new LayoutContainer();
-
-  var center = new ContentPane({region: 'center'});
-  center.addChild(entityForm);
-
-
-  var toolbar = new ContentPane({region: 'bottom'});
-  var okButton = new Button({
-    label: "OK"
-  });
-
-  toolbar.addChild(okButton);
-  layout.addChild(center);
-  layout.addChild(toolbar);
-
-
-  formDialog = new Dialog({
-    title: "Dialog with form",
-    content: layout,
-    class: "form-dialog"
-  });
-
-  entityForm.startup();
-
-});
-
-console.log("Form creation started");
 
 
 // Grid
+
+console.log("About to create a grid");
 
 require([
   'dojo/_base/declare',
@@ -222,47 +221,47 @@ require([
     evt.preventDefault(); // prevent default browser context menu
     var entity = entityGrid.row(evt).data;
     console.log("Right click on " + entityType.getDisplayName(entity));
-    formDialog.set("title", entityType.getDisplayName(entity));
-    entityForm.setValues(entity);
-    formDialog.show();
-  });
 
+    // formDialog.set("title", entityType.getDisplayName(entity));
+    // entityForm.setValues(entity);
+    // formDialog.show();
+  });
 
 
   /*
 
-  var toolbar = new Toolbar({}, "people-grid-toolbar");
+   var toolbar = new Toolbar({}, "people-grid-toolbar");
 
-  var addButton = new Button({
-    label: "Add",
-    onClick: function () {
-      console.log("Create a new Entity");
-    }
-  });
-  toolbar.addChild(addButton);
+   var addButton = new Button({
+   label: "Add",
+   onClick: function () {
+   console.log("Create a new Entity");
+   }
+   });
+   toolbar.addChild(addButton);
 
-  var removeButton = new Button({
-    label: "Remove",
-    onClick: function () {
-      // Confirm dialog
-      console.log("Remove all selected entities");
-      console.log(entityGrid.selection);
-    }
-  }).startup();
-  toolbar.addChild(removeButton);
+   var removeButton = new Button({
+   label: "Remove",
+   onClick: function () {
+   // Confirm dialog
+   console.log("Remove all selected entities");
+   console.log(entityGrid.selection);
+   }
+   }).startup();
+   toolbar.addChild(removeButton);
 
-  var searchButton = new Button({
-    label: "Search",
-    onClick: function () {
-      console.log("Show the search filter");
-    }
-  }).startup();
-  toolbar.addChild(searchButton);
+   var searchButton = new Button({
+   label: "Search",
+   onClick: function () {
+   console.log("Show the search filter");
+   }
+   }).startup();
+   toolbar.addChild(searchButton);
 
 
-  toolbar.startup();
+   toolbar.startup();
 
-  */
+   */
 
 
   entityGrid.startup();
@@ -273,6 +272,7 @@ require([
 console.log("Grid creation started");
 
 
+//*
 // Context Menu
 var contextMenu;
 
@@ -325,15 +325,20 @@ require([
   contextMenu.startup();
 });
 
+//*/
 
-require(["dojo/dom",
-      "dojo/on",
-      "dojo/domReady!"],
-    function (dom, on) {
-      on(dom.byId("dialog-form-button"), "click", function () {
-        console.log("Button clicked, opening dialog with form");
-        formDialog.show();
-      });
-    });
 
-console.log("Creation started of test button to open the form");
+/*
+
+ require(["dojo/dom",
+ "dojo/on",
+ "dojo/domReady!"],
+ function (dom, on) {
+ on(dom.byId("dialog-form-button"), "click", function () {
+ console.log("Button clicked, opening dialog with form");
+ formDialog.show();
+ });
+ });
+
+ console.log("Creation started of test button to open the form");
+ */
