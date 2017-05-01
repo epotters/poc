@@ -1,4 +1,3 @@
-
 define([
   "dojo/_base/declare",
   "dgrid/OnDemandGrid",
@@ -47,10 +46,6 @@ define([
     evt.preventDefault(); // prevent default browser context menu
     var entity = entityGrid.row(evt).data;
     console.log("Right click on " + entityType.getDisplayName(entity));
-
-    // formDialog.set("title", entityType.getDisplayName(entity));
-    // entityForm.setValues(entity);
-    // formDialog.show();
   });
 
 
@@ -82,6 +77,7 @@ define([
     toolbar.addChild(searchButton);
     toolbar.startup();
   }
+
   // this.addToolbar();
 
   entityGrid.startup();

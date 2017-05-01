@@ -12,7 +12,7 @@ import poc.rest.Application;
 
 
 /**
- * Created by epotters on 4-1-2017.
+ * Created by epotters on 2017-01-04
  */
 @Profile("war")
 @Configuration
