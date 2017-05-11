@@ -42,7 +42,6 @@ public class BaseDataCollector {
 
   private static final Log LOG = LogFactory.getLog(BaseDataCollector.class);
 
-
   private static final String READYSTATE_COMPLETE = "complete";
   private static final String READYSTATE_JS = "return document.readyState";
 
@@ -60,10 +59,10 @@ public class BaseDataCollector {
   private String collectorName;
 
   @Value("${collectors.output-path}")
-  private String parentOutputPath = "target/collectors";
+  private String parentOutputPath = "target/collectors/";
 
   @Value("${collectors.screenshots-path}")
-  private String screenshotsPath = "screenshots";
+  private String screenshotsPath = "screenshots/";
 
   File outputDirectory;
 
