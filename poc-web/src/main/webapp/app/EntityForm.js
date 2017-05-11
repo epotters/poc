@@ -9,6 +9,8 @@ define([
   "dojo/domReady!"
 ], function (Dialog, Form, TextBox, Button, ContentPane, LayoutContainer, domConstruct) {
 
+  console.log("Start building Entity Form");
+
   var formGroupType = "div";
 
   function buildFormGroup(fieldName, fieldLabel) {
@@ -60,5 +62,7 @@ define([
 
 
   entityForm.startup();
+  console.log("Entity Form ready");
+
   return entityForm;
 });

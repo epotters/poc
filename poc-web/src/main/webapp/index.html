@@ -1,88 +1,124 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Bezoekersregistratie</title>
+<head>
+  <meta charset="utf-8">
 
-  <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
-  <script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
-  <script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+  <title>Entity view</title>
 
-  <script type="text/javascript" src="themes/default/default.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/resources/dojo.css" />
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/claro/claro.css" />
+
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css" />
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/skins/claro.css" />
+
+  <link rel="stylesheet" href="themes/default/entity-view.css" />
 
 </head>
-<body>
-<div id="page" class="center-block">
-  <div id="header">
-    <div id="banner" class="main-page">
-      <div id="logo" class="banner-box">
-        <a href="./">Home</a>
-      </div>
-      <!-- logo -->
-      <div id="site-title" class="">Bezoekersregistratie</div>
-      <!-- site-title -->
-    </div>
-    <!-- banner -->
-    <div id="menubar" class="navbar navbar-default" role="navigation">
+<body class="claro">
 
-      <ul class="nav navbar-nav menu left">
-        <li class="menu-item"><a href="./" class="menu-home" title="Homeppage">Home</a></li>
-        <li class="menu-item"><a href="#" class="" title="Batch bevraging">Bezoekers</a></li>
-        <li class="menu-item"><a href="#" class="" title="Bevraging">Nieuwe bezoeker</a></li>
-        <li class="menu-item dropdown">
-          <a href="#" title="Monitoring" class="dropdown-toggle menu-monitoring" data-toggle="dropdown">Print <span
-              class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#" title="Verwijderen uit monitoring">Handtekeningenlijst</a></li>
-            <li><a href="#" title="Verwijderen uit monitoring">Parkeerbord</a></li>
-          </ul>
-        </li>
-
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right menu right">
-        <li class="menu-item">
-          <a href="#" class="menu-configuration" title="Instellingen">Instellingen</a>
-        </li>
-        <li class="menu-item">
-          <a href="#" class="menu-info" title="Info">Info</a>
-        </li>
-      </ul>
-    </div>
-    <!-- menubar -->
+<div class="content">
+  <div class="panel grid-panel">
+    <div id="entity-grid-toolbar" class="toolbar grid-toolbar">[entity-grid-toolbar]</div>
+    <div id="entity-grid" class="grid"></div>
   </div>
-  <!-- header -->
-
-  <div id="content" class="main-page">
-
-
-    <h1>Bezoekersregistratie</h1>
-
-    <div class="text-block">
-
-      <p>Met deze applicatie kunnen medewerkers van ABZ bezoekers aanmelden.</p>
-    </div>
-
-
+  <div class="toolbar" id="test-button-toolbar">
+    <button id="context-menu-button">Demo context menu</button>
+    <button id="dialog-form-button">Show form in dialog</button>
   </div>
-  <!-- content -->
-
-  <div id="footer">
-    <div class="main-page">
-
-      <div id="user" class="">
-        <div class="user-data">
-          <div class="value user-displayName">Potters, E.M.</div>
-          <div class="value user-company">ABZ Nederland B.V.</div>
-        </div>
-      </div>
-      <!-- user -->
-    </div>
-  </div>
-  <!-- footer -->
-  <span id="counter"></span>
 </div>
-<!-- page -->
+
+
+<script>
+  var dojoConfig = {
+    async: true,
+    dojoBlankHtmlUrl: 'blank.html',
+    packages: [{
+      name: 'dijit',
+      location: 'http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit'
+    }, {
+      name: 'dgrid',
+      location: 'https://cdn.rawgit.com/SitePen/dgrid/v1.1.0'
+    }, {
+      name: 'dstore',
+      location: 'https://cdn.rawgit.com/SitePen/dstore/v1.1.1'
+    }, {
+      name: 'dmodel',
+      location: 'https://cdn.rawgit.com/SitePen/dmodel/v0.1.0'
+    }, {
+      name: 'app',
+      location: 'http://dev.localhost/poc-webapp/app'
+    }
+    ]
+  };
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
+
+
+<script>
+
+  var entityType = {
+    name: 'person',
+    namePlural: 'people',
+    label: 'Person',
+    labelPlural: 'People',
+
+    getDisplayName: function (person) {
+      return person.firstName +
+          ((!person.prefix || !person.prefix || person.prefix.length === 0) ? "" : " " + person.prefix) +
+          " " + person.lastName
+    }
+  };
+
+  var genderOptions = {m: "Male", f: "Female"};
+
+  var columns = {
+        firstName: 'First Name',
+        prefix: "",
+        lastName: 'Last Name',
+        gender: {
+          label: 'Gender',
+          get: function (object) {
+            return genderOptions[object.gender];
+          }
+        },
+        dateOfBirth: {label: 'Date of Birth'}
+      },
+
+      dataUrl = 'data/people.json',
+      loadingMessage = 'Loading ' + entityType.labelPlural.toLocaleLowerCase() + '...',
+      noDataMessage = 'No ' + entityType.labelPlural.toLocaleLowerCase() + ' found.';
+
+
+  var entityStore, entityGrid, entityForm, contextMenu, formDialog;
+
+
+</script>
+
+
+<script>
+
+  require([
+    "dojo/domReady!",
+
+    "app/EntityStore",
+    "app/EntityGrid",
+    "app/EntityForm",
+    "app/EntityMenu"
+
+  ], function (EntityStore, EntityGrid, EntityForm, EntityMenu) {
+
+    window.entityStore = EntityStore;
+    window.entityGrid = EntityGrid;
+    window.entityForm = EntityForm;
+    window.entityMenu = EntityMenu;
+
+    console.log("Creating all parts of the Entity view");
+  });
+
+
+</script>
 
 </body>
 </html>

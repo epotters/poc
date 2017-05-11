@@ -1,4 +1,3 @@
-
 define([
   "dijit/Menu",
   "dijit/MenuItem",
@@ -8,7 +7,7 @@ define([
   "dojo/domReady!"
 ], function (Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem) {
 
-  console.log("Building contextual menu");
+  console.log("Start building Entity Menu");
 
   contextMenu = new Menu({
     targetNodeIds: ["context-menu-button"]
@@ -48,6 +47,7 @@ define([
 
   contextMenu.startup();
 
+  console.log("Entity Menu ready");
 
   return contextMenu;
 });

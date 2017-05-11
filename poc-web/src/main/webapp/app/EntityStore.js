@@ -4,5 +4,20 @@ define([
 ], function (RequestMemory) {
 
   console.log("Loading EntityStore");
-  return new RequestMemory({target: dataUrl});
+
+  var entityStore = new RequestMemory({target: dataUrl});
+
+  entityStore.on("add", function(evt) {
+    console.log("Entity added to EntityStore");
+  });
+
+  entityStore.on("update", function(evt) {
+    console.log("Entity updated in EntityStore");
+  });
+
+  entityStore.on("delete", function(evt) {
+    console.log("Entity deleted from EntityStore");
+  });
+
+  return entityStore;
 });
