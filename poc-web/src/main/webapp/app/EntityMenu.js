@@ -2,11 +2,10 @@
 define([
   "dijit/Menu",
   "dijit/MenuItem",
-  "dijit/CheckedMenuItem",
   "dijit/MenuSeparator",
   "dijit/PopupMenuItem",
   "dojo/domReady!"
-], function (Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem) {
+], function (Menu, MenuItem, MenuSeparator, PopupMenuItem) {
 
   console.log("Start building Entity Menu");
 
@@ -14,37 +13,36 @@ define([
     targetNodeIds: ["context-menu-button"]
   });
 
-
   contextMenu.addChild(new MenuItem({
-    label: "Simple menu item"
-  }));
-  contextMenu.addChild(new MenuItem({
-    label: "Disabled menu item",
-    disabled: true
-  }));
-  contextMenu.addChild(new MenuItem({
-    label: "Menu Item With an icon",
+    label: "Detail",
     iconClass: "dijitEditorIcon dijitEditorIconCut",
     onClick: function () {
       alert("I was clicked")
     }
   }));
-  contextMenu.addChild(new CheckedMenuItem({
-    label: "Checkable menu item"
+  contextMenu.addChild(new MenuItem({
+    label: "Edit"
   }));
+  contextMenu.addChild(new MenuItem({
+    label: "Delete",
+    disabled: true
+  }));
+
   contextMenu.addChild(new MenuSeparator());
 
   var subMenu = new Menu();
   subMenu.addChild(new MenuItem({
-    label: "Submenu item 1"
+    label: "Search for cell value"
   }));
   subMenu.addChild(new MenuItem({
-    label: "Submenu item 2"
+    label: "Exclude value from results"
   }));
+
   contextMenu.addChild(new PopupMenuItem({
-    label: "Submenu",
+    label: "Search",
     popup: subMenu
   }));
+
 
   contextMenu.startup();
 

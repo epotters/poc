@@ -85,6 +85,11 @@ form .toolbar {
 }
 
 
+.grid-toolbar {
+  text-align: right;
+}
+
+
 /**
 Spinner
 Source:

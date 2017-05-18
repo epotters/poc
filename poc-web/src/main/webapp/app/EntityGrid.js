@@ -19,13 +19,8 @@ define([
 
 
   console.log("Start building Entity Grid");
-  console.log("personViewConfig: %s", personViewConfig);
-  console.log(personViewConfig);
-
   var gridTargetId = "entity-grid";
   var entityType = personViewConfig.entityType;
-  console.log("Above: personViewConfig, entityView");
-
 
   var entityGrid = new (declare([OnDemandGrid, Selection, ColumnResizer]))({
     collection: EntityStore,
@@ -40,10 +35,7 @@ define([
 
   entityGrid.on(".dgrid-row:click", function (evt) {
     evt.preventDefault();
-    var row = entityGrid.row(event);
-
-    EntityForm.show();
-
+    var row = entityGrid.row(evt);
   });
 
 

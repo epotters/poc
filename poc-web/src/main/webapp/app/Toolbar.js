@@ -9,7 +9,9 @@ define([
 
 ], function (declare, Button, Toolbar, domConstruct, EntityStore, personViewConfig) {
 
-  var toolbar = new Toolbar({}, this.gridTargetId + "-toolbar");
+  var toolbar = new Toolbar({}, "entity-toolbar");
+
+
   var addButton = new Button({
     label: "Add",
     onClick: function () {
