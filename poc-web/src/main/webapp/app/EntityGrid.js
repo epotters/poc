@@ -1,3 +1,4 @@
+// EntityGrid
 define([
   "dojo/_base/declare",
   "dgrid/OnDemandGrid",
@@ -7,21 +8,44 @@ define([
   "dijit/form/Button",
   "dijit/Toolbar",
   "dojo/dom-construct",
+
+  "app/EntityStore",
+  "app/EntityForm",
+  "app/domain/personViewConfig",
+
   "dojo/domReady!"
-], function (declare, OnDemandGrid, Selection, ColumnResizer, Button, Toolbar, domConstruct) {
+
+], function (declare, OnDemandGrid, Selection, Editor, ColumnResizer, Button, Toolbar, domConstruct, EntityStore, EntityForm, personViewConfig) {
+
 
   console.log("Start building Entity Grid");
+  console.log("personViewConfig: %s", personViewConfig);
+  console.log(personViewConfig);
 
   var gridTargetId = "entity-grid";
+  var entityType = personViewConfig.entityType;
+  console.log("Above: personViewConfig, entityView");
+
 
   var entityGrid = new (declare([OnDemandGrid, Selection, ColumnResizer]))({
-    collection: entityStore,
-    columns: columns,
+    collection: EntityStore,
+    columns: personViewConfig.columns,
     selectionMode: "extended",
     cellNavigation: false,
-    loadingMessage: loadingMessage,
-    noDataMessage: noDataMessage
+    loadingMessage: "Loading " + entityType.labelPlural.toLocaleLowerCase() + "...",
+    noDataMessage: "No " + entityType.labelPlural.toLocaleLowerCase() + " found."
   }, gridTargetId);
+
+
+
+  entityGrid.on(".dgrid-row:click", function (evt) {
+    evt.preventDefault();
+    var row = entityGrid.row(event);
+
+    EntityForm.show();
+
+  });
+
 
 
   entityGrid.on("dgrid-select", function (evt) {
@@ -51,43 +75,11 @@ define([
     console.log("Right click on " + entityType.getDisplayName(entity));
   });
 
-  entityGrid.on('dgrid-refresh-complete', function (evt) {
+
+  entityGrid.on("dgrid-refresh-complete", function (evt) {
     console.log("Refresh complete");
   });
 
-
-  function addToolbar() {
-    var toolbar = new dijit.Toolbar({}, this.gridTargetId + "-toolbar");
-
-    var addButton = new dijit.form.Button({
-      label: "Add",
-      onClick: function () {
-        console.log("Create a new Entity");
-      }
-    });
-    toolbar.addChild(addButton);
-
-    var removeButton = new dijit.form.Button({
-      label: "Remove",
-      onClick: function () {
-        // Confirm dialog
-        console.log("Remove all selected entities");
-        console.log(entityGrid.selection);
-      }
-    });
-    toolbar.addChild(removeButton);
-
-    var searchButton = new dijit.form.Button({
-      label: "Search",
-      onClick: function () {
-        console.log("Show the search filter");
-      }
-    });
-    toolbar.addChild(searchButton);
-    toolbar.startup();
-  }
-
-  addToolbar();
 
   entityGrid.startup();
 

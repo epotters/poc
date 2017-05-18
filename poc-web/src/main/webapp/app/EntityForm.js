@@ -1,3 +1,4 @@
+// EntityForm
 define([
   "dijit/Dialog",
   "dijit/form/Form",
@@ -5,9 +6,10 @@ define([
   "dijit/form/Button",
   "dijit/layout/ContentPane",
   "dijit/layout/LayoutContainer",
+  "app/domain/personViewConfig",
   "dojo/dom-construct",
   "dojo/domReady!"
-], function (Dialog, Form, TextBox, Button, ContentPane, LayoutContainer, domConstruct) {
+], function (Dialog, Form, TextBox, Button, ContentPane, LayoutContainer, personViewConfig, domConstruct) {
 
   console.log("Start building Entity Form");
 
@@ -29,12 +31,15 @@ define([
     var center = new ContentPane({region: "center"});
     center.addChild(entityForm);
     var toolbar = new ContentPane({region: "bottom"});
+
+
     var okButton = new Button({
       label: "OK"
     });
     toolbar.addChild(okButton);
     layout.addChild(center);
     layout.addChild(toolbar);
+
     return new Dialog({
       title: "Dialog with form",
       content: entityForm,
@@ -46,6 +51,7 @@ define([
   var entityForm = new Form();
 
   var formGroup, fieldName, fieldLabel, fields = [];
+  var columns = personViewConfig.entityType.columns;
 
   for (fieldName in columns) {
     if (columns.hasOwnProperty(fieldName)) {
@@ -59,7 +65,6 @@ define([
       domConstruct.place(formGroup, entityForm.containerNode);
     }
   }
-
 
   entityForm.startup();
   console.log("Entity Form ready");

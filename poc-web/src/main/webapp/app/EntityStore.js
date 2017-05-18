@@ -1,11 +1,17 @@
-
+// EntityStore
 define([
   "dstore/RequestMemory"
 ], function (RequestMemory) {
 
   console.log("Loading EntityStore");
 
-  var entityStore = new RequestMemory({target: dataUrl});
+  var dataUrl = "data/people.json";
+
+  var entityStore = new RequestMemory({
+        idProperty: "id",
+        // model: ;
+        target: dataUrl}
+    );
 
   entityStore.on("add", function(evt) {
     console.log("Entity added to EntityStore");

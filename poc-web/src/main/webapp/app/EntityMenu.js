@@ -1,3 +1,4 @@
+// EntityMenu
 define([
   "dijit/Menu",
   "dijit/MenuItem",
