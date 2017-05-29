@@ -5,77 +5,75 @@ define([
   "dgrid/Selection",
   "dgrid/Editor",
   "dgrid/extensions/ColumnResizer",
-  "dijit/form/Button",
-  "dijit/Toolbar",
-  "dojo/dom-construct",
-
-  "app/EntityStore",
-  "app/EntityForm",
-  "app/domain/personViewConfig",
-
   "dojo/domReady!"
+], function (declare, OnDemandGrid, Selection, Editor, ColumnResizer) {
 
-], function (declare, OnDemandGrid, Selection, Editor, ColumnResizer, Button, Toolbar, domConstruct, EntityStore, EntityForm, personViewConfig) {
 
+  return declare([OnDemandGrid, Selection, ColumnResizer], {
 
-  console.log("Start building Entity Grid");
-  var gridTargetId = "entity-grid";
-  var entityType = personViewConfig.entityType;
+    typeViewConfig: null,
 
-  var entityGrid = new (declare([OnDemandGrid, Selection, ColumnResizer]))({
-    collection: EntityStore,
-    columns: personViewConfig.columns,
+    collection: null,
+    columns: null,
     selectionMode: "extended",
     cellNavigation: false,
-    loadingMessage: "Loading " + entityType.labelPlural.toLocaleLowerCase() + "...",
-    noDataMessage: "No " + entityType.labelPlural.toLocaleLowerCase() + " found."
-  }, gridTargetId);
+    loadingMessage: null,
+    noDataMessage: null,
 
 
+    constructor: function (params) {
 
-  entityGrid.on(".dgrid-row:click", function (evt) {
-    evt.preventDefault();
-    var row = entityGrid.row(evt);
-  });
+      console.log("Constructing an Entity Grid");
 
+      this.typeViewConfig = params.typeViewConfig;
+      this.collection = params.store;
 
+      this.columns = this.typeViewConfig.columns;
 
-  entityGrid.on("dgrid-select", function (evt) {
-    evt.preventDefault();
-    var rows = evt.rows;
-    console.log("Selected " + entityType.labelPlural.toLocaleLowerCase() + ":");
-    for (var i = 0; i < rows.length; i++) {
-      console.log("\t\t" + entityType.getDisplayName(rows[i].data));
+      this.loadingMessage = "Loading " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + "...";
+      this.noDataMessage = "No " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + " found.";
+
+      console.log("Ready constructing an Entity Grid");
+    },
+
+    postCreate: function () {
+      this.inherited(arguments);
+
+      this.on(".dgrid-row:click", function (evt) {
+        evt.preventDefault();
+        var row = this.row(evt);
+      });
+
+      this.on("dgrid-select", function (evt) {
+        evt.preventDefault();
+        var rows = evt.rows;
+        console.log("Selected " + entityType.labelPlural.toLocaleLowerCase() + ":");
+        for (var i = 0; i < rows.length; i++) {
+          console.log("\t\t" + this.typeViewConfig.entityType.getDisplayName(rows[i].data));
+        }
+      });
+
+      this.on("dgrid-deselect", function (evt) {
+        evt.preventDefault();
+        var rows = evt.rows;
+        console.log("Deselected " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + ":");
+
+        for (var i = 0; i < rows.length; i++) {
+          console.log("\t\t" + this.typeViewConfig.entityType.getDisplayName(rows[i].data));
+        }
+      });
+
+      this.on(".dgrid-row:contextmenu", function (evt) {
+        evt.preventDefault();
+        var entity = this.row(evt).data;
+        console.log("Right click on " + this.typeViewConfig.entityType.getDisplayName(entity));
+      });
+
+      this.on("dgrid-refresh-complete", function () {
+        console.log("Refresh complete");
+      });
+
+      console.log("Entity Grid ready");
     }
-  });
-
-
-  entityGrid.on("dgrid-deselect", function (evt) {
-    evt.preventDefault();
-    var rows = evt.rows;
-    console.log("Deselected " + entityType.labelPlural.toLocaleLowerCase() + ":");
-
-    for (var i = 0; i < rows.length; i++) {
-      console.log("\t\t" + entityType.getDisplayName(rows[i].data));
-    }
-  });
-
-
-  entityGrid.on(".dgrid-row:contextmenu", function (evt) {
-    evt.preventDefault(); // prevent default browser context menu
-    var entity = entityGrid.row(evt).data;
-    console.log("Right click on " + entityType.getDisplayName(entity));
-  });
-
-
-  entityGrid.on("dgrid-refresh-complete", function (evt) {
-    console.log("Refresh complete");
-  });
-
-
-  entityGrid.startup();
-
-  console.log("Entity Grid ready");
-
-  return entityGrid;
+  })
 });

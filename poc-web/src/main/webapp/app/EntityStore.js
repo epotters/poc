@@ -1,29 +1,33 @@
 // EntityStore
 define([
+  "dojo/_base/declare",
   "dstore/RequestMemory"
-], function (RequestMemory) {
+], function (declare, RequestMemory) {
 
-  console.log("Loading EntityStore");
+  return declare([RequestMemory], {
 
-  var dataUrl = "data/people.json";
+    constructor: function (params) {
+      console.log("Constructing EntityStore");
+    },
 
-  var entityStore = new RequestMemory({
-        idProperty: "id",
-        // model: ;
-        target: dataUrl}
-    );
 
-  entityStore.on("add", function(evt) {
-    console.log("Entity added to EntityStore");
+    postCreate: function () {
+
+      this.inherited(arguments);
+
+      this.on("add", function (evt) {
+        console.log("Entity added to EntityStore");
+      });
+
+      this.on("update", function (evt) {
+        console.log("Entity updated in EntityStore");
+      });
+
+      this.on("delete", function (evt) {
+        console.log("Entity deleted from EntityStore");
+      });
+
+    }
+
   });
-
-  entityStore.on("update", function(evt) {
-    console.log("Entity updated in EntityStore");
-  });
-
-  entityStore.on("delete", function(evt) {
-    console.log("Entity deleted from EntityStore");
-  });
-
-  return entityStore;
 });

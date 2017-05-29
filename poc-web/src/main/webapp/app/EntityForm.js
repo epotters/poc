@@ -1,64 +1,63 @@
 // EntityForm
 define([
+  "dojo/_base/declare",
   "dijit/form/Form",
   "dijit/form/TextBox",
   "dijit/form/Button",
-
-  "app/domain/personViewConfig",
-
   "dojo/dom-construct",
   "dojo/domReady!"
-], function (Form, TextBox, Button, personViewConfig, domConstruct) {
+], function (declare, Form, TextBox, Button, domConstruct) {
 
-  console.log("Start building Entity Form");
+  return declare([Form], {
 
-  var formGroupType = "div";
+    typeViewConfig: null,
+    formGroupType: "div",
 
-  var entityForm = new Form({}, "entity-form");
+    constructor: function (params) {
+      this.typeViewConfig = params.typeViewConfig;
+      console.log("End of Entity Form constructor");
+    },
 
+    postCreate: function () {
+      this.inherited(arguments);
+      console.log("Start building Entity Form");
+      console.log("Next, we will add some fields to the form");
+      this.addFields();
+    },
 
-  var formGroup, fieldName, fieldLabel, fields = [];
-  var columns = personViewConfig.columns;
+    startup: function () {
+      this.inherited(arguments);
+    },
 
-
-  function buildFormGroup(fieldName, fieldLabel) {
-    var formGroup = domConstruct.create(formGroupType, {"class": "form-group"});
-    domConstruct.create("label", {"for": fieldName, "innerHTML": fieldLabel}, formGroup);
-    new TextBox({
-      name: fieldName,
-      id: fieldName,
-      placeHolder: fieldLabel
-    }).placeAt(formGroup);
-
-    console.log("\tFormGroup built for " + fieldName);
-    return formGroup;
-  }
-
-
-  console.log("Next, we will add some fields to the form");
-  console.log(personViewConfig.entityType);
-
-  for (fieldName in columns) {
-    if (columns.hasOwnProperty(fieldName)) {
-      if (dojo.isObject(columns[fieldName])) {
-        fieldLabel = columns[fieldName]["label"];
-      } else {
-        fieldLabel = columns[fieldName];
+    addFields: function () {
+      var formGroup, fieldName, fieldLabel, fields = [];
+      var columns = this.typeViewConfig.columns;
+      for (fieldName in columns) {
+        if (columns.hasOwnProperty(fieldName)) {
+          if (dojo.isObject(columns[fieldName])) {
+            fieldLabel = columns[fieldName]["label"];
+          } else {
+            fieldLabel = columns[fieldName];
+          }
+          formGroup = this.buildFormGroup(fieldName, fieldLabel);
+          fields[fieldName] = formGroup;
+          domConstruct.place(formGroup, this.containerNode);
+          console.log("\tAdded field: " + fieldName);
+        }
       }
-      formGroup = buildFormGroup(fieldName, fieldLabel);
-      fields[fieldName] = formGroup;
-      domConstruct.place(formGroup, entityForm.containerNode);
+    },
 
-      console.log("\tAdded field: " + fieldName);
+    buildFormGroup: function (fieldName, fieldLabel) {
+      var formGroup = domConstruct.create(this.formGroupType, {"class": "form-group"});
+      domConstruct.create("label", {"for": fieldName, "innerHTML": fieldLabel}, formGroup);
+      new TextBox({
+        name: fieldName,
+        id: fieldName,
+        placeHolder: fieldLabel
+      }).placeAt(formGroup);
+
+      console.log("\tFormGroup built for " + fieldName);
+      return formGroup;
     }
-  }
-
-  var okButton = new Button({
-    label: "OK"
   });
-
-  entityForm.startup();
-  console.log("Entity Form ready");
-
-  return entityForm;
 });

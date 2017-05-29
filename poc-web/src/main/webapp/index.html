@@ -66,10 +66,12 @@
 
 <script>
   require([
-        "app/EntityView"
+        "app/EntityView",
+        "app/domain/organizationViewConfig"
       ],
-      function (EntityView) {
+      function (EntityView, organizationViewConfig) {
         console.log("Creating entity view");
+        var entityView = new EntityView({typeViewConfig: organizationViewConfig});
       });
 </script>
 
