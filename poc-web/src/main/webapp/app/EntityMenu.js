@@ -4,38 +4,55 @@ define([
   "dijit/MenuItem",
   "dijit/MenuSeparator",
   "dijit/PopupMenuItem",
+  "app/EntityGrid",
   "dojo/domReady!"
-], function (Menu, MenuItem, MenuSeparator, PopupMenuItem) {
+], function (Menu, MenuItem, MenuSeparator, PopupMenuItem, EntityGrid) {
 
   console.log("Start building Entity Menu");
 
   contextMenu = new Menu({
-    targetNodeIds: ["context-menu-button"]
+    targetNodeIds: [EntityGrid.domNode]
   });
 
   contextMenu.addChild(new MenuItem({
     label: "Detail",
-    iconClass: "dijitEditorIcon dijitEditorIconCut",
-    onClick: function () {
-      alert("I was clicked")
+    onClick: function (evt) {
+      var entity = EntityGrid.row(evt).data;
+      console.log("Show detail voor ");
     }
   }));
   contextMenu.addChild(new MenuItem({
-    label: "Edit"
+    label: "Edit",
+    onClick: function (evt) {
+      var entity = EntityGrid.row(evt).data;
+      console.log("Edit ");
+    }
   }));
   contextMenu.addChild(new MenuItem({
     label: "Delete",
-    disabled: true
+    disabled: true,
+    onClick: function (evt) {
+      var entity = EntityGrid.row(evt).data;
+      console.log("Delete ");
+    }
   }));
 
   contextMenu.addChild(new MenuSeparator());
 
   var subMenu = new Menu();
   subMenu.addChild(new MenuItem({
-    label: "Search for cell value"
+    label: "Search for cell value",
+    onClick: function (evt) {
+      var entity = EntityGrid.row(evt).data;
+      console.log("Search for cell value ");
+    }
   }));
   subMenu.addChild(new MenuItem({
-    label: "Exclude value from results"
+    label: "Exclude value from results",
+    onClick: function (evt) {
+      var entity = EntityGrid.row(evt).data;
+      console.log("Exclude value from results ");
+    }
   }));
 
   contextMenu.addChild(new PopupMenuItem({

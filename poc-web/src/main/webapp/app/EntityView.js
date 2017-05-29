@@ -1,3 +1,4 @@
+// EntityView
 define([
   "app/EntityStore",
   "app/EntityGrid",
@@ -11,6 +12,19 @@ define([
 
   var entityStore = EntityStore, entityGrid = EntityGrid,
       entityForm = EntityForm, entityToolbar = Toolbar, entityMenu = EntityMenu;
+
+
+  var addEntity = function(entity) {
+
+  };
+
+  var updateEntity = function(entity) {
+
+  };
+
+  var deleteEntity = function(entity) {
+
+  };
 
   console.log("Entity View ready");
 });

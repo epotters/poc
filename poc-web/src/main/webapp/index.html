@@ -52,14 +52,10 @@
 </header>
 <main>
   <div class="content">
-    <div class="panel grid-panel">
-      <div id="entity-toolbar" class="toolbar grid-toolbar"></div>
+    <div class="panel entity-panel">
+      <div id="entity-toolbar" class="toolbar"></div>
       <div id="entity-grid" class="grid"></div>
       <div id="entity-form" class="form"></div>
-    </div>
-    <div class="toolbar" id="test-button-toolbar">
-      <button id="context-menu-button">Demo context menu</button>
-      <button id="dialog-form-button">Show form in dialog</button>
     </div>
   </div>
 </main>
@@ -68,18 +64,13 @@
 
 
 
-
-
 <script>
-
   require([
         "app/EntityView"
       ],
       function (EntityView) {
         console.log("Creating entity view");
       });
-
-
 </script>
 
 </body>

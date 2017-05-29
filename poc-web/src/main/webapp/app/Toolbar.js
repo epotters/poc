@@ -4,10 +4,10 @@ define([
   "dijit/form/Button",
   "dijit/Toolbar",
   "dojo/dom-construct",
-  "app/EntityStore",
+  "app/EntityGrid",
   "dojo/domReady!"
 
-], function (declare, Button, Toolbar, domConstruct, EntityStore, personViewConfig) {
+], function (declare, Button, Toolbar, EntityGrid) {
 
   var toolbar = new Toolbar({}, "entity-toolbar");
 
@@ -25,7 +25,7 @@ define([
     onClick: function () {
       // Confirm dialog
       console.log("Remove all selected entities");
-      console.log(entityGrid.selection);
+      console.log(EntityGrid.selection);
     }
   });
   toolbar.addChild(removeButton);

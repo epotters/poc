@@ -18,7 +18,7 @@ define([
 
 
   var formGroup, fieldName, fieldLabel, fields = [];
-  var columns = personViewConfig.entityType.columns;
+  var columns = personViewConfig.columns;
 
 
   function buildFormGroup(fieldName, fieldLabel) {
@@ -29,9 +29,14 @@ define([
       id: fieldName,
       placeHolder: fieldLabel
     }).placeAt(formGroup);
+
+    console.log("\tFormGroup built for " + fieldName);
     return formGroup;
   }
 
+
+  console.log("Next, we will add some fields to the form");
+  console.log(personViewConfig.entityType);
 
   for (fieldName in columns) {
     if (columns.hasOwnProperty(fieldName)) {
@@ -43,6 +48,8 @@ define([
       formGroup = buildFormGroup(fieldName, fieldLabel);
       fields[fieldName] = formGroup;
       domConstruct.place(formGroup, entityForm.containerNode);
+
+      console.log("\tAdded field: " + fieldName);
     }
   }
 

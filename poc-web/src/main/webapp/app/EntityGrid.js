@@ -61,7 +61,7 @@ define([
   });
 
 
-  entityGrid.on("dgrid-row:contextmenu", function (evt) {
+  entityGrid.on(".dgrid-row:contextmenu", function (evt) {
     evt.preventDefault(); // prevent default browser context menu
     var entity = entityGrid.row(evt).data;
     console.log("Right click on " + entityType.getDisplayName(entity));

@@ -90,6 +90,11 @@ form .toolbar {
 }
 
 
+.form {
+  margin-top: 6px;
+}
+
+
 /**
 Spinner
 Source:
