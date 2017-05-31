@@ -23,7 +23,7 @@ define([
       this.typeViewConfig = params.typeViewConfig;
       console.log("Constructing Entity View for " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase());
 
-      this.entityStore = new EntityStore({dataUrl: "/poc-webapp/data/people.json"});
+      this.entityStore = new EntityStore({typeViewConfig: this.typeViewConfig});    // {target: "data/people.json"});
 
 
       this.entityGrid = new EntityGrid({typeViewConfig: this.typeViewConfig, store: this.entityStore}, "entity-grid");

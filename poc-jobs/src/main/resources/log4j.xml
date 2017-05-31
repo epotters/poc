@@ -9,10 +9,6 @@
     </layout>
   </appender>
 
-  <logger name="org.apache.axis">
-    <level value="ERROR"/>
-  </logger>
-
   <logger name="org.hibernate">
     <level value="ERROR"/>
   </logger>
@@ -25,7 +21,16 @@
     <level value="ERROR"/>
   </logger>
 
-  <logger name="org.apache.wicket">
+  <logger name="org.apache.http">
+    <level value="INFO"/>
+  </logger>
+
+
+  <logger name="org.springframework.web">
+    <level value="INFO"/>
+  </logger>
+
+  <logger name="com.gargoylesoftware.htmlunit">
     <level value="INFO"/>
   </logger>
 

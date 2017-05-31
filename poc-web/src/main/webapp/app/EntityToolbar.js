@@ -21,6 +21,8 @@ define([
 
       this.inherited(arguments);
 
+      var me = this;
+
       var addButton = new Button({
         label: "Add",
         onClick: function () {
@@ -34,7 +36,7 @@ define([
         onClick: function () {
           // Confirm dialog
           console.log("Remove all selected entities");
-          console.log(this.grid.selection);
+          console.log(me.grid.selection);
         }
       });
       this.addChild(removeButton);

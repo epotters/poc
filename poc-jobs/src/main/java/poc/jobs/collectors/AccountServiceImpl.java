@@ -7,25 +7,25 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * Created by epotters on 13-2-2017-02-13
+ * Created by epotters on 2017-02-13
  */
 @Component
 public class AccountServiceImpl implements AccountService {
 
-  private String accountsPropertyPath = "collectors.accounts";
-  private String accountPropertyPath = "account";
+  private static final String ACCOUNTS_PROPERTY_PATH = "collectors.accounts";
+  private static final String ACCOUNT_PROPERTY_PATH = "account";
 
 
   @Override
   public UserAccount getByType(AccountType type) {
 
-    ResourceBundle accounts = ResourceBundle.getBundle(accountsPropertyPath);
+    ResourceBundle accounts = ResourceBundle.getBundle(ACCOUNTS_PROPERTY_PATH);
     UserAccount account = new UserAccount();
 
     account.setType(type);
-    account.setDisplayName(accounts.getString(type.buildKeyForType(accountPropertyPath) + "displayName"));
-    account.setUsername(accounts.getString(type.buildKeyForType(accountPropertyPath) + "username"));
-    account.setPassword(accounts.getString(type.buildKeyForType(accountPropertyPath) + "password"));
+    account.setDisplayName(accounts.getString(type.buildKeyForType(ACCOUNT_PROPERTY_PATH) + "displayName"));
+    account.setUsername(accounts.getString(type.buildKeyForType(ACCOUNT_PROPERTY_PATH) + "username"));
+    account.setPassword(accounts.getString(type.buildKeyForType(ACCOUNT_PROPERTY_PATH) + "password"));
 
     return account;
   }

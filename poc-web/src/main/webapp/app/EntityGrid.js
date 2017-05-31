@@ -23,12 +23,12 @@ define([
 
     constructor: function (params) {
 
-      console.log("Constructing an Entity Grid");
-
       this.typeViewConfig = params.typeViewConfig;
       this.collection = params.store;
-
       this.columns = this.typeViewConfig.columns;
+
+      console.log("Constructing an Entity Grid for " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase());
+
 
       this.loadingMessage = "Loading " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + "...";
       this.noDataMessage = "No " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + " found.";
@@ -39,37 +39,43 @@ define([
     postCreate: function () {
       this.inherited(arguments);
 
-      this.on(".dgrid-row:click", function (evt) {
+      var me = this;
+
+      me.on(".dgrid-row:click", function (evt) {
+        console.log(me);
         evt.preventDefault();
-        var row = this.row(evt);
+        var row = me.row(evt);
       });
 
-      this.on("dgrid-select", function (evt) {
+      me.on("dgrid-select", function (evt) {
+        console.log(me);
         evt.preventDefault();
         var rows = evt.rows;
-        console.log("Selected " + entityType.labelPlural.toLocaleLowerCase() + ":");
+        console.log("Selected " + me.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + ":");
         for (var i = 0; i < rows.length; i++) {
-          console.log("\t\t" + this.typeViewConfig.entityType.getDisplayName(rows[i].data));
+          console.log("\t\t" + me.typeViewConfig.entityType.getDisplayName(rows[i].data));
         }
       });
 
-      this.on("dgrid-deselect", function (evt) {
+      me.on("dgrid-deselect", function (evt) {
+
+        console.log(me);
         evt.preventDefault();
         var rows = evt.rows;
-        console.log("Deselected " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + ":");
+        console.log("Deselected " + me.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + ":");
 
         for (var i = 0; i < rows.length; i++) {
-          console.log("\t\t" + this.typeViewConfig.entityType.getDisplayName(rows[i].data));
+          console.log("\t\t" + me.typeViewConfig.entityType.getDisplayName(rows[i].data));
         }
       });
 
-      this.on(".dgrid-row:contextmenu", function (evt) {
+      me.on(".dgrid-row:contextmenu", function (evt) {
         evt.preventDefault();
-        var entity = this.row(evt).data;
-        console.log("Right click on " + this.typeViewConfig.entityType.getDisplayName(entity));
+        var entity = me.row(evt).data;
+        console.log("Right click on " + me.typeViewConfig.entityType.getDisplayName(entity));
       });
 
-      this.on("dgrid-refresh-complete", function () {
+      me.on("dgrid-refresh-complete", function () {
         console.log("Refresh complete");
       });
 

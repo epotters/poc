@@ -65,12 +65,23 @@
 
 
 <script>
+
+
+
   require([
+        "dojo/io-query",
         "app/EntityView",
         "app/domain/organizationViewConfig"
       ],
-      function (EntityView, organizationViewConfig) {
+      function (ioQuery, EntityView, organizationViewConfig) {
         console.log("Creating entity view");
+
+        var uri = location.href,
+            query = uri.substring(uri.indexOf("?") + 1, uri.length),
+            queryObject = ioQuery.queryToObject(query);
+
+        console.log("Type name: \"" + queryObject["type-name"] + "\"");
+
         var entityView = new EntityView({typeViewConfig: organizationViewConfig});
       });
 </script>
