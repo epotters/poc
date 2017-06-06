@@ -1,15 +1,24 @@
 // EntityView
 define([
   "dojo/_base/declare",
+  "dijit/_WidgetBase",
+  "dijit/_TemplatedMixin",
+
   "app/EntityStore",
   "app/EntityGrid",
   "app/EntityForm",
   "app/EntityToolbar",
-  "app/EntityMenu"
-], function (declare, EntityStore, EntityGrid, EntityForm, EntityToolbar, EntityMenu) {
+  "app/EntityMenu",
 
-  return declare([], {
+  "dojo/text!./templates/EntityView.html"
 
+
+], function (declare, _WidgetBase, _TemplatedMixin,
+    EntityStore, EntityGrid, EntityForm, EntityToolbar, EntityMenu, template) {
+
+  return declare([_WidgetBase, _TemplatedMixin], {
+
+    templateString: template,
     typeViewConfig: null,
 
     entityStore: null,
@@ -21,15 +30,25 @@ define([
     constructor: function(params) {
 
       this.typeViewConfig = params.typeViewConfig;
-      console.log("Constructing Entity View for " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase());
+      this.entityStore = new EntityStore({typeViewConfig: this.typeViewConfig});
 
-      this.entityStore = new EntityStore({typeViewConfig: this.typeViewConfig});    // {target: "data/people.json"});
+      console.log("Constructing Entity View for " + this.typeViewConfig.entityType.labelPlural);
+
+    },
 
 
-      this.entityGrid = new EntityGrid({typeViewConfig: this.typeViewConfig, store: this.entityStore}, "entity-grid");
-      this.entityForm = new EntityForm({typeViewConfig: this.typeViewConfig}, "entity-form");
-      this.entityToolbar = new EntityToolbar({grid: this.entityGrid}, "entity-toolbar");
-      this.entityMenu = new EntityMenu({grid: this.entityGrid});
+    postCreate: function() {
+      this.inherited(arguments);
+
+      console.log("postCreate EntityView");
+
+
+      this.entityGrid = new EntityGrid({typeViewConfig: this.typeViewConfig, store: this.entityStore}, this.entityGridNode);
+      this.entityForm = new EntityForm({typeViewConfig: this.typeViewConfig}, this.entityFormNode);
+
+      this.entityToolbar = new EntityToolbar({grid: this.entityGrid}, this.entityToolbarNode);
+      this.entityMenu = new EntityMenu({grid: this.entityGrid}, this.entityGrid.containerNode);
+
     },
 
 

@@ -10,14 +10,8 @@ define([
 
     constructor: function (params) {
       console.log("Constructing EntityStore");
-
       this.typeViewConfig = params.typeViewConfig;
-
       this.target = "data/" + this.typeViewConfig.entityType.namePlural + ".json";
-
-
-      console.log(params);
-
       this.postCreate();
     },
 

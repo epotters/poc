@@ -42,7 +42,6 @@ define([
           formGroup = this.buildFormGroup(fieldName, fieldLabel);
           fields[fieldName] = formGroup;
           domConstruct.place(formGroup, this.containerNode);
-          console.log("\tAdded field: " + fieldName);
         }
       }
     },

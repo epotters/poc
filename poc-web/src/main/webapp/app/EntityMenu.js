@@ -20,6 +20,7 @@ define([
 
     postCreate: function () {
       this.inherited(arguments);
+
       this.addChild(new MenuItem({
         label: "Detail",
         onClick: function (evt) {
