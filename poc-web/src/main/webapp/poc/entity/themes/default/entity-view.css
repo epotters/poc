@@ -95,6 +95,49 @@ form .toolbar {
 }
 
 
+.form-group-sm input {
+  border: none;
+}
+
+.toolbar {
+  float: none;
+  padding: 6px 0;
+}
+
+.toolbar .btn,
+.toolbar .btn-group {
+  margin: 0 3px;
+}
+
+.toolbar .btn-group .btn {
+  margin: 0;
+}
+
+.form-panel {
+  width: 600px;
+}
+
+.toolbar .btn-group {
+  display: inline-block;
+}
+
+
+.form-control input {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* dijit resets */
+
+.dijitToggleButtonIconChar,
+.dijitOffScreen {
+  display: none;
+}
+
+
+
+
 /**
 Spinner
 Source:

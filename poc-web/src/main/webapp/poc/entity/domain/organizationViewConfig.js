@@ -1,5 +1,5 @@
 /*
- personViewConfig
+organizationViewConfig
  */
 define({
       entityType: {

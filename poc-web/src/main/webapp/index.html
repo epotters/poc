@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/resources/dojo.css" />
-  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/claro/claro.css" />
+  <!-- link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/claro/claro.css" /-->
 
   <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css" />
-  <!--link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/skins/claro.css" /-->
 
-  <link rel="stylesheet" href="themes/default/entity-view.css" />
+
+  <link rel="stylesheet" href="poc/entity/themes/default/entity-view.css" />
 
 
   <script>
@@ -33,8 +33,11 @@
         name: "dmodel",
         location: "https://cdn.rawgit.com/SitePen/dmodel/v0.1.0"
       }, {
-        name: "app",
-        location: "http://dev.localhost/poc-webapp/app"
+        name: "page",
+        location: "http://dev.localhost/poc-webapp/poc/page"
+      }, {
+        name: "entity",
+        location: "http://dev.localhost/poc-webapp/poc/entity"
       }]
     };
   </script>
@@ -48,11 +51,11 @@
 <script>
 
   require([
-        "app/home/BasePage",
+        "page/BasePage",
         "dojo/domReady!"],
       function (BasePage) {
         var page = new BasePage({
-          title: "Base page for entities app",
+          pageTitle: "Base page for entities app",
           content: "<p>Some content...</p>"
         }, "page");
         page.startup();

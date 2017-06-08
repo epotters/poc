@@ -14,17 +14,30 @@ define({
         }
       },
       columns: {
-        firstName: "First Name",
-        prefix: "",
-        lastName: "Last Name",
+        firstName: {
+          label: "First Name",
+          editor: "text"
+        },
+        prefix: {
+          label: "",
+          editor: "text"
+        },
+        lastName: {
+          label: "Last Name",
+          editor: "text"
+        },
         gender: {
           label: "Gender",
+          editor: "text",
           get: function (person) {
             var genderOptions = {m: "Male", f: "Female"};
             return genderOptions[person.gender];
           }
         },
-        dateOfBirth: {label: "Date of Birth"}
+        dateOfBirth: {
+          label: "Date of Birth",
+          editor: "DateTextBox"
+        }
       }
     }
 );

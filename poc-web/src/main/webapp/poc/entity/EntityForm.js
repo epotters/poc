@@ -21,7 +21,6 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.log("Start building Entity Form");
-      console.log("Next, we will add some fields to the form");
       this.addFields();
     },
 
@@ -47,15 +46,14 @@ define([
     },
 
     buildFormGroup: function (fieldName, fieldLabel) {
-      var formGroup = domConstruct.create(this.formGroupType, {"class": "form-group"});
+      var formGroup = domConstruct.create(this.formGroupType, {"class": "form-group form-group-sm"});
       domConstruct.create("label", {"for": fieldName, "innerHTML": fieldLabel}, formGroup);
-      new TextBox({
+      var control = new TextBox({
         name: fieldName,
-        id: fieldName,
-        placeHolder: fieldLabel
-      }).placeAt(formGroup);
-
-      console.log("\tFormGroup built for " + fieldName);
+        id: fieldName
+      });
+      dojo.addClass(control.domNode, "form-control");
+      control.placeAt(formGroup);
       return formGroup;
     }
   });

@@ -4,8 +4,8 @@ define([
   "dijit/_WidgetBase",
   "dijit/_TemplatedMixin",
   "dojo/query",
-  "../Navigation",
-  "dojo/text!../templates/BasePage.html"
+  "./Navigation",
+  "dojo/text!./templates/BasePage.html"
 ], function (declare,
              _WidgetBase,
              _TemplatedMixin,
@@ -16,12 +16,12 @@ define([
 
     templateString: template,
 
-    title: null,
+    pageTitle: null,
     content: null,
 
     constructor: function (params) {
 
-      this.title = params.title;
+      this.pageTitle = params.pageTitle;
       this.content = params.content;
 
     },
@@ -49,7 +49,7 @@ define([
 
       require([
             "dojo/io-query",
-            "app/EntityView"
+            "entity/EntityView"
           ],
           function (ioQuery, EntityView) {
 
@@ -62,7 +62,7 @@ define([
             var typeName = (queryObject["type-name"]) ? queryObject["type-name"] : defaultTypeName;
             console.log("Type name: \"" + typeName + "\"");
 
-            require(["app/domain/" + typeName + "ViewConfig"],
+            require(["entity/domain/" + typeName + "ViewConfig"],
                 function (typeViewConfig) {
                   console.log("building an enitity view");
                   console.log(me.contentNode);

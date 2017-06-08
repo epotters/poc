@@ -1,14 +1,22 @@
 <div class="entity-view">
   <h3>${typeViewConfig.entityType.labelPlural}</h3>
+
   <div class="panel entity-panel">
     <div class="panel-body">
-      <div data-dojo-attach-point="entityToolbarNode" class="toolbar"></div>
+      <div class="toolbar nav navbar-nav">
+        <div data-dojo-attach-point="entityGridToolbarNode"></div>
+      </div>
       <div data-dojo-attach-point="entityGridNode" class="grid"></div>
     </div>
   </div>
-  <div class="panel entity-panel">
+
+
+  <div class="panel entity-panel form-panel">
     <div class="panel-body">
       <div data-dojo-attach-point="entityFormNode" class="form"></div>
+      <div class="toolbar nav navbar-nav">
+        <div data-dojo-attach-point="entityFormToolbarNode"></div>
+      </div>
     </div>
   </div>
 </div>
