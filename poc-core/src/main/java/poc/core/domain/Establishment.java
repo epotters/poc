@@ -16,8 +16,6 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * Created by epotters on 2017-03-28
- *
  * (Dutch translation: Vestiging)
  */
 @Entity
@@ -32,8 +30,8 @@ class Establishment {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "conmpany_id")
-  private Company company;
+  @JoinColumn(name = "company_id")
+  private Organization organization;
 
   @OneToOne
   private Address address;

@@ -13,10 +13,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-/**
- * Created by epotters on 2016-01-07
- */
-
 @Entity
 @Table(name = "address")
 @Data

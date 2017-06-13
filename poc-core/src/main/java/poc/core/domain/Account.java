@@ -8,9 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-/**
- * Created by epotters on 2-3-2015.
- */
 public class Account implements UserDetails {
 
   @Id

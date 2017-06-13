@@ -15,15 +15,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-/**
- * Created by epotters on 2014-09-22
- */
-
 @Entity
-@Table(name = "company")
+@Table(name = "organization")
 @Data
 @NoArgsConstructor
-class Company implements Serializable {
+public class Organization implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +30,7 @@ class Company implements Serializable {
   private List<Employee> employees;
 
 
-  @OneToMany(mappedBy = "company")
+  @OneToMany(mappedBy = "organization")
   private List<Establishment> establishments;
 
 }

@@ -8,15 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/**
- * Created by epotters on 2017-03-28
- */
 
 @Entity
 @Table(name = "household")
@@ -31,4 +28,8 @@ class Household {
 
   @OneToMany(mappedBy = "household")
   private List<Person> members;
+
+  @OneToOne
+  private Address address;
+
 }

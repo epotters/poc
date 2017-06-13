@@ -14,9 +14,7 @@ import poc.core.repository.PersonRepository;
 import poc.core.service.PersonService;
 
 
-/**
- * Created by epotters on 2014-10-09
- */
+
 
 @Component
 public class PersonServiceImpl implements PersonService {

@@ -17,10 +17,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-/**
- * Created by epotters on 6-11-2014.
- */
-
 @Entity
 @Table(name = "person")
 @Data
