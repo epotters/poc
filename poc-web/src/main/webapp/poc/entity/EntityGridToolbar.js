@@ -4,69 +4,128 @@ define([
   "dijit/form/Button",
   "dijit/Toolbar",
   "dojo/dom-construct",
+  "dojo/on",
   "dojo/domReady!"
-], function (declare, Button, Toolbar, domConstruct) {
+], function (declare, Button, Toolbar, domConstruct, on) {
   return declare([Toolbar], {
 
     grid: null,
     buttonClass: "btn btn-sm btn-default",
 
+    addButton: null,
+    removeButton: null,
+    searchButton: null,
+
     constructor: function (params) {
       this.grid = params.grid;
     },
+
+    collectKeys: function (object) {
+      var keys = [];
+      for (var key in object) {
+        if (!object.hasOwnProperty(key)) {
+          continue;
+        }
+        keys.push(key);
+      }
+      return keys;
+    },
+
 
     postCreate: function () {
 
       this.inherited(arguments);
 
+
+      this.buildCrudButtons();
+      this.buildViewButtons();
+    },
+
+
+    buildCrudButtons: function () {
+
       var me = this;
 
-      var addButton = new Button({
+
+      var newEntity = {
+        id: "20001",
+        firstName: "Milan",
+        prefix: "",
+        lastName: "Potters",
+        gender: "m",
+        dateOfBirth: "2003-11-26"
+      };
+
+      this.addButton = new Button({
         label: "Add",
         icon: "glyphicon-plus",
         onClick: function () {
           console.log("Create a new Entity");
+          on.emit(this, "add", {});
+          me.grid.store.add(newEntity);
+          me.grid.refresh();
         }
       });
-      dojo.addClass(addButton.domNode, this.buttonClass);
-      this.addChild(addButton);
+      dojo.addClass(this.addButton.domNode, this.buttonClass);
+      this.addChild(this.addButton);
 
-      var removeButton = new Button({
+
+      this.removeButton = new Button({
         label: "Remove",
         icon: "glyphicon-trash",
         onClick: function () {
-          // Confirm dialog
-          var numberSelected = me.grid.selection.length;
+
+          on.emit(this, "remove", {});
+
+          var keys = me.collectKeys(me.grid.selection);
+          console.log(keys);
+          numberSelected = keys.length;
+          console.log(me.grid.selection);
+
           if (numberSelected > 0) {
             console.log("Remove all selected entities");
-            console.log(me.grid.selection);
+            var entity;
+            for (var i = 0; i < keys.length; i++) {
+              me.grid.collection.remove(keys[i]);
+            }
+            me.grid.refresh();
+
           } else {
             console.log("No entities selected");
           }
         }
       });
-      dojo.addClass(removeButton.domNode, this.buttonClass);
-      this.addChild(removeButton);
+      dojo.addClass(this.removeButton.domNode, this.buttonClass + " disabled");
+      this.addChild(this.removeButton);
 
-      var searchButton = new Button({
+
+      this.searchButton = new Button({
         label: "Search",
         icon: "glyphicon-search",
         onClick: function () {
           console.log("Show the search filter");
+          on.emit(this, "search", {});
         }
       });
-      dojo.addClass(searchButton.domNode, this.buttonClass);
-      this.addChild(searchButton);
+      dojo.addClass(this.searchButton.domNode, this.buttonClass);
+      this.addChild(this.searchButton);
 
+    },
+
+
+    buildViewButtons: function () {
+
+      var me = this;
 
       console.log("Start building the view button group");
       var viewButtonGroup = domConstruct.create("div", {"class": "btn-group btn-group-sm", role: "group"});
 
       var tableViewButton = new Button({
         label: "Table",
-        icon: "glyphicon-search",
+        icon: "glyphicon-align-justify",
         onClick: function () {
           console.log("Show as Table");
+          on.emit(this, "tableView", {});
         }
       });
       dojo.addClass(tableViewButton.domNode, this.buttonClass);
@@ -76,9 +135,10 @@ define([
 
       var detailViewButton = new Button({
         label: "Detail",
-        icon: "glyphicon-search",
+        icon: "glyphicon-th-list", // "glyphicon-list"
         onClick: function () {
           console.log("Show as Detail");
+          this.emit("detailView", {});
         }
       });
       dojo.addClass(detailViewButton.domNode, this.buttonClass);
@@ -87,14 +147,14 @@ define([
 
       var galleryViewButton = new Button({
         label: "Gallery",
-        icon: "glyphicon-search",
+        icon: "glyphicon-th",
         onClick: function () {
           console.log("Show as Gallery");
+          this.emit("galleryView", {});
         }
       });
       dojo.addClass(galleryViewButton.domNode, this.buttonClass);
       domConstruct.place(galleryViewButton.domNode, viewButtonGroup);
-
 
       domConstruct.place(viewButtonGroup, this.domNode);
     }

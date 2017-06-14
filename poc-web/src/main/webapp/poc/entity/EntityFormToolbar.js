@@ -21,28 +21,25 @@ define([
 
       this.inherited(arguments);
 
+      this.buildNavigationButtons();
+
+      this.buildSaveButtons();
+    },
+
+
+    buildSaveButtons: function () {
       var me = this;
 
-      var previousButton = new Button({
-        label: "Previous",
-        icon: "arrow-left",
+      var cancelButton = new Button({
+        label: "Cancel",
+        icon: "glyphicon-remove",
         onClick: function () {
-          console.log("Go to the previous entity");
+          console.log("Discard changes to this entity");
         }
       });
-      dojo.addClass(previousButton.domNode, this.buttonClass);
-      this.addChild(previousButton);
 
-      var nextButton = new Button({
-        label: "Next",
-        icon: "arrow-right",
-        onClick: function () {
-          console.log("Go to the next entity");
-        }
-      });
-      dojo.addClass(nextButton.domNode, this.buttonClass);
-      this.addChild(nextButton);
-
+      dojo.addClass(cancelButton.domNode, this.buttonClass);
+      this.addChild(cancelButton);
 
       var saveButton = new Button({
         label: "Save",
@@ -53,17 +50,39 @@ define([
       });
       dojo.addClass(saveButton.domNode, this.buttonClass);
       this.addChild(saveButton);
+    },
 
+    buildNavigationButtons: function () {
 
-      var cancelButton = new Button({
-        label: "Cancel",
-        icon: "glyphicon-ok",
+      var me = this;
+
+      console.log("Start building the navigation button group");
+      var navigationButtonGroup = domConstruct.create("div", {"class": "btn-group btn-group-sm", role: "group"});
+
+      var previousButton = new Button({
+        label: "Previous",
+        icon: "arrow-left",
         onClick: function () {
-          console.log("Discard changes to this entity");
+          console.log("Go to the previous entity");
         }
       });
-      dojo.addClass(cancelButton.domNode, this.buttonClass);
-      this.addChild(cancelButton);
+      dojo.addClass(previousButton.domNode, this.buttonClass);
+      domConstruct.place(previousButton.domNode, navigationButtonGroup);
+
+      var nextButton = new Button({
+        label: "Next",
+        icon: "arrow-right",
+        onClick: function () {
+          console.log("Go to the next entity");
+        }
+      });
+      dojo.addClass(nextButton.domNode, this.buttonClass);
+      domConstruct.place(nextButton.domNode, navigationButtonGroup);
+
+
+      domConstruct.place(navigationButtonGroup, this.domNode);
+
+
     }
   });
 

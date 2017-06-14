@@ -15,11 +15,21 @@ define([
     constructor: function (params) {
       console.log("Constructing Entity Menu");
       this.grid = params.grid;
-      console.log("Entity Menu ready");
     },
 
     postCreate: function () {
+
       this.inherited(arguments);
+
+      this.addItems();
+
+      dojo.addClass(this.domNode, "dropdown-menu");
+
+      console.log("Entity Menu ready");
+    },
+
+
+    addItems: function () {
 
       this.addChild(new MenuItem({
         label: "Detail",

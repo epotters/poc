@@ -2,11 +2,7 @@
 
 }
 
-
-
-
 /*** dgrid styling **/
-
 
 /*
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
@@ -24,7 +20,6 @@
   margin: 36px;
 }
 
-
 .panel {
   border: 1px solid silver;
 }
@@ -32,7 +27,6 @@
 .grid-panel .dgrid {
   border: 0 !important;
 }
-
 
 .form-panel .form-component {
   margin-bottom: 3px;
@@ -47,12 +41,11 @@
   display: inline-block;
 }
 
-
 .form-dialog {
   width: 360px;
-  height: 240px;"
+  height: 240px;
+"
 }
-
 
 .form-group {
   padding: 0;
@@ -63,37 +56,21 @@
   display: inline-block;
   width: 40%;
   color: gray;
-}
-
-.form-group .dijitTextBox {
-  display: inline-block;
-  width: 59%;
+  vertical-align: top;
+  font-weight: normal;
 }
 
 form .toolbar {
   text-align: right;
 }
 
-
-.dijitDialogSingleChild {
-  height: 100%;
-}
-
-
-.dgrid-loading .dgrid-below{
-  margin: 24px;
-}
-
-
 .grid-toolbar {
   text-align: right;
 }
 
-
 .form {
   margin-top: 6px;
 }
-
 
 .form-group-sm input {
   border: none;
@@ -121,74 +98,127 @@ form .toolbar {
   display: inline-block;
 }
 
+.form-group-sm .form-control {
+  height: auto;
+  padding: 3px 9px;
+}
 
-.form-control input {
+/* dijit resets */
+
+.form-group .dijitTextBox,
+.form-group .dijitSelect {
+  display: inline-block;
+  width: 59%;
+}
+
+.form-control .dijitInputInner {
   width: 100%;
+}
+
+.dijitDialogSingleChild {
   height: 100%;
 }
 
+.dgrid-loading .dgrid-below {
+  margin: 24px;
+}
 
-/* dijit resets */
+.form-control .dijitTextBox input {
+  width: 100%;
+  height: 100%;
+}
 
 .dijitToggleButtonIconChar,
 .dijitOffScreen {
   display: none;
 }
 
-
-
-
-/**
-Spinner
-Source:
-***/
-.spinner {
-  margin: 100px auto;
-  width: 40px;
-  height: 40px;
-  position: relative;
-  text-align: center;
-
-  -webkit-animation: sk-rotate 2.0s infinite linear;
-  animation: sk-rotate 2.0s infinite linear;
-}
-
-.dot1, .dot2 {
-  width: 60%;
-  height: 60%;
-  display: inline-block;
+.dijitPopup, .dijitMenuPopup {
   position: absolute;
-  top: 0;
-  background-color: #333;
-  border-radius: 100%;
-
-  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
-  animation: sk-bounce 2.0s infinite ease-in-out;
+  background: white;
+  border: 1px solid #ddd;
 }
 
-.dot2 {
-  top: auto;
-  bottom: 0;
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+.dijitPopup tr td, .dijitMenuPopup tr td {
+  border-bottom: 1px solid #ddd;
+  padding: 3px;
 }
 
-@-webkit-keyframes sk-rotate { 100% { -webkit-transform: rotate(360deg) }}
-@keyframes sk-rotate { 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg) }}
-
-@-webkit-keyframes sk-bounce {
-  0%, 100% { -webkit-transform: scale(0.0) }
-  50% { -webkit-transform: scale(1.0) }
+td.dijitArrowButtonContainer {
+  vertical-align: top;
 }
 
-@keyframes sk-bounce {
-  0%, 100% {
-    transform: scale(0.0);
-    -webkit-transform: scale(0.0);
-  } 50% {
-      transform: scale(1.0);
-      -webkit-transform: scale(1.0);
-    }
+td.dijitArrowButtonContainer input.arrowButtonInner {
+  display: inline-block;
+  text-align: right;
 }
 
-/*****/
+.dijitValidationContainer input,
+.dijitValidationContainer input.dijitInputField {
+  display: none;
+}
+
+.dijitArrowButtonContainer input.dijitInputField {
+  text-align: right;
+}
+
+table.dijitSelect tbody {
+  width: 100%;
+}
+
+.btn-group-sm > .btn, .btn-sm {
+  padding: 3px 9px;
+}
+
+.btn-group > .btn {
+  border-left-width: 0;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-left-width: 1px;
+}
+
+.dgrid .dgrid-cell {
+  border: 1px solid transparent;
+}
+
+.dgrid .dgrid-row {
+  border: 1px solid transparent;
+  border-bottom: 1px solid #ddd;
+}
+
+.header .navbar {
+  min-height: 30px;
+  max-height: 30px;
+}
+
+nav > li > a {
+  position: relative;
+  display: block;
+  padding: 3px 6px;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav > li > a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+}
+
+.banner {
+  min-height: 48px;
+}
+
+.user-panel {
+  float: right;
+  margin: 6px 0;
+  padding: 9px;
+}
+
+.user {
+  display: inline-block;
+
+}
+
+
+

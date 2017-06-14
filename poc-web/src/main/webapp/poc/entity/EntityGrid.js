@@ -4,12 +4,13 @@ define([
   "dgrid/OnDemandGrid",
   "dgrid/Selection",
   "dgrid/Editor",
+  "dgrid/Keyboard",
   "dgrid/extensions/ColumnResizer",
   "dojo/domReady!"
-], function (declare, OnDemandGrid, Selection, Editor, ColumnResizer) {
+], function (declare, OnDemandGrid, Selection, Editor, Keyboard, ColumnResizer) {
 
 
-  return declare([OnDemandGrid, Selection, Editor, ColumnResizer], {
+  return declare([OnDemandGrid, Selection, Editor, Keyboard, ColumnResizer], {
 
     typeViewConfig: null,
 
@@ -63,12 +64,6 @@ define([
         console.log("Deselected " + rows.length + " " + me.typeViewConfig.entityType.labelPlural.toLocaleLowerCase());
       });
 
-      me.on(".dgrid-row:contextmenu", function (evt) {
-        evt.preventDefault();
-        var entity = me.row(evt).data;
-        console.log("Right click on " + me.typeViewConfig.entityType.getDisplayName(entity));
-      });
-
       me.on("dgrid-refresh-complete", function () {
         console.log("Refresh complete");
       });
@@ -76,16 +71,14 @@ define([
       console.log("Entity Grid ready");
     },
 
+
+
     addSharedColumnSettings: function (columns, sharedSettings) {
-
-
       for (var key in columns) {
-
         if (!columns.hasOwnProperty(key)) {
           continue;
         }
         column = columns[key];
-
         for (var settingKey in sharedSettings) {
           if (!sharedSettings.hasOwnProperty(settingKey)) {
             continue;
@@ -96,7 +89,6 @@ define([
       }
       return columns;
     }
-
 
   });
 });
