@@ -14,6 +14,6 @@ import poc.core.domain.Organization;
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Long>, Serializable {
 
-  List<Organization> findByLastName(String lastName);
+  List<Organization> findByName(String name);
 
 }
