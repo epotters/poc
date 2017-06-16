@@ -182,10 +182,6 @@ nav > li > a {
   min-height: 48px;
 }
 
-
-
-
-
 /* User panel */
 .user-panel {
   float: right;
@@ -196,10 +192,6 @@ nav > li > a {
 .user {
   display: inline-block;
 }
-
-
-
-
 
 /* Grid */
 
@@ -303,7 +295,6 @@ div.dijitInputContainer {
   margin-bottom: 0;
 }
 
-
 div.dijitRight {
   float: right;
 }
@@ -314,4 +305,74 @@ div.dijitRight {
 
 .form-control-select {
   margin-bottom: -3px;
+}
+
+/* Grid views */
+
+p {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+.icon {
+  background: url(dummy.png);
+  font-size: 0;
+  background-repeat: no-repeat;
+}
+
+/* styles for "table" view (using Grid.renderRow) */
+
+.table .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.table .field-icon {
+  width: 33px;
+  padding: 0;
+}
+
+.table .dgrid-cell {
+  vertical-align: middle;
+}
+
+/* styles for details view */
+
+.details .dgrid-row {
+  clear: both;
+  min-height: 64px;
+  padding: 0.5em;
+}
+
+.details .icon {
+  width: 64px;
+  height: 64px;
+}
+
+.details .name {
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+/* styles for gallery view */
+
+.gallery .dgrid-row {
+  width: 25%;
+  display: inline-block;
+  text-align: center;
+  padding: 1em 0;
+}
+
+.gallery .media-left .media {
+  text-align: center;
+}
+
+.gallery .icon {
+  width: 128px;
+  height: 128px;
+  margin: auto;
+}
+
+.gallery .name {
+  margin-top: 0.5em;
 }

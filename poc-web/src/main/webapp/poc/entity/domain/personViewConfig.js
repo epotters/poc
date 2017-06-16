@@ -47,7 +47,6 @@ define({
             for (var i = 0; i < options.length; i++) {
               option = options[i];
               if (option.value === person.gender) {
-                console.log("Gender label found");
                 label = option.label;
                 break;
               }

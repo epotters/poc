@@ -4,9 +4,11 @@ define([
   "dijit/form/Button",
   "dijit/Toolbar",
   "dojo/dom-construct",
+  "dojo/dom-class",
   "dojo/on",
   "dojo/domReady!"
-], function (declare, Button, Toolbar, domConstruct, on) {
+], function (declare, Button, Toolbar, domConstruct, domClass, on) {
+
   return declare([Toolbar], {
 
     grid: null,
@@ -117,6 +119,7 @@ define([
 
       var me = this;
 
+
       console.log("Start building the view button group");
       var viewButtonGroup = domConstruct.create("div", {"class": "btn-group btn-group-sm", role: "group"});
 
@@ -155,6 +158,13 @@ define([
       });
       dojo.addClass(galleryViewButton.domNode, this.buttonClass);
       domConstruct.place(galleryViewButton.domNode, viewButtonGroup);
+
+
+      // switch views when buttons are clicked
+      on(tableViewButton, "click", me.grid.setViewRenderer("table"));
+      on(detailViewButton, "click", me.grid.setViewRenderer("details"));
+      on(galleryViewButton, "click", me.grid.setViewRenderer("gallery"));
+
 
       domConstruct.place(viewButtonGroup, this.domNode);
     }
