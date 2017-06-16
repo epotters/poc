@@ -21,8 +21,15 @@ define([
     loadingMessage: null,
     noDataMessage: null,
     sharedColumnSettings: {
-      editOn: "dblclick",
+      // editOn: "dblclick",
       autoSave: true
+
+      , renderCell: function (entity, value, cellNode) {
+        var div = document.createElement("div");
+        div.className = "display-field";
+        div.innerHTML = value;
+        return div;
+      }
     },
 
 
@@ -34,16 +41,20 @@ define([
       this.columns = this.addSharedColumnSettings(this.typeViewConfig.columns, this.sharedColumnSettings);
       console.log(this.columns);
 
-      console.log("Constructing an Entity Grid for " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase());
 
-      this.loadingMessage = "Loading " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + "...";
-      this.noDataMessage = "No " + this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + " found.";
+      var labelPlural = this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase();
+      console.log("Constructing an Entity Grid for " + labelPlural);
+      this.loadingMessage = "Loading " + labelPlural + "...";
+      this.noDataMessage = "No " + labelPlural + " found.";
 
       console.log("Ready constructing an Entity Grid");
     },
 
+
     postCreate: function () {
       this.inherited(arguments);
+
+      dojo.addClass(this.domNode, "table");
 
       var me = this;
 
@@ -71,18 +82,18 @@ define([
       console.log("Entity Grid ready");
     },
 
-
-
     addSharedColumnSettings: function (columns, sharedSettings) {
       for (var key in columns) {
         if (!columns.hasOwnProperty(key)) {
           continue;
         }
+        console.log("\tkey: " + key);
         column = columns[key];
         for (var settingKey in sharedSettings) {
           if (!sharedSettings.hasOwnProperty(settingKey)) {
             continue;
           }
+          console.log("\t\t" + settingKey);
           column[settingKey] = sharedSettings[settingKey];
         }
         columns[key] = column;

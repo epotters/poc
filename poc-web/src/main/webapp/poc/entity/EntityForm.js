@@ -4,10 +4,11 @@ define([
   "dijit/form/Form",
   "dijit/form/TextBox",
   "dijit/form/Select",
+  "dijit/form/DateTextBox",
   "dijit/form/Button",
   "dojo/dom-construct",
   "dojo/domReady!"
-], function (declare, Form, TextBox, Select, Button, domConstruct) {
+], function (declare, Form, TextBox, Select, DateTextBox, Button, domConstruct) {
 
   return declare([Form], {
 
@@ -22,6 +23,8 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.log("Start building Entity Form");
+      dojo.addClass(this.domNode, "form");
+
       this.addFields();
     },
 
@@ -49,22 +52,27 @@ define([
     buildFormGroup: function (fieldName, fieldConfig) {
       var formGroup = domConstruct.create(this.formGroupType, {"class": "form-group form-group-sm"});
       domConstruct.create("label", {"for": fieldName, "innerHTML": fieldConfig.label}, formGroup);
+      var valueContainer = domConstruct.create("div", {"class": "value"}, formGroup);
+      dojo.addClass(valueContainer, "form-control-" + fieldConfig.editor.toLocaleLowerCase());
       var control = this.buildControl(fieldName, fieldConfig);
       dojo.addClass(control.domNode, "form-control");
-      control.placeAt(formGroup);
+      control.placeAt(valueContainer);
       return formGroup;
     },
 
 
     buildControl: function (fieldName, fieldConfig) {
 
-
       fieldConfig.options = (fieldConfig.options) ? fieldConfig.options : [];
 
       switch (fieldConfig.editor) {
-        case "select":
+        case "Select":
           console.log("About to build a select");
           return this.buildSelect(fieldName, fieldConfig);
+          break;
+        case "DateTextBox":
+          console.log("About to build a DateTextBox");
+          return this.buildDateTextBox(fieldName, fieldConfig);
           break;
         default:
           return new TextBox({
@@ -75,13 +83,13 @@ define([
     },
 
 
-    buildSelect: function (fieldName, fieldConfig) {
 
-      console.log(fieldConfig);
+
+
+    buildSelect: function (fieldName, fieldConfig) {
 
       var options = (fieldConfig.editorArgs.options) ? fieldConfig.editorArgs.options : [];
       options.unshift({label: "", value: ""});
-
 
       return new Select({
         name: fieldName,
@@ -89,6 +97,14 @@ define([
         options: options
       });
 
+    },
+
+
+    buildDateTextBox: function(fieldName, fieldConfig) {
+      return new DateTextBox({
+        name: fieldName,
+        id: fieldName
+      });
     }
   });
 });

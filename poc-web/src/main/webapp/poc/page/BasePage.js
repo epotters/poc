@@ -3,14 +3,12 @@ define([
   "dojo/_base/declare",
   "dijit/_WidgetBase",
   "dijit/_TemplatedMixin",
-  "dojo/query",
   "./Navigation",
   "./UserPanel",
   "dojo/text!./templates/BasePage.html"
 ], function (declare,
              _WidgetBase,
              _TemplatedMixin,
-             query,
              Navigation,
              UserPanel,
              template) {
@@ -26,17 +24,32 @@ define([
     constructor: function (params) {
       this.pageTitle = params.pageTitle;
       this.content = params.content;
-
-      this.user = {name: "epo", displayName: "Eelko Potters"};
     },
 
     postCreate: function () {
       this.inherited(arguments);
+
       var navigation = new Navigation({}, this.navigationNode);
 
-      var userPanel = new UserPanel({user: this.user}, this.userPanelNode);
+      var me = this;
+      require(["dojo/request"], function (request) {
+        request("data/user.json", {handleAs: "json"}).then(
+            function (user) {
+              console.log(user);
+              me.user = user;
+              var userPanel = new UserPanel({user: me.user}, me.userPanelNode);
+            },
+            function (error) {
+              console.log("Error loading current user");
+              console.log(error);
+            }
+        );
+      });
+
+
       var title = "Base Page";
       this.setContent();
+
     },
 
 
@@ -58,7 +71,6 @@ define([
             require(["entity/domain/" + typeName + "ViewConfig"],
                 function (typeViewConfig) {
                   var entityView = new EntityView({typeViewConfig: typeViewConfig}, me.contentNode);
-                  console.log(me.entityView);
                 });
           });
     },

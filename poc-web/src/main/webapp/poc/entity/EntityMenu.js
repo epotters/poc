@@ -20,10 +20,9 @@ define([
     postCreate: function () {
 
       this.inherited(arguments);
+      dojo.addClass(this.domNode, "dropdown-menu");
 
       this.addItems();
-
-      dojo.addClass(this.domNode, "dropdown-menu");
 
       console.log("Entity Menu ready");
     },

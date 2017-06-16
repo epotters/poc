@@ -1,7 +1,3 @@
-#entity-grid-toolbar {
-
-}
-
 /*** dgrid styling **/
 
 /*
@@ -26,6 +22,12 @@
 
 .grid-panel .dgrid {
   border: 0 !important;
+}
+
+/* Form Panel */
+
+.form-panel {
+  width: 600px;
 }
 
 .form-panel .form-component {
@@ -60,25 +62,20 @@
   font-weight: normal;
 }
 
-form .toolbar {
-  text-align: right;
-}
-
-.grid-toolbar {
-  text-align: right;
-}
-
-.form {
-  margin-top: 6px;
-}
-
-.form-group-sm input {
-  border: none;
-}
+/* Toolbars */
 
 .toolbar {
   float: none;
   padding: 6px 0;
+}
+
+.grid-toolbar,
+form .toolbar {
+  text-align: right;
+}
+
+.toolbar .btn-group {
+  display: inline-block;
 }
 
 .toolbar .btn,
@@ -90,29 +87,12 @@ form .toolbar {
   margin: 0;
 }
 
-.form-panel {
-  width: 600px;
-}
-
-.toolbar .btn-group {
-  display: inline-block;
-}
-
-.form-group-sm .form-control {
-  height: auto;
-  padding: 3px 9px;
-}
-
 /* dijit resets */
 
 .form-group .dijitTextBox,
-.form-group .dijitSelect {
-  display: inline-block;
-  width: 59%;
-}
+.form-group .dijitSelect,
+.form-group .dijitDateTextBox {
 
-.form-control .dijitInputInner {
-  width: 100%;
 }
 
 .dijitDialogSingleChild {
@@ -178,14 +158,7 @@ table.dijitSelect tbody {
   border-left-width: 1px;
 }
 
-.dgrid .dgrid-cell {
-  border: 1px solid transparent;
-}
-
-.dgrid .dgrid-row {
-  border: 1px solid transparent;
-  border-bottom: 1px solid #ddd;
-}
+/* Header */
 
 .header .navbar {
   min-height: 30px;
@@ -209,6 +182,11 @@ nav > li > a {
   min-height: 48px;
 }
 
+
+
+
+
+/* User panel */
 .user-panel {
   float: right;
   margin: 6px 0;
@@ -217,8 +195,123 @@ nav > li > a {
 
 .user {
   display: inline-block;
-
 }
 
 
 
+
+
+/* Grid */
+
+.dgrid .dgrid-cell {
+  border: 1px solid transparent;
+}
+
+.dgrid .dgrid-row {
+  border: 1px solid transparent;
+  border-bottom: 1px solid #ddd;
+}
+
+.dgrid-row .display-field,
+.dgrid-row input,
+.form-control input,
+.form-control .dijitSelectLabel {
+  padding: 3px;
+  border: 1px solid transparent;
+  background-color: transparent;
+}
+
+.dgrid-row .display-field,
+.dgrid-row input,
+.form-control input {
+  width: 100%;
+}
+
+.dgrid-row.dgrid-selected .display-field,
+.dgrid-row.dgrid-selected input {
+  background-color: white;
+}
+
+.dgrid-row td.dgrid-cell {
+  padding: 0;
+}
+
+/* Form */
+
+table.dijitDownArrowButton {
+  border-collapse: collapse;
+  cursor: pointer;
+}
+
+table.dijitDownArrowButton tbody,
+table.dijitDownArrowButton tbody tr,
+table.dijitDownArrowButton tbody tr td {
+  height: auto;
+}
+
+table.dijitDownArrowButton tbody,
+table.dijitDownArrowButton tbody tr,
+input.dijitArrowButtonInner {
+  width: 100%;
+}
+
+.form-group-sm .form-control {
+  height: auto;
+  padding: 0;
+}
+
+.form-group .value,
+.form-group-sm .value {
+  width: 59%;
+  display: inline-block;
+}
+
+.form-group-sm input {
+  border: none;
+}
+
+td.dijitArrowButton {
+  text-align: right;
+}
+
+.form-group .dijitInputInner {
+  display: inline-block;
+}
+
+td.dijitButtonContents,
+div.dijitInputContainer {
+  width: 90%;
+}
+
+div.dijitInputContainer {
+  display: inline-block;
+}
+
+.dijitArrowButton {
+  width: 9%;
+}
+
+.dijitDateTextBox.form-control input.dijitInputInner {
+  width: auto;
+}
+
+.toolbar-top {
+  margin-top: 0;
+}
+
+.toolbar-bottom {
+  margin-bottom: 0;
+}
+
+
+div.dijitRight {
+  float: right;
+}
+
+.panel-body {
+  overflow: hidden;
+}
+
+.form-control-select {
+  margin-bottom: -3px;
+}

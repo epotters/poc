@@ -16,7 +16,7 @@ define([
   "dojo/text!./templates/EntityView.html"
 
 ], function (declare, on, _WidgetBase, _TemplatedMixin,
-    EntityStore, EntityGrid, EntityForm, EntityGridToolbar, EntityFormToolbar, EntityMenu, template) {
+             EntityStore, EntityGrid, EntityForm, EntityGridToolbar, EntityFormToolbar, EntityMenu, template) {
 
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -30,7 +30,7 @@ define([
     formToolbar: null,
     contextMenu: null,
 
-    constructor: function(params) {
+    constructor: function (params) {
 
       this.typeViewConfig = params.typeViewConfig;
       this.store = new EntityStore({typeViewConfig: this.typeViewConfig});
@@ -39,20 +39,20 @@ define([
     },
 
 
-    postCreate: function() {
+    postCreate: function () {
       this.inherited(arguments);
 
       this.grid = new EntityGrid({typeViewConfig: this.typeViewConfig, store: this.store}, this.entityGridNode);
       this.form = new EntityForm({typeViewConfig: this.typeViewConfig}, this.entityFormNode);
       this.gridToolbar = new EntityGridToolbar({grid: this.grid}, this.entityGridToolbarNode);
       this.formToolbar = new EntityFormToolbar({grid: this.form}, this.entityFormToolbarNode);
-      this.contextMenu = new EntityMenu({grid: this.grid}, this.grid.entityGridNode);
+      this.contextMenu = new EntityMenu({grid: this.grid, targetIds: [this.grid.contentNode]});
 
       this.activateEvents();
     },
 
 
-    activateEvents: function() {
+    activateEvents: function () {
 
       var me = this;
 
@@ -62,7 +62,7 @@ define([
         me.form.setValues(entity);
       });
 
-      me.on("dgrid-select", function (evt) {
+      me.grid.on("dgrid-select", function (evt) {
         evt.preventDefault();
         me.updateButtonState();
       });
@@ -72,22 +72,24 @@ define([
         me.updateButtonState();
       });
 
+      /*
       me.grid.on(".dgrid-row:contextmenu", function (evt) {
         evt.preventDefault();
         var entity = me.grid.row(evt).data;
         console.log("Right click on " + me.typeViewConfig.entityType.getDisplayName(entity));
 
-        this.contextMenu.show();
+        me.contextMenu.open();
       });
+      */
 
-      on(me.gridToolbar, "search", function(evt) {
+      on(me.gridToolbar, "search", function (evt) {
         console.log("Toolbar emitted a search event");
       });
 
     },
 
 
-    updateButtonState: function() {
+    updateButtonState: function () {
 
       var selectedIds = Object.keys(this.grid.selection);
       console.log(selectedIds.length + " entities selected");
@@ -101,8 +103,6 @@ define([
       }
 
     },
-
-
 
 
     addEntity: function (entity) {

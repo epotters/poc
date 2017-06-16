@@ -28,31 +28,32 @@ define({
         },
         gender: {
           label: "Gender",
-          editor: "select",
+          renderCell: function (person, value, cellNode) {
+            var div = document.createElement("div");
+            div.className = "display-field";
+            div.innerHTML = value;
+            return div;
+          },
+          editor: "Select",
           editorArgs: {
             options: [
               {label: "Female", value: "f"},
               {label: "Male", value: "m"}
             ]
-          }
+          },
 
-          /*,
           get: function (person) {
             var label = "", options = this.editorArgs.options, option;
-
             for (var i = 0; i < options.length; i++) {
               option = options[i];
               if (option.value === person.gender) {
-                console.log("Label found");
+                console.log("Gender label found");
                 label = option.label;
                 break;
               }
-              return label;
             }
-
-            return this.editorArgs.options[person.gender];
-          },
-          */
+            return label;
+          }
         },
         dateOfBirth: {
           label: "Date of Birth",
