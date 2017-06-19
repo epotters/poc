@@ -38,6 +38,8 @@ define([
 
       this.inherited(arguments);
 
+      dojo.addClass(this.domNode, "toolbar");
+
 
       this.buildCrudButtons();
       this.buildViewButtons();
