@@ -286,7 +286,7 @@ td.dijitArrowButton {
   display: inline-block;
   width: 100%;
   height: 100%;
-  padding: 3px;
+  padding: 3px !important;
 }
 
 td.dijitButtonContents,
@@ -294,6 +294,9 @@ div.dijitInputContainer {
   width: 100%;
   height: 100%;
 }
+
+
+
 
 .dijitDateTextBox .dijitArrowButton {
   border-left: 1px solid #ccc;
