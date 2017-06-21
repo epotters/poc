@@ -12,15 +12,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Entity
-@Table(name = "employee")
+
 @Getter
 @Setter
 @NoArgsConstructor
 class Employee extends Person {
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "organization_id")
   private Organization employer;
 
 }

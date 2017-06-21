@@ -26,8 +26,8 @@ public class Organization implements Serializable {
   private Long id;
   private String name;
 
-  @OneToMany(mappedBy = "employer")
-  private List<Employee> employees;
+  // @OneToMany(mappedBy = "employer")
+  // private List<Employee> employees;
 
 
   @OneToMany(mappedBy = "organization")

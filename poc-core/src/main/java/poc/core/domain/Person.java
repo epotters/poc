@@ -4,7 +4,10 @@ package poc.core.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,15 +27,17 @@ import lombok.NoArgsConstructor;
 public class Person implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
 
   private String firstName;
   private String prefix;
   private String lastName;
 
+  @Enumerated(EnumType.STRING)
   private Gender gender;
 
+  @Column(columnDefinition = "DATE")
   private LocalDate birthDate;
   private String birthPlace;
 

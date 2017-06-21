@@ -26,6 +26,9 @@ class Household {
   @Column(name = "id")
   private Long id;
 
+  @Column(name = "displayName")
+  private String displayName;
+
   @OneToMany(mappedBy = "household")
   private List<Person> members;
 
