@@ -104,7 +104,7 @@ define([
     renderers: {
       table: OnDemandGrid.prototype.renderRow,
       details: function (entity) {
-        entity.displayName = entity.firstName + " " + entity.prefix + " " + entity.lastName;
+        entity.displayName = entity.firstName + " " + ((entity.prefix) ? entity.prefix : "") + " " + entity.lastName;
         entity.summary = "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo." +
             " Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.";
         return domConstruct.create("div", {
@@ -117,7 +117,7 @@ define([
         });
       },
       gallery: function (entity) {
-        entity.displayName = entity.firstName + " " + entity.prefix + " " + entity.lastName;
+        entity.displayName = entity.firstName + " " + ((entity.prefix) ? entity.prefix : "") + " " + entity.lastName;
         return domConstruct.create("div", {
           class: "media",
           innerHTML: "<div class=\"media-left\"></div><div class=\"icon\">&nbsp;</div></div>" +

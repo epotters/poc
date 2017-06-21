@@ -8,12 +8,12 @@ define([
 ], function (declare, Button, Toolbar, domConstruct) {
   return declare([Toolbar], {
 
-    form: null,
+    drid: null,
     buttonClass: "btn btn-sm btn-default",
 
     constructor: function (params) {
 
-      this.form = params.form;
+      this.grid = params.grid;
 
     },
 
@@ -64,6 +64,7 @@ define([
         icon: "arrow-left",
         onClick: function () {
           console.log("Go to the previous entity");
+          me.grid.up();
         }
       });
       dojo.addClass(previousButton.domNode, this.buttonClass);
@@ -74,6 +75,7 @@ define([
         icon: "arrow-right",
         onClick: function () {
           console.log("Go to the next entity");
+          me.grid.down();
         }
       });
       dojo.addClass(nextButton.domNode, this.buttonClass);
@@ -81,8 +83,17 @@ define([
 
 
       domConstruct.place(navigationButtonGroup, this.domNode);
+    },
 
-
+    collectKeys: function (object) {
+      var keys = [];
+      for (var key in object) {
+        if (!object.hasOwnProperty(key)) {
+          continue;
+        }
+        keys.push(key);
+      }
+      return keys;
     }
   });
 

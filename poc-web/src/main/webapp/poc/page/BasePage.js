@@ -33,9 +33,8 @@ define([
 
       var me = this;
       require(["dojo/request"], function (request) {
-        request("data/user.json", {handleAs: "json"}).then(
+        request("poc/demo/data/user.json", {handleAs: "json"}).then(
             function (user) {
-              console.log(user);
               me.user = user;
               var userPanel = new UserPanel({user: me.user}, me.userPanelNode);
             },
@@ -54,7 +53,6 @@ define([
 
 
     setContent: function () {
-      var me = this;
 
     },
 

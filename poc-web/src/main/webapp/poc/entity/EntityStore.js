@@ -1,24 +1,43 @@
 // EntityStore
 define([
   "dojo/_base/declare",
-  "dstore/RequestMemory"
-], function (declare, RequestMemory) {
+  "dojo/json",
+  "dstore/Rest"
+], function (declare, json, Rest) {
 
-  return declare([RequestMemory], {
+  console.log(Rest);
+
+  return declare([Rest], {
 
     typeViewConfig: null,
+    baseUrl: "http://dev.localhost/poc/api/",
+    altLowercasePlural: null,
+
 
     constructor: function (params) {
+
       console.log("Constructing EntityStore");
+      this.altLowercasePlural = this.typeViewConfig.entityType.name + "s";
       this.typeViewConfig = params.typeViewConfig;
-      this.target = "data/" + this.typeViewConfig.entityType.namePlural + ".json";
+      this.target = this.baseUrl + this.altLowercasePlural;
+
       this.postCreate();
     },
 
 
-    postCreate: function () {
 
-      console.log("PostCreate EntityStore");
+    parse: function (resultJson) {
+      console.log("Parse results");
+      results = json.parse(resultJson);
+
+      return {
+        items: results._embedded.persons,
+        totalCount: results.page.totalElements
+      };
+    },
+
+
+    postCreate: function () {
 
       this.inherited(arguments);
 

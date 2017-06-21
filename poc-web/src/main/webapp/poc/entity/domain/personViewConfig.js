@@ -13,6 +13,14 @@ define({
               " " + person.lastName
         }
       },
+      newEntity: {
+        id: "",
+        firstName: "",
+        prefix: "",
+        lastName: "",
+        gender: "",
+        dateOfBirth: ""
+      },
       columns: {
         firstName: {
           label: "First Name",
@@ -37,8 +45,8 @@ define({
           editor: "Select",
           editorArgs: {
             options: [
-              {label: "Female", value: "f"},
-              {label: "Male", value: "m"}
+              {label: "Female", value: "FEMALE"},
+              {label: "Male", value: "MALE"}
             ]
           },
 
@@ -56,6 +64,10 @@ define({
         },
         dateOfBirth: {
           label: "Date of Birth",
+
+          get: function (person) {
+            return person.birthDate.year + "-" + person.birthDate.monthValue + "-" + person.birthDate.dayOfMonth;
+          },
           editor: "DateTextBox"
         }
       }

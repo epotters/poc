@@ -15,12 +15,13 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       this.title = "Entity page";
-      this.setContent();
     },
 
 
     setContent: function () {
+
       var me = this;
+
 
       require([
             "dojo/io-query",

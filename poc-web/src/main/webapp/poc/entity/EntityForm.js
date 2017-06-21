@@ -84,8 +84,6 @@ define([
 
 
 
-
-
     buildSelect: function (fieldName, fieldConfig) {
 
       var options = (fieldConfig.editorArgs.options) ? fieldConfig.editorArgs.options : [];
