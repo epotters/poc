@@ -25,7 +25,7 @@ public class AllCollectorsLogin {
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);
 
 
-  @Test
+
   public void loginAll() throws Exception {
 
     List<DataCollector> collectors = new ArrayList<>();

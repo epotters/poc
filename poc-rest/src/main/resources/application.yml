@@ -10,6 +10,11 @@ spring:
   data:
     rest:
       base-path: /api
+
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
   # Data
   datasource:
     url: jdbc:mysql://localhost:3306/poc_dev

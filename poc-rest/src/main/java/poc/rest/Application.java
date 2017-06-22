@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.test.context.ContextConfiguration;
 
 
-@ContextConfiguration(classes = {poc.core.config.CoreContext.class, poc.rest.config.RestContext.class})
+@ContextConfiguration(classes = { poc.core.config.CoreContext.class, poc.rest.config.RestContext.class })
 @SpringBootApplication
 public class Application {
 
@@ -16,7 +16,7 @@ public class Application {
 
 
   public static void main(String[] args) {
-    LOG.info("Starting main application");
+    LOG.info("Starting Proof of Concept application");
     SpringApplication.run(Application.class, args);
   }
 }
