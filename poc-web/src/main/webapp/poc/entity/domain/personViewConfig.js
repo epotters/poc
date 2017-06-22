@@ -19,7 +19,8 @@ define({
         prefix: "",
         lastName: "",
         gender: "",
-        dateOfBirth: ""
+        birthDate: "",
+        birthPlace: ""
       },
       columns: {
         firstName: {
@@ -62,14 +63,14 @@ define({
             return label;
           }
         },
-        dateOfBirth: {
+        birthDate: {
           label: "Date of Birth",
-
-          get: function (person) {
-            return person.birthDate.year + "-" + person.birthDate.monthValue + "-" + person.birthDate.dayOfMonth;
-          },
           editor: "DateTextBox"
-        }
+        },
+        birthPlace: {
+          label: "Birth place",
+          editor: "text"
+        },
       }
     }
 );

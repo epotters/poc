@@ -21,7 +21,10 @@ Person = define([
           gender: {
             type: "string"
           },
-          dateOfBirth: {
+          birthDate: {
+            type: "string"
+          },
+          birthPlace: {
             type: "string"
           }
         }

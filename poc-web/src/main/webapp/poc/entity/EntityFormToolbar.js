@@ -8,8 +8,13 @@ define([
 ], function (declare, Button, Toolbar, domConstruct) {
   return declare([Toolbar], {
 
-    drid: null,
+    grid: null,
     buttonClass: "btn btn-sm btn-default",
+
+    saveButton: null,
+    cancelButton: null,
+    previousButton: null,
+    nextButton: null,
 
     constructor: function (params) {
 
@@ -30,27 +35,21 @@ define([
     buildSaveButtons: function () {
       var me = this;
 
-      var cancelButton = new Button({
+      this.cancelButton = new Button({
         label: "Cancel",
-        icon: "glyphicon-remove",
-        onClick: function () {
-          console.log("Discard changes to this entity");
-        }
+        icon: "glyphicon-remove"
       });
+      dojo.addClass(this.cancelButton.domNode, this.buttonClass);
+      this.addChild(this.cancelButton);
 
-      dojo.addClass(cancelButton.domNode, this.buttonClass);
-      this.addChild(cancelButton);
-
-      var saveButton = new Button({
+      this.saveButton = new Button({
         label: "Save",
-        icon: "glyphicon-ok",
-        onClick: function () {
-          console.log("Save changes to this entity");
-        }
+        icon: "glyphicon-ok"
       });
-      dojo.addClass(saveButton.domNode, this.buttonClass);
-      this.addChild(saveButton);
+      dojo.addClass(this.saveButton.domNode, this.buttonClass);
+      this.addChild(this.saveButton);
     },
+
 
     buildNavigationButtons: function () {
 
@@ -59,41 +58,21 @@ define([
       console.log("Start building the navigation button group");
       var navigationButtonGroup = domConstruct.create("div", {"class": "btn-group btn-group-sm", role: "group"});
 
-      var previousButton = new Button({
+      this.previousButton = new Button({
         label: "Previous",
-        icon: "arrow-left",
-        onClick: function () {
-          console.log("Go to the previous entity");
-          me.grid.up();
-        }
+        icon: "arrow-left"
       });
-      dojo.addClass(previousButton.domNode, this.buttonClass);
-      domConstruct.place(previousButton.domNode, navigationButtonGroup);
+      dojo.addClass(this.previousButton.domNode, this.buttonClass);
+      domConstruct.place(this.previousButton.domNode, navigationButtonGroup);
 
-      var nextButton = new Button({
+      this.nextButton = new Button({
         label: "Next",
-        icon: "arrow-right",
-        onClick: function () {
-          console.log("Go to the next entity");
-          me.grid.down();
-        }
+        icon: "arrow-right"
       });
-      dojo.addClass(nextButton.domNode, this.buttonClass);
-      domConstruct.place(nextButton.domNode, navigationButtonGroup);
-
+      dojo.addClass(this.nextButton.domNode, this.buttonClass);
+      domConstruct.place(this.nextButton.domNode, navigationButtonGroup);
 
       domConstruct.place(navigationButtonGroup, this.domNode);
-    },
-
-    collectKeys: function (object) {
-      var keys = [];
-      for (var key in object) {
-        if (!object.hasOwnProperty(key)) {
-          continue;
-        }
-        keys.push(key);
-      }
-      return keys;
     }
   });
 

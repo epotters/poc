@@ -22,6 +22,7 @@ define([
 
     templateString: template,
     typeViewConfig: null,
+    model: null,
 
     store: null,
     grid: null,
@@ -33,7 +34,8 @@ define([
     constructor: function (params) {
 
       this.typeViewConfig = params.typeViewConfig;
-      this.store = new EntityStore({typeViewConfig: this.typeViewConfig});
+      this.model = params.model;
+      this.store = new EntityStore({typeViewConfig: this.typeViewConfig, model: this.model});
 
       console.log("Constructing Entity View for " + this.typeViewConfig.entityType.labelPlural);
     },
@@ -58,7 +60,11 @@ define([
 
       me.grid.on(".dgrid-row:click", function (evt) {
         evt.preventDefault();
+
         var entity = me.grid.row(evt).data;
+
+        console.log(me.grid.row(evt));
+
         me.form.setValues(entity);
       });
 
@@ -83,8 +89,6 @@ define([
        */
 
       // CRUD operations
-     // me.gridToolbar.addButton.on("click", me.addEntity);
-
       on(this.gridToolbar.addButton, "click", function(evt) {me.addEntity(me);});
       on(this.gridToolbar.duplicateButton, "click", function(evt) {me.duplicateEntity(me);});
       on(this.gridToolbar.removeButton, "click", function(evt) {me.deleteEntity(me);});
@@ -94,19 +98,23 @@ define([
       });
 
 
-      // switch views when buttons are clicked
+      // Views
       me.gridToolbar.tableViewButton.on("click", me.grid.setViewRenderer("table"));
       me.gridToolbar.detailViewButton.on("click", me.grid.setViewRenderer("details"));
       me.gridToolbar.galleryViewButton.on("click", me.grid.setViewRenderer("gallery"));
 
+      // Form buttons
+      on(this.formToolbar.saveButton, "click", function(evt) {me.saveEntity();});
+      on(this.formToolbar.cancelButton, "click", function(evt) {me.revertEntity();});
+
+      on(this.formToolbar.previousButton, "click", function(evt) {me.selectPreviousEntity();});
+      on(this.formToolbar.nextButton, "click", function(evt) {me.selectNextEntity();});
     },
 
 
     updateButtonState: function () {
 
       var selectedIds = Object.keys(this.grid.selection);
-      console.log(selectedIds.length + " entities selected");
-
       if (selectedIds.length === 0) {
         console.log("Disable buttons that rely on a selection");
         dojo.addClass(this.gridToolbar.removeButton.domNode, "disabled");
@@ -170,8 +178,34 @@ define([
       }
     },
 
-    saveEntity: function (entity) {
+    saveEntity: function () {
       console.log("Save " + this.typeViewConfig.entityType.label.toLocaleLowerCase());
+
+      var me = this;
+
+      if (this.form.validate()) {
+        console.log("Form is valid");
+      }
+
+      var entity = this.form.getValues();
+      console.log(entity);
+
+      if (!entity.id) {
+        this.store.add(entity, {}).then(function() {
+          me.grid.refresh();
+          console.log("Entity added successfully");
+        });
+      } else {
+        this.store.put(entity, {}).then(function() {
+          me.grid.refresh();
+          console.log("Entity updated successfully");
+        });
+      }
+
+
+
+
+      this.grid.refresh();
     },
 
     revertEntity: function (entity) {
@@ -180,10 +214,24 @@ define([
 
     selectNextEntity: function (entity) {
       console.log("Select next " + this.typeViewConfig.entityType.label.toLocaleLowerCase());
+      this.grid.down();
     },
 
     selectPreviousEntity: function (entity) {
       console.log("Select previous " + this.typeViewConfig.entityType.label.toLocaleLowerCase());
+      this.grid.up();
+    },
+
+
+    collectKeys: function (object) {
+      var keys = [];
+      for (var key in object) {
+        if (!object.hasOwnProperty(key)) {
+          continue;
+        }
+        keys.push(key);
+      }
+      return keys;
     }
 
 

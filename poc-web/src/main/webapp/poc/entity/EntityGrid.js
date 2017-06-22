@@ -41,8 +41,6 @@ define([
       this.collection = params.store;
 
       this.columns = this.addSharedColumnSettings(this.typeViewConfig.columns, this.sharedColumnSettings);
-      console.log(this.columns);
-
 
       var labelPlural = this.typeViewConfig.entityType.labelPlural.toLocaleLowerCase();
       console.log("Constructing an Entity Grid for " + labelPlural);
@@ -54,33 +52,16 @@ define([
 
 
     postCreate: function () {
+
       this.inherited(arguments);
+      var me = this;
 
       dojo.addClass(this.domNode, "table");
 
-      var me = this;
-
-      me.on(".dgrid-row:click", function (evt) {
-        evt.preventDefault();
-        var row = me.row(evt);
-      });
-
-      me.on("dgrid-select", function (evt) {
-        evt.preventDefault();
-        var rows = evt.rows;
-        console.log("Selected " + rows.length + " " + me.typeViewConfig.entityType.labelPlural.toLocaleLowerCase() + ":");
-      });
-
-      me.on("dgrid-deselect", function (evt) {
-        evt.preventDefault();
-        var rows = evt.rows;
-        console.log("Deselected " + rows.length + " " + me.typeViewConfig.entityType.labelPlural.toLocaleLowerCase());
-      });
 
       me.on("dgrid-refresh-complete", function () {
         console.log("Refresh complete");
       });
-
       console.log("Entity Grid ready");
     },
 
@@ -111,7 +92,7 @@ define([
           class: "media",
           innerHTML: "<div class=\"media-left\"><div class=\"icon\">&nbsp;</div></div>" +
           "<div class=\"media-body\">" +
-          "<h4 class=\"media-heading\">"  + entity.displayName + "</h4>" +
+          "<h4 class=\"media-heading\">" + entity.displayName + "</h4>" +
           "<p>" + entity.summary + "</p>" +
           "</div>"
         });
@@ -128,9 +109,7 @@ define([
 
 
     setViewRenderer: function (viewName) {
-
       var me = this;
-
       return function () {
         console.log("Switching to " + viewName + "-view");
         me.renderRow = me.renderers[viewName];
@@ -138,7 +117,6 @@ define([
         me.set("showHeader", viewName === "table");
         me.refresh();
       };
-
     }
 
   });

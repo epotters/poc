@@ -29,6 +29,13 @@ define([
     },
 
     addFields: function () {
+
+      var idField = new TextBox({
+        name: "id",
+        type: "hidden"
+      });
+      idField.placeAt(this.containerNode);
+
       var defaultEditorType = "text";
       var formGroup, fieldName;
       var columns = this.typeViewConfig.columns;

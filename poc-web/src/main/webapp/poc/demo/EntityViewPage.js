@@ -3,8 +3,7 @@ define([
   "dojo/_base/declare",
   "page/BasePage"
 ], function (declare,
-             BasePage
-) {
+             BasePage) {
   return declare([BasePage], {
 
     entityView: null,
@@ -32,12 +31,19 @@ define([
             var uri = location.href,
                 query = uri.substring(uri.indexOf("?") + 1, uri.length),
                 queryObject = ioQuery.queryToObject(query);
-            var defaultTypeName = "person";
+
+            var defaultTypeName = "person", defaultModelName = "Person";
+
             var typeName = (queryObject["type-name"]) ? queryObject["type-name"] : defaultTypeName;
-            console.log("Type name: \"" + typeName + "\"");
-            require(["entity/domain/" + typeName + "ViewConfig"],
-                function (typeViewConfig) {
-                  me.entityView = new EntityView({typeViewConfig: typeViewConfig}, me.contentNode);
+            var modelName = (queryObject["model-name"]) ? queryObject["model-name"] : defaultModelName;
+            console.log("Type name: \"" + typeName + "\", Model name: \"" + modelName + "\"");
+
+            require([
+                  "entity/domain/" + typeName + "ViewConfig",
+                  "entity/domain/" + modelName
+                ],
+                function (typeViewConfig, model) {
+                  me.entityView = new EntityView({typeViewConfig: typeViewConfig, model: model}, me.contentNode);
                 });
           });
     }
