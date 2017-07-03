@@ -20,18 +20,22 @@
 
   <modules>
     <module>poc-core</module>
+    <module>poc-rest</module>
     <module>poc-web</module>
-    <module>poc-jobs</module>
-    <module>poc-sencha</module>
+
+
+    <!-- module>poc-jobs</module -->
+    <!-- module>poc-sencha</module -->
     <!-- module>poc-cordova</module -->
-    <module>poc-evernote</module>
-    <module>poc-jcr</module>
+    <!-- module>poc-evernote</module -->
+    <!-- module>poc-jcr</module -->
+
     <module>poc-integration-tests</module>
 
-    <module>poc-rest</module>
   </modules>
 
   <properties>
+
     <!-- use UTF-8 for everything -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -59,7 +63,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-rest</artifactId>
     </dependency>
-
 
     <!-- Security -->
     <dependency>
