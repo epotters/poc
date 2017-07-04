@@ -14,6 +14,9 @@ define([
     grid: null,
     buttonClass: "btn btn-sm btn-default",
 
+    navbarLeft: null,
+    navbarRight: null,
+
     addButton: null,
     duplicateButton: null,
     removeButton: null,
@@ -23,7 +26,7 @@ define([
     detailViewButton: null,
     tableViewButton: null,
 
-  constructor: function (params) {
+    constructor: function (params) {
       this.grid = params.grid;
     },
 
@@ -32,6 +35,9 @@ define([
       this.inherited(arguments);
 
       dojo.addClass(this.domNode, "toolbar");
+
+      this.navbarLeft = this.buildSubNavbar("navbar-left");
+      this.navbarRight = this.buildSubNavbar("navbar-right");
 
       this.buildCrudButtons();
       this.buildViewButtons();
@@ -46,7 +52,7 @@ define([
         icon: "glyphicon-plus"
       });
       dojo.addClass(this.addButton.domNode, this.buttonClass);
-      this.addChild(this.addButton);
+      domConstruct.place(this.addButton.domNode, this.navbarRight);
 
 
       this.duplicateButton = new Button({
@@ -54,7 +60,7 @@ define([
         icon: "glyphicon-duplicate"
       });
       dojo.addClass(this.duplicateButton.domNode, this.buttonClass + " disabled");
-      this.addChild(this.duplicateButton);
+      domConstruct.place(this.duplicateButton.domNode, this.navbarRight);
 
 
       this.removeButton = new Button({
@@ -62,7 +68,7 @@ define([
         icon: "glyphicon-trash"
       });
       dojo.addClass(this.removeButton.domNode, this.buttonClass + " disabled");
-      this.addChild(this.removeButton);
+      domConstruct.place(this.removeButton.domNode, this.navbarRight);
 
 
       this.searchButton = new Button({
@@ -70,7 +76,7 @@ define([
         icon: "glyphicon-search"
       });
       dojo.addClass(this.searchButton.domNode, this.buttonClass);
-      this.addChild(this.searchButton);
+      domConstruct.place(this.searchButton.domNode, this.navbarRight);
 
     },
 
@@ -108,9 +114,14 @@ define([
       domConstruct.place(this.galleryViewButton.domNode, viewButtonGroup);
 
 
-      domConstruct.place(viewButtonGroup, this.domNode);
-    }
+      domConstruct.place(viewButtonGroup, this.navbarLeft);
+    },
 
+    buildSubNavbar: function (styleClass) {
+      var subNavbar = domConstruct.create("div", {"class": "nav navbar-nav " + styleClass});
+      domConstruct.place(subNavbar, this.domNode);
+      return subNavbar;
+    }
   });
 
 });

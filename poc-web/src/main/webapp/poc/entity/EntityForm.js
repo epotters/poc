@@ -63,6 +63,13 @@ define([
       dojo.addClass(valueContainer, "form-control-" + fieldConfig.editor.toLocaleLowerCase());
       var control = this.buildControl(fieldName, fieldConfig);
       dojo.addClass(control.domNode, "form-control");
+
+
+      control.watch('value', function (prop, old, val) {
+        console.info('select.watch("value")', prop, old, val);
+      });
+
+
       control.placeAt(valueContainer);
       return formGroup;
     },

@@ -33,8 +33,10 @@ define([
 
       var me = this;
       require(["dojo/request"], function (request) {
-        request("poc/demo/data/user.json", {handleAs: "json"}).then(
-            function (user) {
+//         request("poc/demo/data/user.json", {handleAs: "json"}).then(
+        request("api/users/me", {handleAs: "json"}).then(
+
+        function (user) {
               me.user = user;
               var userPanel = new UserPanel({user: me.user}, me.userPanelNode);
             },

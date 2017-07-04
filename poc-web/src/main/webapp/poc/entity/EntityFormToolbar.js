@@ -11,6 +11,9 @@ define([
     grid: null,
     buttonClass: "btn btn-sm btn-default",
 
+    navbarLeft: null,
+    navbarRight: null,
+
     saveButton: null,
     cancelButton: null,
     previousButton: null,
@@ -26,8 +29,10 @@ define([
 
       this.inherited(arguments);
 
-      this.buildNavigationButtons();
+      this.navbarLeft = this.buildSubNavbar("navbar-left");
+      this.navbarRight = this.buildSubNavbar("navbar-right");
 
+      this.buildNavigationButtons();
       this.buildSaveButtons();
     },
 
@@ -40,14 +45,14 @@ define([
         icon: "glyphicon-remove"
       });
       dojo.addClass(this.cancelButton.domNode, this.buttonClass);
-      this.addChild(this.cancelButton);
+      domConstruct.place(this.cancelButton.domNode, this.navbarRight);
 
       this.saveButton = new Button({
         label: "Save",
         icon: "glyphicon-ok"
       });
       dojo.addClass(this.saveButton.domNode, this.buttonClass);
-      this.addChild(this.saveButton);
+      domConstruct.place(this.saveButton.domNode, this.navbarRight);
     },
 
 
@@ -72,7 +77,14 @@ define([
       dojo.addClass(this.nextButton.domNode, this.buttonClass);
       domConstruct.place(this.nextButton.domNode, navigationButtonGroup);
 
-      domConstruct.place(navigationButtonGroup, this.domNode);
+      domConstruct.place(navigationButtonGroup, this.navbarLeft);
+    },
+
+
+    buildSubNavbar: function (styleClass) {
+      var subNavbar = domConstruct.create("div", {"class": "nav navbar-nav " + styleClass});
+      domConstruct.place(subNavbar, this.domNode);
+      return subNavbar;
     }
   });
 

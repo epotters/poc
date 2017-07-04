@@ -5,7 +5,7 @@
 */
 * {
   font-family: 'Montserrat', sans-serif;
- font-size: 12px;
+  font-size: 12px;
 }
 
 .content {
@@ -71,11 +71,6 @@
   padding: 6px 0;
 }
 
-.grid-toolbar,
-form .toolbar {
-  text-align: right;
-}
-
 .toolbar .btn-group {
   display: inline-block;
 }
@@ -86,17 +81,18 @@ form .toolbar {
 }
 
 .toolbar .btn {
-
   border: 1px solid #ccc;
 }
 
 .toolbar .btn-group .btn {
   margin: 0;
+}
 
+.navbar-nav.navbar-right {
+  margin-right: 0;
 }
 
 /* dijit resets */
-
 
 .dijitButtonNode {
   border: 0;
@@ -110,7 +106,6 @@ form .toolbar {
 .form-group .dijitDateTextBox {
 
 }
-
 
 .dijitDialogSingleChild {
   height: 100%;
@@ -295,9 +290,6 @@ div.dijitInputContainer {
   width: 100%;
   height: 100%;
 }
-
-
-
 
 .dijitDateTextBox .dijitArrowButton {
   border-left: 1px solid #ccc;
