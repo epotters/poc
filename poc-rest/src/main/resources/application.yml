@@ -4,9 +4,15 @@ server:
   context-path: /poc
   port: 8002
 
+banner:
+  location: classpath:banner.txt
 
 # REST
 spring:
+
+  profiles:
+    active: development
+
   data:
     rest:
       base-path: /api
@@ -17,8 +23,8 @@ spring:
 
   # Data
   datasource:
-    url: jdbc:mysql://localhost:3306/poc_dev
-    username: poc_dev
+    url: jdbc:mysql://localhost:3306/poc
+    username: poc
     password: b1vidh
   jpa:
     properties:
@@ -38,30 +44,26 @@ management:
   context-path: /actuator
 
 
-# Security
-security:
-  user:
-    name: epo
-    password: 12345
-    role: USER
+
 
   # Security (OAuth2)
-  oauth2:
-    client:
-      clientId: eb66c494b9c0a6913db6
-      clientSecret: 7f123163c9808fd8b7893a8b03250e93f227f4b5
-      accessTokenUri: https://github.com/login/oauth/access_token
-      userAuthorizationUri: https://github.com/login/oauth/authorize
-      clientAuthenticationScheme: form
-
-      authenticationScheme: query
-      tokenName: oauth_token
-      scope: profile email
-
-    resource:
-      user-info-uri: https://api.github.com/user
-      # token-info-uri:
-      prefer-token-info: false
+# security:
+#  oauth2:
+#    client:
+#      clientId: eb66c494b9c0a6913db6
+#      clientSecret: 7f123163c9808fd8b7893a8b03250e93f227f4b5
+#      accessTokenUri: https://github.com/login/oauth/access_token
+#      userAuthorizationUri: https://github.com/login/oauth/authorize
+#      clientAuthenticationScheme: form
+#
+#      authenticationScheme: query
+#      tokenName: oauth_token
+#      scope: profile email
+#
+#    resource:
+#      user-info-uri: https://api.github.com/user
+#      # token-info-uri:
+#      prefer-token-info: false
 
 
 # Logging

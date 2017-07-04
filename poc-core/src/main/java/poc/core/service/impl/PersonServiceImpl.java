@@ -14,11 +14,8 @@ import poc.core.repository.PersonRepository;
 import poc.core.service.PersonService;
 
 
-
-
 @Component
 public class PersonServiceImpl implements PersonService {
-
 
   private PersonRepository personRepository;
 
@@ -26,7 +23,7 @@ public class PersonServiceImpl implements PersonService {
   @Autowired
   PersonServiceImpl(PersonRepository personRepository) {
     this.personRepository = personRepository;
-    assert(personRepository != null);
+    assert (personRepository != null);
   }
 
 

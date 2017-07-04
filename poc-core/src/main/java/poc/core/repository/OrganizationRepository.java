@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import poc.core.domain.Organization;
 
 
-
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Long>, Serializable {
 

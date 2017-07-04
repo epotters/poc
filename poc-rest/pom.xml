@@ -31,17 +31,22 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.security.oauth</groupId>
-      <artifactId>spring-security-oauth2</artifactId>
-      <version>${spring-security-oauth2.version}</version>
-    </dependency>
 
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-security</artifactId>
-      <version>${spring-cloud-security.version}</version>
-    </dependency>
+
+    <!--
+            <dependency>
+              <groupId>org.springframework.security.oauth</groupId>
+              <artifactId>spring-security-oauth2</artifactId>
+              <version>${spring-security-oauth2.version}</version>
+            </dependency>
+    -->
+    <!--
+        <dependency>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-security</artifactId>
+          <version>${spring-cloud-security.version}</version>
+        </dependency>
+        -->
 
 
     <!-- JSON Schema dependencies -->
@@ -65,13 +70,33 @@
       <artifactId>jackson-module-jsonSchema</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-
   </dependencies>
 
+
+  <profiles>
+    <profile>
+      <id>war</id>
+      <properties>
+        <start-class>poc.rest.config.WebInitializer</start-class>
+        <packaging.type>war</packaging.type>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-jasper</artifactId>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>

@@ -11,14 +11,11 @@ import org.springframework.stereotype.Component;
 
 import poc.core.domain.Organization;
 import poc.core.repository.OrganizationRepository;
-import poc.core.repository.OrganizationRepository;
-import poc.core.service.OrganizationService;
 import poc.core.service.OrganizationService;
 
 
 @Component
 public class OrganizationServiceImpl implements OrganizationService {
-
 
   private OrganizationRepository organizationRepository;
 
@@ -26,7 +23,7 @@ public class OrganizationServiceImpl implements OrganizationService {
   @Autowired
   OrganizationServiceImpl(OrganizationRepository organizationRepository) {
     this.organizationRepository = organizationRepository;
-    assert(organizationRepository != null);
+    assert (organizationRepository != null);
   }
 
 

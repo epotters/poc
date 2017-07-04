@@ -23,18 +23,18 @@ import poc.rest.service.LocalizedMessageService;
  * Created by epotters on 2016-02-01
  */
 
-@SpringBootTest(classes = {poc.rest.config.RestContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
+@SpringBootTest(classes = { poc.rest.config.RestContext.class })
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class })
 @RunWith(SpringRunner.class)
 public class LocalizedMessageServiceImplTest {
 
+  @Autowired
   private LocalizedMessageService messageService;
 
 
-  @Autowired
-  LocalizedMessageServiceImplTest(LocalizedMessageService messageService) {
-    this.messageService = messageService;
+  public LocalizedMessageServiceImplTest() {
   }
+
 
   @Before
   public void init() throws IOException {
@@ -46,9 +46,10 @@ public class LocalizedMessageServiceImplTest {
   @Test
   public void printMessages() {
 
+    System.out.println("Current locale's language: " + messageService.currentLocale().getDisplayLanguage());
     String message = messageService.getMessage("person.lastName.label");
     System.out.println(message);
-    Assert.assertEquals("Last name", message);
+    Assert.assertEquals("Achternaam", message);
 
     Locale locale = new Locale("es");
     LocaleContextHolder.setLocale(locale);
@@ -66,7 +67,6 @@ public class LocalizedMessageServiceImplTest {
     for (Locale locale : locales) {
       System.out.println(locale.getDisplayName());
     }
-
     System.out.println("\n\n");
   }
 

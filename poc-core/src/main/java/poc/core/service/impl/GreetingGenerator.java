@@ -4,9 +4,6 @@ package poc.core.service.impl;
 import java.util.Calendar;
 
 
-/**
- * Created by epotters on 2015-02-12
- */
 public class GreetingGenerator {
 
   static final String GOOD_MORNING = "Goedemorgen";
@@ -24,11 +21,14 @@ public class GreetingGenerator {
 
     if (hour < 6) {
       greeting = GOOD_NIGHT;
-    } else if (hour > 6 && hour <= 12) {
+    }
+    else if (hour > 6 && hour <= 12) {
       greeting = GOOD_MORNING;
-    } else if (hour > 12 && hour <= 18) {
+    }
+    else if (hour > 12 && hour <= 18) {
       greeting = GOOD_AFTERNOON;
-    } else if (hour > 18) {
+    }
+    else if (hour > 18) {
       greeting = GOOD_EVENING;
     }
     return greeting;

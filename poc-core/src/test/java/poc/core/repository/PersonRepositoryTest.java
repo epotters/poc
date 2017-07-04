@@ -39,9 +39,7 @@ public class PersonRepositoryTest {
 
   @Before
   public void prepareTests() {
-
     LOG.debug("@prepareTests");
-
   }
 
 

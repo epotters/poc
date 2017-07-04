@@ -4,8 +4,6 @@ package poc.core.service;
 import java.util.List;
 
 import poc.core.domain.Organization;
-import poc.core.domain.Person;
-
 
 
 public interface OrganizationService {

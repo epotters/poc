@@ -1,3 +1,21 @@
 
 # Logging
 debug: true
+
+# Security
+security:
+
+  user:
+    name: epo
+    password: 12345
+    role: USER
+
+banner:
+  location: classpath:dev/banner.txt
+
+spring:
+  # Data
+  datasource:
+    url: jdbc:mysql://localhost:3306/poc_dev
+    username: poc_dev
+    password: b1vidh

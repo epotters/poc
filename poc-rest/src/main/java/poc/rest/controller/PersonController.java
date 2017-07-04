@@ -1,6 +1,8 @@
 package poc.rest.controller;
 
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +24,13 @@ import poc.core.repository.PersonRepository;
 @RequestMapping("/people")
 public class PersonController {
 
-  @Autowired
+
   private PersonRepository personRepository;
+
+  @Autowired
+  PersonController(PersonRepository personRepository) {
+    this.personRepository = personRepository;
+  }
 
 
   @RequestMapping("/{id}")
@@ -35,9 +42,7 @@ public class PersonController {
   // page, size and sort parameters are supported by default
   @RequestMapping
   public Iterable<Person> listPeople(Pageable pageable) {
-    Page<Person> persons = personRepository.findAll(pageable);
-
-    return persons;
+    return personRepository.findAll(pageable);
   }
 
 

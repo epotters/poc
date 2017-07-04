@@ -30,7 +30,7 @@ class Establishment {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "company_id")
+  @JoinColumn(name = "organization_id")
   private Organization organization;
 
   @OneToOne

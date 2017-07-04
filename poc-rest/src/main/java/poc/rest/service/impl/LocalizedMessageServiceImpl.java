@@ -67,9 +67,7 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
   public List<String> listKeys() {
     List<String> keys = new ArrayList<>();
     ResourceBundle messages = ResourceBundle.getBundle("locale/messages", currentLocale());
-    for (String key : messages.keySet()) {
-      keys.add(key);
-    }
+    keys.addAll(messages.keySet());
     return keys;
   }
 
