@@ -1,7 +1,7 @@
 
 # Embedded server
 server:
-  context-path: /poc
+  contextPath: /poc
   port: 8002
 
 banner:
@@ -41,7 +41,7 @@ spring:
 
 
 management:
-  context-path: /actuator
+  contextPath: /actuator
 
 
 
