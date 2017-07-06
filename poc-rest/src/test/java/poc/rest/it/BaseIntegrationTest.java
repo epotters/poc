@@ -19,7 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 /**
  * Created by eelko on 2016-04-08
  */
-@TestPropertySource("/application-test.properties")
+@TestPropertySource("/application-test.yml")
 public class BaseIntegrationTest {
 
   static final Log LOG = LogFactory.getLog(BaseIntegrationTest.class);

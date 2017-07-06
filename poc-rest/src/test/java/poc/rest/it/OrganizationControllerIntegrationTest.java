@@ -31,7 +31,7 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
   public void setUpItems() throws URISyntaxException {
     LOG.debug("Logger from base class");
     System.out.println("Setting up OrganizationControllerIntegrationTest");
-    organizationsUri = new URI(getRestUri() + "/organization");
+    organizationsUri = new URI(getRestUri() + "/organizations");
   }
 
 
@@ -41,7 +41,7 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
 
 
   @Test
-  public void items() throws URISyntaxException {
+  public void organizations() throws URISyntaxException {
 
     System.out.println("Rest URI (for organizations): " + organizationsUri);
 
@@ -84,8 +84,8 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
     // Delete
     testRestTemplate.delete(getOrganizationUri(1));
     responseEntity = testRestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
-    Assert.assertEquals("Item still exists, delete failed", responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
-    System.out.println("Item deleted (" + responseEntity + ")");
+    Assert.assertEquals("Organization still exists, delete failed",  HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    System.out.println("Organization deleted (" + responseEntity + ")");
   }
 
 

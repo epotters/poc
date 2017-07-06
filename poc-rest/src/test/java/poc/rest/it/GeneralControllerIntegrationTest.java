@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
-/**
- * Created by epotters on 2016-10-27
- */
+
 @Profile("integration-test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -31,13 +29,14 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
 
   @Test
   public void error401() throws URISyntaxException {
-    URI uri = new URI(getRestUri() + "/items");
+    URI uri = new URI(getRestUri() + "/persons");
     System.out.println("Rest URI for 401 error: " + uri);
     ResponseEntity<Map> responseEntity =
         testRestTemplate.withBasicAuth(username, "this password is wrong").getForEntity(uri, Map.class);
     printResponse(responseEntity);
-    Assert.assertEquals("Rest call with wrong password did not return a 401 error", responseEntity.getStatusCode(),
-        HttpStatus.UNAUTHORIZED);
+    Assert.assertEquals("Rest call with wrong password did not return a 401 error", HttpStatus.UNAUTHORIZED,
+        responseEntity.getStatusCode());
+
   }
 
 
@@ -48,8 +47,8 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
     ResponseEntity<Map> responseEntity = testRestTemplate.getForEntity(uri, Map.class);
     printResponse(responseEntity);
 
-    Assert.assertEquals("Rest call to nonexistent URL did not return 404 error", responseEntity.getStatusCode(),
-        HttpStatus.NOT_FOUND);
+    Assert.assertEquals("Rest call to non existent URL did not return 404 error", HttpStatus.NOT_FOUND,
+        responseEntity.getStatusCode());
   }
 
 }
