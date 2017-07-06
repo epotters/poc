@@ -22,13 +22,12 @@ import lombok.NoArgsConstructor;
 public class Organization implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
 
   // @OneToMany(mappedBy = "employer")
   // private List<Employee> employees;
-
 
   @OneToMany(mappedBy = "organization")
   private List<Establishment> establishments;

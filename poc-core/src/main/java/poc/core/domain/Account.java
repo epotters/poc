@@ -1,50 +1,38 @@
 package poc.core.domain;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@NoArgsConstructor
 public class Account implements UserDetails {
 
   @Id
-  private String id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String username;
   private String password;
+  private String displayName;
 
-  private Collection<? extends GrantedAuthority> authorities;
-
-
-  public Account() {
-  }
+  private Collection<GrantedAuthority> authorities = new ArrayList<>();
 
 
   public Account(String username, String password) {
     this.username = username;
     this.password = password;
-  }
-
-
-  public String getId() {
-    return id;
-  }
-
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-
-  public String getUsername() {
-    return username;
-  }
-
-
-  public void setUsername(String username) {
-    this.username = username;
   }
 
 
@@ -56,35 +44,31 @@ public class Account implements UserDetails {
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+    return true;
   }
 
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+    return true;
   }
 
 
   @Override
   public boolean isEnabled() {
-    return false;
+    return true;
   }
 
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return this.authorities;
   }
 
-
-  public String getPassword() {
-    return password;
-  }
-
-
-  public void setPassword(String password) {
-    this.password = password;
+  public void addAuthority(GrantedAuthority authority) {
+    if (!authorities.contains(authority)) {
+      authorities.add(authority);
+    }
   }
 
 }
