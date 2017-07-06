@@ -25,11 +25,11 @@ public class BaseIntegrationTest {
   static final Log LOG = LogFactory.getLog(BaseIntegrationTest.class);
 
   private final String HOST = "localhost";
-
   private final String PROTOCOLL = "http";
+
   @Value("${server.contextPath}")
   protected String contextPath;
-  @Value("${spring.data.rest.base-path}")
+  @Value("${spring.data.rest.basePath}")
   protected String restBasePath;
   @Value("${management.contextPath}")
   protected String managementContextPath;

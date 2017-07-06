@@ -26,7 +26,7 @@
       class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
 
 
-  <bean id="securityService" class="poc.core.service.impl.SecurityServiceImpl"/>
+  <bean id="securityService" class="poc.core.service.impl.SecurityServicePropertiesImpl"/>
 
   <bean id="proxyAuthenticationHeaderFilter"
       class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">

@@ -15,7 +15,7 @@ spring:
 
   data:
     rest:
-      base-path: /api
+      basePath: /api
 
   jackson:
     serialization:

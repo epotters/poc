@@ -15,9 +15,9 @@ import poc.core.service.SecurityService;
 
 
 @Component
-public class SecurityServiceImpl implements SecurityService {
+public class SecurityServicePropertiesImpl implements SecurityService {
 
-  private static final Log LOG = LogFactory.getLog(SecurityServiceImpl.class);
+  private static final Log LOG = LogFactory.getLog(SecurityServicePropertiesImpl.class);
 
   private static final String ACCOUNTS_PROPERTY_PATH = "accounts";
   private ResourceBundle accounts = ResourceBundle.getBundle(ACCOUNTS_PROPERTY_PATH);
