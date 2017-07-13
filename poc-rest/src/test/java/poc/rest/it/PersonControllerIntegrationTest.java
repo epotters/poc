@@ -24,7 +24,7 @@ public class PersonControllerIntegrationTest extends BaseIntegrationTest {
   public void people() throws URISyntaxException {
     URI uri = new URI(getRestUri() + "/persons");
     System.out.println("Rest URI (for people): " + uri);
-    ResponseEntity<Person> responseEntity = testRestTemplate.getForEntity(uri, Person.class);
+    ResponseEntity<Person> responseEntity = oauth2RestTemplate.getForEntity(uri, Person.class);
     printResponse(responseEntity);
     Assert.assertTrue("Call to people REST service did not return OK (HTTP 200)",
         responseEntity.getStatusCode().is2xxSuccessful());

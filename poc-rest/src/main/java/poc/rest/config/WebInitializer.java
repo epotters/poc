@@ -11,9 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import poc.rest.Application;
 
 
-/**
- * Created by epotters on 2017-01-04
- */
+
 @Profile("war")
 @Configuration
 @EnableAutoConfiguration

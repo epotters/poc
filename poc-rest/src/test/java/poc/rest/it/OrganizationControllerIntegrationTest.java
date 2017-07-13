@@ -45,9 +45,9 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
 
     System.out.println("Rest URI (for organizations): " + organizationsUri);
 
-    ResponseEntity<Organization> responseEntity = testRestTemplate.getForEntity(organizationsUri, Organization.class);
+    ResponseEntity<Organization> responseEntity = oauth2RestTemplate.getForEntity(organizationsUri, Organization.class);
     printResponse(responseEntity);
-    Assert.assertTrue("Call to the items REST service did not return OK (HTTP 200)",
+    Assert.assertTrue("Call to the organizations REST service did not return OK (HTTP 200)",
         responseEntity.getStatusCode().is2xxSuccessful());
   }
 
@@ -58,18 +58,19 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
     // Create
     Organization organizationToSend = createOrganization("Solera Nederland BV");
     HttpEntity<Organization> itemRequest = new HttpEntity<>(organizationToSend);
-    ResponseEntity<Organization> responseEntity = testRestTemplate.exchange(organizationsUri, HttpMethod.POST, itemRequest, Organization.class);
+    ResponseEntity<Organization> responseEntity = oauth2RestTemplate.exchange(organizationsUri, HttpMethod.POST, itemRequest, Organization
+        .class);
     Assert.assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
     Organization responseItem = responseEntity.getBody();
     Assert.assertEquals("The name of the organization sent does not match te name of the organization received", organizationToSend.getName(),
         responseItem.getName());
 
     Organization abz = createOrganization("ABZ Nederland BV");
-    responseEntity = testRestTemplate.exchange(organizationsUri, HttpMethod.POST, new HttpEntity<>(abz), Organization.class);
+    responseEntity = oauth2RestTemplate.exchange(organizationsUri, HttpMethod.POST, new HttpEntity<>(abz), Organization.class);
     LOG.debug(responseEntity);
 
     // Read
-    responseEntity = testRestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
+    responseEntity = oauth2RestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
     System.out.println("Organization created " + responseEntity.getBody());
 
     // Update
@@ -77,13 +78,13 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
 
     // TO DO: Change the Organization
     HttpEntity<Organization> updatedItemRequest = new HttpEntity<>(updatedOrganization);
-    testRestTemplate.exchange(getOrganizationUri(1), HttpMethod.PUT, updatedItemRequest, Void.class);
-    responseEntity = testRestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
+    oauth2RestTemplate.exchange(getOrganizationUri(1), HttpMethod.PUT, updatedItemRequest, Void.class);
+    responseEntity = oauth2RestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
     System.out.println("Updated updatedOrganization read " + responseEntity.getBody());
 
     // Delete
-    testRestTemplate.delete(getOrganizationUri(1));
-    responseEntity = testRestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
+    oauth2RestTemplate.delete(getOrganizationUri(1));
+    responseEntity = oauth2RestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
     Assert.assertEquals("Organization still exists, delete failed",  HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     System.out.println("Organization deleted (" + responseEntity + ")");
   }

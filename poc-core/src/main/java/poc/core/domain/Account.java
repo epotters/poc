@@ -1,6 +1,7 @@
 package poc.core.domain;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,39 +27,39 @@ public class Account implements UserDetails {
   private Long id;
 
   private String username;
+  @JsonIgnore
   private String password;
   private String displayName;
+
+  private LocalDate expiryDate = LocalDate.of(2018, 3, 23);
+  private boolean enabled = true;
+  private LocalDate credentialsExpiryDate = LocalDate.of(2018, 3, 23);
+  private boolean locked = false;
 
   private Collection<GrantedAuthority> authorities = new ArrayList<>();
 
 
-  public Account(String username, String password) {
-    this.username = username;
-    this.password = password;
-  }
-
-
   @Override
   public boolean isAccountNonExpired() {
-    return true;
+    return (LocalDate.now().isBefore(expiryDate));
   }
 
 
   @Override
   public boolean isAccountNonLocked() {
-    return true;
+    return !locked;
   }
 
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return true;
+    return (LocalDate.now().isBefore(credentialsExpiryDate));
   }
 
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return enabled;
   }
 
 
@@ -70,5 +73,4 @@ public class Account implements UserDetails {
       authorities.add(authority);
     }
   }
-
 }

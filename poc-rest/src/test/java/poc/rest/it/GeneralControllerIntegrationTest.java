@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import poc.core.domain.Person;
+
+import static java.lang.String.format;
 
 
 @Profile("integration-test")
@@ -26,7 +29,15 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
     health();
   }
 
+  @Test
+  public void clientAccess() {
 
+    final Person person = oauth2RestTemplate.getForObject(format("http://localhost:%d/poc/api/persons/1", port), Person.class);
+
+    System.out.println(person);
+  }
+
+/*
   @Test
   public void error401() throws URISyntaxException {
     URI uri = new URI(getRestUri() + "/persons");
@@ -38,13 +49,14 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
         responseEntity.getStatusCode());
 
   }
+*/
 
 
   @Test
   public void error404() throws URISyntaxException {
     URI uri = new URI(getRestUri() + "/this-url-does-not-exist");
     System.out.println("Rest URI for 404 error: " + uri);
-    ResponseEntity<Map> responseEntity = testRestTemplate.getForEntity(uri, Map.class);
+    ResponseEntity<Map> responseEntity = oauth2RestTemplate.getForEntity(uri, Map.class);
     printResponse(responseEntity);
 
     Assert.assertEquals("Rest call to non existent URL did not return 404 error", HttpStatus.NOT_FOUND,

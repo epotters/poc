@@ -17,11 +17,13 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 
 import poc.rest.config.security.RestAuthenticationEntryPoint;
 import poc.rest.config.security.RestAuthenticationSuccessHandler;
+import poc.rest.config.security.RestLogoutSuccessHandler;
 
-
+/*
 @Configuration
 @EnableWebSecurity
 @ComponentScan("poc.rest.config.security")
+*/
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private static final Log LOG = LogFactory.getLog(SecurityConfig.class);
@@ -33,20 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private RestAuthenticationSuccessHandler authenticationSuccessHandler;
 
   @Autowired
+  private RestLogoutSuccessHandler restLogoutSuccessHandler;
+
+  @Autowired
   private UserDetailsService securityService;
 
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.authenticationProvider(authenticationProvider());
-  }
-
-
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(securityService);
-    return authProvider;
   }
 
 
@@ -59,26 +56,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     http.authorizeRequests()
         .antMatchers("/").permitAll()
-        .antMatchers("/login").permitAll()
         .antMatchers("/logout").permitAll()
         .antMatchers("/api/**").authenticated()
-        .anyRequest().fullyAuthenticated();
+        .anyRequest().fullyAuthenticated()
+        .and().httpBasic();
 
     http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
+
     http.formLogin()
+        .loginPage("/login").permitAll()
         .successHandler(authenticationSuccessHandler)
-        .failureHandler(new SimpleUrlAuthenticationFailureHandler())
-        .and()
-        .logout();
+        .failureHandler(new SimpleUrlAuthenticationFailureHandler());
+
+    http.logout()
+        .logoutSuccessHandler(restLogoutSuccessHandler);
   }
 
 
   @Bean
-  public RestAuthenticationSuccessHandler restSuccessHandler(){
+  public DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setUserDetailsService(securityService);
+    return authProvider;
+  }
+
+/*
+  @Bean
+  public RestAuthenticationSuccessHandler restSuccessHandler() {
     return new RestAuthenticationSuccessHandler();
   }
+
+
   @Bean
-  public SimpleUrlAuthenticationFailureHandler restFailureHandler(){
+  public SimpleUrlAuthenticationFailureHandler restFailureHandler() {
     return new SimpleUrlAuthenticationFailureHandler();
   }
+  */
 }

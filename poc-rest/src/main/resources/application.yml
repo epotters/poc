@@ -44,11 +44,13 @@ management:
   contextPath: /actuator
 
 
+poc:
+  oauth:
+    tokenTimeout: 2400
 
-
-  # Security (OAuth2)
-# security:
-#  oauth2:
+# Security (OAuth2)
+#  security:
+#    oauth2:
 #    client:
 #      clientId: eb66c494b9c0a6913db6
 #      clientSecret: 7f123163c9808fd8b7893a8b03250e93f227f4b5

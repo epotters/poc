@@ -19,7 +19,7 @@ spring:
     username: poc_tst
     password: b1vidh
 # Logging
-debug: false
+debug: true
 
 logging:
   level:

@@ -3,6 +3,7 @@ package poc.rest.it;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,7 +14,13 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.test.context.TestPropertySource;
+
+import static java.util.Arrays.asList;
 
 
 /**
@@ -24,8 +31,8 @@ public class BaseIntegrationTest {
 
   static final Log LOG = LogFactory.getLog(BaseIntegrationTest.class);
 
-  private final String HOST = "localhost";
-  private final String PROTOCOLL = "http";
+  private static final String HOST = "localhost";
+  private static final String PROTOCOLL = "http";
 
   @Value("${server.contextPath}")
   protected String contextPath;
@@ -33,28 +40,43 @@ public class BaseIntegrationTest {
   protected String restBasePath;
   @Value("${management.contextPath}")
   protected String managementContextPath;
+
   @Value("${security.user.name}")
   protected String username;
   @Value("${security.user.password}")
   protected String password;
-  TestRestTemplate testRestTemplate;
+
+  // TestRestTemplate testRestTemplate;
+
+  OAuth2RestTemplate oauth2RestTemplate;
+
   @LocalServerPort
-  private int port;
+  int port;
 
 
   BaseIntegrationTest() {
     LOG.debug("Constructing BaseIntegrationTest");
-    testRestTemplate = (new TestRestTemplate()).withBasicAuth(username, password);
+    // testRestTemplate = (new TestRestTemplate()).withBasicAuth(username, password);
+  }
+
+
+  String getRootUri() {
+    return PROTOCOLL + "://" + HOST + ":" + port + contextPath;
   }
 
 
   String getRestUri() {
-    return PROTOCOLL + "://" + HOST + ":" + port + contextPath + restBasePath;
+    return getRootUri() + restBasePath;
+  }
+
+
+  String getAccessTokenUri() {
+    return getRootUri() + "/oauth/token";
   }
 
 
   private String getManagementUri() {
-    return PROTOCOLL + "://" + HOST + ":" + port + contextPath + managementContextPath;
+    return getRootUri() + managementContextPath;
   }
 
 
@@ -64,7 +86,25 @@ public class BaseIntegrationTest {
 
     printServerProperties();
 
-    testRestTemplate = testRestTemplate.withBasicAuth(username, password);
+    // testRestTemplate = testRestTemplate.withBasicAuth(username, password);
+    setOauth2Template();
+  }
+
+  private void setOauth2Template() {
+
+    ResourceOwnerPasswordResourceDetails resourceDetails = new ResourceOwnerPasswordResourceDetails();
+    resourceDetails.setUsername("epo");
+    resourceDetails.setPassword("12345");
+    resourceDetails.setAccessTokenUri(getAccessTokenUri());
+    resourceDetails.setClientId("poc");
+    resourceDetails.setClientSecret("secret");
+    resourceDetails.setGrantType("password");
+    resourceDetails.setScope(asList("read", "write"));
+
+    DefaultOAuth2ClientContext clientContext = new DefaultOAuth2ClientContext();
+
+    oauth2RestTemplate = new OAuth2RestTemplate(resourceDetails, clientContext);
+    oauth2RestTemplate.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
   }
 
 
@@ -73,9 +113,10 @@ public class BaseIntegrationTest {
     URI uri = new URI(getManagementUri() + "/health");
     LOG.debug("Management Health URI: " + uri);
 
-    Assert.assertNotNull("No test rest template", testRestTemplate);
+    // Assert.assertNotNull("No test rest template", testRestTemplate);
+    Assert.assertNotNull("No oauth2 rest template", oauth2RestTemplate);
 
-    ResponseEntity<String> entity = testRestTemplate.getForEntity(uri, String.class);
+    ResponseEntity<String> entity = oauth2RestTemplate.getForEntity(uri, String.class);
 
     printResponse(entity);
 

@@ -24,9 +24,8 @@ define([
     noDataMessage: null,
     sharedColumnSettings: {
       // editOn: "dblclick",
-      autoSave: true
-
-      , renderCell: function (entity, value, cellNode) {
+      autoSave: true,
+      renderCell: function (entity, value, cellNode) {
         var div = document.createElement("div");
         div.className = "display-field";
         div.innerHTML = value;
@@ -47,7 +46,7 @@ define([
       this.loadingMessage = "Loading " + labelPlural + "...";
       this.noDataMessage = "No " + labelPlural + " found.";
 
-      console.log("Ready constructing an Entity Grid");
+      console.log("Ready constructing an Entity Grid for " + labelPlural);
     },
 
 
@@ -57,7 +56,6 @@ define([
       var me = this;
 
       dojo.addClass(this.domNode, "table");
-
 
       me.on("dgrid-refresh-complete", function () {
         console.log("Refresh complete");
