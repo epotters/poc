@@ -46,8 +46,6 @@ public class BaseIntegrationTest {
   @Value("${security.user.password}")
   protected String password;
 
-  // TestRestTemplate testRestTemplate;
-
   OAuth2RestTemplate oauth2RestTemplate;
 
   @LocalServerPort
@@ -56,7 +54,6 @@ public class BaseIntegrationTest {
 
   BaseIntegrationTest() {
     LOG.debug("Constructing BaseIntegrationTest");
-    // testRestTemplate = (new TestRestTemplate()).withBasicAuth(username, password);
   }
 
 
@@ -85,8 +82,6 @@ public class BaseIntegrationTest {
     LOG.debug("Setting up BaseIntegrationTest");
 
     printServerProperties();
-
-    // testRestTemplate = testRestTemplate.withBasicAuth(username, password);
     setOauth2Template();
   }
 
@@ -113,7 +108,6 @@ public class BaseIntegrationTest {
     URI uri = new URI(getManagementUri() + "/health");
     LOG.debug("Management Health URI: " + uri);
 
-    // Assert.assertNotNull("No test rest template", testRestTemplate);
     Assert.assertNotNull("No oauth2 rest template", oauth2RestTemplate);
 
     ResponseEntity<String> entity = oauth2RestTemplate.getForEntity(uri, String.class);
@@ -129,7 +123,7 @@ public class BaseIntegrationTest {
   private void printServerProperties() {
     LOG.debug("Local server is listening on port " + port);
     LOG.debug("contextPath: " + contextPath + ", restBasePath: " + restBasePath);
-    LOG.debug("username: " + username + ", password: " + password);
+    // LOG.debug("username: " + username + ", password: " + password);
   }
 
 

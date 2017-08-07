@@ -19,11 +19,11 @@ import poc.rest.config.security.RestAuthenticationEntryPoint;
 import poc.rest.config.security.RestAuthenticationSuccessHandler;
 import poc.rest.config.security.RestLogoutSuccessHandler;
 
-/*
+//*
 @Configuration
 @EnableWebSecurity
 @ComponentScan("poc.rest.config.security")
-*/
+//*/
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private static final Log LOG = LogFactory.getLog(SecurityConfig.class);

@@ -33,8 +33,6 @@ public class SecurityServiceTest {
   @Test
   public void getUser() throws Exception {
 
-    assert (securityService != null);
-
     UserDetails userDetails = securityService.loadUserByUsername("epo");
     assert (userDetails != null);
     System.out.println(userDetails);
