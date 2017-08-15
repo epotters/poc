@@ -14,12 +14,6 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import poc.core.config.CoreContext;
 
 
-/**
- * Created by epotters on 2016-01-07
- */
-
-
-
 @Configuration
 @Import(CoreContext.class)
 @ComponentScan(basePackages = {"poc.rest.service", "poc.rest.controller"})

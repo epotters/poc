@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Test;
 import org.springframework.util.Assert;
 
 import poc.jobs.collectors.impl.ImdbDataCollector;

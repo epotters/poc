@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -36,17 +35,14 @@ public class BaseIntegrationTest {
 
   @Value("${server.contextPath}")
   protected String contextPath;
+
   @Value("${spring.data.rest.basePath}")
   protected String restBasePath;
+
   @Value("${management.contextPath}")
   protected String managementContextPath;
 
-  @Value("${security.user.name}")
-  protected String username;
-  @Value("${security.user.password}")
-  protected String password;
-
-  OAuth2RestTemplate oauth2RestTemplate;
+  OAuth2RestTemplate restTemplate;
 
   @LocalServerPort
   int port;
@@ -82,24 +78,34 @@ public class BaseIntegrationTest {
     LOG.debug("Setting up BaseIntegrationTest");
 
     printServerProperties();
-    setOauth2Template();
+    restTemplate = createOauth2Template("epo", "12345");
   }
 
-  private void setOauth2Template() {
+
+  OAuth2RestTemplate createOauth2Template(String username, String password) {
+    String clientId = "poc";
+    String resourceId = "api";
 
     ResourceOwnerPasswordResourceDetails resourceDetails = new ResourceOwnerPasswordResourceDetails();
-    resourceDetails.setUsername("epo");
-    resourceDetails.setPassword("12345");
-    resourceDetails.setAccessTokenUri(getAccessTokenUri());
-    resourceDetails.setClientId("poc");
-    resourceDetails.setClientSecret("secret");
+    // ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
+    // AuthorizationCodeResourceDetails resourceDetails = new AuthorizationCodeResourceDetails();
+
     resourceDetails.setGrantType("password");
+    resourceDetails.setAccessTokenUri(getAccessTokenUri());
+    resourceDetails.setId(resourceId);
+    resourceDetails.setClientId(clientId);
+    resourceDetails.setClientSecret("secret");
     resourceDetails.setScope(asList("read", "write"));
+    resourceDetails.setUsername(username);
+    resourceDetails.setPassword(password);
 
     DefaultOAuth2ClientContext clientContext = new DefaultOAuth2ClientContext();
 
-    oauth2RestTemplate = new OAuth2RestTemplate(resourceDetails, clientContext);
-    oauth2RestTemplate.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
+    restTemplate = new OAuth2RestTemplate(resourceDetails, clientContext);
+
+    restTemplate.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
+
+    return restTemplate;
   }
 
 
@@ -108,9 +114,9 @@ public class BaseIntegrationTest {
     URI uri = new URI(getManagementUri() + "/health");
     LOG.debug("Management Health URI: " + uri);
 
-    Assert.assertNotNull("No oauth2 rest template", oauth2RestTemplate);
+    Assert.assertNotNull("No oauth2 rest template", restTemplate);
 
-    ResponseEntity<String> entity = oauth2RestTemplate.getForEntity(uri, String.class);
+    ResponseEntity<String> entity = restTemplate.getForEntity(uri, String.class);
 
     printResponse(entity);
 

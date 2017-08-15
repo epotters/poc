@@ -12,11 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 
-import poc.core.domain.Person;
-
-import static java.lang.String.format;
+import poc.core.domain.UserAccount;
 
 
 @Profile("integration-test")
@@ -24,43 +26,48 @@ import static java.lang.String.format;
 @RunWith(SpringRunner.class)
 public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
 
+  private Object HttpClientErrorException;
+
+
   // @Test
   public void healthCheck() throws URISyntaxException {
     health();
   }
 
+
   @Test
-  public void clientAccess() {
-
-    final Person person = oauth2RestTemplate.getForObject(format("http://localhost:%d/poc/api/persons/1", port), Person.class);
-
-    System.out.println(person);
+  public void currentUser() {
+    final UserDetails currentUser = restTemplate.getForObject(getRestUri() + "/users/me", UserAccount.class);
+    System.out.println(currentUser);
+    Assert.assertEquals("Unexpected current user found", "epo", currentUser.getUsername());
   }
 
-/*
+
   @Test
   public void error401() throws URISyntaxException {
     URI uri = new URI(getRestUri() + "/persons");
-    System.out.println("Rest URI for 401 error: " + uri);
-    ResponseEntity<Map> responseEntity =
-        testRestTemplate.withBasicAuth(username, "this password is wrong").getForEntity(uri, Map.class);
-    printResponse(responseEntity);
-    Assert.assertEquals("Rest call with wrong password did not return a 401 error", HttpStatus.UNAUTHORIZED,
-        responseEntity.getStatusCode());
-
+    String username = "epo";
+    String wrongPassword = "54321";
+    try {
+      OAuth2RestTemplate restTemplate = createOauth2Template(username, wrongPassword);
+      restTemplate.getForEntity(uri, Map.class);
+    }
+    catch (OAuth2AccessDeniedException exception) {
+      Assert.assertEquals("Unexpected error message", "Access token denied.", exception.getMessage());
+    }
   }
-*/
 
 
   @Test
   public void error404() throws URISyntaxException {
     URI uri = new URI(getRestUri() + "/this-url-does-not-exist");
     System.out.println("Rest URI for 404 error: " + uri);
-    ResponseEntity<Map> responseEntity = oauth2RestTemplate.getForEntity(uri, Map.class);
-    printResponse(responseEntity);
-
-    Assert.assertEquals("Rest call to non existent URL did not return 404 error", HttpStatus.NOT_FOUND,
-        responseEntity.getStatusCode());
+    ResponseEntity<Map> responseEntity = null;
+    try {
+      restTemplate.getForEntity(uri, Map.class);
+    }
+    catch (HttpClientErrorException httpClientErrorException) {
+      Assert.assertEquals("Unexpected error code", HttpStatus.NOT_FOUND, httpClientErrorException.getStatusCode());
+    }
   }
-
 }

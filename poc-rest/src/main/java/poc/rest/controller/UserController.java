@@ -5,7 +5,6 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,24 +30,23 @@ public class UserController {
     this.securityService = securityService;
   }
 
-
   @RequestMapping("/me")
-  public UserDetails getMe() {
+  public UserDetails getMe(Authentication authentication) {
 
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    if (auth == null) {
+    if (authentication == null) {
       LOG.debug(NO_AUTHENTICATION);
       return null;
     }
-    else if (!auth.isAuthenticated()) {
+    else if (!authentication.isAuthenticated()) {
       LOG.debug(ANONYMOUS_USER);
       return null;
     }
     else {
-      String currentUserName = auth.getName();
-
+      String currentUserName = authentication.getName();
       // User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
       LOG.debug(AUTHENTICATED_USER + " (\"" + currentUserName + "\")");
       return securityService.loadUserByUsername(currentUserName);
     }

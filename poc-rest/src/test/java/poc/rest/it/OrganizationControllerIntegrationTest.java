@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 
 import poc.core.domain.Organization;
 
@@ -36,7 +37,7 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
 
 
   private URI getOrganizationUri(long organizationId) throws URISyntaxException {
-    return new URI(getRestUri() + "/organization/" + organizationId);
+    return new URI(getRestUri() + "/organizations/" + organizationId);
   }
 
 
@@ -45,7 +46,7 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
 
     System.out.println("Rest URI (for organizations): " + organizationsUri);
 
-    ResponseEntity<Organization> responseEntity = oauth2RestTemplate.getForEntity(organizationsUri, Organization.class);
+    ResponseEntity<Organization> responseEntity = restTemplate.getForEntity(organizationsUri, Organization.class);
     printResponse(responseEntity);
     Assert.assertTrue("Call to the organizations REST service did not return OK (HTTP 200)",
         responseEntity.getStatusCode().is2xxSuccessful());
@@ -56,37 +57,44 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
   public void organizationsCrud() throws URISyntaxException {
 
     // Create
-    Organization organizationToSend = createOrganization("Solera Nederland BV");
-    HttpEntity<Organization> itemRequest = new HttpEntity<>(organizationToSend);
-    ResponseEntity<Organization> responseEntity = oauth2RestTemplate.exchange(organizationsUri, HttpMethod.POST, itemRequest, Organization
-        .class);
+    Organization organizationToCreate = createOrganization("Solera Nederland BV");
+    HttpEntity<Organization> itemRequest = new HttpEntity<>(organizationToCreate);
+    ResponseEntity<Organization> responseEntity =
+        restTemplate.exchange(organizationsUri, HttpMethod.POST, itemRequest, Organization.class);
     Assert.assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
+
     Organization responseItem = responseEntity.getBody();
-    Assert.assertEquals("The name of the organization sent does not match te name of the organization received", organizationToSend.getName(),
-        responseItem.getName());
+    Assert.assertEquals("The name of the organization sent does not match te name of the organization received",
+        organizationToCreate.getName(), responseItem.getName());
 
     Organization abz = createOrganization("ABZ Nederland BV");
-    responseEntity = oauth2RestTemplate.exchange(organizationsUri, HttpMethod.POST, new HttpEntity<>(abz), Organization.class);
+    responseEntity = restTemplate.exchange(organizationsUri, HttpMethod.POST, new HttpEntity<>(abz), Organization.class);
     LOG.debug(responseEntity);
 
     // Read
-    responseEntity = oauth2RestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
+    responseEntity = restTemplate.getForEntity(getOrganizationUri(1), Organization.class);
     System.out.println("Organization created " + responseEntity.getBody());
 
     // Update
     Organization updatedOrganization = responseEntity.getBody();
-
-    // TO DO: Change the Organization
+    updatedOrganization.setName("Philips");
     HttpEntity<Organization> updatedItemRequest = new HttpEntity<>(updatedOrganization);
-    oauth2RestTemplate.exchange(getOrganizationUri(1), HttpMethod.PUT, updatedItemRequest, Void.class);
-    responseEntity = oauth2RestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
+    restTemplate.exchange(getOrganizationUri(1), HttpMethod.PUT, updatedItemRequest, Void.class);
+    responseEntity = restTemplate.getForEntity(getOrganizationUri(1), Organization.class);
     System.out.println("Updated updatedOrganization read " + responseEntity.getBody());
 
     // Delete
-    oauth2RestTemplate.delete(getOrganizationUri(1));
-    responseEntity = oauth2RestTemplate.getForEntity(getOrganizationUri(1), Organization.class);
-    Assert.assertEquals("Organization still exists, delete failed",  HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    System.out.println("Organization deleted (" + responseEntity + ")");
+    restTemplate.delete(getOrganizationUri(1));
+    responseEntity = null;
+    try {
+      responseEntity = restTemplate.getForEntity(getOrganizationUri(1), Organization.class);
+
+      Assert.assertEquals("Organization still exists, delete failed", HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+    } catch (HttpClientErrorException e) {
+
+      System.out.println("Organization deleted (" + responseEntity + ") " + e.getMessage());
+    }
   }
 
 

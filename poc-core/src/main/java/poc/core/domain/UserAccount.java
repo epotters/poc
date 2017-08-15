@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Account implements UserDetails {
+public class UserAccount implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,7 @@ public class Account implements UserDetails {
   private LocalDate credentialsExpiryDate = LocalDate.of(2018, 3, 23);
   private boolean locked = false;
 
-  private Collection<GrantedAuthority> authorities = new ArrayList<>();
+  private Collection<UserRole> authorities = new ArrayList<>();
 
 
   @Override
@@ -63,12 +62,11 @@ public class Account implements UserDetails {
   }
 
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<UserRole> getAuthorities() {
     return this.authorities;
   }
 
-  public void addAuthority(GrantedAuthority authority) {
+  public void addAuthority(UserRole authority) {
     if (!authorities.contains(authority)) {
       authorities.add(authority);
     }

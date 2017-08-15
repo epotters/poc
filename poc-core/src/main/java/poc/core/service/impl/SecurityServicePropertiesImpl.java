@@ -5,12 +5,12 @@ import java.util.ResourceBundle;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import poc.core.domain.Account;
+import poc.core.domain.UserAccount;
+import poc.core.domain.UserRole;
 import poc.core.service.SecurityService;
 
 
@@ -30,20 +30,20 @@ public class SecurityServicePropertiesImpl implements SecurityService {
 
     if (!accounts.getString(username + ".password").equals("")) {
 
-      Account account = new Account();
-      account.setUsername(username);
-      account.setPassword(accounts.getString(username + ".password"));
-      account.setDisplayName(accounts.getString(username + ".displayName"));
+      UserAccount userAccount = new UserAccount();
+      userAccount.setUsername(username);
+      userAccount.setPassword(accounts.getString(username + ".password"));
+      userAccount.setDisplayName(accounts.getString(username + ".displayName"));
 
-      SimpleGrantedAuthority authority;
-      for (String role : accounts.getString(username + ".roles").split(",")) {
-        authority = new SimpleGrantedAuthority(role);
-        account.addAuthority(authority);
+      UserRole authority;
+      for (String roleName : accounts.getString(username + ".roles").split(",")) {
+        authority = new UserRole(roleName);
+        userAccount.addAuthority(authority);
       }
-      return account;
+      return userAccount;
     }
     else {
-      throw new UsernameNotFoundException(username + " not found");
+      throw new UsernameNotFoundException("User name: " + username + " not found");
     }
   }
 }
