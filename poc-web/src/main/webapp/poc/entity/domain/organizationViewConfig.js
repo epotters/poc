@@ -1,5 +1,5 @@
 /*
-organizationViewConfig
+ organizationViewConfig
  */
 define({
       entityType: {

@@ -97,7 +97,6 @@ define([
     },
 
 
-
     buildSelect: function (fieldName, fieldConfig) {
 
       var options = (fieldConfig.editorArgs.options) ? fieldConfig.editorArgs.options : [];
@@ -112,7 +111,7 @@ define([
     },
 
 
-    buildDateTextBox: function(fieldName, fieldConfig) {
+    buildDateTextBox: function (fieldName, fieldConfig) {
       return new DateTextBox({
         name: fieldName,
         id: fieldName

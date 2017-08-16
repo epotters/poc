@@ -89,9 +89,15 @@ define([
        */
 
       // CRUD operations
-      on(this.gridToolbar.addButton, "click", function(evt) {me.addEntity(me);});
-      on(this.gridToolbar.duplicateButton, "click", function(evt) {me.duplicateEntity(me);});
-      on(this.gridToolbar.removeButton, "click", function(evt) {me.deleteEntity(me);});
+      on(this.gridToolbar.addButton, "click", function (evt) {
+        me.addEntity(me);
+      });
+      on(this.gridToolbar.duplicateButton, "click", function (evt) {
+        me.duplicateEntity(me);
+      });
+      on(this.gridToolbar.removeButton, "click", function (evt) {
+        me.deleteEntity(me);
+      });
 
       on(me.gridToolbar, "search", function (evt) {
         console.log("Toolbar emitted a search event");
@@ -104,11 +110,19 @@ define([
       me.gridToolbar.galleryViewButton.on("click", me.grid.setViewRenderer("gallery"));
 
       // Form buttons
-      on(this.formToolbar.saveButton, "click", function(evt) {me.saveEntity();});
-      on(this.formToolbar.cancelButton, "click", function(evt) {me.revertEntity();});
+      on(this.formToolbar.saveButton, "click", function (evt) {
+        me.saveEntity();
+      });
+      on(this.formToolbar.cancelButton, "click", function (evt) {
+        me.revertEntity();
+      });
 
-      on(this.formToolbar.previousButton, "click", function(evt) {me.selectPreviousEntity();});
-      on(this.formToolbar.nextButton, "click", function(evt) {me.selectNextEntity();});
+      on(this.formToolbar.previousButton, "click", function (evt) {
+        me.selectPreviousEntity();
+      });
+      on(this.formToolbar.nextButton, "click", function (evt) {
+        me.selectNextEntity();
+      });
     },
 
 
@@ -191,18 +205,16 @@ define([
       console.log(entity);
 
       if (!entity.id) {
-        this.store.add(entity, {}).then(function() {
+        this.store.add(entity, {}).then(function () {
           me.grid.refresh();
           console.log("Entity added successfully");
         });
       } else {
-        this.store.put(entity, {}).then(function() {
+        this.store.put(entity, {}).then(function () {
           me.grid.refresh();
           console.log("Entity updated successfully");
         });
       }
-
-
 
 
       this.grid.refresh();

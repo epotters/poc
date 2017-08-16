@@ -1,8 +1,10 @@
-[{
-  "name": "Solera Nederland",
-  "coc": "1234567890",
-  "legalForm": "BV"
-}, {
+[
+  {
+    "name": "Solera Nederland",
+    "coc": "1234567890",
+    "legalForm": "BV"
+  },
+  {
     "name": "Apple Computer",
     "coc": "2222222222",
     "legalForm": "Inc"

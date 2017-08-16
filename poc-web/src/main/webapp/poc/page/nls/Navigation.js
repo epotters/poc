@@ -1,4 +1,3 @@
-
 define({
   root: {
     homeLabel: "Home",
