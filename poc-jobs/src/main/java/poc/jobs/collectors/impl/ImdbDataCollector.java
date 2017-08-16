@@ -71,9 +71,10 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
   public boolean isLoggedIn() {
     String loggedInUserCss = "#navUserMenu p.navCategory a";
     List<WebElement> loggedInUserElements = driver.findElements(By.cssSelector(loggedInUserCss));
-    assert(loggedInUserElements.size() > 0);
+    assert (loggedInUserElements.size() > 0);
     WebElement loggedInUserElement = loggedInUserElements.get(0);
-    LOG.debug("loggedInUserElement: " + loggedInUserElement.getText() + ", user display name: " + getAccount().getDisplayName());
+    LOG.debug(
+        "loggedInUserElement: " + loggedInUserElement.getText() + ", user display name: " + getAccount().getDisplayName());
     return (loggedInUserElement != null && loggedInUserElement.getText().contains(getAccount().getDisplayName()));
   }
 
@@ -89,7 +90,7 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
     WebElement logoutLink = driver.findElement(By.linkText(logoutLinkText));
 
     activateAndWaitForNewPage(logoutLink);
-    assert(!isLoggedIn());
+    assert (!isLoggedIn());
   }
 
 
@@ -145,7 +146,6 @@ public class ImdbDataCollector extends BaseDataCollector implements DataCollecto
     checkForErrors();
     LOG.debug("Login result page is titled: " + driver.getTitle());
   }
-
 
 
   private void goToWatchlist() throws IOException {

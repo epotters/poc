@@ -60,6 +60,7 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
 
   }
 
+
   @Override
   public void login() throws IOException {
 
@@ -93,7 +94,6 @@ public class ParkMobileDataCollector extends BaseDataCollector implements DataCo
     LOG.debug("After login, the first page title is: " + driver.getTitle());
     assert (isLoggedIn());
     LOG.info("Logged in successfully");
-
 
     String script = "alert('Logged in successfully to " + getType().getDisplayName() + ");";
     executeJavascript(script);

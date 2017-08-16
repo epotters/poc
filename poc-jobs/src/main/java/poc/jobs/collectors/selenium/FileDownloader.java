@@ -73,6 +73,18 @@ public class FileDownloader {
   }
 
 
+  protected static String getEncodingFromMeta(String pageSource) {
+    Matcher metaMatcher = CONTENT_TYPE_META_REGEXP.matcher(pageSource);
+    if (metaMatcher.find()) {
+      Matcher encodingMatcher = ENCODING_REGEXP.matcher(metaMatcher.group(1));
+      if (encodingMatcher.find()) {
+        return encodingMatcher.group(1);
+      }
+    }
+    return Charset.defaultCharset().name();
+  }
+
+
   public void followRedirectsWhenDownloading(boolean value) {
     this.followRedirects = value;
   }
@@ -101,22 +113,9 @@ public class FileDownloader {
       String encoding = getEncodingFromMeta(this.driver.getPageSource());
       String valueElement = element.getAttribute("value");
       return nameElement + "=" + URLEncoder.encode(valueElement, encoding);
-    }
-    else {
+    } else {
       return "";
     }
-  }
-
-
-  protected static String getEncodingFromMeta(String pageSource) {
-    Matcher metaMatcher = CONTENT_TYPE_META_REGEXP.matcher(pageSource);
-    if (metaMatcher.find()) {
-      Matcher encodingMatcher = ENCODING_REGEXP.matcher(metaMatcher.group(1));
-      if (encodingMatcher.find()) {
-        return encodingMatcher.group(1);
-      }
-    }
-    return Charset.defaultCharset().name();
   }
 
 
@@ -149,8 +148,7 @@ public class FileDownloader {
     String fileToDownloadLocation = element.getAttribute(attribute);
     if (fileToDownloadLocation.trim().equals("")) {
       throw new NullPointerException("The element you have specified does not link to anything!");
-    }
-    else {
+    } else {
       URL fileToDownload = new URL(fileToDownloadLocation);
       return this.downloadFileFromUrl(fileToDownload);
     }

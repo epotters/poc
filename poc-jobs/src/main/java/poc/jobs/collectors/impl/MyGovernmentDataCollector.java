@@ -59,14 +59,12 @@ public class MyGovernmentDataCollector extends BaseDataCollector implements Data
     driver.get(getType().getLoginPageUrl());
     final WebElement loginButton = (new WebDriverWait(driver, getDriverWaitTimeOutSecs()))
         .until(ExpectedConditions.elementToBeClickable(By.cssSelector(loginButtonCssSelector)));
-    assert(loginButton != null);
+    assert (loginButton != null);
     LOG.debug("Page title (homepage) " + driver.getTitle());
 
     // activateAndWaitForNewPage(loginButton);
 
     loginButton.click();
-
-
 
     final String loginFormId = "new_authentication";
     final String userNameFieldId = "authentication_digid_username";

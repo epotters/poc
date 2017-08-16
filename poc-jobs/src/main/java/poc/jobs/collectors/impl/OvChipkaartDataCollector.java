@@ -108,7 +108,6 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
   @Override
   public void logout() {
 
-
     String menuItemCssSelector = "div.user label.label";
     WebElement menuLink = driver.findElements(By.cssSelector(menuItemCssSelector)).get(0);
     menuLink.click();
@@ -173,7 +172,8 @@ public class OvChipkaartDataCollector extends BaseDataCollector implements DataC
     try {
       errorBox = driver.findElement(By.cssSelector("div.alert-info"));
       LOG.debug("Error on page:\n" + errorBox.getText());
-    } catch(Exception e) {
+    }
+    catch (Exception e) {
 
       LOG.debug("Error finding error box, assuming there is none");
     }

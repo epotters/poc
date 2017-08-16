@@ -44,34 +44,24 @@ public class BaseDataCollector {
 
   private static final String READYSTATE_COMPLETE = "complete";
   private static final String READYSTATE_JS = "return document.readyState";
-
+  @Getter
+  protected WebDriver driver;
+  File outputDirectory;
   @Getter
   private AccountType type;
-
   private AccountService accountService = new AccountServiceImpl();
-
   @Getter
   @Setter
   private String collectorDisplayName;
-
   @Getter
   @Setter
   private String collectorName;
-
   @Value("${collectors.output-path}")
   private String parentOutputPath = "target/collectors/";
-
   @Value("${collectors.screenshots-path}")
   private String screenshotsPath = "screenshots/";
-
-  File outputDirectory;
-
   @Getter
   private UserAccount account;
-
-  @Getter
-  protected WebDriver driver;
-
   @Getter
   private WebDriverWait driverWait;
 
@@ -92,6 +82,23 @@ public class BaseDataCollector {
     this.account = accountService.getByType(type);
     this.driver = driver;
     init();
+  }
+
+
+  protected static void sleep() {
+    try {
+      Thread.sleep(1000L);
+    }
+    catch (Exception var1) {
+      LOG.info("Sleep interrupted");
+    }
+  }
+
+
+  public static void sleep(int seconds) {
+    for (int n = 0; n < seconds; ++n) {
+      sleep();
+    }
   }
 
 
@@ -220,23 +227,6 @@ public class BaseDataCollector {
       LOG.error("Failed creating screenshot " + ex);
     }
 
-  }
-
-
-  protected static void sleep() {
-    try {
-      Thread.sleep(1000L);
-    }
-    catch (Exception var1) {
-      LOG.info("Sleep interrupted");
-    }
-  }
-
-
-  public static void sleep(int seconds) {
-    for (int n = 0; n < seconds; ++n) {
-      sleep();
-    }
   }
 
 

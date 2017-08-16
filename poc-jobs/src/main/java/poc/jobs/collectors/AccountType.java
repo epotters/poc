@@ -14,22 +14,17 @@ public enum AccountType {
   ING, IMDB, MY_GOVERNMENT, OV_CHIPCARD, PARK_MOBILE, PUBLIC_LIBRARY;
 
   private static final String DOT = ".";
-
-  @Getter
-  private String displayName;
-
-  @Getter
-  private String name;
-
-  @Getter
-  private String loginPageUrl;
-
-  private String sitesPropertyPath = "collectors.sites";
-  private String sitePropertyPath = "site";
-
   private static final String NAME_KEY = "name";
   private static final String DISPLAY_NAME_KEY = "displayName";
   private static final String LOGIN_PAGE_URL_KEY = "loginPageUrl";
+  @Getter
+  private String displayName;
+  @Getter
+  private String name;
+  @Getter
+  private String loginPageUrl;
+  private String sitesPropertyPath = "collectors.sites";
+  private String sitePropertyPath = "site";
 
 
   AccountType() {
@@ -50,8 +45,7 @@ public enum AccountType {
       if (isFirst) {
         typeName = typeName + namePart.toLowerCase();
         isFirst = false;
-      }
-      else {
+      } else {
         typeName = typeName + namePart.substring(0, 1).toUpperCase() + namePart.substring(1).toLowerCase();
       }
     }

@@ -24,7 +24,6 @@ public class AllCollectorsLogin {
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);
 
 
-
   public void loginAll() throws Exception {
 
     List<DataCollector> collectors = new ArrayList<>();
@@ -40,7 +39,6 @@ public class AllCollectorsLogin {
       logInAndOut(collector);
     }
   }
-
 
 
   private void logInAndOut(DataCollector collector) throws Exception {
