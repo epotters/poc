@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.test.context.ContextConfiguration;
 
 
-@ContextConfiguration(classes = { poc.core.config.CoreContext.class, poc.rest.config.RestContext.class,
-    poc.rest.config.AuthorizationServerConfig.class, poc.rest.config.ResourceServerConfig.class })
+@ContextConfiguration(classes = {poc.core.config.CoreContext.class, poc.rest.config.RestContext.class,
+    poc.rest.config.AuthorizationServerConfig.class, poc.rest.config.ResourceServerConfig.class})
 @SpringBootApplication
 public class Application {
 

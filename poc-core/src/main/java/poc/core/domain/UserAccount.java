@@ -25,6 +25,8 @@ public class UserAccount implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String mail;
+
   private String username;
   @JsonIgnore
   private String password;
@@ -65,6 +67,7 @@ public class UserAccount implements UserDetails {
   public Collection<UserRole> getAuthorities() {
     return this.authorities;
   }
+
 
   public void addAuthority(UserRole authority) {
     if (!authorities.contains(authority)) {

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import poc.core.domain.Person;
 
 
-
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long>, Serializable {
 

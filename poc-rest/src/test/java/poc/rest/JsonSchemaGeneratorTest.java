@@ -17,6 +17,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 
 import poc.core.domain.Person;
 
+
 /**
  * Created by epotters on 2017-03-20
  */

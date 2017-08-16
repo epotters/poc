@@ -22,8 +22,8 @@ import poc.core.repository.PersonRepository;
 @RequestMapping("/people")
 public class PersonController {
 
-
   private PersonRepository personRepository;
+
 
   @Autowired
   PersonController(PersonRepository personRepository) {
@@ -38,14 +38,14 @@ public class PersonController {
 
 
   // page, size and sort parameters are supported by default
-  @RequestMapping
+  @RequestMapping("/list")
   public Iterable<Person> listPeople(Pageable pageable) {
     return personRepository.findAll(pageable);
   }
 
 
   // http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html
-  @RequestMapping(value = "/people", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   HttpEntity<PagedResources<Person>> people(Pageable pageable, PagedResourcesAssembler assembler) {
 
     Page<Person> people = personRepository.findAll(pageable);

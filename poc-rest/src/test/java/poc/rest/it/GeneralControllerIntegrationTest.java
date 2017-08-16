@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -32,6 +33,22 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
   // @Test
   public void healthCheck() throws URISyntaxException {
     health();
+  }
+
+
+  @Test
+  public void obtainToken() {
+
+    OAuth2AccessToken accessToken = restTemplate.getAccessToken();
+
+    String indent = "   ";
+    System.out.println("Access token:");
+    System.out.println(indent + "value: " + accessToken.getValue());
+    System.out.println(indent + "scope: " + accessToken.getScope());
+    System.out.println(indent + "type: " + accessToken.getTokenType());
+    System.out.println(indent + "additional information: " + accessToken.getAdditionalInformation());
+
+    Assert.assertEquals("epotters@xs4all.nl", accessToken.getAdditionalInformation().get("mail"));
   }
 
 

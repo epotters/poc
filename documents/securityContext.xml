@@ -25,7 +25,7 @@
 
     <security:session-management invalid-session-url="/login?error"/>
 
-    <security:remember-me key="myAppKey" user-service-ref="securityService"/>
+    <security:remember-me key="myAppKey" user-service-ref="userAccountsService"/>
 
 
     <security:custom-filter ref="proxyAuthenticationHeaderFilter" position="PRE_AUTH_FILTER"/>
@@ -47,7 +47,7 @@
   <bean id="securityExpressionHandler"
       class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"/>
 
-  <bean id="securityService"
+  <bean id="userAccountsService"
       class="poc.core.service.impl.SecurityServiceImpl"/>
 
   <bean id="proxyAuthenticationHeaderFilter"
@@ -60,7 +60,7 @@
       class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
     <property name="preAuthenticatedUserDetailsService">
       <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
-        <property name="userDetailsService" ref="securityService"/>
+        <property name="userDetailsService" ref="userAccountsService"/>
       </bean>
     </property>
   </bean>

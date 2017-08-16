@@ -27,20 +27,19 @@ import poc.core.config.CoreContext;
 public class SecurityServiceTest {
 
   @Autowired
-  private SecurityService securityService;
+  private UserAccountsService userAccountsService;
 
 
   @Test
   public void getUser() throws Exception {
 
-    UserDetails userDetails = securityService.loadUserByUsername("epo");
+    UserDetails userDetails = userAccountsService.loadUserByUsername("epo");
     assert (userDetails != null);
     System.out.println(userDetails);
 
-  PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     Assert.assertTrue("Password found does not match expected password",
         passwordEncoder.matches("12345", userDetails.getPassword()));
   }
-
 
 }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import poc.core.repository.PersonRepository;
 
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class PersonServiceTest {
 

@@ -18,6 +18,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
   private static final Log LOG = LogFactory.getLog(RestAuthenticationEntryPoint.class);
 
+
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
       throws IOException {

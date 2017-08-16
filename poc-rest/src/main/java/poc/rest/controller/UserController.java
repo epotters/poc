@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import poc.core.service.SecurityService;
+import poc.core.service.UserAccountsService;
 
 
 @RestController
@@ -22,13 +22,14 @@ public class UserController {
   private static final String ANONYMOUS_USER = "User is not authenticated (Anounymous user)";
   private static final String AUTHENTICATED_USER = "Authenticated user";
 
+  private UserAccountsService userAccountsService;
 
-  private SecurityService securityService;
 
   @Autowired
-  UserController(SecurityService securityService) {
-    this.securityService = securityService;
+  UserController(UserAccountsService userAccountsService) {
+    this.userAccountsService = userAccountsService;
   }
+
 
   @RequestMapping("/me")
   public UserDetails getMe(Authentication authentication) {
@@ -38,17 +39,15 @@ public class UserController {
     if (authentication == null) {
       LOG.debug(NO_AUTHENTICATION);
       return null;
-    }
-    else if (!authentication.isAuthenticated()) {
+    } else if (!authentication.isAuthenticated()) {
       LOG.debug(ANONYMOUS_USER);
       return null;
-    }
-    else {
+    } else {
       String currentUserName = authentication.getName();
       // User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
       LOG.debug(AUTHENTICATED_USER + " (\"" + currentUserName + "\")");
-      return securityService.loadUserByUsername(currentUserName);
+      return userAccountsService.loadUserByUsername(currentUserName);
     }
   }
 

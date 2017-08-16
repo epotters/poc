@@ -1,6 +1,8 @@
 package poc.rest.config;
 
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,23 +17,28 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import poc.rest.config.security.CustomTokenEnhancer;
 
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+  private static final String SIGNING_KEY = "123";
   @Autowired
-  private UserDetailsService securityService;
-
-  private TokenStore tokenStore = new InMemoryTokenStore();
-
+  private UserDetailsService userAccountService;
+  @Autowired
+  private ClientDetailsService clientAccountService;
   @Autowired
   private AuthenticationManager authenticationManager;
-
   @Value("${poc.oauth.tokenTimeout:3600}")
   private int expiration;
 
@@ -39,11 +46,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
+    TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+    tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
+
     // @formatter:off
     endpoints
-        .tokenStore(tokenStore)
+        .tokenStore(tokenStore())
+        .tokenEnhancer(tokenEnhancerChain)
+        .accessTokenConverter(accessTokenConverter())
         .authenticationManager(authenticationManager)
-        .userDetailsService(securityService);
+        .userDetailsService(userAccountService);
     // @formatter:on
   }
 
@@ -51,6 +63,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
+    clients.withClientDetails(clientAccountService);
+
+    /*
     // @formatter:off
     clients.inMemory()
         .withClient("poc")
@@ -60,7 +75,29 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
           .authorizedGrantTypes("password", "authorization_code", "client_credentials", "refresh_token", "implicit")
           .authorities("USER", "ADMIN");
      // @formatter:on
+     */
   }
+
+
+
+  /*
+  public ClientDetailsService clientDetailsService() {
+    return new ClientDetailsService() {
+      @Override
+      public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+        BaseClientDetails details = new BaseClientDetails();
+        details.setClientId(clientId);
+        details.setAuthorizedGrantTypes(Arrays.asList("password", "authorization_code", "client_credentials", "refresh_token", "implicit"));
+        details.setScope(Arrays.asList("read", "write"));
+        details.setResourceIds(Collections.singletonList("poc"));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("USER"));
+        authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        details.setAuthorities(authorities);
+        return details;
+      }
+    };
+  } */
 
 
   @Override
@@ -74,10 +111,29 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   }
 
 
-
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+
+  @Bean
+  public TokenStore tokenStore() {
+    return new JwtTokenStore(accessTokenConverter());
+  }
+
+
+  @Bean
+  public TokenEnhancer tokenEnhancer() {
+    return new CustomTokenEnhancer();
+  }
+
+
+  @Bean
+  public JwtAccessTokenConverter accessTokenConverter() {
+    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+    converter.setSigningKey(SIGNING_KEY);
+    return converter;
   }
 
 
@@ -86,7 +142,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   public DefaultTokenServices tokenServices() {
     DefaultTokenServices tokenServices = new DefaultTokenServices();
     tokenServices.setSupportRefreshToken(true);
-    tokenServices.setTokenStore(this.tokenStore);
+    tokenServices.setTokenStore(this.tokenStore());
     return tokenServices;
   }
 

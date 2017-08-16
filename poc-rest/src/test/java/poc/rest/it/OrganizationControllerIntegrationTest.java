@@ -91,7 +91,8 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
 
       Assert.assertEquals("Organization still exists, delete failed", HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 
-    } catch (HttpClientErrorException e) {
+    }
+    catch (HttpClientErrorException e) {
 
       System.out.println("Organization deleted (" + responseEntity + ") " + e.getMessage());
     }

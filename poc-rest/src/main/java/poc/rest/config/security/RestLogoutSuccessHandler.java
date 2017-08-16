@@ -20,6 +20,7 @@ public class RestLogoutSuccessHandler implements LogoutSuccessHandler {
 
   private static final Log LOG = LogFactory.getLog(RestLogoutSuccessHandler.class);
 
+
   @Override
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
