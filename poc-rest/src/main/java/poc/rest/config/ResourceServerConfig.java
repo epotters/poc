@@ -48,7 +48,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   private RestLogoutSuccessHandler restLogoutSuccessHandler;
 
   @Autowired
-  private UserDetailsService securityService;
+  private UserDetailsService userAccountsService;
 
 
   @Override
@@ -89,7 +89,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(securityService);
+    authProvider.setUserDetailsService(userAccountsService);
     authProvider.setPasswordEncoder(passwordEncoder());
     return authProvider;
   }

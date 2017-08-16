@@ -61,15 +61,15 @@ public class ClientAccountsServicePropertiesImpl implements ClientAccountsServic
       clientAccount.setScopes(scopes);
 
       Set<String> authorizedGrantTypes = new HashSet<>();
-      scopes.addAll(Arrays.asList(clientAccounts.getString(clientId + ".authorizedGrantTypes").split(",")));
+      authorizedGrantTypes.addAll(Arrays.asList(clientAccounts.getString(clientId + ".authorizedGrantTypes").split(",")));
       clientAccount.setAuthorizedGrantTypes(authorizedGrantTypes);
 
       Set<String> registeredRedirectUris = new HashSet<>();
-      scopes.addAll(Arrays.asList(clientAccounts.getString(clientId + ".registeredRedirectUris").split(",")));
+      registeredRedirectUris.addAll(Arrays.asList(clientAccounts.getString(clientId + ".registeredRedirectUris").split(",")));
       clientAccount.setRegisteredRedirectUris(registeredRedirectUris);
 
       UserRole authority;
-      for (String roleName : clientAccounts.getString(clientId + ".roles").split(",")) {
+      for (String roleName : clientAccounts.getString(clientId + ".authorities").split(",")) {
         authority = new UserRole(roleName);
         clientAccount.addAuthority(authority);
       }

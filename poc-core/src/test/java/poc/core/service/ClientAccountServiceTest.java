@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -24,22 +25,23 @@ import poc.core.config.CoreContext;
     TransactionalTestExecutionListener.class})
 @Transactional
 @RunWith(SpringRunner.class)
-public class SecurityServiceTest {
+public class ClientAccountServiceTest {
 
   @Autowired
-  private UserAccountsService userAccountsService;
+  private ClientAccountsService clientAccountsService;
 
 
   @Test
-  public void getUser() throws Exception {
+  public void getClient() throws Exception {
 
-    UserDetails userDetails = userAccountsService.loadUserByUsername("epo");
-    assert (userDetails != null);
-    System.out.println(userDetails);
+    ClientDetails clientDetails = clientAccountsService.loadClientByClientId("poc");
 
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    Assert.assertTrue("Password found does not match expected password",
-        passwordEncoder.matches("12345", userDetails.getPassword()));
+    System.out.println("\n");
+    System.out.println(clientDetails);
+    System.out.println("\n");
+
+    Assert.assertEquals("Client secret found does not match expected client secret",
+        "9876543210", clientDetails.getClientSecret());
   }
 
 }

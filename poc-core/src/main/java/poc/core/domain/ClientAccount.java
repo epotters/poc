@@ -2,6 +2,7 @@ package poc.core.domain;
 
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class ClientAccount implements ClientDetails {
   private Set<String> scopes;
   private Set<String> authorizedGrantTypes;
   private Set<String> registeredRedirectUris;
-  private Collection<GrantedAuthority> authorities;
+  private Collection<GrantedAuthority> authorities = new HashSet<>();
   private Integer accessTokenValiditySeconds = 3600;
   private Integer refreshTokenValiditySeconds = 36000;
   private Map<String, Object> additionalInformation;

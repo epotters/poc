@@ -94,7 +94,7 @@ public class BaseIntegrationTest {
     resourceDetails.setAccessTokenUri(getAccessTokenUri());
     resourceDetails.setId(resourceId);
     resourceDetails.setClientId(clientId);
-    resourceDetails.setClientSecret("secret");
+    resourceDetails.setClientSecret("9876543210");
     resourceDetails.setScope(asList("read", "write"));
     resourceDetails.setUsername(username);
     resourceDetails.setPassword(password);

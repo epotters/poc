@@ -4,7 +4,7 @@ package poc.rest.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -36,11 +36,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Autowired
   private UserDetailsService userAccountService;
   @Autowired
-  private ClientDetailsService clientAccountService;
+  @Qualifier("clientAccountsServicePropertiesImpl")
+  private ClientDetailsService clientAccountsService;
   @Autowired
   private AuthenticationManager authenticationManager;
-  @Value("${poc.oauth.tokenTimeout:3600}")
-  private int expiration;
 
 
   @Override
@@ -62,42 +61,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-    clients.withClientDetails(clientAccountService);
-
-    /*
-    // @formatter:off
-    clients.inMemory()
-        .withClient("poc")
-          .secret("secret")
-          .accessTokenValiditySeconds(expiration)
-          .scopes("read", "write")
-          .authorizedGrantTypes("password", "authorization_code", "client_credentials", "refresh_token", "implicit")
-          .authorities("USER", "ADMIN");
-     // @formatter:on
-     */
+    clients.withClientDetails(clientAccountsService);
   }
-
-
-
-  /*
-  public ClientDetailsService clientDetailsService() {
-    return new ClientDetailsService() {
-      @Override
-      public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        BaseClientDetails details = new BaseClientDetails();
-        details.setClientId(clientId);
-        details.setAuthorizedGrantTypes(Arrays.asList("password", "authorization_code", "client_credentials", "refresh_token", "implicit"));
-        details.setScope(Arrays.asList("read", "write"));
-        details.setResourceIds(Collections.singletonList("poc"));
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
-        authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        details.setAuthorities(authorities);
-        return details;
-      }
-    };
-  } */
 
 
   @Override
