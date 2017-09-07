@@ -2,8 +2,11 @@
 
 define([
   "dojo/_base/declare",
-  "dojo/dom", "dojo/on",
   "dojo/request",
+  "dojo/cookie",
+  "dojo/on",
+  "dojo/dom",
+  "dojo/dom-class",
   "dojo/dom-form",
   "dijit/_WidgetBase",
   "dijit/_TemplatedMixin",
@@ -13,8 +16,12 @@ define([
   "./UserPanel",
   "dojo/text!./templates/BasePage.html"
 ], function (declare,
-             dom, on,
-             request, domForm,
+             request,
+             cookie,
+             on,
+             dom,
+             domClass,
+             domForm,
              _WidgetBase,
              _TemplatedMixin,
              _AppAware,
@@ -29,16 +36,20 @@ define([
     router: null,
     session: null,
 
+    stickyHeader: true,
+    shrinkHeaderOn: 60,
+
     templateString: template,
 
     tokenUrl: "http://dev.localhost/poc/oauth/token",
+    tokenCookieName: "access_token",
     token: null,
     user: null,
-
 
     pageTitle: null,
     content: null,
 
+    navigation: null,
     loginPanel: null,
     userPanel: null,
 
@@ -54,8 +65,13 @@ define([
     postCreate: function () {
       this.inherited(arguments);
 
-      var navigation = new Navigation({}, this.navigationNode);
+      this.navigation = new Navigation({}, this.navigationNode);
 
+
+      if (!this.isLoggedIn()) {
+        console.log("About to load token from cookie");
+        this.loadTokenFromStorage();
+      }
 
       if (this.isLoggedIn()) {
         this.loadUser();
@@ -64,11 +80,44 @@ define([
       }
 
       this.setContent();
+
+      if (this.stickyHeader) {
+        this.addScrollListener();
+      }
+    },
+
+
+    addScrollListener: function () {
+      var me = this;
+      window.addEventListener("scroll", function (evt) {
+        var distanceY = window.pageYOffset || document.documentElement.scrollTop,
+            page = document.querySelector("#page");
+        if (distanceY > me.shrinkHeaderOn) {
+          domClass.add(page, "scrolling");
+        } else {
+          domClass.remove(page, "scrolling");
+        }
+      });
+    },
+
+
+    loadTokenFromStorage: function () {
+      var token = cookie(this.tokenCookieName);
+      if (token !== null && token !== undefined && token.length > 10) {
+        this.token = token;
+      } else {
+        console.log("Token cookie is empty");
+      }
+    },
+
+    storeToken: function () {
+      cookie(this.tokenCookieName, this.token, {expires: 5});
+      console.log("Token stored in cookie");
     },
 
 
     isLoggedIn: function () {
-      return !!(this.token);
+      return (this.token !== null && this.token !== undefined);
     },
 
 
@@ -95,15 +144,15 @@ define([
 
       console.log("About to log in");
 
-      var me = this;
-
-      var username = domForm.fieldToObject("usernameField"),
+      var me = this, username = domForm.fieldToObject("usernameField"),
           password = domForm.fieldToObject("passwordField");
 
       if (!this.validateCredentials(username, password)) {
-        console.log("Username or password missing");
-        // Mark fields
+        var msg = "Username, password or both are missing";
+        this.loginPanel.showError(msg);
         return false;
+      } else {
+        this.loginPanel.hideError();
       }
 
       var requestOptions = {
@@ -122,35 +171,42 @@ define([
         timeout: 10000
       };
 
-      console.log(requestOptions);
-
 
       request(this.tokenUrl, requestOptions).then(
           function (response) {
-            console.log("The file's content is:");
-            console.log(response);
+            // console.log(response);
             me.token = response["access_token"];
+            me.storeToken();
             console.log("Token: " + me.token);
-
             me.loginPanel.hideError();
 
             me.loadUser();
             me.loginPanel.hide();
+
+            console.log("Logged in successfully");
           },
           function (error) {
             console.log("Login failed. An error occurred");
-            // console.log(error);
-
             console.log("Status: " + error.response.status);
             console.log("Error: " + error.response.data.error);
             console.log("Error description: " + error.response.data.error_description);
-            // Show Error on screen
-
             me.loginPanel.showError(error.response.data.error + "<br />" + error.response.data.error_description);
-
+            console.log("Failed to log in");
           }
       );
+    },
 
+
+    logout: function () {
+      console.log("Logging out");
+      this.token = null;
+      this.storeToken();
+
+      this.userPanel.hide();
+      this.userPanel.user = null;
+      this.user = null;
+
+      this.showLoginPanel();
     },
 
     loadUser: function () {
@@ -165,7 +221,16 @@ define([
             function (user) {
               console.log(user);
               me.user = user;
-              me.userPanel = new UserPanel({user: me.user}, me.userPanelNode);
+
+              if (!me.userPanel) {
+                me.userPanel = new UserPanel({user: me.user}, me.userPanelNode);
+                var logoutButton = dom.byId("logoutButton");
+                on(logoutButton, "click", function (evt) {
+                  me.logout();
+                });
+              }
+              me.userPanel.show();
+
             },
             function (error) {
               console.log("Error loading current user");
@@ -175,10 +240,8 @@ define([
       });
     },
 
-////
 
     setContent: function () {
-
     },
 
 
@@ -194,7 +257,6 @@ define([
         styleElement.innerHTML = css;
       }
     }
-
 
   });
 });
