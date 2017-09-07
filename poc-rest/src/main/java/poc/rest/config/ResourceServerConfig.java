@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -35,7 +36,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   private static final Log LOG = LogFactory.getLog(ResourceServerConfig.class);
 
-  private static final String RESOURCE_ID = "poc";
+  private static final String RESOURCE_ID = "poc-api";
   private static final String SIGNING_KEY = "123";
 
   @Autowired
@@ -62,7 +63,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .antMatchers("/api/**").authenticated()
         .anyRequest().authenticated()
         .and().httpBasic()
-        .and().csrf().disable();;
+        .and().csrf().disable();
 
     http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
 
@@ -81,6 +82,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   public void configure(ResourceServerSecurityConfigurer resources) {
     // @formatter:off
     resources
+        .tokenServices(tokenServices())
+
         .resourceId(RESOURCE_ID);
     // @formatter:on
   }
@@ -129,7 +132,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   @Bean
   @Primary
-  public DefaultTokenServices tokenServices() {
+  public ResourceServerTokenServices tokenServices() {
     DefaultTokenServices tokenServices = new DefaultTokenServices();
     tokenServices.setSupportRefreshToken(true);
     tokenServices.setTokenStore(this.tokenStore());

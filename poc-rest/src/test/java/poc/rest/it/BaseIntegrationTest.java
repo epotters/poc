@@ -84,7 +84,7 @@ public class BaseIntegrationTest {
 
   OAuth2RestTemplate createOauth2Template(String username, String password) {
     String clientId = "poc";
-    String resourceId = "api";
+    String resourceId = "poc-api";
 
     ResourceOwnerPasswordResourceDetails resourceDetails = new ResourceOwnerPasswordResourceDetails();
     // ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();

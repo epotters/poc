@@ -35,11 +35,14 @@ public class UserAccountsServicePropertiesImpl implements UserAccountsService {
   }
 
 
+
+
   private UserAccount loadUserAccountFromProperties(String username) {
 
     LOG.debug("Loading user named " + username);
 
-    if (!userAccounts.getString(username + ".password").equals("")) {
+    String passwordKey = username + ".password";
+    if (userAccounts.containsKey(passwordKey) && !userAccounts.getString(passwordKey).equals("")) {
 
       UserAccount userAccount = new UserAccount();
       userAccount.setUsername(username);

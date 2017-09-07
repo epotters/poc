@@ -33,6 +33,7 @@ import poc.rest.config.security.CustomTokenEnhancer;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
   private static final String SIGNING_KEY = "123";
+
   @Autowired
   private UserDetailsService userAccountService;
   @Autowired
