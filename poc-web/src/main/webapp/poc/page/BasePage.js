@@ -110,8 +110,8 @@ define([
       }
     },
 
-    storeToken: function () {
-      cookie(this.tokenCookieName, this.token, {expires: 5});
+    storeTokenUntil: function (expiryDate) {
+      cookie(this.tokenCookieName, this.token, {expires: expiryDate});
       console.log("Token stored in cookie");
     },
 
@@ -139,6 +139,7 @@ define([
     validateCredentials: function (username, password) {
       return (!!username && !!password);
     },
+
 
     login: function () {
 
@@ -174,9 +175,11 @@ define([
 
       request(this.tokenUrl, requestOptions).then(
           function (response) {
-            // console.log(response);
+            console.log(response);
             me.token = response["access_token"];
-            me.storeToken();
+            var tokenValidityInSec = response["expires_in"],
+                expiryDate = me.calcultateExpiryDate(tokenValidityInSec);
+            me.storeTokenUntil(expiryDate);
             console.log("Token: " + me.token);
             me.loginPanel.hideError();
 
@@ -196,11 +199,18 @@ define([
       );
     },
 
+    calcultateExpiryDate: function(tokenValidityInSec) {
+      var buffer = 60, now = new Date(), time = now.getTime();
+      time += parseInt(tokenValidityInSec - buffer) * 1000;
+      now.setTime(time);
+      return now.toUTCString();
+    },
+
 
     logout: function () {
       console.log("Logging out");
       this.token = null;
-      this.storeToken();
+      this.storeTokenUntil(-1);
 
       this.userPanel.hide();
       this.userPanel.user = null;
