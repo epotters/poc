@@ -16,6 +16,8 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       this.homeNode.innerHTML = nls.homeLabel;
+      this.nextNode.innerHTML = nls.nextLabel;
+
       this.peopleNode.innerHTML = nls.peopleLabel;
       this.organizationsNode.innerHTML = nls.organizationsLabel;
     }

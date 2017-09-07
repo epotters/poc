@@ -47,22 +47,9 @@
 .form-dialog {
   width: 360px;
   height: 240px;
-"
 }
 
-.form-group {
-  padding: 0;
-  margin-bottom: 3px;
-}
 
-.form-group label {
-  display: inline-block;
-  width: 40%;
-  color: gray;
-  vertical-align: top;
-  font-weight: normal;
-  padding: 3px 0;
-}
 
 /* Toolbars */
 
@@ -170,40 +157,6 @@ table.dijitSelect tbody {
   border-left-width: 1px;
 }
 
-/* Header */
-
-.header .navbar {
-  min-height: 30px;
-  max-height: 30px;
-}
-
-nav > li > a {
-  position: relative;
-  display: block;
-  padding: 3px 6px;
-}
-
-@media (min-width: 768px) {
-  .navbar-nav > li > a {
-    padding-top: 3px;
-    padding-bottom: 3px;
-  }
-}
-
-.banner {
-  min-height: 48px;
-}
-
-/* User panel */
-.user-panel {
-  float: right;
-  margin: 6px 0;
-  padding: 9px;
-}
-
-.user {
-  display: inline-block;
-}
 
 /* Grid */
 

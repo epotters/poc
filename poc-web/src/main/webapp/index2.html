@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Entity view</title>
+  <title>Home page</title>
 
-
+<!--
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/resources/dojo.css"/>
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit/themes/dijit.css"/>
+-->
+
   <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css"/>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat"/>
 
-
-  <link rel="stylesheet" href="poc/entity/themes/default/entity-view.css"/>
+  <link rel="stylesheet" href="poc/page/themes/default/default.css"/>
 
 
   <script>
@@ -39,15 +40,10 @@
       }, {
         name: "page",
         location: "http://dev.localhost/poc/poc/page"
-      }, {
-        name: "entity",
-        location: "http://dev.localhost/poc/poc/entity"
-      }, {
-        name: "demo",
-        location: "http://dev.localhost/poc/poc/demo"
       }]
     };
   </script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
 
 </head>
@@ -58,11 +54,11 @@
 <script>
 
   require([
-        "demo/EntityViewPage",
-        "dojo/domReady!"],
-      function (EntityViewPage) {
-        var page = new EntityViewPage({
-          pageTitle: "Base page for entities demo app"
+        "page/HomePage"
+      ],
+      function (HomePage) {
+        var page = new HomePage({
+          pageTitle: "Demo homepage"
         }, "page");
         page.startup();
       });
