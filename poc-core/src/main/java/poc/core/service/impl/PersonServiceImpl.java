@@ -43,7 +43,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public Person getPerson(Long id) {
-    return personRepository.findOne(id);
+    return personRepository.getOne(id);
   }
 
 

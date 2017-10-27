@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -33,14 +33,14 @@ public class BaseIntegrationTest {
   private static final String HOST = "localhost";
   private static final String PROTOCOLL = "http";
 
-  @Value("${server.contextPath}")
+  @Value("${server.servlet.contextPath}")
   protected String contextPath;
 
   @Value("${spring.data.rest.basePath}")
   protected String restBasePath;
 
-  @Value("${management.contextPath}")
-  protected String managementContextPath;
+  // @Value("${management.context-path}")
+  protected String managementContextPath = "application";
 
   OAuth2RestTemplate restTemplate;
 
@@ -68,7 +68,7 @@ public class BaseIntegrationTest {
   }
 
 
-  private String getManagementUri() {
+  String getManagementUri() {
     return getRootUri() + managementContextPath;
   }
 

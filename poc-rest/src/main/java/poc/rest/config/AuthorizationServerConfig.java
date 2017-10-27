@@ -35,6 +35,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   private static final String SIGNING_KEY = "123";
 
   @Autowired
+  @Qualifier("userAccountsServicePropertiesImpl")
   private UserDetailsService userAccountService;
   @Autowired
   @Qualifier("clientAccountsServicePropertiesImpl")
@@ -111,5 +112,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     tokenServices.setTokenStore(this.tokenStore());
     return tokenServices;
   }
+
 
 }

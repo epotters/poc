@@ -43,7 +43,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
   @Override
   public Organization getOrganization(Long id) {
-    return organizationRepository.findOne(id);
+    return organizationRepository.getOne(id);
   }
 
 

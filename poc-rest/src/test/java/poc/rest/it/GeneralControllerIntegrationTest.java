@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,8 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
   private Object HttpClientErrorException;
 
 
-  // @Test
+  @Ignore
+  @Test
   public void healthCheck() throws URISyntaxException {
     health();
   }

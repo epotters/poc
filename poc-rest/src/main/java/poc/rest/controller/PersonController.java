@@ -33,7 +33,7 @@ public class PersonController {
 
   @RequestMapping("/{id}")
   public Person getPerson(@PathVariable Long id) {
-    return personRepository.findOne(id);
+    return personRepository.getOne(id);
   }
 
 

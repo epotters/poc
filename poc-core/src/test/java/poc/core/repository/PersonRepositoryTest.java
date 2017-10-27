@@ -68,12 +68,14 @@ public class PersonRepositoryTest {
     }
     System.out.println();
 
+    /*
     // Fetch an individual customer by ID
-    Person person = personRepository.findOne(1L);
-    System.out.println("Person found with findOne(1L):");
+    Person person = personRepository.getOne(1L);
+    System.out.println("Person found with getOne(1L):");
     System.out.println("--------------------------------");
     System.out.println(person);
     System.out.println();
+    */
 
     // Fetch customers by last name
     System.out.println("Person found with findByLastName('Bauer'):");

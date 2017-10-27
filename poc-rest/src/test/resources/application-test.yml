@@ -3,11 +3,11 @@ spring:
   profiles:
     active: test
 # Security
-security:
-  user:
-    name: epo
-    password: 12345
-    role: USER
+# security:
+#   user:
+#     name: epo
+#     password: 12345
+#    role: USER
 
 #Data
 spring:

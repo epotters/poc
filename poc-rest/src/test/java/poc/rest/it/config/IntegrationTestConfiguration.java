@@ -1,27 +1,29 @@
 package poc.rest.it.config;
 
 
-import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
+
+
+import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.WebApplicationContext;
 
 
 @Configuration
-public class IntegrationTestConfiguration implements ApplicationListener<EmbeddedServletContainerInitializedEvent> {
+public class IntegrationTestConfiguration implements ApplicationListener<WebServerInitializedEvent> {
 
-  private EmbeddedWebApplicationContext webApplicationContext;
+  private WebApplicationContext webApplicationContext;
 
 
   @Override
-  public void onApplicationEvent(EmbeddedServletContainerInitializedEvent event) {
-    webApplicationContext = event.getApplicationContext();
+  public void onApplicationEvent(WebServerInitializedEvent webServerInitializedEvent) {
+
   }
 
 
   @Bean
-  EmbeddedWebApplicationContext webApplicationContext() {
+  WebApplicationContext webApplicationContext() {
     return webApplicationContext;
   }
 }

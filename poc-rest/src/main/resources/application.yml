@@ -1,7 +1,8 @@
 
 # Embedded server
 server:
-  contextPath: /poc
+  servlet:
+    contextPath: /poc
   port: 8002
 
 banner:
@@ -33,15 +34,11 @@ spring:
     generate-ddl: true
     # validate or create-drop
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       # See: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes
       use-new-id-generator-mappings: true
     show-sql: true
 
-
-
-management:
-  contextPath: /actuator
 
 
 poc:

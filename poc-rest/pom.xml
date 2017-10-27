@@ -16,15 +16,13 @@
 
 
   <properties>
-    <spring-security-oauth2.version>2.0.8.RELEASE</spring-security-oauth2.version>
-    <spring-cloud-security.version>1.0.2.RELEASE</spring-cloud-security.version>
-    <jackson.version>2.8.7</jackson.version>
+    <spring-security-oauth2.version>2.2.2.RELEASE</spring-security-oauth2.version>
+    <jackson.version>2.9.1</jackson.version>
     <start-class>poc.rest.Application</start-class>
   </properties>
 
 
   <dependencies>
-
     <dependency>
       <groupId>nl.xs4all.epotters.poc</groupId>
       <artifactId>poc-core</artifactId>
@@ -35,15 +33,29 @@
     <dependency>
       <groupId>org.springframework.security.oauth</groupId>
       <artifactId>spring-security-oauth2</artifactId>
+      <version>2.2.0.RELEASE</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-jwt</artifactId>
+      <version>1.0.8.RELEASE</version>
     </dependency>
 
 
     <!-- JSON Schema dependencies -->
+
+    <dependency><groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-json</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-jsonSchema</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <!--
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -59,16 +71,13 @@
       <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-jsonSchema</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>${jackson.version}</version>
     </dependency>
+    -->
 
   </dependencies>
 
