@@ -10,9 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Override
+  static final String SIGNING_KEY = "12345";
+
+
   @Bean
-  public AuthenticationManager authenticationManager() throws Exception {
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
   }
 }

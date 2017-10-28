@@ -1,9 +1,8 @@
 package poc.rest.config;
 
 
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,21 +33,15 @@ import poc.rest.config.security.RestLogoutSuccessHandler;
 @ComponentScan("poc.rest.config.security")
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-  private static final Log LOG = LogFactory.getLog(ResourceServerConfig.class);
-
   private static final String RESOURCE_ID = "poc-api";
-  private static final String SIGNING_KEY = "123";
-
   @Autowired
   private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
   @Autowired
   private RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
-
   @Autowired
   private RestLogoutSuccessHandler restLogoutSuccessHandler;
-
   @Autowired
+  @Qualifier("userAccountsServicePropertiesImpl")
   private UserDetailsService userAccountsService;
 
 
@@ -125,7 +118,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   @Bean
   public JwtAccessTokenConverter accessTokenConverter() {
     JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    converter.setSigningKey(SIGNING_KEY);
+    converter.setSigningKey(ServerSecurityConfig.SIGNING_KEY);
     return converter;
   }
 

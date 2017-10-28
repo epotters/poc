@@ -35,8 +35,6 @@ public class UserAccountsServicePropertiesImpl implements UserAccountsService {
   }
 
 
-
-
   private UserAccount loadUserAccountFromProperties(String username) {
 
     LOG.debug("Loading user named " + username);

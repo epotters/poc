@@ -39,13 +39,13 @@ public class BaseIntegrationTest {
   @Value("${spring.data.rest.basePath}")
   protected String restBasePath;
 
-  // @Value("${management.context-path}")
-  protected String managementContextPath = "application";
-
-  OAuth2RestTemplate restTemplate;
+  // @Value("${management.contextPath}")
+  private String managementContextPath = "/application";
 
   @LocalServerPort
-  int port;
+  private int port;
+
+  OAuth2RestTemplate restTemplate;
 
 
   BaseIntegrationTest() {
@@ -53,7 +53,7 @@ public class BaseIntegrationTest {
   }
 
 
-  String getRootUri() {
+  private String getRootUri() {
     return PROTOCOLL + "://" + HOST + ":" + port + contextPath;
   }
 
@@ -113,7 +113,7 @@ public class BaseIntegrationTest {
 
     URI uri = new URI(getManagementUri() + "/health");
     LOG.debug("Management Health URI: " + uri);
-
+    System.out.println("Management Health URI: " + uri);
     Assert.assertNotNull("No oauth2 rest template", restTemplate);
 
     ResponseEntity<String> entity = restTemplate.getForEntity(uri, String.class);

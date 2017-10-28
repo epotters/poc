@@ -8,6 +8,9 @@ server:
 banner:
   location: classpath:banner.txt
 
+# management:
+#  context-path: /monitoring
+
 # REST
 spring:
 
@@ -21,6 +24,8 @@ spring:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+
+      # date-format: "yyyy-MM-dd HH:mm:ss"
 
   # Data
   datasource:

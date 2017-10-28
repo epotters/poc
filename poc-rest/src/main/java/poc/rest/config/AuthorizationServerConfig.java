@@ -32,16 +32,22 @@ import poc.rest.config.security.CustomTokenEnhancer;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-  private static final String SIGNING_KEY = "123";
+  private UserDetailsService userAccountsService;
+  private ClientDetailsService clientAccountsService;
+  private AuthenticationManager authenticationManager;
+
 
   @Autowired
-  @Qualifier("userAccountsServicePropertiesImpl")
-  private UserDetailsService userAccountService;
-  @Autowired
-  @Qualifier("clientAccountsServicePropertiesImpl")
-  private ClientDetailsService clientAccountsService;
-  @Autowired
-  private AuthenticationManager authenticationManager;
+  public AuthorizationServerConfig(@Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService,
+      @Qualifier("clientAccountsServicePropertiesImpl") ClientDetailsService clientAccountsService,
+      AuthenticationManager authenticationManager) {
+    assert (userAccountsService != null);
+    this.userAccountsService = userAccountsService;
+    assert (clientAccountsService != null);
+    this.clientAccountsService = clientAccountsService;
+    assert (authenticationManager != null);
+    this.authenticationManager = authenticationManager;
+  }
 
 
   @Override
@@ -56,7 +62,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         .tokenEnhancer(tokenEnhancerChain)
         .accessTokenConverter(accessTokenConverter())
         .authenticationManager(authenticationManager)
-        .userDetailsService(userAccountService);
+        .userDetailsService(userAccountsService);
     // @formatter:on
   }
 
@@ -99,7 +105,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Bean
   public JwtAccessTokenConverter accessTokenConverter() {
     JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    converter.setSigningKey(SIGNING_KEY);
+    converter.setSigningKey(ServerSecurityConfig.SIGNING_KEY);
     return converter;
   }
 
@@ -112,6 +118,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     tokenServices.setTokenStore(this.tokenStore());
     return tokenServices;
   }
-
 
 }

@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,6 +54,7 @@ public class OrganizationControllerIntegrationTest extends BaseIntegrationTest {
   }
 
 
+  @Ignore
   @Test
   public void organizationsCrud() throws URISyntaxException {
 

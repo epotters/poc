@@ -23,10 +23,10 @@ debug: true
 
 logging:
   level:
-    org.springframeworkboot.autoconfigure.logging: INFO
-    org.springframeworkboot.core.io.support: INFO
-    org.springframeworkboot.test.annotation: INFO
-    org.springframeworkboot.web: INFO
+    org.springframework.boot.autoconfigure.logging: INFO
+    org.springframework.boot.core.io.support: INFO
+    org.springframework.boot.test.annotation: INFO
+    org.springframework.boot.web: INFO
     org.hibernate: WARN
     org.hibernateSQL: WARN
 
