@@ -1,14 +1,14 @@
 
 # Logging
-debug: true
+debug: false
 
 # Security
-security:
-
-  user:
-    name: epo
-    password: 12345
-    role: USER
+#security:
+#
+#  user:
+#    name: epo
+#    password: 12345
+#    role: USER
 
 banner:
   location: classpath:dev/banner.txt
