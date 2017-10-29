@@ -39,7 +39,7 @@ public class LocalizedMessageServiceImplTest {
   @Before
   public void init() throws IOException {
     listLocales(messageService.customizedLocales(), "Customized locales");
-    listLocales(messageService.availableLocales(), "All available locales");
+    // listLocales(messageService.availableLocales(), "All available locales");
   }
 
 
