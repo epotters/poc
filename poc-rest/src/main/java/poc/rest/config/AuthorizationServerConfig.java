@@ -38,7 +38,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 
   @Autowired
-  public AuthorizationServerConfig(@Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService,
+  public AuthorizationServerConfig( //
+      @Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService,
       @Qualifier("clientAccountsServicePropertiesImpl") ClientDetailsService clientAccountsService,
       AuthenticationManager authenticationManager) {
     assert (userAccountsService != null);
