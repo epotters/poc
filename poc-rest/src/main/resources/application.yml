@@ -51,6 +51,9 @@ poc:
   oauth:
     tokenTimeout: 2400
 
+security:
+  security-realm: POC Realm
+
 # Security (OAuth2)
 #  security:
 #    oauth2:
