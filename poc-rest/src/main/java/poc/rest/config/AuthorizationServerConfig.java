@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -32,22 +31,26 @@ import poc.rest.config.security.CustomTokenEnhancer;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-  private UserDetailsService userAccountsService;
-  private ClientDetailsService clientAccountsService;
-  private AuthenticationManager authenticationManager;
+  private final UserDetailsService userAccountsService;
+  private final ClientDetailsService clientAccountsService;
+  private final AuthenticationManager authenticationManager;
+  private final PasswordEncoder passwordEncoder;
 
 
   @Autowired
   public AuthorizationServerConfig( //
       @Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService,
       @Qualifier("clientAccountsServicePropertiesImpl") ClientDetailsService clientAccountsService,
-      AuthenticationManager authenticationManager) {
+      AuthenticationManager authenticationManager, //
+      PasswordEncoder passwordEncoder) {
     assert (userAccountsService != null);
     this.userAccountsService = userAccountsService;
     assert (clientAccountsService != null);
     this.clientAccountsService = clientAccountsService;
     assert (authenticationManager != null);
     this.authenticationManager = authenticationManager;
+    assert (passwordEncoder != null);
+    this.passwordEncoder = passwordEncoder;
   }
 
 
@@ -82,12 +85,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         .tokenKeyAccess("permitAll()")
         .checkTokenAccess("isAuthenticated()");
     // @formatter:on
-  }
-
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 
 

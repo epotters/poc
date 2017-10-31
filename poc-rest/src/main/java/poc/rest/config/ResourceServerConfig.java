@@ -8,11 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -76,18 +73,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     // @formatter:off
     resources
         .tokenServices(tokenServices())
-
         .resourceId(RESOURCE_ID);
     // @formatter:on
-  }
-
-
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userAccountsService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-    return authProvider;
   }
 
 
@@ -102,11 +89,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     return new SimpleUrlAuthenticationFailureHandler();
   }
 
-
+/*
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+*/
 
 
   @Bean
