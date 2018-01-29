@@ -16,6 +16,6 @@ banner:
 spring:
   # Data
   datasource:
-    url: jdbc:mysql://localhost:3306/poc_dev
+    url: jdbc:mysql://localhost:3306/poc_dev?useSSL=false
     username: poc_dev
     password: b1vidh
