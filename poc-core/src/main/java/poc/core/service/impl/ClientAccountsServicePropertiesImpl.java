@@ -78,6 +78,5 @@ public class ClientAccountsServicePropertiesImpl implements ClientAccountsServic
     } else {
       throw new UsernameNotFoundException("Client ID \" " + clientId + "\" not found");
     }
-
   }
 }
