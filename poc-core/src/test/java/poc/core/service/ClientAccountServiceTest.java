@@ -40,8 +40,9 @@ public class ClientAccountServiceTest {
     System.out.println(clientDetails);
     System.out.println("\n");
 
-    Assert.assertEquals("Client secret found does not match expected client secret",
-        "9876543210", clientDetails.getClientSecret());
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    Assert.assertTrue("Client secret found does not match expected client secret",
+        passwordEncoder.matches("9876543210", clientDetails.getClientSecret()));
   }
 
 }

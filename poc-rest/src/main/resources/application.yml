@@ -5,27 +5,18 @@ server:
     contextPath: /poc
   port: 8002
 
-banner:
-  location: classpath:banner.txt
-
-# management:
-#  context-path: /monitoring
 
 # REST
 spring:
-
   profiles:
     active: development
-
   data:
     rest:
-      basePath: /api
-
+      base-path: /api
   jackson:
     date-format: "yyyy-MM-dd HH:mm:ss"
-    serialization:
-      write-dates-as-timestamps: false
-
+  banner:
+    location: classpath:banner.txt
 
 
   # Data
@@ -36,43 +27,20 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        storage_engine: innodb
     generate-ddl: true
-    # validate or create-drop
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
       # See: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes
       use-new-id-generator-mappings: true
     show-sql: true
 
 
-
 poc:
   oauth:
     tokenTimeout: 2400
-
-security:
   security-realm: POC Realm
-
-# Security (OAuth2)
-#  security:
-#    oauth2:
-#    client:
-#      clientId: eb66c494b9c0a6913db6
-#      clientSecret: 7f123163c9808fd8b7893a8b03250e93f227f4b5
-#      accessTokenUri: https://github.com/login/oauth/access_token
-#      userAuthorizationUri: https://github.com/login/oauth/authorize
-#      clientAuthenticationScheme: form
-#
-#      authenticationScheme: query
-#      tokenName: oauth_token
-#      scope: profile email
-#
-#    resource:
-#      user-info-uri: https://api.github.com/user
-#      # token-info-uri:
-#      prefer-token-info: false
-
 
 # Logging
 logging:

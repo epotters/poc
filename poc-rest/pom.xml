@@ -16,8 +16,7 @@
 
 
   <properties>
-    <spring-security-oauth2.version>2.2.2.RELEASE</spring-security-oauth2.version>
-    <jackson.version>2.9.1</jackson.version>
+    <jackson.version>2.9.4</jackson.version>
     <start-class>poc.rest.Application</start-class>
   </properties>
 
@@ -30,28 +29,30 @@
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.security.oauth</groupId>
-      <artifactId>spring-security-oauth2</artifactId>
-      <version>2.2.0.RELEASE</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-jwt</artifactId>
-      <version>1.0.8.RELEASE</version>
-    </dependency>
-
-
-    <!-- JSON Schema dependencies -->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-json</artifactId>
+      <artifactId>spring-boot-starter-data-rest</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security.oauth.boot</groupId>
+      <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+      <version>2.0.0.RELEASE</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- JSON dependencies -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-json</artifactId>
     </dependency>
 
     <dependency>

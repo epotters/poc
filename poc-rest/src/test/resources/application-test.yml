@@ -2,26 +2,27 @@
 spring:
   profiles:
     active: test
-# Security
-# security:
-#   user:
-#     name: epo
-#     password: 12345
-#    role: USER
+  banner:
+    location: classpath:banner-test.txt
+  security:
+    user:
+      name: epo
+      password: 12345
 
 #Data
-spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
   datasource:
     url: jdbc:mysql://localhost:3306/poc_tst?useSSL=false
     username: poc_tst
-    password: b1vidh
+    password: poc_tst
+
 # Logging
 debug: true
 
 logging:
+  file: target/log/poc.log
   level:
     org.springframework.boot.autoconfigure.logging: INFO
     org.springframework.boot.core.io.support: INFO
@@ -29,5 +30,3 @@ logging:
     org.springframework.boot.web: INFO
     org.hibernate: WARN
     org.hibernateSQL: WARN
-
-

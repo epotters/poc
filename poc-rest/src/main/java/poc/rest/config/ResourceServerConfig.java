@@ -2,14 +2,13 @@ package poc.rest.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -31,15 +30,22 @@ import poc.rest.config.security.RestLogoutSuccessHandler;
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   private static final String RESOURCE_ID = "poc-api";
+
+  private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+  private final RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+  private final RestLogoutSuccessHandler restLogoutSuccessHandler;
+
+
   @Autowired
-  private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-  @Autowired
-  private RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
-  @Autowired
-  private RestLogoutSuccessHandler restLogoutSuccessHandler;
-  @Autowired
-  @Qualifier("userAccountsServicePropertiesImpl")
-  private UserDetailsService userAccountsService;
+  ResourceServerConfig( //
+      RestAuthenticationEntryPoint restAuthenticationEntryPoint, //
+      RestAuthenticationSuccessHandler restAuthenticationSuccessHandler, //
+      RestLogoutSuccessHandler restLogoutSuccessHandler //
+  ) {
+    this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+    this.restAuthenticationSuccessHandler = restAuthenticationSuccessHandler;
+    this.restLogoutSuccessHandler = restLogoutSuccessHandler;
+  }
 
 
   @Override
@@ -48,9 +54,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     // @formatter:off
     http.authorizeRequests()
         .antMatchers("/").permitAll()
+
+        .requestMatchers(EndpointRequest.to("health", "info")).permitAll() // Actuator rules per endpoint
+        .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin") // Actuator general rules
+
         .antMatchers("/logout").permitAll()
         .antMatchers(HttpMethod.OPTIONS).permitAll()
+
         .antMatchers("/api/**").authenticated()
+
+        .antMatchers("/oauth/**").permitAll()
+
         .anyRequest().authenticated()
         .and().httpBasic()
         .and().csrf().disable();
@@ -79,22 +93,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
   @Bean
-  public RestAuthenticationSuccessHandler restAuthenticationSuccessHandler() {
-    return new RestAuthenticationSuccessHandler();
-  }
-
-
-  @Bean
   public SimpleUrlAuthenticationFailureHandler restFailureHandler() {
     return new SimpleUrlAuthenticationFailureHandler();
   }
-
-/*
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-*/
 
 
   @Bean

@@ -1,0 +1,18 @@
+# General
+name: poc
+displayName: PoC
+
+
+spring:
+  main:
+    web-application-type: none
+
+# Logging
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+  file: target/log/poc.log
+
+
+debug: false

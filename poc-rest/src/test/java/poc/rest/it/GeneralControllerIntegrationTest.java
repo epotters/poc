@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,10 +27,12 @@ import poc.core.domain.UserAccount;
 @RunWith(SpringRunner.class)
 public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
 
-  private Object HttpClientErrorException;
+  @Test
+  public void contextLoads() {
+    System.out.println("\n\n-----> Context loaded <-----\n\n");
+  }
 
 
-  @Ignore
   @Test
   public void healthCheck() throws URISyntaxException {
     health();

@@ -34,23 +34,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   private final UserDetailsService userAccountsService;
   private final ClientDetailsService clientAccountsService;
   private final AuthenticationManager authenticationManager;
-  private final PasswordEncoder passwordEncoder;
 
 
   @Autowired
   public AuthorizationServerConfig( //
       @Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService,
       @Qualifier("clientAccountsServicePropertiesImpl") ClientDetailsService clientAccountsService,
-      AuthenticationManager authenticationManager, //
-      PasswordEncoder passwordEncoder) {
+      AuthenticationManager authenticationManager) {
     assert (userAccountsService != null);
     this.userAccountsService = userAccountsService;
     assert (clientAccountsService != null);
     this.clientAccountsService = clientAccountsService;
     assert (authenticationManager != null);
     this.authenticationManager = authenticationManager;
-    assert (passwordEncoder != null);
-    this.passwordEncoder = passwordEncoder;
   }
 
 

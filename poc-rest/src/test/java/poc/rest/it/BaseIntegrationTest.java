@@ -17,35 +17,41 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
+
+import net.minidev.json.JSONObject;
 
 import static java.util.Arrays.asList;
 
 
-/**
- * Created by eelko on 2016-04-08
- */
-@TestPropertySource("/application-test.yml")
+@ActiveProfiles("test")
 public class BaseIntegrationTest {
 
   static final Log LOG = LogFactory.getLog(BaseIntegrationTest.class);
 
-  private static final String HOST = "localhost";
-  private static final String PROTOCOLL = "http";
+  private final String HOST = "localhost";
 
-  @Value("${server.servlet.contextPath}")
+  private final String PROTOCOLL = "http";
+
+  @Value("${server.servlet.context-path}")
   protected String contextPath;
 
-  @Value("${spring.data.rest.basePath}")
+  @Value("${spring.data.rest.base-path}")
   protected String restBasePath;
 
-  // @Value("${management.contextPath}")
-  private String managementContextPath = "/application";
+  // @Value("${management.endpoints.web.base-path}")
+  protected String managementBasePath = "/actuator";
+
+  @Value("${spring.security.user.name}")
+  protected String username;
+
+  @Value("${spring.security.user.password}")
+  protected String password;
+
+  OAuth2RestTemplate restTemplate;
 
   @LocalServerPort
   private int port;
-
-  OAuth2RestTemplate restTemplate;
 
 
   BaseIntegrationTest() {
@@ -69,7 +75,7 @@ public class BaseIntegrationTest {
 
 
   String getManagementUri() {
-    return getRootUri() + managementContextPath;
+    return getRootUri() + managementBasePath;
   }
 
 
@@ -99,6 +105,8 @@ public class BaseIntegrationTest {
     resourceDetails.setUsername(username);
     resourceDetails.setPassword(password);
 
+    LOG.debug("" + resourceDetails.getAuthenticationScheme());
+
     DefaultOAuth2ClientContext clientContext = new DefaultOAuth2ClientContext();
 
     restTemplate = new OAuth2RestTemplate(resourceDetails, clientContext);
@@ -116,13 +124,13 @@ public class BaseIntegrationTest {
     System.out.println("Management Health URI: " + uri);
     Assert.assertNotNull("No oauth2 rest template", restTemplate);
 
-    ResponseEntity<String> entity = restTemplate.getForEntity(uri, String.class);
+    ResponseEntity<JSONObject> actuatorResponse = restTemplate.getForEntity(uri, JSONObject.class);
+    JSONObject actuatorEntity = actuatorResponse.getBody();
 
-    printResponse(entity);
+    System.out.println("Actuator health response: " + actuatorEntity.getAsString("status"));
 
-    Assert.assertTrue("Call to health service did not return OK (HTTP 200)", entity.getStatusCode().equals(HttpStatus.OK));
-    Assert.assertTrue(entity.getBody().contains("\"status\":\"UP\""));
-    Assert.assertFalse(entity.getBody().contains("\"hello\":\"1\""));
+    Assert.assertTrue("Call to health service did not return OK (HTTP 200)", actuatorResponse.getStatusCode().equals(HttpStatus.OK));
+    Assert.assertEquals("Status doen not equal UP","UP", actuatorEntity.getAsString("status"));
   }
 
 

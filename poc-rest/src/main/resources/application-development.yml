@@ -1,17 +1,8 @@
 
 # Logging
-debug: false
+debug: true
 
-# Security
-#security:
-#
-#  user:
-#    name: epo
-#    password: 12345
-#    role: USER
 
-banner:
-  location: classpath:dev/banner.txt
 
 spring:
   # Data
@@ -19,3 +10,11 @@ spring:
     url: jdbc:mysql://localhost:3306/poc_dev?useSSL=false
     username: poc_dev
     password: b1vidh
+
+  banner:
+      location: classpath:dev/banner.txt
+
+
+# Logging
+logging:
+  file: target/log/poc.log
