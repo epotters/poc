@@ -18,8 +18,7 @@ public class AuthenticationManagerConfig extends GlobalAuthenticationConfigurerA
 
 
   AuthenticationManagerConfig( //
-      @Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService
-      ) {
+      @Qualifier("userAccountsServicePropertiesImpl") UserDetailsService userAccountsService) {
     this.userAccountsService = userAccountsService;
   }
 
@@ -29,6 +28,7 @@ public class AuthenticationManagerConfig extends GlobalAuthenticationConfigurerA
     auth.userDetailsService(userAccountsService) //
         .passwordEncoder(passwordEncoder());
   }
+
 
   @Bean
   public PasswordEncoder passwordEncoder() {

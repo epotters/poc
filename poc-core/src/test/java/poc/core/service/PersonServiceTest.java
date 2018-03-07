@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import poc.core.config.CoreContext;
 import poc.core.repository.PersonRepository;
 
+
 @SpringBootTest(classes = {CoreContext.class}, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
     TransactionalTestExecutionListener.class})

@@ -16,7 +16,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 
 /**
- * Created by epotters on 2016-04-05
  * <p>
  * Based on the helpful answer at http://stackoverflow.com/q/25356781/56285,
  * with error details in response body added.

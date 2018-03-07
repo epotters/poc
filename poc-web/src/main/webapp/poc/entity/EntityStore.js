@@ -45,7 +45,7 @@ define([
           entities[i] = entity;
         }
 
-        totalCount = results.page.totalElements
+        totalCount = results.page.totalElements;
       } else {
 
         console.log(results);

@@ -13,7 +13,7 @@ define([
       this.inherited(arguments);
       this.title = "Demo Next page";
     },
-    
+
     setContent: function () {
       var me = this;
       this.content = "<p>Demo content next page</p>";

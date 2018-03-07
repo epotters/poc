@@ -18,10 +18,6 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import poc.core.domain.Person;
 
 
-/**
- * Created by epotters on 2017-03-20
- */
-
 @RunWith(SpringRunner.class)
 public class JsonSchemaGeneratorTest {
 

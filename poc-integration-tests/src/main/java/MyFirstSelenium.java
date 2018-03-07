@@ -1,8 +1,3 @@
-/**
- * Created by epotters on 29-10-2014.
- */
-
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -18,10 +18,6 @@ import org.springframework.stereotype.Component;
 import poc.rest.service.LocalizedMessageService;
 
 
-/**
- * Created by epotters on 2016-02-01
- */
-
 @Component
 public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 

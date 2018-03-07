@@ -19,10 +19,6 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import poc.rest.service.LocalizedMessageService;
 
 
-/**
- * Created by epotters on 2016-02-01
- */
-
 @SpringBootTest(classes = {poc.rest.config.RestContext.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 @RunWith(SpringRunner.class)

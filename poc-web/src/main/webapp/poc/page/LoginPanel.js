@@ -17,7 +17,7 @@ define([
              template,
              nls) {
   return declare([_WidgetBase, _TemplatedMixin], {
-      templateString: template,
+    templateString: template,
 
 
     postCreate: function () {
@@ -40,12 +40,12 @@ define([
       domStyle.set(this.domNode, "display", "none");
     },
 
-    showError: function(errorText) {
+    showError: function (errorText) {
       domStyle.set(this.errorText, "display", "");
       this.errorText.innerHTML = errorText;
     },
 
-    hideError: function(errorText) {
+    hideError: function (errorText) {
       domStyle.set(this.errorText, "display", "none");
       this.errorText.innerHTML = "";
     }

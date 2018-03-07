@@ -49,8 +49,6 @@
   height: 240px;
 }
 
-
-
 /* Toolbars */
 
 .toolbar {
@@ -156,7 +154,6 @@ table.dijitSelect tbody {
 .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
   border-left-width: 1px;
 }
-
 
 /* Grid */
 

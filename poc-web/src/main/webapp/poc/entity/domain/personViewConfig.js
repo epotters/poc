@@ -10,7 +10,7 @@ define({
         getDisplayName: function (person) {
           return person.firstName +
               ((!person.prefix || !person.prefix || person.prefix.length === 0) ? "" : " " + person.prefix) +
-              " " + person.lastName
+              " " + person.lastName;
         }
       },
       newEntity: {

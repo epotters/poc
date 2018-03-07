@@ -199,7 +199,7 @@ define([
       );
     },
 
-    calcultateExpiryDate: function(tokenValidityInSec) {
+    calcultateExpiryDate: function (tokenValidityInSec) {
       var buffer = 60, now = new Date(), time = now.getTime();
       time += parseInt(tokenValidityInSec - buffer) * 1000;
       now.setTime(time);

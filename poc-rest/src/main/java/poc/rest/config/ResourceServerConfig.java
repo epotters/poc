@@ -55,8 +55,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     http.authorizeRequests()
         .antMatchers("/").permitAll()
 
-        .requestMatchers(EndpointRequest.to("health", "info")).permitAll() // Actuator rules per endpoint
-        .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin") // Actuator general rules
+        .requestMatchers(EndpointRequest.to("health", "info")).permitAll()
+        .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin")
 
         .antMatchers("/logout").permitAll()
         .antMatchers(HttpMethod.OPTIONS).permitAll()

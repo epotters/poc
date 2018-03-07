@@ -65,8 +65,8 @@ define([
       dojo.addClass(control.domNode, "form-control");
 
 
-      control.watch('value', function (prop, old, val) {
-        console.info('select.watch("value")', prop, old, val);
+      control.watch("value", function (prop, old, val) {
+        console.info("select.watch(\"value\")", prop, old, val);
       });
 
 
