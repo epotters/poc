@@ -1,9 +1,5 @@
 package poc.jobs.collectors.selenium;
 
-/**
- * Created by epotters on 6-2-2017.
- */
-
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;

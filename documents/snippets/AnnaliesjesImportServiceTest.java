@@ -28,10 +28,6 @@ import bowlon.core.service.impl.CsvAnnaliesjesImportServiceImpl;
 import bowlon.core.service.impl.GoogleSheetsAnnaliesjesImportServiceImpl;
 
 
-/**
- * Created by epotters on 2016-06-13
- */
-
 //@RunWith(Parameterized.class)
 public class AnnaliesjesImportServiceTest {
 

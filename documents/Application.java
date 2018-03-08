@@ -10,9 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import poc.core.repository.PersonRepository;
 
 
-/**
- * Created by epotters on 12-3-2015.
- */
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 

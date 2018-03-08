@@ -16,9 +16,6 @@ import poc.jobs.collectors.impl.ParkMobileDataCollector;
 import poc.jobs.collectors.impl.PublicLibraryDataCollector;
 
 
-/**
- * Created by epotters on 2017-02-08
- */
 public class AllCollectorsLogin {
 
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);

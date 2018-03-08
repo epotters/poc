@@ -15,10 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import bowlon.core.service.AnnaliesjesImportService;
 
 
-/**
- * Created by epotters on 2016-06-13
- */
-
 @RunWith(SpringRunner.class)
 public class GoogleSpreadsheetAnnaliesjesImportServiceTest extends AnnaliesjesImportServiceBaseTest {
 

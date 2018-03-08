@@ -6,9 +6,6 @@ import java.util.ResourceBundle;
 import org.springframework.stereotype.Component;
 
 
-/**
- * Created by epotters on 2017-02-13
- */
 @Component
 public class AccountServiceImpl implements AccountService {
 

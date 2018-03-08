@@ -45,10 +45,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-/**
- * Created by epotters on 2017-02-10
- */
-
 public class FileDownloader {
   private static final Logger LOG = Logger.getLogger(FileDownloader.class);
 

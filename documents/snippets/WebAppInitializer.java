@@ -12,9 +12,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 import poc.rest.Application;
 
 
-/**
- * Created by epotters on 2014-12-15
- */
 public class WebAppInitializer implements WebApplicationInitializer {
 
   @Override

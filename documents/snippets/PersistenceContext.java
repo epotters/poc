@@ -23,9 +23,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-/**
- * Created by epotters on 17-11-2014.
- */
 @Configuration
 @EnableJpaRepositories("poc.core.repository")
 @EnableTransactionManagement

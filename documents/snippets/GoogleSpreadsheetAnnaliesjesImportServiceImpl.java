@@ -25,10 +25,6 @@ import com.google.gdata.util.ServiceException;
 import bowlon.core.service.AnnaliesjesImportService;
 
 
-/**
- * Created by epotters on 2016-01-14
- */
-
 public abstract class GoogleSpreadsheetAnnaliesjesImportServiceImpl extends BaseAnnaliesjesImportService
     implements AnnaliesjesImportService {
 

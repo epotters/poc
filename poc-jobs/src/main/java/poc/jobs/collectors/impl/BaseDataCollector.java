@@ -34,9 +34,6 @@ import poc.jobs.collectors.UserAccount;
 import poc.jobs.collectors.selenium.FileDownloader;
 
 
-/**
- * Created by epotters on 2017-01-24
- */
 @PropertySource("/application.properties")
 public class BaseDataCollector {
 

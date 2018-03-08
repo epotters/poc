@@ -8,9 +8,6 @@ import poc.jobs.collectors.AccountService;
 import poc.jobs.collectors.AccountServiceImpl;
 
 
-/**
- * Created by epotters on 2017-02-13
- */
 @Configuration
 public class CollectorsContext {
 

@@ -6,9 +6,6 @@ import java.util.ResourceBundle;
 import lombok.Getter;
 
 
-/**
- * Created by epotters on 2017-02-13
- */
 public enum AccountType {
 
   ING, IMDB, MY_GOVERNMENT, OV_CHIPCARD, PARK_MOBILE, PUBLIC_LIBRARY;
