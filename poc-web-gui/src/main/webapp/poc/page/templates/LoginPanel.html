@@ -1,0 +1,38 @@
+<div>
+  <div class="modal fade in" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content login-panel">
+        <form name="login-form">
+          <div class="modal-header">
+            <h4 class="modal-title">Login</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="usernameField" data-dojo-attach-point="usernameLabel">User name</label>
+              <div class="value">
+                <input type="text" id="usernameField" name="username" class="form-control"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="passwordField" data-dojo-attach-point="passwordLabel">Password</label>
+              <div class="value">
+                <input type="password" id="passwordField" name="password" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="alert alert-danger error-text" data-dojo-attach-point="errorText" style="display: none">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="toolbar navbar">
+              <div class="nav navbar-nav navbar-right">
+                <span class="btn btn-default" id="loginButton" data-dojo-attach-point="loginButton">Login</span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade in"></div>
+</div>

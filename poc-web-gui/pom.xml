@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>poc</artifactId>
+    <groupId>nl.xs4all.epotters</groupId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.xs4all.epotters.poc</groupId>
+  <artifactId>poc-web-gui</artifactId>
+  <name>POC Web GUI</name>
+  <description>Web probeersels</description>
+  <packaging>war</packaging>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>nl.xs4all.epotters.poc</groupId>
+      <artifactId>poc-core</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.1.1-1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>3.3.7-1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>dojo</artifactId>
+      <version>1.10.4-1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>dojo</artifactId>
+      <version>1.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>dgrid</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+
+  </dependencies>
+
+</project>

@@ -1,0 +1,360 @@
+/*** dgrid styling **/
+
+/*
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+*/
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+}
+
+.content {
+  margin: 24px;
+}
+
+.dgrid-no-data {
+  padding: 12px;
+  margin: 36px;
+}
+
+.panel {
+  border: 1px solid silver;
+}
+
+.grid-panel .dgrid {
+  border: 0 !important;
+}
+
+/* Form Panel */
+
+.form-panel {
+  width: 600px;
+}
+
+.form-panel .form-component {
+  margin-bottom: 3px;
+}
+
+.form-panel .form-component label {
+  display: inline-block;
+  width: 120px;
+}
+
+.form-panel .form-component .control {
+  display: inline-block;
+}
+
+.form-dialog {
+  width: 360px;
+  height: 240px;
+}
+
+/* Toolbars */
+
+.toolbar {
+  float: none;
+  padding: 6px 0;
+}
+
+.toolbar .btn-group {
+  display: inline-block;
+}
+
+.toolbar .btn,
+.toolbar .btn-group {
+  margin: 0 3px;
+}
+
+.toolbar .btn {
+  border: 1px solid #ccc;
+}
+
+.toolbar .btn-group .btn {
+  margin: 0;
+}
+
+.navbar-nav.navbar-right {
+  margin-right: 0;
+}
+
+/* dijit resets */
+
+.dijitButtonNode {
+  border: 0;
+  padding: 3px 9px;
+  width: 100%;
+  height: 100%;
+}
+
+.form-group .dijitTextBox,
+.form-group .dijitSelect,
+.form-group .dijitDateTextBox {
+
+}
+
+.dijitDialogSingleChild {
+  height: 100%;
+}
+
+.dgrid-loading .dgrid-below {
+  margin: 24px;
+}
+
+.form-control .dijitTextBox input {
+  width: 100%;
+  height: 100%;
+}
+
+.dijitToggleButtonIconChar,
+.dijitOffScreen {
+  display: none;
+}
+
+.dijitPopup, .dijitMenuPopup {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.dijitPopup tr td, .dijitMenuPopup tr td {
+  border-bottom: 1px solid #ddd;
+  padding: 3px;
+}
+
+td.dijitArrowButtonContainer {
+  vertical-align: top;
+}
+
+td.dijitArrowButtonContainer input.arrowButtonInner {
+  display: inline-block;
+  text-align: right;
+}
+
+.dijitValidationContainer input,
+.dijitValidationContainer input.dijitInputField {
+  display: none;
+}
+
+.dijitArrowButtonContainer input.dijitInputField {
+  text-align: right;
+}
+
+table.dijitSelect tbody {
+  width: 100%;
+}
+
+.btn-group-sm > .btn, .btn-sm {
+  padding: 0;
+}
+
+.btn-group > .btn {
+  border-left-width: 0;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-left-width: 1px;
+}
+
+/* Grid */
+
+.dgrid .dgrid-cell {
+  border: 1px solid transparent;
+}
+
+.dgrid .dgrid-row {
+  border: 1px solid transparent;
+  border-bottom: 1px solid #ddd;
+}
+
+.dgrid-row .display-field,
+.dgrid-row input,
+.form-control input,
+.form-control .dijitSelectLabel {
+  padding: 3px;
+  border: 1px solid transparent;
+  background-color: transparent;
+}
+
+.dgrid-row .display-field,
+.dgrid-row input,
+.form-control input {
+  width: 100%;
+}
+
+.dgrid-row.dgrid-selected .display-field,
+.dgrid-row.dgrid-selected input {
+  background-color: white;
+}
+
+.dgrid-row td.dgrid-cell {
+  padding: 0;
+}
+
+/* Form */
+
+table.dijitDownArrowButton {
+  border-collapse: collapse;
+  cursor: pointer;
+}
+
+table.dijitDownArrowButton tbody,
+table.dijitDownArrowButton tbody tr,
+table.dijitDownArrowButton tbody tr td {
+  height: auto;
+}
+
+table.dijitDownArrowButton tbody,
+table.dijitDownArrowButton tbody tr,
+input.dijitArrowButtonInner {
+  width: 100%;
+}
+
+.form-group-sm .form-control {
+  height: auto;
+  padding: 0;
+}
+
+.form-group .value,
+.form-group-sm .value {
+  width: 59%;
+  display: inline-block;
+}
+
+.form-group-sm input {
+  border: none;
+}
+
+td.dijitArrowButton {
+  text-align: right;
+}
+
+.form-group .dijitInputInner {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 3px !important;
+}
+
+td.dijitButtonContents,
+div.dijitInputContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.dijitDateTextBox .dijitArrowButton {
+  border-left: 1px solid #ccc;
+
+}
+
+.form-control-datetextbox .dijitInputContainer {
+  width: 90%;
+}
+
+.dijitSelect input,
+.dijitTextBox input.dijitArrowButtonInner {
+  text-indent: 0 !important;
+}
+
+.dijitSelect .dijitButtonContents {
+  border-right-color: #ccc;
+}
+
+div.dijitInputContainer {
+  display: inline-block;
+}
+
+.dijitArrowButton {
+  width: 9%;
+}
+
+.toolbar-top {
+  margin-top: 0;
+}
+
+.toolbar-bottom {
+  margin-bottom: 0;
+}
+
+div.dijitRight {
+  float: right;
+}
+
+.panel-body {
+  overflow: hidden;
+}
+
+/*
+.form-control-select {
+  margin-bottom: -3px;
+}
+*/
+
+/* Grid views */
+
+p {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+.icon {
+  background: url(dummy.png);
+  font-size: 0;
+  background-repeat: no-repeat;
+}
+
+/* styles for "table" view (using Grid.renderRow) */
+
+.table .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.table .field-icon {
+  width: 33px;
+  padding: 0;
+}
+
+.table .dgrid-cell {
+  vertical-align: middle;
+}
+
+/* styles for details view */
+
+.details .dgrid-row {
+  clear: both;
+  min-height: 64px;
+  padding: 0.5em;
+}
+
+.details .icon {
+  width: 64px;
+  height: 64px;
+}
+
+.details .name {
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+/* styles for gallery view */
+
+.gallery .dgrid-row {
+  width: 25%;
+  display: inline-block;
+  text-align: center;
+  padding: 1em 0;
+}
+
+.gallery .media-left .media {
+  text-align: center;
+}
+
+.gallery .icon {
+  width: 128px;
+  height: 128px;
+  margin: auto;
+}
+
+.gallery .name {
+  margin-top: 0.5em;
+}

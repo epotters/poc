@@ -1,0 +1,32 @@
+# General
+spring:
+  profiles:
+    active: test
+  banner:
+    location: classpath:banner-test.txt
+  security:
+    user:
+      name: epo
+      password: 12345
+
+#Data
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/poc_tst?useSSL=false
+    username: poc_tst
+    password: poc_tst
+
+# Logging
+debug: true
+
+logging:
+  file: target/log/poc.log
+  level:
+    org.springframework.boot.autoconfigure.logging: INFO
+    org.springframework.boot.core.io.support: INFO
+    org.springframework.boot.test.annotation: INFO
+    org.springframework.boot.web: INFO
+    org.hibernate: WARN
+    org.hibernateSQL: WARN

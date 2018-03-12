@@ -1,0 +1,174 @@
+/* Page */
+#page {
+  width: 100%;
+}
+
+.content-container {
+  width: 960px;
+  height: 100%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  border-left: 1px solid #e3e3e3;
+  border-right: 1px solid #e3e3e3;
+}
+
+.main .content-container {
+  padding: 12px;
+
+  min-height: 1200px;
+}
+
+/* Header */
+
+.header {
+  height: 90px;
+}
+
+nav > li > a {
+  position: relative;
+  display: block;
+  padding: 3px 6px;
+}
+
+@media (min-width: 768px) {
+  .menubar.navbar {
+    border-radius: 0;
+  }
+
+  .menubar ul.navbar-nav,
+  .menubar ul.navbar-nav > li,
+  .menubar ul.navbar-nav > li > a {
+    height: 30px;
+  }
+
+  .navbar-nav > li > a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: middle;
+    font-size: 0.9em;
+  }
+
+}
+
+.banner {
+  height: 60px;
+}
+
+.menubar.navbar {
+  border-top: 1px solid #e3e3e3;
+  border-bottom: 1px solid #e3e3e3;
+  min-height: 30px;
+  max-height: 30px;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2);
+}
+
+.menubar .navbar-nav > li > a:hover {
+  background-color: silver;
+}
+
+/* User panel */
+
+.user-panel {
+  display: inline-block;
+  float: right;
+  margin: 6px 0;
+  padding: 9px;
+}
+
+.user-panel .glyphicon {
+  margin-right: 3px;
+}
+
+.user {
+  display: inline-block;
+}
+
+.user-panel .btn-sm {
+  display: inline-block;
+  margin-left: 12px;
+}
+
+/* Scrolling */
+
+.scrolling .header .banner {
+  display: none;
+}
+
+.scrolling .header .menubar {
+  position: fixed;
+  width: 100%;
+}
+
+/* Bootstrap ajustments */
+
+.container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.panel {
+  border-color: #ccc;
+}
+
+.modal-dialog {
+  margin-top: 120px;
+}
+
+.navbar {
+  margin-bottom: 0;
+  min-height: 30px;
+  border: 0;
+}
+
+.navbar .navbar-right {
+  margin-right: 0;
+  border: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+div.form-group:nth-last-child(2),
+div.error-text:last-child {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.form-group.error input {
+  border-color: #ebccd1;
+}
+
+.form-group .error-text {
+  display: none;
+}
+
+.form-group.error .error-text {
+  display: block;
+}
+
+.form-group label {
+  display: inline-block;
+  flex: 2;
+  color: gray;
+  vertical-align: top;
+  font-weight: normal;
+  padding: 3px 12px 3px 0;
+  text-align: right;
+}
+
+.form-group .value {
+  display: inline-block;
+  flex: 3;
+}
+
+
+
+
+

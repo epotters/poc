@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Home page</title>
+
+  <link rel="stylesheet" href="https://cdn.rawgit.com/SitePen/dgrid/v1.1.0/css/dgrid.css"/>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat"/>
+
+  <link rel="stylesheet" href="poc/page/themes/default/default.css"/>
+
+
+  <script>
+    var dojoConfig = {
+      async: true,
+      dojoBlankHtmlUrl: "blank.html",
+      packages: [{
+        name: "dijit",
+        location: "http://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dijit"
+      }, {
+        name: "dgrid",
+        location: "https://cdn.rawgit.com/SitePen/dgrid/v1.2.1"
+      }, {
+        name: "dstore",
+        location: "https://cdn.rawgit.com/SitePen/dstore/v1.1.1"
+      }, {
+        name: "dmodel",
+        location: "https://cdn.rawgit.com/SitePen/dmodel/v0.1.0"
+      }, {
+        name: "dojomat",
+        location: "http://dev.localhost/poc/lib/sirprize/dojomat"
+      }, {
+        name: "page",
+        location: "http://dev.localhost/poc/poc/page"
+      }]
+    };
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.12.2/dojo/dojo.js"></script>
+
+</head>
+<body class="">
+
+<div id="page"></div>
+
+<script>
+
+  require([
+        "page/HomePage"
+      ],
+      function (HomePage) {
+        var page = new HomePage({
+          pageTitle: "Demo homepage"
+        }, "page");
+        page.startup();
+      });
+
+</script>
+
+</body>
+</html>
