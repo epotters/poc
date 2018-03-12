@@ -21,8 +21,8 @@
 
   <modules>
     <module>poc-core</module>
-    <module>poc-rest</module>
-    <module>poc-web</module>
+    <module>poc-web-api</module>
+    <module>poc-web-gui</module>
 
 
     <!-- module>poc-jobs</module -->
