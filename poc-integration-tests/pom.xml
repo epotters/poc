@@ -16,7 +16,8 @@
 
 
   <properties>
-    <selenium.version>2.48.2</selenium.version>
+    <selenium.version>3.11.0</selenium.version>
+    <selenium-htmlunit.version>2.52.0</selenium-htmlunit.version>
   </properties>
 
   <dependencies>
@@ -30,7 +31,7 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-htmlunit-driver</artifactId>
-      <version>${selenium.version}</version>
+      <version>${selenium-htmlunit.version}</version>
     </dependency>
 
   </dependencies>
