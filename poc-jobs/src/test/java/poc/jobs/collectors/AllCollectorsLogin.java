@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
 import poc.jobs.collectors.impl.ImdbDataCollector;
@@ -15,12 +18,12 @@ import poc.jobs.collectors.impl.OvChipkaartDataCollector;
 import poc.jobs.collectors.impl.ParkMobileDataCollector;
 import poc.jobs.collectors.impl.PublicLibraryDataCollector;
 
-
+@RunWith(SpringRunner.class)
 public class AllCollectorsLogin {
 
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);
 
-
+  @Test
   public void loginAll() throws Exception {
 
     List<DataCollector> collectors = new ArrayList<>();
