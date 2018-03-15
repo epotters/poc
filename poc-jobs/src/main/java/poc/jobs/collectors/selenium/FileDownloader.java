@@ -35,7 +35,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
@@ -46,7 +47,7 @@ import lombok.Setter;
 
 
 public class FileDownloader {
-  private static final Logger LOG = Logger.getLogger(FileDownloader.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FileDownloader.class);
 
   private static final Pattern CONTENT_TYPE_META_REGEXP = Pattern.compile("(<meta [^>]*http-equiv=\"Content-Type\"[^>]*)", 2);
   private static final Pattern ENCODING_REGEXP = Pattern.compile("charset=([-_A-Za-z0-9]*)", 2);
