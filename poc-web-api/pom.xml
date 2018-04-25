@@ -14,12 +14,9 @@
   <name>POC Rest API</name>
   <packaging>jar</packaging>
 
-
   <properties>
-    <jackson.version>2.9.4</jackson.version>
     <start-class>poc.web.api.Application</start-class>
   </properties>
-
 
   <dependencies>
     <dependency>
