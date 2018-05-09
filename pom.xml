@@ -36,15 +36,14 @@
   </modules>
 
   <properties>
-
     <!-- Text encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Java version -->
     <java.version>9</java.version>
-    <maven.compiler.source>9</maven.compiler.source>
-    <maven.compiler.target>9</maven.compiler.target>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
 
 
@@ -133,6 +132,7 @@
             <arg>--add-modules</arg>
             <arg>java.xml.bind</arg>
           </compilerArgs>
+          <release>${java.version}</release>
         </configuration>
       </plugin>
       <plugin>
