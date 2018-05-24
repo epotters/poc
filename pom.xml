@@ -24,7 +24,7 @@
     <module>poc-web-api</module>
     <module>poc-web-gui</module>
 
-    <!-- module>poc-jobs</module -->
+    <module>poc-jobs</module>
 
     <!-- module>poc-sencha</module -->
     <!-- module>poc-cordova</module -->

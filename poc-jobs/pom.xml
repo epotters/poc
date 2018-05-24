@@ -14,8 +14,9 @@
   <name>POC Jobs</name>
 
   <properties>
-    <selenium.version>3.11.0</selenium.version>
-    <selenium-htmlunit.version>2.52.0</selenium-htmlunit.version>
+    <selenium.version>3.12.0</selenium.version>
+    <htmlunit-driver.version>2.30.1</htmlunit-driver.version>
+    <htmlunit.version>2.31</htmlunit.version>
   </properties>
 
   <dependencies>
@@ -23,6 +24,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-quartz</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sourceforge.htmlunit</groupId>
+      <artifactId>htmlunit</artifactId>
+      <version>${htmlunit.version}</version>
     </dependency>
 
 
@@ -35,15 +42,15 @@
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-htmlunit-driver</artifactId>
-      <version>${selenium-htmlunit.version}</version>
+      <artifactId>htmlunit-driver</artifactId>
+      <version>${htmlunit-driver.version}</version>
     </dependency>
 
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.5</version>
+      <version>${commons-lang3.version}</version>
     </dependency>
 
   </dependencies>

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class AccountServiceImpl implements AccountService {
 
   private static final String ACCOUNTS_PROPERTY_PATH = "collectors.accounts";
-  private static final String ACCOUNT_PROPERTY_PATH = "account";
+  private static final String ACCOUNT_PROPERTY_PATH = "userAccount";
 
 
   @Override
