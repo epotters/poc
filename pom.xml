@@ -41,9 +41,11 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Java version -->
-    <java.version>9</java.version>
+    <java.version>10</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <lombok.version>1.16.22</lombok.version>
   </properties>
 
 
