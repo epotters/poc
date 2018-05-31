@@ -4,6 +4,7 @@ package poc.jobs.collectors.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,6 +29,7 @@ public class IngDataCollectorTest extends BaseDataCollectorTest {
   }
 
 
+  @Ignore
   @Test
   public void collectData() throws Exception {
     LOG.debug("About to collect data from ING");

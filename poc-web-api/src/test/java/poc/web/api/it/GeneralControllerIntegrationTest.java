@@ -42,9 +42,9 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
   @Test
   public void obtainToken() {
 
-    OAuth2AccessToken accessToken = restTemplate.getAccessToken();
+    final OAuth2AccessToken accessToken = restTemplate.getAccessToken();
 
-    String indent = "   ";
+    final String indent = "   ";
     System.out.println("Access token:");
     System.out.println(indent + "value: " + accessToken.getValue());
     System.out.println(indent + "scope: " + accessToken.getScope());
@@ -66,8 +66,8 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
   @Test
   public void error401() throws URISyntaxException {
     URI uri = new URI(getRestUri() + "/persons");
-    String username = "epo";
-    String wrongPassword = "54321";
+    final String username = "epo";
+    final String wrongPassword = "54321";
     try {
       OAuth2RestTemplate restTemplate = createOauth2Template(username, wrongPassword);
       restTemplate.getForEntity(uri, Map.class);
@@ -80,7 +80,7 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
 
   @Test
   public void error404() throws URISyntaxException {
-    URI uri = new URI(getRestUri() + "/this-url-does-not-exist");
+    final URI uri = new URI(getRestUri() + "/this-url-does-not-exist");
     System.out.println("Rest URI for 404 error: " + uri);
     ResponseEntity<Map> responseEntity = null;
     try {

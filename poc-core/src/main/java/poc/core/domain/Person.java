@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "person")
 @Data
-@NoArgsConstructor
 public class Person implements Serializable {
 
   @Id
@@ -46,6 +45,9 @@ public class Person implements Serializable {
   private Household household;
 
 
+  public Person() {}
+
+
   public Person(String firstName, String lastName) {
     setFirstName(firstName);
     setLastName(lastName);
@@ -58,4 +60,5 @@ public class Person implements Serializable {
     setGender(gender);
     setBirthDate(birthDate);
   }
+
 }

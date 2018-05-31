@@ -4,6 +4,7 @@ package poc.jobs.collectors.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -25,6 +26,7 @@ public class PublicLibraryDataCollectorTest extends BaseDataCollectorTest {
   }
 
 
+  @Ignore
   @Test
   public void collectData() throws Exception {
 

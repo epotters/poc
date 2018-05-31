@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,6 +24,7 @@ public class AllCollectorsLogin {
 
   private static final Log LOG = LogFactory.getLog(AllCollectorsLogin.class);
 
+  @Ignore
   @Test
   public void loginAll() throws Exception {
 
