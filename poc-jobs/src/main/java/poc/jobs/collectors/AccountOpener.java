@@ -27,7 +27,7 @@ public class AccountOpener {
 
   public static void main(String[] args) {
 
-    String driverType = HTML_UNIT;
+    final String driverType = HTML_UNIT;
     LOG.info("Starting main application with driver " + driverType);
 
     WebDriver driver;

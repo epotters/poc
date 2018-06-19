@@ -12,8 +12,7 @@ public class MyFirstSelenium {
   public static void main(String[] args) {
 
     // Create a new instance of the html unit driver
-    // Notice that the remainder of the code relies on the interface,
-    // not the implementation.
+    // Notice that the remainder of the code relies on the interface, not the implementation.
     WebDriver driver = new HtmlUnitDriver();
 
     // And now use this to visit Google
