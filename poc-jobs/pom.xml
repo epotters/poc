@@ -14,9 +14,6 @@
   <name>POC Jobs</name>
 
   <properties>
-    <selenium.version>3.12.0</selenium.version>
-    <htmlunit-driver.version>2.31.0</htmlunit-driver.version>
-    <htmlunit.version>2.31</htmlunit.version>
   </properties>
 
   <dependencies>
@@ -27,25 +24,20 @@
     </dependency>
 
     <dependency>
-      <groupId>net.sourceforge.htmlunit</groupId>
-      <artifactId>htmlunit</artifactId>
-      <version>${htmlunit.version}</version>
-    </dependency>
-
-
-    <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>${selenium.version}</version>
     </dependency>
-
-
+    <dependency>
+      <groupId>net.sourceforge.htmlunit</groupId>
+      <artifactId>htmlunit</artifactId>
+      <version>${htmlunit.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>htmlunit-driver</artifactId>
-      <version>${htmlunit-driver.version}</version>
+      <version>${selenium-htmlunit.version}</version>
     </dependency>
-
 
     <dependency>
       <groupId>org.apache.commons</groupId>

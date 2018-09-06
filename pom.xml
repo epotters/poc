@@ -26,12 +26,14 @@
 
     <module>poc-jobs</module>
 
+    <module>poc-tests</module>
+
     <!-- module>poc-sencha</module -->
     <!-- module>poc-cordova</module -->
     <!-- module>poc-evernote</module -->
     <!-- module>poc-jcr</module -->
 
-    <module>poc-integration-tests</module>
+
 
   </modules>
 
@@ -44,8 +46,6 @@
     <java.version>10</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-
-    <lombok.version>1.16.22</lombok.version>
   </properties>
 
 
