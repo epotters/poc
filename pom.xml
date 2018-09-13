@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.4.RELEASE</version>
+    <version>2.0.5.RELEASE</version>
   </parent>
 
   <groupId>nl.xs4all.epotters</groupId>
@@ -134,7 +134,7 @@
             <arg>--add-modules</arg>
             <arg>java.xml.bind</arg>
           </compilerArgs>
-          <release>${java.version}</release>
+          <!-- release>${java.version}</release -->
         </configuration>
       </plugin>
       <plugin>
