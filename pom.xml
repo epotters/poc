@@ -32,10 +32,8 @@
     <!-- module>poc-cordova</module -->
     <!-- module>poc-evernote</module -->
     <!-- module>poc-jcr</module -->
-
-
-
   </modules>
+
 
   <properties>
     <!-- Text encoding -->
