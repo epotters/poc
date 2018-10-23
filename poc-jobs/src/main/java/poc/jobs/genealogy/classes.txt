@@ -1,0 +1,146 @@
+
+
+
+@Data
+class Person {
+
+	private Long id;
+	private String displayName;
+	private Gender gender;
+
+	private Person father;
+	private Person mother;
+	private List<Person> children;
+
+}
+
+enum Gender {
+	MALE, FEMALE;
+}
+
+
+
+@Data
+class Ancestor {
+
+	private Person person;
+	private int kekuleNumber;
+
+	Ancestor(Person person) {
+		this.person = person;
+	}
+}
+
+
+/*
+Pedigree chart, Ahnentafel, Ancestry chart
+numbers according to the Kekulé system
+The subject of a Pedigree Chart is called Proband or Progenitor
+
+Kwartiestaat: Nummering volgens Kekulé-systeem
+*/
+class PedigreeChart {
+
+	private Ancestor proband;
+	private Map<Integer, Person> ahnenListe;
+
+
+	public PedigreeChart(Person proband) {
+		Ancestor proband = new Ancestor(person);
+		proband.setKekuleNumber(1);
+
+		buildAhnenListe();
+	}
+
+
+	public Ancestor getProband() {
+		return this.ahnenListe.get(1);
+	}
+
+
+	private void buildAhnenListe() {
+
+		List<Ancestor> ancestorsToProcess = new ArrayList<>();
+		ancestorsToProcess.add(proband);
+
+		while (ancestorsToProcess.size() > 0) {
+
+			Ancestor ancestor = ancestorsToProcess.get(0);
+
+			Person father = ancestor.getFather();
+			if (father != null) {
+				Ancestor fatherAncestor = new Ancestor(father);
+				fatherAncestor.setKekuleNumber((ancestor.getKekuleNumber() * 2);
+				ancestorsToProcess.add(fatherAncestor);
+			}
+
+			Person mother = ancestor.getMother();
+			if (mother != null) {
+				Ancestor motherAncestor = new Ancestor(father);
+				motherAncestor.setKekuleNumber((1 + ancestor.getKekuleNumber() * 2);
+				ancestorsToProcess.add(motherAncestor);
+			}
+
+			ahnenListe.add(ancestor);
+			ancestorsToProcess.remove(0);
+		}
+	}
+
+
+	/*
+	log2(<ahnentafel number>)
+	 -> The result needs to be rounded down to a full integer (truncate decimal digits)
+	 = generation number
+	*/
+	public int getGeneration(Ancestor ancestor) {
+		return 	Math.floor((Math.log(ancestor.getKekuleNumber()) / Math.log(2)));
+	}
+}
+
+
+/*
+Parenteel
+Descendancy chart
+*/
+class GenealogyChart {
+
+	Person proband;
+	List<Person> descendants = new ArrayList<>();
+
+	public GenealogyChart(Person proband) {
+		this.proband = proband;
+		collectDescendants();
+	}
+
+
+	private collectDescendants() {
+
+		List<Person> descendantsToProcess = new ArrayList<>();
+		descendantsToProcess.add(proband);
+		while (descendantsToProcess.size() > 0) {
+
+			Person descendant = descendantsToProcess.get(0);
+			List<Person> children = descendant.getChildren();
+
+			for(Person child : children) {
+
+				Person father = child.getFather();
+				if (!descendants.contains(father) & !descendantsToProcess.contains(father)) {
+					descendantsToProcess.add(father);
+				}
+
+				Person mother = child.getMother();
+				if (!descendants.contains(mother) & !descendantsToProcess.contains(mother)) {
+					descendantsToProcess.add(mother);
+				}
+
+				descendantsToProcess.add(child);
+			}
+
+			descendantsToProcess.remove(0);
+			descendants.add(descendant);
+		}
+	}
+
+
+}
