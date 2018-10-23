@@ -21,13 +21,13 @@ spring:
 
   # Data
   datasource:
-    url: jdbc:mysql://localhost:3306/poc
+    url: jdbc:mysql://localhost:3306/poc?serverTimezone=Europe/Amsterdam
     username: poc
     password: b1vidh
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         storage_engine: innodb
     generate-ddl: true
     hibernate:
