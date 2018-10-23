@@ -82,7 +82,6 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
   public void error404() throws URISyntaxException {
     final URI uri = new URI(getRestUri() + "/this-url-does-not-exist");
     System.out.println("Rest URI for 404 error: " + uri);
-    ResponseEntity<Map> responseEntity = null;
     try {
       restTemplate.getForEntity(uri, Map.class);
     }

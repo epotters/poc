@@ -26,7 +26,6 @@ public class UserAccount implements UserDetails {
   private Long id;
 
   private String mail;
-
   private String username;
   @JsonIgnore
   private String password;
