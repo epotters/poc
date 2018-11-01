@@ -92,13 +92,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
     </dependency>
 
-    <!-- Spring Boot 2
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-properties-migrator</artifactId>
-    </dependency>
-migration -->
-
     <!-- Java 9 migration -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
