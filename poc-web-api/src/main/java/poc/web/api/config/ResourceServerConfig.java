@@ -6,17 +6,12 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import poc.web.api.config.security.RestAuthenticationEntryPoint;
@@ -34,17 +29,22 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
   private final RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
   private final RestLogoutSuccessHandler restLogoutSuccessHandler;
+  private final ResourceServerTokenServices tokenServices;
+  //private final TokenStore tokenStore;
+  //private final JwtAccessTokenConverter accessTokenConverter;
 
 
   @Autowired
   ResourceServerConfig( //
       RestAuthenticationEntryPoint restAuthenticationEntryPoint, //
       RestAuthenticationSuccessHandler restAuthenticationSuccessHandler, //
-      RestLogoutSuccessHandler restLogoutSuccessHandler //
+      RestLogoutSuccessHandler restLogoutSuccessHandler, //
+      ResourceServerTokenServices tokenServices //
   ) {
     this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     this.restAuthenticationSuccessHandler = restAuthenticationSuccessHandler;
     this.restLogoutSuccessHandler = restLogoutSuccessHandler;
+    this.tokenServices = tokenServices;
   }
 
 
@@ -86,7 +86,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   public void configure(ResourceServerSecurityConfigurer resources) {
     // @formatter:off
     resources
-        .tokenServices(tokenServices())
+        .tokenServices(tokenServices)
         .resourceId(RESOURCE_ID);
     // @formatter:on
   }
@@ -95,29 +95,5 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   @Bean
   public SimpleUrlAuthenticationFailureHandler restFailureHandler() {
     return new SimpleUrlAuthenticationFailureHandler();
-  }
-
-
-  @Bean
-  public TokenStore tokenStore() {
-    return new JwtTokenStore(accessTokenConverter());
-  }
-
-
-  @Bean
-  public JwtAccessTokenConverter accessTokenConverter() {
-    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    converter.setSigningKey(ServerSecurityConfig.SIGNING_KEY);
-    return converter;
-  }
-
-
-  @Bean
-  @Primary
-  public ResourceServerTokenServices tokenServices() {
-    DefaultTokenServices tokenServices = new DefaultTokenServices();
-    tokenServices.setSupportRefreshToken(true);
-    tokenServices.setTokenStore(this.tokenStore());
-    return tokenServices;
   }
 }

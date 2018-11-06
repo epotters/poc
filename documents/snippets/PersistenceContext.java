@@ -117,7 +117,7 @@ public DataSource secondaryDataSource() {
   protected Properties additionalProperties() {
     Properties properties = new Properties();
     if (DATABASE_TYPE.equals(DB_TYPE_MYSQL)) {
-      properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+      properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
       properties.setProperty("hibernate.hbm2ddl.auto", "");
     } else { // defaults to H2 database
       properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");

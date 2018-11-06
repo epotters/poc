@@ -14,6 +14,7 @@
   <name>POC Jobs</name>
 
   <properties>
+    <gedcom4j.version>RELEASE</gedcom4j.version>
   </properties>
 
   <dependencies>
@@ -43,6 +44,12 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>${commons-lang3.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.gedcom4j</groupId>
+      <artifactId>gedcom4j</artifactId>
+      <version>${gedcom4j.version}</version>
     </dependency>
 
   </dependencies>
