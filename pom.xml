@@ -46,6 +46,8 @@
     <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <spring-security-oauth2-autoconfigure.version>2.1.0.RELEASE</spring-security-oauth2-autoconfigure.version>
   </properties>
 
 
@@ -91,6 +93,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- Java 9 migration -->
@@ -118,6 +121,16 @@
 
   </dependencies>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.security.oauth.boot</groupId>
+        <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+        <version>${spring-security-oauth2-autoconfigure.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
     <plugins>
       <plugin>
@@ -139,13 +152,13 @@
       <url>http://repo.spring.io/milestone</url>
     </repository>
     <repository>
-      <snapshots />
+      <snapshots/>
       <id>milestone-local</id>
       <name>libs-milestone-local</name>
       <url>https://repo.spring.io/libs-milestone-local</url>
     </repository>
     <repository>
-      <snapshots />
+      <snapshots/>
       <id>snapshots</id>
       <name>libs-snapshot</name>
       <url>https://repo.spring.io/libs-snapshot</url>
