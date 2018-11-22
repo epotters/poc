@@ -21,11 +21,15 @@ import poc.web.api.service.LocalizedMessageService;
 @Component
 public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
-  @Autowired
   private ResourcePatternResolver resourceResolver;
+  private MessageSource messageSource;
+
 
   @Autowired
-  private MessageSource messageSource;
+  public LocalizedMessageServiceImpl(ResourcePatternResolver resourceResolver, MessageSource messageSource) {
+    this.resourceResolver = resourceResolver;
+    this.messageSource = messageSource;
+  }
 
 
   @Override
@@ -41,6 +45,7 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
   }
 
 
+  @Override
   public List<Locale> customizedLocales() throws IOException {
     List<Locale> locales = new ArrayList<>();
 
@@ -51,7 +56,7 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
     Resource[] resources = resourceResolver.getResources(resourcePattern);
     for (Resource resource : resources) {
       String fileName = resource.getFilename();
-      if (fileName.startsWith(startString) && fileName.endsWith(endString)) {
+      if (fileName != null && fileName.startsWith(startString) && fileName.endsWith(endString)) {
         String languageTag = fileName.substring(startString.length(), fileName.indexOf(endString));
         locales.add(Locale.forLanguageTag(languageTag));
       }
@@ -61,10 +66,8 @@ public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
 
   public List<String> listKeys() {
-    List<String> keys = new ArrayList<>();
     ResourceBundle messages = ResourceBundle.getBundle("locale/messages", currentLocale());
-    keys.addAll(messages.keySet());
-    return keys;
+    return new ArrayList<>(messages.keySet());
   }
 
 
