@@ -99,29 +99,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Java 9 migration -->
-    <!--<dependency>-->
-      <!--<groupId>javax.xml.bind</groupId>-->
-      <!--<artifactId>jaxb-api</artifactId>-->
-    <!--</dependency>-->
-
-    <!--<dependency>-->
-      <!--<groupId>org.glassfish.jaxb</groupId>-->
-      <!--<artifactId>jaxb-runtime</artifactId>-->
-      <!--&lt;!&ndash;<version>${javax-jaxb.version}</version>&ndash;&gt;-->
-    <!--</dependency>-->
-
-    <!--<dependency>-->
-      <!--<groupId>javax.activation</groupId>-->
-      <!--<artifactId>activation</artifactId>-->
-      <!--<version>1.1</version>-->
-    <!--</dependency>-->
-
-    <dependency>
-      <groupId>javax.transaction</groupId>
-      <artifactId>javax.transaction-api</artifactId>
-    </dependency>
-
   </dependencies>
 
   <dependencyManagement>
