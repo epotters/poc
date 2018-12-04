@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.ContextConfiguration;
 
 import poc.web.api.Application;
 
@@ -14,7 +14,7 @@ import poc.web.api.Application;
 @Profile("war")
 @Configuration
 @EnableAutoConfiguration
-@ContextConfiguration(classes = {RestContext.class})
+@Import(RestContext.class)
 public class WebInitializer extends SpringBootServletInitializer {
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
