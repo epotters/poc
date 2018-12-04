@@ -45,10 +45,19 @@
     <dependency>
       <groupId>org.gedcom4j</groupId>
       <artifactId>gedcom4j</artifactId>
-      <version>${gedcom4j.version}</version>
     </dependency>
 
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.gedcom4j</groupId>
+        <artifactId>gedcom4j</artifactId>
+        <version>${gedcom4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 
 </project>
