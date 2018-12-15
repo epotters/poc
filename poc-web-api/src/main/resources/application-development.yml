@@ -5,9 +5,10 @@ debug: true
 
 
 spring:
+
   # Data
   datasource:
-    url: jdbc:mysql://localhost:3306/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam
+    url: jdbc:mysql://localhost:3307/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam
     username: poc_dev
     password: b1vidh
 
