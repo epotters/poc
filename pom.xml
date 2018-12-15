@@ -22,7 +22,7 @@
   <modules>
     <module>poc-core</module>
     <module>poc-web-api</module>
-    <module>poc-web-gui</module>
+    <!--<module>poc-web-gui</module>-->
 
     <module>poc-jobs</module>
 
@@ -45,10 +45,11 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
+    <spring-boot-version>2.1.1.RELEASE</spring-boot-version>
+
     <spring-security-oauth2>2.3.4.RELEASE</spring-security-oauth2>
     <spring-security-oauth2-autoconfigure.version>2.1.1.RELEASE</spring-security-oauth2-autoconfigure.version>
 
-    <skip.it>false</skip.it>
   </properties>
 
 
@@ -100,10 +101,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>javax.transaction</groupId>
-      <artifactId>javax.transaction-api</artifactId>
-    </dependency>
 
   </dependencies>
 
@@ -127,39 +124,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>2.1.1.RELEASE</version>
-        <executions>
-          <execution>
-            <id>pre-integration-test</id>
-            <goals>
-              <goal>start</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.it}</skip>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-integration-test</id>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.it}</skip>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <configuration>
-          <skip>${skip.it}</skip>
-        </configuration>
       </plugin>
     </plugins>
   </build>
