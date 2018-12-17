@@ -16,6 +16,13 @@
 
   <properties>
     <start-class>poc.web.api.Application</start-class>
+
+    <jib-plugin-version>0.10.1</jib-plugin-version>
+    <registry-url>registry.hub.docker.com</registry-url>
+    <registry-user>epotters</registry-user>
+    <registry-password>B@rc3l0n@</registry-password>
+
+
     <maven.test.skip>true</maven.test.skip>
     <skip.it>true</skip.it>
   </properties>
@@ -118,6 +125,38 @@
           <scope>provided</scope>
         </dependency>
       </dependencies>
+    </profile>
+
+    <profile>
+      <id>docker</id>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <version>${jib-plugin-version}</version>
+            <configuration>
+              <from>
+                <image>openjdk:11.0-jdk</image>
+              </from>
+              <to>
+                <image>${registry-url}/${registry-user}/${project.artifactId}:${project.version}</image>
+                <auth>
+                  <username>${registry-user}</username>
+                  <password>${registry-password}</password>
+                </auth>
+              </to>
+              <container>
+                <mainClass>${start-class}</mainClass>
+                <ports>
+                  <port>8002</port>
+                </ports>
+              </container>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
