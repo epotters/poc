@@ -129,9 +129,9 @@ public class BaseIntegrationTest {
 
     System.out.println("Actuator health response: " + actuatorEntity.getAsString("status"));
 
-    Assert.assertTrue("Call to health service did not return OK (HTTP 200)",
-        actuatorResponse.getStatusCode().equals(HttpStatus.OK));
-    Assert.assertEquals("Status doen not equal UP", "UP", actuatorEntity.getAsString("status"));
+    Assert.assertEquals("Call to health service did not return OK (HTTP 200)",
+        actuatorResponse.getStatusCode(), HttpStatus.OK);
+    Assert.assertEquals("Status does not equal UP", "UP", actuatorEntity.getAsString("status"));
   }
 
 

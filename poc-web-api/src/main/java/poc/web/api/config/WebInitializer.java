@@ -16,8 +16,8 @@ import poc.web.api.Application;
 @EnableAutoConfiguration
 @Import(RestContext.class)
 public class WebInitializer extends SpringBootServletInitializer {
-  @Override
-  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-    return application.sources(Application.class);
-  }
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
 }

@@ -29,7 +29,7 @@
 
 
     <dojo2.version>2.0.0</dojo2.version>
-    <dojo2.projectDir>poc-dojo</dojo2.projectDir>
+    <dojo2.projectDir>src/main/webapp/dojo</dojo2.projectDir>
     <dojo2.targetDir>output/dist</dojo2.targetDir>
     <dojo2.toolsDir>dojo-build-tools</dojo2.toolsDir>
 
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>nl.xs4all.epotters.poc</groupId>
       <artifactId>poc-core</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
 

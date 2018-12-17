@@ -11,12 +11,18 @@ spring:
 
 #Data
   jpa:
+    database-platform: org.hibernate.dialect.HSQLDialect
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
   datasource:
-    url: jdbc:mysql://localhost:3306/poc_tst?useSSL=false&serverTimezone=Europe/Amsterdam
-    username: poc_tst
-    password: poc_tst
+    url: jdbc:hsqldb:file:target/data/poc-test.hsqldb
+    username: sa
+
+#    url: jdbc:mysql://localhost:3306/poc_tst?useSSL=false&serverTimezone=Europe/Amsterdam
+#    username: poc_tst
+#    password: poc_tst
+
 
 # Logging
 debug: true
