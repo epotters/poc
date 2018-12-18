@@ -142,8 +142,10 @@
                   <password>${registry-password}</password>
                 </auth>
               </to>
+              <extraDirectory>${project.parent.basedir}/environment/configs/poc-web-api/</extraDirectory>
               <container>
                 <mainClass>${start-class}</mainClass>
+                <args>-Dspring.config.location=/config/</args>
                 <ports>
                   <port>8002</port>
                 </ports>

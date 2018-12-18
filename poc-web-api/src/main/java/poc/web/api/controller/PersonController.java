@@ -24,7 +24,6 @@ public class PersonController {
 
   private PersonRepository personRepository;
 
-
   @Autowired
   PersonController(PersonRepository personRepository) {
     this.personRepository = personRepository;

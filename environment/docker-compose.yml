@@ -1,45 +1,64 @@
-version: "3"
+version: "3.4"
 
 services:
 
-  db:
+  poc-db:
     image: mysql/mysql-server:8.0.13
     container_name: poc-db-dev
     ports:
-    - 13306:3306
+      - 13306:3306
     volumes:
-    - db-data:/var/lib/mysql
-    - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/:ro
-#    - db-entrypoint-initdb:/docker-entrypoint-initdb.d
-    networks:
-    - poc-dev
-    restart: always
-#    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
-#
-    command: ["mysqld", "--default-authentication-plugin=mysql_native_password", "--init-file=/docker-entrypoint-initdb.d/init.sql"]
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: poc_dev
-      MYSQL_USER: poc_dev
-      MYSQL_PASSWORD: b1vidh
-
-  poc:
-    image: epotters/poc-web-api
-    ports:
-      - 8002:8002
+      - poc-db-data:/var/lib/mysql
+#      - poc-db-config:/docker-entrypoint-initdb.d/:ro
     networks:
       - poc-dev
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
+    #, "--init-file=/docker-entrypoint-initdb.d/init.sql"]
     restart: always
+    environment:
+      ENVIRONMENT: "dev"
+
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: "poc_dev"
+      MYSQL_USER: "poc_dev"
+      MYSQL_PASSWORD: "b1vidh"
+
+
+  poc-web-api:
+    image: epotters/poc-web-api
+    container_name: poc-web-api-dev
+    ports:
+      - 18002:8002
+    networks:
+      - poc-dev
+    volumes:
+      #      - ./configs/poc-web-api/:/config/:ro
+      - poc-web-api-config:/config/:ro
+#    restart: always
+    depends_on:
+      - poc-db
+    environment:
+      ENVIRONMENT: "dev"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:13306/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam"
+
+
 
 volumes:
-  db-data:
-    driver: local
-#  db-entrypoint-initdb:
-#    external: true
+  poc-db-data:
+#  poc-db-config:
+  poc-web-api-config:
 
 networks:
   poc-dev:
 
+
+
+
+### The configs key is not supported for docker-compose
 #configs:
-#  sql_file_1:
-#    file: ./file_1.sql
+#  poc-web-api-config:
+#    file: configs/poc-web-api/application-cloud.yml
+#  poc-db-config:
+#    file: configs/poc-db/init.sql
+
+# secrets:
