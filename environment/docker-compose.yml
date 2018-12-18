@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+
+  db:
+    image: mysql/mysql-server:8.0.13
+    container_name: poc-db-dev
+    ports:
+    - 13306:3306
+    volumes:
+    - db-data:/var/lib/mysql
+    - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/:ro
+#    - db-entrypoint-initdb:/docker-entrypoint-initdb.d
+    networks:
+    - poc-dev
+    restart: always
+#    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
+#
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password", "--init-file=/docker-entrypoint-initdb.d/init.sql"]
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: poc_dev
+      MYSQL_USER: poc_dev
+      MYSQL_PASSWORD: b1vidh
+
+  poc:
+    image: epotters/poc-web-api
+    ports:
+      - 8002:8002
+    networks:
+      - poc-dev
+    restart: always
+
+volumes:
+  db-data:
+    driver: local
+#  db-entrypoint-initdb:
+#    external: true
+
+networks:
+  poc-dev:
+
+#configs:
+#  sql_file_1:
+#    file: ./file_1.sql

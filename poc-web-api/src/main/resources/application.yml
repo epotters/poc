@@ -8,8 +8,8 @@ server:
 
 # REST
 spring:
-#  profiles:
-#    active: test  # development
+  profiles:
+    active: development
   data:
     rest:
       base-path: /api
