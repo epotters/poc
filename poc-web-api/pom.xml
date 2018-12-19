@@ -20,8 +20,7 @@
     <jib-plugin-version>0.10.1</jib-plugin-version>
     <registry-url>registry.hub.docker.com</registry-url>
     <registry-user>epotters</registry-user>
-    <registry-password>B@rc3l0n@</registry-password>
-
+    <registry-password>B4rc3l0n4</registry-password>
 
     <maven.test.skip>true</maven.test.skip>
     <skip.it>true</skip.it>
@@ -142,10 +141,9 @@
                   <password>${registry-password}</password>
                 </auth>
               </to>
-              <extraDirectory>${project.parent.basedir}/environment/configs/poc-web-api/</extraDirectory>
+              <!--<extraDirectory>${project.parent.basedir}/environment/configs/poc-web-api/</extraDirectory>-->
               <container>
                 <mainClass>${start-class}</mainClass>
-                <args>-Dspring.config.location=/config/</args>
                 <ports>
                   <port>8002</port>
                 </ports>
@@ -154,6 +152,7 @@
           </plugin>
         </plugins>
       </build>
+
     </profile>
   </profiles>
 </project>

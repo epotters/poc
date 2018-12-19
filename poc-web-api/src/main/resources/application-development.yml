@@ -8,9 +8,13 @@ spring:
 
   # Data
   datasource:
-    url: jdbc:mysql://localhost:13306/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam
+    url: jdbc:mysql://localhost:3306/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam
     username: poc_dev
     password: b1vidh
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
 
   banner:
       location: classpath:dev/banner.txt
