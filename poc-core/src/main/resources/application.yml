@@ -1,6 +1,7 @@
 # General
-name: poc
-displayName: Proof of concept
+epo:
+  name: poc
+  displayName: Proof of concept
 
 
 spring:
