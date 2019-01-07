@@ -17,22 +17,12 @@
   <properties>
   </properties>
 
-  <dependencies>
 
+  <dependencies>
     <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <version>${selenium.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sourceforge.htmlunit</groupId>
-      <artifactId>htmlunit</artifactId>
-      <version>${htmlunit.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>htmlunit-driver</artifactId>
-      <version>${selenium-htmlunit.version}</version>
+      <groupId>nl.xs4all.epotters.poc</groupId>
+      <artifactId>poc-web-api</artifactId>
+      <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
 </project>
