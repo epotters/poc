@@ -1,6 +1,8 @@
 
 
-Docker images build in this project:
+Four environments: DEV, TST, ACC, PRD
+
+Docker images built in this project:
 
 `epotters/poc-web-api`
 
@@ -18,9 +20,9 @@ Start the database:
 `docker run mysql/mysql-server:8.0.13`
 
 
-Start the environment:
+Start an environment {env}:
 
-`cd environment`
+`cd environments/{env}`
 
 `docker-compose up`
 

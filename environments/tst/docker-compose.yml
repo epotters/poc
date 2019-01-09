@@ -4,36 +4,38 @@ services:
 
   poc-db:
     image: mysql/mysql-server:8.0.13
-    container_name: poc-db-dev
+    container_name: poc-db-tst
     ports:
-      - 13306:3306
+      - 23306:3306
     volumes:
       - poc-db-data:/var/lib/mysql
     networks:
-      - poc-dev
+      - poc
     command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
     restart: always
     environment:
-      ENVIRONMENT: "dev"
+      ENVIRONMENT: "tst"
       MYSQL_ROOT_HOST: "%"
-      MYSQL_DATABASE: "poc_dev"
-      MYSQL_USER: "poc_dev"
+      MYSQL_DATABASE: "poc"
+      MYSQL_USER: "poc"
       MYSQL_PASSWORD: "b1vidh"
 
 
   poc-web-api:
     image: epotters/poc-web-api:0.1-SNAPSHOT
-    container_name: poc-web-api-dev
+    container_name: poc-web-api-tst
     ports:
-      - 18002:8002
+      - 28002:8002
     networks:
-      - poc-dev
+      - poc
     restart: always
     depends_on:
       - poc-db
     environment:
-      ENVIRONMENT: "dev"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:3306/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam"
+      ENVIRONMENT: "tst"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:3306/poc?useSSL=false&serverTimezone=Europe/Amsterdam"
+      SPRING_APPLICATION_JSON: "{\"spring.jpa.hibernate.ddl-auto\": \"create\"}"
+
 
 
 volumes:
@@ -41,4 +43,4 @@ volumes:
 
 
 networks:
-  poc-dev:
+  poc:
