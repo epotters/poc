@@ -30,8 +30,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   private final RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
   private final RestLogoutSuccessHandler restLogoutSuccessHandler;
   private final ResourceServerTokenServices tokenServices;
-  //private final TokenStore tokenStore;
-  //private final JwtAccessTokenConverter accessTokenConverter;
+//  private final TokenStore tokenStore;
+//  private final JwtAccessTokenConverter accessTokenConverter;
 
 
   @Autowired

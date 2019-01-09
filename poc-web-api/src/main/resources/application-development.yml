@@ -1,9 +1,3 @@
-
-# Logging
-debug: true
-
-
-
 spring:
 
   # Data
@@ -21,5 +15,7 @@ spring:
 
 
 # Logging
+debug: true
+
 logging:
   file: target/log/poc.log

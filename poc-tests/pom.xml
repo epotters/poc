@@ -13,8 +13,13 @@
   <artifactId>poc-tests</artifactId>
   <name>POC Integration tests</name>
   <description>Integration Tests (Selenium test automation)</description>
+  <packaging>jar</packaging>
 
   <properties>
+    <start-class>poc.web.api.Application</start-class>
+
+    <maven.test.skip>true</maven.test.skip>
+    <skip.it>true</skip.it>
   </properties>
 
 
@@ -25,4 +30,43 @@
       <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring-boot-version}</version>
+        <executions>
+          <execution>
+            <id>pre-integration-test</id>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <skip>${skip.it}</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-integration-test</id>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+            <configuration>
+              <skip>${skip.it}</skip>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <skip>${skip.it}</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
