@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.2"
 
 services:
 
@@ -6,7 +6,7 @@ services:
     image: mysql/mysql-server:8.0.13
     container_name: poc-db-dev
     ports:
-      - 13306:3306
+      - 13307:3306
     volumes:
       - poc-db-data:/var/lib/mysql
     networks:
@@ -34,6 +34,8 @@ services:
     environment:
       ENVIRONMENT: "dev"
       SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:3306/poc?useSSL=false&serverTimezone=Europe/Amsterdam"
+      SPRING_DATASOURCE_USERNAME: poc
+      SPRING_DATASOURCE_PASSWORD: b1vidh
       SPRING_APPLICATION_JSON: "{\"spring.jpa.hibernate.ddl-auto\": \"create\"}"
 
 

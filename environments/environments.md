@@ -31,4 +31,5 @@ TODO
 
 - Look for a smaller base image
 - Remove the credentials from the pom, docker-compose and application-xxx.yml files.
+- Create dev, test, acc and prd environments
 

@@ -34,6 +34,8 @@ services:
     environment:
       ENVIRONMENT: "tst"
       SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:3306/poc?useSSL=false&serverTimezone=Europe/Amsterdam"
+      SPRING_DATASOURCE_USERNAME: poc
+      SPRING_DATASOURCE_PASSWORD: b1vidh
       SPRING_APPLICATION_JSON: "{\"spring.jpa.hibernate.ddl-auto\": \"create\"}"
 
 
