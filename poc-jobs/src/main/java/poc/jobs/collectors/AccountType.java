@@ -36,17 +36,17 @@ public enum AccountType {
 
   protected String buildKeyForType(String basePropertyPath) {
     String[] nameParts = name().split("_");
-    String typeName = "";
     boolean isFirst = true;
+    StringBuilder typeNameBuilder = new StringBuilder();
     for (String namePart : nameParts) {
       if (isFirst) {
-        typeName = typeName + namePart.toLowerCase();
+        typeNameBuilder.append(namePart.toLowerCase());
         isFirst = false;
       } else {
-        typeName = typeName + namePart.substring(0, 1).toUpperCase() + namePart.substring(1).toLowerCase();
+        typeNameBuilder.append(namePart.substring(0, 1).toUpperCase()).append(namePart.substring(1).toLowerCase());
       }
     }
-    return basePropertyPath + DOT + typeName + DOT;
+    return basePropertyPath + DOT + typeNameBuilder.toString() + DOT;
   }
 
 }
