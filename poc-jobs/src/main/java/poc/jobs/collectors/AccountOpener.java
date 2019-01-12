@@ -27,7 +27,7 @@ public class AccountOpener {
 
   public static void main(String[] args) {
 
-    final String driverType = HTML_UNIT;
+    final String driverType = CHROME;  //HTML_UNIT;
     LOG.info("Starting main application with driver " + driverType);
 
     WebDriver driver;
@@ -79,7 +79,9 @@ public class AccountOpener {
       case FIREFOX:
         return new FirefoxDriver();
       case CHROME:
-        String chromeDriverPath = "C:\\Program Files\\Chrome Driver\\chromedriver.exe";
+//        String chromeDriverPath = "C:\\Program Files\\Chrome Driver\\chromedriver.exe";
+        String chromeDriverPath = "/usr/local/bin/chromedriver";
+
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         return new ChromeDriver();
       case HTML_UNIT:

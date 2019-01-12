@@ -23,6 +23,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 
 import lombok.Getter;
@@ -31,9 +32,11 @@ import poc.jobs.collectors.AccountService;
 import poc.jobs.collectors.AccountServiceImpl;
 import poc.jobs.collectors.AccountType;
 import poc.jobs.collectors.UserAccount;
+import poc.jobs.collectors.config.CollectorsProperties;
 import poc.jobs.collectors.selenium.FileDownloader;
 
 
+@EnableConfigurationProperties(CollectorsProperties.class)
 @PropertySource("/application.properties")
 public class BaseDataCollector {
 
