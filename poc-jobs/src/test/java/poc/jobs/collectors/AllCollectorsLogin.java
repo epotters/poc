@@ -9,6 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
@@ -30,18 +33,29 @@ public class AllCollectorsLogin {
 
     List<DataCollector> collectors = new ArrayList<>();
 
-    collectors.add(new ImdbDataCollector());
-    collectors.add(new IngDataCollector());
-    collectors.add(new MyGovernmentDataCollector());
-    collectors.add(new OvChipkaartDataCollector());
-    collectors.add(new ParkMobileDataCollector());
-    collectors.add(new PublicLibraryDataCollector());
+    WebDriver driver = getChromeDriver();
+
+    collectors.add(new ImdbDataCollector(driver));
+    collectors.add(new IngDataCollector(driver));
+    collectors.add(new MyGovernmentDataCollector(driver));
+    collectors.add(new OvChipkaartDataCollector(driver));
+    collectors.add(new ParkMobileDataCollector(driver));
+    collectors.add(new PublicLibraryDataCollector(driver));
 
     for (DataCollector collector : collectors) {
       logInAndOut(collector);
     }
   }
 
+  private WebDriver getChromeDriver() {
+    String chromeDriverPath = "/usr/local/bin/chromedriver";
+    ChromeOptions chromeOptions = new ChromeOptions();
+//    chromeOptions.setBinary("/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary");
+    chromeOptions.addArguments("--headless");
+
+    System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+    return new ChromeDriver(chromeOptions);
+  }
 
   private void logInAndOut(DataCollector collector) throws Exception {
     String collectorDisplayName = collector.getType().getDisplayName();
