@@ -1,7 +1,7 @@
 # General
 spring:
   profiles:
-    active: test
+    active: integration-tests
   banner:
     location: classpath:banner-test.txt
   security:
@@ -9,15 +9,6 @@ spring:
       name: epo
       password: 12345
 
-  # Data
-  jpa:
-    database-platform: org.hibernate.dialect.HSQLDialect
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  datasource:
-    url: jdbc:hsqldb:file:target/data/poc-test.hsqldb
-    username: sa
 
 
 # Logging

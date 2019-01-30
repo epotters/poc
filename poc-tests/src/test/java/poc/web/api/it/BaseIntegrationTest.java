@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 import org.springframework.test.context.ActiveProfiles;
 
 import net.minidev.json.JSONObject;
+import poc.web.api.it.config.RemoteApplicationProperties;
 
 
 @ActiveProfiles("test")
@@ -48,10 +49,12 @@ public class BaseIntegrationTest {
   @Value("${spring.security.user.password}")
   protected String password;
 
-  OAuth2RestTemplate restTemplate;
-
   @LocalServerPort
   private int port;
+
+  RemoteApplicationProperties remoteApplicationProperties;
+
+  OAuth2RestTemplate restTemplate;
 
 
   BaseIntegrationTest() {
@@ -129,8 +132,7 @@ public class BaseIntegrationTest {
 
     System.out.println("Actuator health response: " + actuatorEntity.getAsString("status"));
 
-    Assert.assertEquals("Call to health service did not return OK (HTTP 200)",
-        actuatorResponse.getStatusCode(), HttpStatus.OK);
+    Assert.assertEquals("Call to health service did not return OK (HTTP 200)", actuatorResponse.getStatusCode(), HttpStatus.OK);
     Assert.assertEquals("Status does not equal UP", "UP", actuatorEntity.getAsString("status"));
   }
 
