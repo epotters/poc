@@ -1,36 +1,36 @@
 package poc.core.service.impl;
 
 
-import java.util.Calendar;
+import java.time.LocalTime;
 
 
 public class GreetingGenerator {
 
-  static final String GOOD_MORNING = "Goedemorgen";
-  static final String GOOD_AFTERNOON = "Goedemiddag";
-  static final String GOOD_EVENING = "Goedenavond";
-  static final String GOOD_NIGHT = "Goedenacht";
+  static final String GREETING_GROUP = "greeting";
+  static final String GOOD_MORNING = "good-morning";
+  static final String GOOD_AFTERNOON = "good-afternoon";
+  static final String GOOD_EVENING = "good-evening";
+  static final String GOOD_NIGHT = "good-night";
 
 
-  public static String generate() {
+  public static String generateGreeting() {
+    return GreetingGenerator.generateGreeting(LocalTime.now());
+  }
 
-    String greeting = "";
 
-    Calendar cal = Calendar.getInstance();
-    int hour = cal.get(Calendar.HOUR_OF_DAY);
-
-    if (hour < 6) {
-      greeting = GOOD_NIGHT;
-    } else if (hour > 6 && hour <= 12) {
-      greeting = GOOD_MORNING;
-    } else if (hour > 12 && hour <= 18) {
-      greeting = GOOD_AFTERNOON;
-    } else if (hour > 18) {
-      greeting = GOOD_EVENING;
+  public static String generateGreeting(LocalTime time) {
+    StringBuilder greetingKey = new StringBuilder();
+    greetingKey.append(GREETING_GROUP).append(".");
+    final int hour = time.getHour();
+    if (hour <= 6) {
+      greetingKey.append(GOOD_NIGHT);
+    } else if (hour <= 12) {
+      greetingKey.append(GOOD_MORNING);
+    } else if (hour <= 18) {
+      greetingKey.append(GOOD_AFTERNOON);
+    } else {
+      greetingKey.append(GOOD_EVENING);
     }
-    return greeting;
+    return greetingKey.toString();
   }
 }
-
-
-

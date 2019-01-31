@@ -55,6 +55,7 @@ public class LocalizedMessageServiceImplTest {
     Assert.assertEquals("Nombre", message);
 
     Assert.assertEquals(locale, messageService.currentLocale());
+
   }
 
 
