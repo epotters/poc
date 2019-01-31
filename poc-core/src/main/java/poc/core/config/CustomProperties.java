@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "epo")
+@ConfigurationProperties(prefix = "epo.application")
 public class CustomProperties {
 
   private String name;

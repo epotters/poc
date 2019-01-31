@@ -1,7 +1,8 @@
 # General
 epo:
-  name: poc
-  displayName: Proof of concept
+  application:
+    name: poc
+    displayName: Proof of concept
 
 
 spring:

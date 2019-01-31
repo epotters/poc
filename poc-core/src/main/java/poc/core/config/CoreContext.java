@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableAutoConfiguration
-@EntityScan(basePackages = { "poc.core.domain", "org.springframework.data.jpa.convert.threeten" })
-@EnableJpaRepositories(basePackages = { "poc.core.repository" })
-@ComponentScan(basePackages = { "poc.core.service" })
+@EntityScan(basePackages = {"poc.core.domain", "org.springframework.data.jpa.convert.threeten"})
+@EnableJpaRepositories(basePackages = {"poc.core.repository"})
+@ComponentScan(basePackages = {"poc.core.service"})
 @EnableTransactionManagement
 public class CoreContext {
 
