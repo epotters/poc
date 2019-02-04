@@ -36,16 +36,15 @@ spring:
 
 
 poc:
+  security-realm: POC Realm
   oauth:
     tokenTimeout: 2400
-  security-realm: POC Realm
+
 
 # Logging
 logging:
   level:
-    org:
-      springframework:
-        web: DEBUG
-      hibernate: INFO
+    org.springframework.web: DEBUG
+    org.hibernate: INFO
 
 

@@ -2,8 +2,8 @@ spring:
 
   # Data
   datasource:
-    url: jdbc:mysql://localhost:13306/poc_dev?useSSL=false&serverTimezone=Europe/Amsterdam
-    username: poc_dev
+    url: jdbc:mysql://localhost:13307/poc?useSSL=false&serverTimezone=Europe/Amsterdam
+    username: poc
     password: b1vidh
 
   jpa:

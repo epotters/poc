@@ -39,7 +39,6 @@ services:
       SPRING_APPLICATION_JSON: "{\"spring.jpa.hibernate.ddl-auto\": \"create\"}"
 
 
-
 volumes:
   poc-db-data:
 
