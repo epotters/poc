@@ -15,14 +15,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
-
 import poc.web.api.Application;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@SpringBootTest(classes = {Application.class, FeatureTestConfig.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SpringIntegrationTest {
 
   protected static ResponseResults latestResponse = null;
@@ -43,13 +43,11 @@ public class SpringIntegrationTest {
       public ResponseResults extractData(ClientHttpResponse response) throws IOException {
         if (errorHandler.hadError) {
           return (errorHandler.getResults());
-        }
-        else {
+        } else {
           return (new ResponseResults(response));
         }
       }
     });
-
   }
 
 
@@ -69,13 +67,11 @@ public class SpringIntegrationTest {
       public ResponseResults extractData(ClientHttpResponse response) throws IOException {
         if (errorHandler.hadError) {
           return (errorHandler.getResults());
-        }
-        else {
+        } else {
           return (new ResponseResults(response));
         }
       }
     });
-
   }
 
 
