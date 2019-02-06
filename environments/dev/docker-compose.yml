@@ -33,6 +33,7 @@ services:
       - poc-db
     environment:
       ENVIRONMENT: "dev"
+      SPRING_PROFILES_ACTIVE: development
       SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:3306/poc?useSSL=false&serverTimezone=Europe/Amsterdam"
       SPRING_DATASOURCE_USERNAME: poc
       SPRING_DATASOURCE_PASSWORD: b1vidh
