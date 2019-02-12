@@ -10,9 +10,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>nl.xs4all.epotters.poc</groupId>
-  <artifactId>poc-web-gui</artifactId>
-  <name>POC Web GUI</name>
-  <description>Web probeersels</description>
+  <artifactId>poc-web-gui-dojo</artifactId>
+  <name>POC Web GUI in Dojo</name>
   <packaging>war</packaging>
 
 
@@ -20,20 +19,15 @@
     <jquery.version>3.1.1-1</jquery.version>
     <bootstrap.version>3.3.7-1</bootstrap.version>
 
-    <node.version>v8.11.3</node.version>
-    <npm.version>6.1.0</npm.version>
-
     <dojo.version>1.10.4-1</dojo.version>
     <dojo-bower.version>1.12.1</dojo-bower.version>
     <dgrid.version>1.1.0</dgrid.version>
-
 
     <dojo2.version>2.0.0</dojo2.version>
     <dojo2.projectDir>src/main/webapp/dojo</dojo2.projectDir>
     <dojo2.targetDir>output/dist</dojo2.targetDir>
     <dojo2.toolsDir>dojo-build-tools</dojo2.toolsDir>
 
-    <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
   </properties>
 
 
@@ -85,52 +79,57 @@
         </configuration>
       </plugin>
 
-      <!-- Plugin to execute command "npm install" and "npm run build" inside /${angular.projectDir}} directory -->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
-        <version>${frontend-maven-plugin.version}</version>
-        <configuration>
-          <workingDirectory>${dojo2.projectDir}</workingDirectory>
-          <installDirectory>${project.build.directory}/${dojo2.toolsDir}</installDirectory>
-        </configuration>
-        <executions>
-
-          <!-- It will install nodejs and npm -->
-          <execution>
-            <id>install-node-and-npm</id>
-            <goals>
-              <goal>install-node-and-npm</goal>
-            </goals>
-            <configuration>
-              <nodeVersion>${node.version}</nodeVersion>
-              <npmVersion>${npm.version}</npmVersion>
-            </configuration>
-          </execution>
-
-          <!-- It will execute command "npm install" -->
-          <execution>
-            <id>npm-install</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>install</arguments>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>npm-build</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>build</arguments>
-            </configuration>
-          </execution>
-
-        </executions>
       </plugin>
+
+      <!--&lt;!&ndash; Plugin to execute command "npm install" and "npm run build" inside /${angular.projectDir}} directory &ndash;&gt;-->
+      <!--<plugin>-->
+      <!--<groupId>com.github.eirslett</groupId>-->
+      <!--<artifactId>frontend-maven-plugin</artifactId>-->
+      <!--<version>${frontend-maven-plugin.version}</version>-->
+      <!--<configuration>-->
+      <!--<workingDirectory>${dojo2.projectDir}</workingDirectory>-->
+      <!--<installDirectory>${project.build.directory}/${dojo2.toolsDir}</installDirectory>-->
+      <!--</configuration>-->
+      <!--<executions>-->
+
+      <!--&lt;!&ndash; It will install nodejs and npm &ndash;&gt;-->
+      <!--<execution>-->
+      <!--<id>install-node-and-npm</id>-->
+      <!--<goals>-->
+      <!--<goal>install-node-and-npm</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<nodeVersion>${node.version}</nodeVersion>-->
+      <!--<npmVersion>${npm.version}</npmVersion>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+
+      <!--&lt;!&ndash; It will execute command "npm install" &ndash;&gt;-->
+      <!--<execution>-->
+      <!--<id>npm-install</id>-->
+      <!--<goals>-->
+      <!--<goal>npm</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<arguments>install</arguments>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+
+      <!--<execution>-->
+      <!--<id>npm-build</id>-->
+      <!--<goals>-->
+      <!--<goal>npm</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<arguments>build</arguments>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+
+      <!--</executions>-->
+      <!--</plugin>-->
 
 
       <!-- Plugin to copy the content of ${dojo.baseDir}/dist/ directory to the war output directory -->
