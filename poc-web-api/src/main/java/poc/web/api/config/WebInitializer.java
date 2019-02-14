@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import poc.web.api.Application;
+import poc.web.api.PocWebApi;
 
 
 @Profile("war")
@@ -18,6 +18,6 @@ import poc.web.api.Application;
 public class WebInitializer extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class);
+        return application.sources(PocWebApi.class);
     }
 }

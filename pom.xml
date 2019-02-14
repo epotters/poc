@@ -31,7 +31,6 @@
 
     <module>poc-tests</module>
 
-
     <!-- module>poc-sencha</module -->
     <!-- module>poc-cordova</module -->
     <!-- module>poc-evernote</module -->
@@ -49,6 +48,10 @@
     <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+    <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
+
 
     <spring-boot-version>2.1.2.RELEASE</spring-boot-version>
     <spring-security-oauth2>2.3.4.RELEASE</spring-security-oauth2>
@@ -128,8 +131,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-
 
   <build>
 

@@ -15,12 +15,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
-import poc.web.api.Application;
+import poc.web.api.PocWebApi;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@SpringBootTest(classes = {Application.class, FeatureTestConfig.class},
+@SpringBootTest(classes = { PocWebApi.class, FeatureTestConfig.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
 public class SpringIntegrationTest {

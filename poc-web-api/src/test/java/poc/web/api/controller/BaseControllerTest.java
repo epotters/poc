@@ -13,13 +13,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import poc.web.api.Application;
+import poc.web.api.PocWebApi;
 
 import java.io.IOException;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = PocWebApi.class)
 @WebAppConfiguration
 public class BaseControllerTest {
 

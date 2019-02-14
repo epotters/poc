@@ -8,13 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class Application {
+public class PocWebApi {
 
-  private static final Log LOG = LogFactory.getLog(Application.class);
+  private static final Log LOG = LogFactory.getLog(PocWebApi.class);
 
 
   public static void main(String[] args) {
     LOG.info("Starting Proof of Concept application");
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(PocWebApi.class, args);
   }
 }
