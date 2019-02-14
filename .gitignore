@@ -7,3 +7,8 @@ target/
 # IntelliJ
 .idea/
 *.iml
+
+
+# Node built projects
+package-lock.json
+node/
