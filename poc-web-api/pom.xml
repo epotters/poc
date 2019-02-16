@@ -132,7 +132,11 @@
             <version>${jib-plugin-version}</version>
             <configuration>
               <from>
-                <image>openjdk:11.0-jdk</image>
+                <image>azul/zulu-openjdk-alpine:11</image>
+                <auth>
+                  <username>${registry-user}</username>
+                  <password>${registry-password}</password>
+                </auth>
               </from>
               <to>
                 <image>${registry-url}/${registry-user}/${project.artifactId}:${project.version}</image>
@@ -141,7 +145,6 @@
                   <password>${registry-password}</password>
                 </auth>
               </to>
-              <!--<extraDirectory>${project.parent.basedir}/environment/configs/poc-web-api/</extraDirectory>-->
               <container>
                 <mainClass>${start-class}</mainClass>
                 <ports>
