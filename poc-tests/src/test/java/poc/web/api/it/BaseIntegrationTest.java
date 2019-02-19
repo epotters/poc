@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -30,40 +31,37 @@ public class BaseIntegrationTest {
 
   static final Log LOG = LogFactory.getLog(BaseIntegrationTest.class);
 
-  private final String HOST = "localhost";
-
-  private final String PROTOCOLL = "http";
-
   @Value("${server.servlet.context-path}")
   protected String contextPath;
 
   @Value("${spring.data.rest.base-path}")
   protected String restBasePath;
 
-  // @Value("${management.endpoints.web.base-path}")
-  protected String managementBasePath = "/actuator";
-
-  @Value("${spring.security.user.name}")
-  protected String username;
-
-  @Value("${spring.security.user.password}")
-  protected String password;
+  @Value("${management.endpoints.web.base-path}")
+  protected String managementBasePath;
 
   @LocalServerPort
   private int port;
 
-  RemoteApplicationProperties remoteApplicationProperties;
+  private RemoteApplicationProperties remoteApplicationProperties;
 
   OAuth2RestTemplate restTemplate;
 
-
   BaseIntegrationTest() {
-    LOG.debug("Constructing BaseIntegrationTest");
+    LOG.debug("Constructing BaseIntegrationTest (1)");
+  }
+
+
+  @Autowired
+  BaseIntegrationTest(RemoteApplicationProperties remoteApplicationProperties) {
+    LOG.debug("Constructing BaseIntegrationTest (2)");
+    this.remoteApplicationProperties = remoteApplicationProperties;
   }
 
 
   private String getRootUri() {
-    return PROTOCOLL + "://" + HOST + ":" + port + contextPath;
+    return remoteApplicationProperties.getProtocoll() + "://" + remoteApplicationProperties.getHost() + ":" + port
+        + contextPath;
   }
 
 

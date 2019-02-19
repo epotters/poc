@@ -23,3 +23,10 @@ logging:
     org.springframework.boot.web: INFO
     org.hibernate: WARN
     org.hibernateSQL: WARN
+
+
+it:
+  remote:
+    host: "localhost"
+    protocoll: "http"
+    port:
