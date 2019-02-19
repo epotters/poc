@@ -1,8 +1,23 @@
+# Custom properties
+poc:
+  security-realm: POC Realm
+  oauth:
+    tokenTimeout: 2400
+
+
 # Embedded server
 server:
   servlet:
     contextPath: /poc
   port: 8002
+
+
+
+# Actuators
+management:
+  endpoints:
+    web:
+      base-path: /actuator
 
 
 # REST
@@ -18,7 +33,7 @@ spring:
     location: classpath:banner.txt
 
 
-  # Data
+  # Persistence
   datasource:
     url: jdbc:mysql://localhost:3306/poc?serverTimezone=Europe/Amsterdam
     username: poc
@@ -34,11 +49,6 @@ spring:
       ddl-auto: validate
     show-sql: true
 
-
-poc:
-  security-realm: POC Realm
-  oauth:
-    tokenTimeout: 2400
 
 
 # Logging

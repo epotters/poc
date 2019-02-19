@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
@@ -15,6 +17,7 @@ import poc.core.service.PersonService;
 
 
 @Component
+@Transactional(propagation = Propagation.REQUIRED)
 public class PersonServiceImpl implements PersonService {
 
   private PersonRepository personRepository;
