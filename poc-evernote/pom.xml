@@ -13,12 +13,16 @@
   <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-evernote</artifactId>
 
+  <properties>
+    <evernote-api.version>1.25.1</evernote-api.version>
+  </properties>
+
 
   <dependencies>
     <dependency>
       <groupId>com.evernote</groupId>
       <artifactId>evernote-api</artifactId>
-      <version>1.25.1</version>
+      <version>${evernote-api.version}</version>
     </dependency>
   </dependencies>
 </project>
