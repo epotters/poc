@@ -31,10 +31,13 @@
 
     <module>poc-tests</module>
 
-    <!-- module>poc-sencha</module -->
     <!-- module>poc-cordova</module -->
      <module>poc-evernote</module>
+
+
+    <!--<module>poc-web-gui-dojo-1</module>-->
     <!-- module>poc-jcr</module -->
+    <!-- module>poc-sencha</module -->
 
   </modules>
 
