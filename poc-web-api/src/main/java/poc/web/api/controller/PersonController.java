@@ -19,7 +19,7 @@ import poc.core.repository.PersonRepository;
 
 
 @RestController
-@RequestMapping("/people")
+@RequestMapping("/api/people")
 public class PersonController {
 
   private PersonRepository personRepository;
@@ -37,7 +37,7 @@ public class PersonController {
 
 
   // page, size and sort parameters are supported by default
-  @RequestMapping("/list")
+  @RequestMapping("/")
   public Iterable<Person> listPeople(Pageable pageable) {
     return personRepository.findAll(pageable);
   }
