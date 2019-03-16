@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import poc.web.api.service.photos.domain.Photo;
 
 
 @Component

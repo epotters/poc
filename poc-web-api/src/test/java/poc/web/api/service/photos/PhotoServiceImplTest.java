@@ -1,14 +1,13 @@
 package poc.web.api.service.photos;
 
 
-import static org.junit.Assert.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import poc.web.api.service.photos.domain.Photo;
 
 
 public class PhotoServiceImplTest {

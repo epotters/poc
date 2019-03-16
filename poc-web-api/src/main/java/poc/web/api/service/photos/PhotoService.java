@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import poc.web.api.service.photos.domain.Photo;
 
 
 /**

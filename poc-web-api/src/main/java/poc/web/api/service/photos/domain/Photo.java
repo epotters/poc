@@ -1,4 +1,4 @@
-package poc.web.api.service.photos;
+package poc.web.api.service.photos.domain;
 
 
 import java.time.LocalDateTime;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 
 @Data
-class Photo {
+public class Photo {
 
   private String uuid;
   private String name;
