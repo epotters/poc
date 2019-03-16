@@ -17,7 +17,7 @@
   <properties>
     <start-class>poc.web.api.PocWebApi</start-class>
 
-    <jib-plugin-version>1.0.0</jib-plugin-version>
+    <jib-plugin-version>1.0.2</jib-plugin-version>
     <registry-url>registry.hub.docker.com</registry-url>
     <registry-user>epotters</registry-user>
     <registry-password>B4rc3l0n4</registry-password>
@@ -72,7 +72,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot-version}</version>
         <executions>
           <execution>
             <id>pre-integration-test</id>
