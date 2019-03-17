@@ -39,6 +39,16 @@ services:
       SPRING_DATASOURCE_PASSWORD: b1vidh
       SPRING_APPLICATION_JSON: "{\"spring.jpa.hibernate.ddl-auto\": \"create\"}"
 
+  poc-web-gui:
+    image: nginx:alpine
+    container_name: poc-web-gui-dev
+    ports:
+    - 10080:80
+    volumes:
+    - /poc-web-gui/app:/usr/share/nginx/html:ro
+    networks:
+      - poc
+    restart: always
 
 volumes:
   poc-db-data:

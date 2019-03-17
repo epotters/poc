@@ -9,6 +9,7 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,7 @@ public class PersonController {
 
 
   // page, size and sort parameters are supported by default
+  @CrossOrigin(origins = "http://localhost:9999")
   @RequestMapping("/")
   public Iterable<Person> listPeople(Pageable pageable) {
     return personRepository.findAll(pageable);
