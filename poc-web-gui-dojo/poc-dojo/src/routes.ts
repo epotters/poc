@@ -15,5 +15,9 @@ export default [
 	{
 		path: 'profile',
 		outlet: 'profile'
+	},
+	{
+		path: 'login',
+		outlet: 'login'
 	}
 ];

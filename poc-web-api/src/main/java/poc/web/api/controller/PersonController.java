@@ -39,6 +39,8 @@ public class PersonController {
 
 
 /*
+
+Fetcher options as sent by the dojo client
 {
   "sort": {
     "columnId": "firstName",
@@ -61,8 +63,6 @@ public class PersonController {
   @RequestMapping("/")
   public Iterable<Person> listPeople(Pageable pageable) {
   //public Page<Person> listPeople(PageableDojoFetchOptions pageableDojoFetchOptions) {
-
-    // PersonSpecification spec = new PersonSpecification(sfilters);
 
     personRepository.findAll(pageable);
     return personRepository.findAll(pageable);

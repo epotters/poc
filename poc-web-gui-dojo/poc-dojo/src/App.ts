@@ -7,6 +7,8 @@ import Home from './widgets/Home';
 import People from "./widgets/People";
 import About from './widgets/About';
 import Profile from './widgets/Profile';
+import Login from "./widgets/Login";
+
 
 import * as css from './App.m.css';
 
@@ -19,7 +21,8 @@ export default class App extends WidgetBase {
 				w(Outlet, { key: 'home', id: 'home', renderer: () => w(Home, {}) }),
 				w(Outlet, { key: 'people', id: 'people', renderer: () => w(People, {}) }),
 				w(Outlet, { key: 'about', id: 'about', renderer: () => w(About, {}) }),
-				w(Outlet, { key: 'profile', id: 'profile', renderer: () => w(Profile, { username: 'Dojo User' }) })
+				w(Outlet, { key: 'profile', id: 'profile', renderer: () => w(Profile, { username: 'Dojo User' }) }),
+				w(Outlet, { key: 'login', id: 'login', renderer: () => w(Login, {}) }),
 			])
 		]);
 	}

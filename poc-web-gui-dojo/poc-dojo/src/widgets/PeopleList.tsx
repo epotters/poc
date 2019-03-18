@@ -53,11 +53,7 @@ const fetcher = async (
 
     const offset = (page - 1) * pageSize;
 
-    //const temp = sorter(filterer(data, options), options)
-
-
     const response = await fetch(
-        // `https://mock-json-server.now.sh/data?offset=${offset}&size=${pageSize}`,
         "http://127.0.0.1:8002/poc/api/people/",
         {
             method: "POST",
@@ -74,11 +70,6 @@ const fetcher = async (
     );
 
     const json = await response.json();
-
-
-    // console.log("json: ");
-    // console.log(json);
-
     console.log(json.content);
     console.log(json.totalElements);
 
