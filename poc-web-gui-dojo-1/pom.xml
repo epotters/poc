@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -85,52 +85,52 @@
         <artifactId>frontend-maven-plugin</artifactId>
       </plugin>
 
-      <!--&lt;!&ndash; Plugin to execute command "npm install" and "npm run build" inside /${angular.projectDir}} directory &ndash;&gt;-->
-      <!--<plugin>-->
-      <!--<groupId>com.github.eirslett</groupId>-->
-      <!--<artifactId>frontend-maven-plugin</artifactId>-->
-      <!--<version>${frontend-maven-plugin.version}</version>-->
-      <!--<configuration>-->
-      <!--<workingDirectory>${dojo2.projectDir}</workingDirectory>-->
-      <!--<installDirectory>${project.build.directory}/${dojo2.toolsDir}</installDirectory>-->
-      <!--</configuration>-->
-      <!--<executions>-->
+      <!-- Plugin to execute command "npm install" and "npm run build" inside /${angular.projectDir}} directory -->
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
 
-      <!--&lt;!&ndash; It will install nodejs and npm &ndash;&gt;-->
-      <!--<execution>-->
-      <!--<id>install-node-and-npm</id>-->
-      <!--<goals>-->
-      <!--<goal>install-node-and-npm</goal>-->
-      <!--</goals>-->
-      <!--<configuration>-->
-      <!--<nodeVersion>${node.version}</nodeVersion>-->
-      <!--<npmVersion>${npm.version}</npmVersion>-->
-      <!--</configuration>-->
-      <!--</execution>-->
+        <configuration>
+          <workingDirectory>${dojo2.projectDir}</workingDirectory>
+          <installDirectory>${project.build.directory}/${dojo2.toolsDir}</installDirectory>
+        </configuration>
+        <executions>
 
-      <!--&lt;!&ndash; It will execute command "npm install" &ndash;&gt;-->
-      <!--<execution>-->
-      <!--<id>npm-install</id>-->
-      <!--<goals>-->
-      <!--<goal>npm</goal>-->
-      <!--</goals>-->
-      <!--<configuration>-->
-      <!--<arguments>install</arguments>-->
-      <!--</configuration>-->
-      <!--</execution>-->
+          <!-- It will install nodejs and npm -->
+          <execution>
+            <id>install-node-and-npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>${node.version}</nodeVersion>
+              <npmVersion>${npm.version}</npmVersion>
+            </configuration>
+          </execution>
 
-      <!--<execution>-->
-      <!--<id>npm-build</id>-->
-      <!--<goals>-->
-      <!--<goal>npm</goal>-->
-      <!--</goals>-->
-      <!--<configuration>-->
-      <!--<arguments>build</arguments>-->
-      <!--</configuration>-->
-      <!--</execution>-->
+          <!-- It will execute command "npm install" -->
+          <execution>
+            <id>npm-install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
 
-      <!--</executions>-->
-      <!--</plugin>-->
+          <execution>
+            <id>npm-build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>build</arguments>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
 
 
       <!-- Plugin to copy the content of ${dojo.baseDir}/dist/ directory to the war output directory -->

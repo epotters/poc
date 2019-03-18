@@ -12,21 +12,37 @@ const columnConfig = [
     },
     {
         id: "firstName",
-        title: "First Name"
+        title: "First Name",
+        sortable: true,
+        editable: true,
+        filterable: true
     },
     {
         id: "lastName",
-        title: "Last Name"
+        title: "Last Name",
+        sortable: true,
+        editable: true,
+        filterable: true
+    },
+    {
+        id: "gender",
+        title: "M/F",
+        renderer: (item: any) => {
+            return (
+                (item.value == "MALE") ? "Man" : "Woman"
+            );
+        }
     },
     {
         id: "birthDate",
         title: "Birth date"
     },
     {
-        id: "gender",
-        title: "M/F"
+        id: "birthPlace",
+        title: "Birth place"
     }
 ];
+
 
 
 const fetcher = async (
@@ -34,7 +50,12 @@ const fetcher = async (
     pageSize: number,
     options: FetcherOptions = {}
 ) => {
+
     const offset = (page - 1) * pageSize;
+
+    //const temp = sorter(filterer(data, options), options)
+
+
     const response = await fetch(
         // `https://mock-json-server.now.sh/data?offset=${offset}&size=${pageSize}`,
         "http://127.0.0.1:8002/poc/api/people/",
@@ -51,16 +72,17 @@ const fetcher = async (
             }
         }
     );
+
     const json = await response.json();
-    // return { data: json.data, meta: { total: json.total } };
-    // return { data: json.get("content"), meta: { total: json.get("totalElements") } };
-    // console.log(json.data.content);
-    // console.log(json.data);
-    // console.log(json.content);
-    // console.log(json.totalElements);
 
-    return {data: json.data.content, meta: {total: json.totalElements}};
 
+    // console.log("json: ");
+    // console.log(json);
+
+    console.log(json.content);
+    console.log(json.totalElements);
+
+    return {data: json.content, meta: {total: json.totalElements}};
 };
 
 

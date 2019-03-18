@@ -1,0 +1,12 @@
+{
+  "sort": {
+    "columnId": "firstName",
+    "direction": "desc"
+  },
+  "filter": {
+    "lastName": "bijke",
+    "firstName": "jac"
+  },
+  "offset": 0,
+  "size": 100
+}

@@ -4,6 +4,7 @@ package poc.web.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
@@ -37,10 +38,33 @@ public class PersonController {
   }
 
 
+/*
+{
+  "sort": {
+    "columnId": "firstName",
+    "direction": "desc"
+  },
+  "filter": {
+    "lastName": "bijke",
+    "firstName": "jac"
+  },
+  "offset": 0,
+  "size": 100
+}
+   */
   // page, size and sort parameters are supported by default
+
+
+  // https://stackoverflow.com/questions/33953287/spring-boot-rest-webservice-jpa-pageable-and-filter
+
   @CrossOrigin(origins = "http://localhost:9999")
   @RequestMapping("/")
   public Iterable<Person> listPeople(Pageable pageable) {
+  //public Page<Person> listPeople(PageableDojoFetchOptions pageableDojoFetchOptions) {
+
+    // PersonSpecification spec = new PersonSpecification(sfilters);
+
+    personRepository.findAll(pageable);
     return personRepository.findAll(pageable);
   }
 
