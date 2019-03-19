@@ -1,0 +1,7 @@
+# Node
+node_modules/
+
+_build/
+
+# Dojo 2
+output/

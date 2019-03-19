@@ -6,8 +6,11 @@ import Toolbar from '@dojo/widgets/toolbar';
 import * as css from './styles/Menu.m.css';
 
 export default class Menu extends WidgetBase {
+
+	appDisplayName: 'Proof of Concept!';
+
 	protected render() {
-		return w(Toolbar, {heading: 'My Dojo App!', collapseWidth: 600}, [
+		return w(Toolbar, {heading: this.appDisplayName, collapseWidth: 600}, [
 			w(
 				Link,
 				{

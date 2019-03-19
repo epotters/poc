@@ -3,6 +3,7 @@ import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
 
 import Grid from "@dojo/widgets/grid";
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
+// import Button from "@dojo/widgets/button";
 
 
 const columnConfig = [
@@ -50,20 +51,14 @@ const fetcher = async (
     options: FetcherOptions = {}
 ) => {
 
-    // console.log(options);
-
     let sortParams = "";
     if (options.sort != undefined) {
         sortParams += (options.sort.columnId != undefined) ? "&sort=" + options.sort.columnId + "," : "";
         sortParams += (options.sort.direction != undefined) ? options.sort.direction : "asc";
     }
-
     const queryString = "?page" + page + "&size=" + pageSize + sortParams;
     console.log(queryString);
 
-
-
-    // const offset = (page - 1) * pageSize;
     const response = await fetch(
         "http://127.0.0.1:8002/poc/api/people/" + queryString,
         {
@@ -97,12 +92,16 @@ const fetcher = async (
     return {data: json.content, meta: {total: json.totalElements}};
 };
 
+//
+// w(Button, {}, ['Login'])
+
+//             <Button onClick={}>New</Button>
 
 export default class extends WidgetBase {
     protected render() {
         return (
             <div styles={{width: "100%"}}>
-                <Grid fetcher={fetcher} columnConfig={columnConfig} height={450}/>
+                <Grid fetcher={fetcher} columnConfig={columnConfig} height={720}/>
             </div>
         );
     }

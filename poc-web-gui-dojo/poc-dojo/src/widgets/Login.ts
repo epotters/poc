@@ -3,7 +3,6 @@ import {v, w} from '@dojo/framework/widget-core/d';
 import Button from '@dojo/widgets/button';
 import TextInput from '@dojo/widgets/text-input';
 
-// Source: https://www.vogella.com/tutorials/Dojo/article.html
 
 export default class Login extends WidgetBase {
 

@@ -159,6 +159,12 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
+
+        <!-- TODO: make this plugin run only for poc-core -->
+        <configuration>
+          <runOnlyOnce>true</runOnlyOnce>
+          <skipPoms>false</skipPoms>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

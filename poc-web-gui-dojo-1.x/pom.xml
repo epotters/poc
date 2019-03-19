@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.xs4all.epotters.poc</groupId>
+  <artifactId>poc-web-gui-dojo-1.x</artifactId>
+  <name>POC Web GUI in Dojo 1.x</name>
+  <packaging>war</packaging>
+
+
+  <properties>
+    <jquery.version>3.1.1-1</jquery.version>
+    <bootstrap.version>3.3.7-1</bootstrap.version>
+
+    <dojo.version>1.10.4-1</dojo.version>
+    <dojo-bower.version>1.12.1</dojo-bower.version>
+    <dgrid.version>1.1.0</dgrid.version>
+
+    <dojo2.version>2.0.0</dojo2.version>
+    <dojo2.projectDir>src/main/webapp/dojo</dojo2.projectDir>
+    <dojo2.targetDir>output/dist</dojo2.targetDir>
+    <dojo2.toolsDir>dojo-build-tools</dojo2.toolsDir>
+
+  </properties>
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>nl.xs4all.epotters.poc</groupId>
+      <artifactId>poc-core</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>${jquery.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>${bootstrap.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>dojo</artifactId>
+      <version>${dojo.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>dojo</artifactId>
+      <version>${dojo-bower.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>dgrid</artifactId>
+      <version>${dgrid.version}</version>
+    </dependency>
+
+  </dependencies>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+      </plugin>
+
+      <!--&lt;!&ndash; Plugin to execute command "npm install" and "npm run build" inside /${angular.projectDir}} directory &ndash;&gt;-->
+      <!--<plugin>-->
+      <!--<groupId>com.github.eirslett</groupId>-->
+      <!--<artifactId>frontend-maven-plugin</artifactId>-->
+      <!--<version>${frontend-maven-plugin.version}</version>-->
+      <!--<configuration>-->
+      <!--<workingDirectory>${dojo2.projectDir}</workingDirectory>-->
+      <!--<installDirectory>${project.build.directory}/${dojo2.toolsDir}</installDirectory>-->
+      <!--</configuration>-->
+      <!--<executions>-->
+
+      <!--&lt;!&ndash; It will install nodejs and npm &ndash;&gt;-->
+      <!--<execution>-->
+      <!--<id>install-node-and-npm</id>-->
+      <!--<goals>-->
+      <!--<goal>install-node-and-npm</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<nodeVersion>${node.version}</nodeVersion>-->
+      <!--<npmVersion>${npm.version}</npmVersion>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+
+      <!--&lt;!&ndash; It will execute command "npm install" &ndash;&gt;-->
+      <!--<execution>-->
+      <!--<id>npm-install</id>-->
+      <!--<goals>-->
+      <!--<goal>npm</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<arguments>install</arguments>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+
+      <!--<execution>-->
+      <!--<id>npm-build</id>-->
+      <!--<goals>-->
+      <!--<goal>npm</goal>-->
+      <!--</goals>-->
+      <!--<configuration>-->
+      <!--<arguments>build</arguments>-->
+      <!--</configuration>-->
+      <!--</execution>-->
+
+      <!--</executions>-->
+      <!--</plugin>-->
+
+
+      <!-- Plugin to copy the content of ${dojo.baseDir}/dist/ directory to the war output directory -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-frontend-artifacts</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <overwrite>true</overwrite>
+              <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${dojo2.projectDir}/${dojo2.targetDir}</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <!-- Clear the frontend build directories -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>/${dojo2.projectDir}/${dojo2.targetDir}</directory>
+              <directory>/${dojo2.projectDir}/node_modules</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

@@ -9,6 +9,10 @@ export default [
 		outlet: 'people'
 	},
 	{
+		path: 'person',
+		outlet: 'person'
+	},
+	{
 		path: 'about',
 		outlet: 'about'
 	},
@@ -21,3 +25,9 @@ export default [
 		outlet: 'login'
 	}
 ];
+
+
+export interface PersonProperties {
+	firstName?: string;
+	lastName?: string;
+};

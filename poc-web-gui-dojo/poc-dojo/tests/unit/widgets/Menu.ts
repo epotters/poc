@@ -9,9 +9,10 @@ import * as css from '../../../src/widgets/styles/Menu.m.css';
 
 describe('Menu', () => {
 	it('default renders correctly', () => {
+		const appDisplayName = 'Proof of Concept!';
 		const h = harness(() => w(Menu, {}));
 		h.expect(() =>
-			w(Toolbar, { heading: 'My Dojo App!', collapseWidth: 600 }, [
+			w(Toolbar, { heading: appDisplayName, collapseWidth: 600 }, [
 				w(
 					Link,
 					{
