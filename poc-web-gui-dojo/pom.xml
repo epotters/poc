@@ -8,29 +8,41 @@
   <artifactId>poc-web-gui-dojo</artifactId>
   <name>POC Web GUI in Dojo 2+</name>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <!--<packaging>war</packaging>-->
 
 
   <properties>
+    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
 
+    <frontend-maven-plugin.version>1.7.5</frontend-maven-plugin.version>
     <node.version>v11.10.1</node.version>
     <npm.version>6.9.0</npm.version>
 
     <dojo.projectDir>poc-dojo</dojo.projectDir>
     <dojo.targetDir>output/dev</dojo.targetDir>
     <dojo.toolsDir>dojo-build-tools</dojo.toolsDir>
-
   </properties>
 
 
+
+
   <build>
-    <plugins>
+    <pluginManagement>
+      <plugins>
       <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>${frontend-maven-plugin.version}</version>
       </plugin>
+    </plugins>
+  </pluginManagement>
+    <plugins>
+      <!--<plugin>-->
+        <!--<artifactId>maven-war-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
@@ -81,27 +93,28 @@
       </plugin>
 
 
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${maven.multiModuleProjectDirectory}/environments/dev/poc-web-gui/app</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${dojo.projectDir}/${dojo.targetDir}</directory>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <!--<plugin>-->
+        <!--<artifactId>maven-resources-plugin</artifactId>-->
+        <!--<version>${maven-resources-plugin.version}</version>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>copy-resources</id>-->
+            <!--<phase>process-resources</phase>-->
+            <!--<goals>-->
+              <!--<goal>copy-resources</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>-->
+              <!--<resources>-->
+                <!--<resource>-->
+                  <!--<directory>${dojo.projectDir}/${dojo.targetDir}</directory>-->
+                  <!--<filtering>true</filtering>-->
+                <!--</resource>-->
+              <!--</resources>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
     </plugins>
   </build>
 
