@@ -12,7 +12,6 @@ import PersonEditor from "./widgets/PersonEditor";
 
 import * as css from './App.m.css';
 
-
 export default class App extends WidgetBase {
 	protected render() {
 		return v('div', {classes: [css.root]}, [
