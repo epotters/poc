@@ -20,7 +20,7 @@ export default class App extends WidgetBase {
 			v('div', [
 				w(Outlet, {key: 'home', id: 'home', renderer: () => w(Home, {})}),
 				w(Outlet, {key: 'people', id: 'people', renderer: () => w(People, {})}),
-				w(Outlet, {key: 'person', id: 'person', renderer: () => w(PersonEditor, {personId: '12345'})}),
+				w(Outlet, {key: 'person', id: 'person', renderer: () => w(PersonEditor, {})}),
 				w(Outlet, {key: 'about', id: 'about', renderer: () => w(About, {})}),
 				w(Outlet, {key: 'profile', id: 'profile', renderer: () => w(Profile, {username: 'Dojo User'})}),
 				w(Outlet, {key: 'login', id: 'login', renderer: () => w(Login, {})}),
