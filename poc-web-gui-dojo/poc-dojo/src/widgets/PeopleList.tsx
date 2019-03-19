@@ -44,34 +44,55 @@ const columnConfig = [
 ];
 
 
-
 const fetcher = async (
     page: number,
     pageSize: number,
     options: FetcherOptions = {}
 ) => {
 
-    const offset = (page - 1) * pageSize;
+    // console.log(options);
 
+    let sortParams = "";
+    if (options.sort != undefined) {
+        sortParams += (options.sort.columnId != undefined) ? "&sort=" + options.sort.columnId + "," : "";
+        sortParams += (options.sort.direction != undefined) ? options.sort.direction : "asc";
+    }
+
+    const queryString = "?page" + page + "&size=" + pageSize + sortParams;
+    console.log(queryString);
+
+
+
+    // const offset = (page - 1) * pageSize;
     const response = await fetch(
-        "http://127.0.0.1:8002/poc/api/people/",
+        "http://127.0.0.1:8002/poc/api/people/" + queryString,
         {
-            method: "POST",
-            body: JSON.stringify({
-                sort: options.sort,
-                filter: options.filter,
-                offset,
-                size: pageSize
-            }),
+            method: "GET",
             headers: {
                 "Content-Type": "application/json"
             }
         }
     );
 
+    // const responseWorking = await fetch(
+    //     "http://127.0.0.1:8002/poc/api/people/",
+    //     {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //             sort: options.sort,
+    //             filter: options.filter,
+    //             offset,
+    //             size: pageSize
+    //         }),
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         }
+    //     }
+    // );
+
     const json = await response.json();
-    console.log(json.content);
-    console.log(json.totalElements);
+    // console.log(json.content);
+    // console.log(json.totalElements);
 
     return {data: json.content, meta: {total: json.totalElements}};
 };

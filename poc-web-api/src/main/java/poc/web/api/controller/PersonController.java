@@ -62,9 +62,9 @@ Fetcher options as sent by the dojo client
   @CrossOrigin(origins = "http://localhost:9999")
   @RequestMapping("/")
   public Iterable<Person> listPeople(Pageable pageable) {
-  //public Page<Person> listPeople(PageableDojoFetchOptions pageableDojoFetchOptions) {
-
-    personRepository.findAll(pageable);
+//  public Page<Person> listPeople(PageableDojoFetchOptions pageableDojoFetchOptions) {
+//
+//    personRepository.findAll(pageable);
     return personRepository.findAll(pageable);
   }
 
