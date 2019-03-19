@@ -49,6 +49,8 @@ services:
     networks:
       - poc
     restart: always
+    environment:
+      ENVIRONMENT: "dev"
 
 volumes:
   poc-db-data:
