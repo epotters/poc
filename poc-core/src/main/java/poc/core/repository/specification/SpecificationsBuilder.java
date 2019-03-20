@@ -17,6 +17,15 @@ public class SpecificationsBuilder<T> {
   }
 
 
+  public SpecificationsBuilder with(String key, String operation, Object value) {
+    SearchOperation op = SearchOperation.getSimpleOperation(operation.charAt(0));
+    if (op != null) {
+      params.add(new SearchCriteria(key, op, value));
+    }
+    return this;
+  }
+
+
   public SpecificationsBuilder with(String key, String operation, Object value, String prefix, String suffix) {
 
     SearchOperation op = SearchOperation.getSimpleOperation(operation.charAt(0));

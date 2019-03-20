@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SearchCriteria {
+class SearchCriteria {
 
   private String key;
   private SearchOperation operation;

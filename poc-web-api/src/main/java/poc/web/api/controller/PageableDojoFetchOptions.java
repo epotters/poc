@@ -1,8 +1,12 @@
 package poc.web.api.controller;
 
 
-/*
+import java.util.Map;
 
+import lombok.Data;
+
+
+/*
 Fetcher options as sent by the dojo client
 {
   "sort": {
@@ -16,21 +20,11 @@ Fetcher options as sent by the dojo client
   "offset": 0,
   "size": 100
 }
-
  */
-
-import javax.validation.constraints.NotNull;
-import java.util.Map;
-import java.util.Optional;
-
-import lombok.Data;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
 
 
 @Data
-public class PageableDojoFetchOptions {//implements Pageable {
+public class PageableDojoFetchOptions {
 
   private DojoSort sort;
   private Map<String, String> filter;
@@ -44,67 +38,6 @@ public class PageableDojoFetchOptions {//implements Pageable {
     private SortDirection direction;
   }
 
+
   private enum SortDirection {ASC, DESC}
-
-
-  // Pageable implementation
-
-//
-//  @Override
-//  public int getPageNumber() {
-//    return (offset / size);
-//  }
-//
-//  @Override
-//  public int getPageSize() {
-//    return size;
-//  }
-//
-//  @Override
-//  @NonNull
-//  public Pageable next() {
-//
-//
-//    return null;
-//  }
-//
-//  @Override
-//  @NonNull
-//  public Pageable previousOrFirst() {
-//    return null;
-//  }
-//
-//  @Override
-//  @NonNull
-//  public Pageable first() {
-//    return null;
-//  }
-//
-//  @Override
-//  public boolean hasPrevious() {
-//    return (getPageNumber() > 0);
-//  }
-//
-//  @Override
-//  public boolean isPaged() {
-//    return true;
-//  }
-//
-//  @Override
-//  public boolean isUnpaged() {
-//    return false;
-//  }
-//
-//  @Override
-//  @NonNull
-//  public Sort getSortOr(Sort sort) {
-//    return Sort.by(getSort().getColumnId());
-//  }
-//
-//  @Override
-////  @NonNullApi
-//  @NotNull
-//  public Optional<Pageable> toOptional() {
-//    return Optional.empty();
-//  }
 }

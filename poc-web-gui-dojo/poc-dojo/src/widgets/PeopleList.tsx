@@ -3,7 +3,6 @@ import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
 
 import Grid from "@dojo/widgets/grid";
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
-// import Button from "@dojo/widgets/button";
 
 
 const columnConfig = [
@@ -45,9 +44,6 @@ const columnConfig = [
 ];
 
 
-
-
-
 const fetcher = async (
     page: number,
     pageSize: number,
@@ -55,9 +51,9 @@ const fetcher = async (
 ) => {
 
     // This should go to a library of kind
-    function buildQueryString(page:number, pageSize:number, options: FetcherOptions) {
+    function buildQueryString(page: number, pageSize: number, options: FetcherOptions) {
 
-        let queryString = "?page=" + page + "&size=" + pageSize;
+        let queryString = "?page=" + (page - 1) + "&size=" + pageSize;
 
         let sortParams = "";
         if (options.sort != undefined) {
@@ -69,19 +65,21 @@ const fetcher = async (
 
         let filterParams = "";
         if (options.filter != undefined) {
-            filterParams += "&filters=";
             for (let columnId in options.filter) {
                 let value = options.filter[columnId];
                 if (value != null && value != "") {
                     filterParams += columnId + "~" + value + ",";
                 }
             }
+            if (filterParams.length > 0) {
+                filterParams += "&filters=" + filterParams.substr(0, filterParams.length - 1);
+            }
         }
         queryString += filterParams;
 
+
         return queryString;
     }
-
 
     const queryString = buildQueryString(page, pageSize, options);
     console.log(queryString);
@@ -96,21 +94,6 @@ const fetcher = async (
         }
     );
 
-    // const responseWorking = await fetch(
-    //     "http://127.0.0.1:8002/poc/api/people/",
-    //     {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //             sort: options.sort,
-    //             filter: options.filter,
-    //             offset,
-    //             size: pageSize
-    //         }),
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         }
-    //     }
-    // );
 
     const json = await response.json();
     // console.log(json.content);
@@ -120,15 +103,11 @@ const fetcher = async (
 };
 
 //
-// w(Button, {}, ['Login'])
-
-//             <Button onClick={}>New</Button>
-
 export default class extends WidgetBase {
     protected render() {
         return (
             <div styles={{width: "100%"}}>
-                <Grid fetcher={fetcher} columnConfig={columnConfig} height={720}/>
+                <Grid fetcher={fetcher} columnConfig={columnConfig} height={720} />
             </div>
         );
     }
