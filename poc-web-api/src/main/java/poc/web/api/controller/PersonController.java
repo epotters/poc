@@ -1,10 +1,14 @@
 package poc.web.api.controller;
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
@@ -14,12 +18,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
+import poc.core.repository.specification.SearchOperation;
+import poc.core.repository.specification.SpecificationsBuilder;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/people")
 public class PersonController {
@@ -38,34 +45,25 @@ public class PersonController {
   }
 
 
-/*
-
-Fetcher options as sent by the dojo client
-{
-  "sort": {
-    "columnId": "firstName",
-    "direction": "desc"
-  },
-  "filter": {
-    "lastName": "bijke",
-    "firstName": "jac"
-  },
-  "offset": 0,
-  "size": 100
-}
-   */
   // page, size and sort parameters are supported by default
-
-
   // https://stackoverflow.com/questions/33953287/spring-boot-rest-webservice-jpa-pageable-and-filter
-
+  // ?page=1&size=100&sort=firstName,asc&filters=firstName~jaco,lastName~bijk
   @CrossOrigin(origins = "http://localhost:9999")
   @RequestMapping("/")
-  public Iterable<Person> listPeople(Pageable pageable) {
-//  public Page<Person> listPeople(PageableDojoFetchOptions pageableDojoFetchOptions) {
-//
-//    personRepository.findAll(pageable);
-    return personRepository.findAll(pageable);
+  public Iterable<Person> listPeople(Pageable pageable, @RequestParam(value = "filters") String filters) {
+
+    log.debug("filters: " + filters);
+    SpecificationsBuilder<Person> builder = new SpecificationsBuilder<>();
+    String operationSetExpr = String.join("|", SearchOperation.SIMPLE_OPERATION_SET);
+    Pattern pattern = Pattern.compile("(\\w+?)(" + operationSetExpr + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),", Pattern.UNICODE_CHARACTER_CLASS);
+    Matcher matcher = pattern.matcher(filters);
+    while (matcher.find()) {
+      builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
+    }
+
+    Specification<Person> spec = builder.build();
+
+    return personRepository.findAll(spec, pageable);
   }
 
 

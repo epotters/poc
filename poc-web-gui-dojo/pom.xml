@@ -84,28 +84,28 @@
       </plugin>
 
 
-      <!--<plugin>-->
-        <!--<artifactId>maven-resources-plugin</artifactId>-->
-        <!--<version>${maven-resources-plugin.version}</version>-->
-        <!--<executions>-->
-          <!--<execution>-->
-            <!--<id>copy-resources</id>-->
-            <!--<phase>process-resources</phase>-->
-            <!--<goals>-->
-              <!--<goal>copy-resources</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-              <!--<outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>-->
-              <!--<resources>-->
-                <!--<resource>-->
-                  <!--<directory>${dojo.projectDir}/${dojo.targetDir}</directory>-->
-                  <!--<filtering>true</filtering>-->
-                <!--</resource>-->
-              <!--</resources>-->
-            <!--</configuration>-->
-          <!--</execution>-->
-        <!--</executions>-->
-      <!--</plugin>-->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${dojo.projectDir}/${dojo.targetDir}</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 

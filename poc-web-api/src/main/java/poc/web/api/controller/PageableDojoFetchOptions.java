@@ -3,7 +3,7 @@ package poc.web.api.controller;
 
 /*
 
-Example dojo request payload
+Fetcher options as sent by the dojo client
 {
   "sort": {
     "columnId": "firstName",

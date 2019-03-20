@@ -45,18 +45,45 @@ const columnConfig = [
 ];
 
 
+
+
+
 const fetcher = async (
     page: number,
     pageSize: number,
     options: FetcherOptions = {}
 ) => {
 
-    let sortParams = "";
-    if (options.sort != undefined) {
-        sortParams += (options.sort.columnId != undefined) ? "&sort=" + options.sort.columnId + "," : "";
-        sortParams += (options.sort.direction != undefined) ? options.sort.direction : "asc";
+    // This should go to a library of kind
+    function buildQueryString(page:number, pageSize:number, options: FetcherOptions) {
+
+        let queryString = "?page=" + page + "&size=" + pageSize;
+
+        let sortParams = "";
+        if (options.sort != undefined) {
+            sortParams += ((options.sort.columnId != undefined) ? "&sort=" + options.sort.columnId + "," : "");
+            sortParams += (options.sort.direction != undefined) ? options.sort.direction : "asc";
+        }
+        queryString += sortParams;
+
+
+        let filterParams = "";
+        if (options.filter != undefined) {
+            filterParams += "&filters=";
+            for (let columnId in options.filter) {
+                let value = options.filter[columnId];
+                if (value != null && value != "") {
+                    filterParams += columnId + "~" + value + ",";
+                }
+            }
+        }
+        queryString += filterParams;
+
+        return queryString;
     }
-    const queryString = "?page" + page + "&size=" + pageSize + sortParams;
+
+
+    const queryString = buildQueryString(page, pageSize, options);
     console.log(queryString);
 
     const response = await fetch(
