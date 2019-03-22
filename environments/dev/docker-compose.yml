@@ -45,7 +45,7 @@ services:
     ports:
     - 10080:80
     volumes:
-    - /poc-web-gui/app:/usr/share/nginx/html:ro
+    - ./poc-web-gui/app:/usr/share/nginx/html:ro
     networks:
       - poc
     restart: always
