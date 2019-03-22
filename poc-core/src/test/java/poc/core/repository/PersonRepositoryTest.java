@@ -2,6 +2,7 @@ package poc.core.repository;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,24 +11,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
+import poc.core.config.CoreContext;
 import poc.core.domain.Gender;
 import poc.core.domain.Person;
+import poc.core.repository.specification.SpecificationsBuilder;
 
 
-/**
- * Created by eelko on 2015-02-06
- */
-
-@SpringBootTest(classes = {poc.core.config.CoreContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-    TransactionalTestExecutionListener.class})
+@DataJpaTest
+@ContextConfiguration(classes = CoreContext.class)
 @RunWith(SpringRunner.class)
 public class PersonRepositoryTest {
 
@@ -39,49 +34,64 @@ public class PersonRepositoryTest {
 
   @Before
   public void prepareTests() {
-    LOG.debug("@prepareTests");
-  }
-
-
-  @Test
-  public void isRepositoryAvailable() {
-    LOG.debug("@isRepositoryAvailable");
     Assert.assertNotNull(personRepository);
+    LOG.debug("@prepareTests");
+    personRepository.deleteAll();
+    loadPeople();
   }
 
 
   @Test
   public void savePeople() throws Exception {
 
+    List<Person> peopleFound;
+
+    // Fetch people by last name
+    peopleFound = personRepository.findAll();
+    listPeople(peopleFound, "People found with findAll()");
+    Assert.assertEquals("There should be 5 search results", 5, peopleFound.size());
+
+
+    // Fetch people by last name
+    peopleFound = personRepository.findByLastName("Bauer");
+    listPeople(peopleFound, "Person found with findByLastName('Bauer')");
+    Assert.assertEquals("There should be 2 search results", 2, peopleFound.size());
+
+
+  }
+
+
+  @Test
+  public void findPeopleFiltered() {
+
+    SpecificationsBuilder<Person> builder = new SpecificationsBuilder<>();
+    builder.with("firstName", "~", "Jac%");
+    builder.with("lastName", "~", "Bau%");
+    Specification<Person> specifications = builder.build();
+
+    List<Person> peopleFound = personRepository.findAll(specifications);
+    listPeople(peopleFound, "Search for people by partial first and last name");
+    Assert.assertEquals("There should be 1 search result", 1, peopleFound.size());
+
+  }
+
+
+  private void loadPeople() {
     // Save a couple of people
     personRepository.save(new Person("Jack", "Bauer", Gender.MALE, LocalDate.of(1970, 10, 5)));
     personRepository.save(new Person("Chloe", "O'Brian", Gender.FEMALE, LocalDate.of(1970, 10, 5)));
     personRepository.save(new Person("Kim", "Bauer", Gender.FEMALE, LocalDate.of(1985, 3, 5)));
     personRepository.save(new Person("David", "Palmer", Gender.MALE, LocalDate.of(1970, 10, 5)));
     personRepository.save(new Person("Michelle", "Dessler", Gender.FEMALE, LocalDate.of(1960, 12, 30)));
+  }
 
-    // Fetch all customers
-    System.out.println("People found with findAll():");
-    System.out.println("-------------------------------");
-    for (Person person : personRepository.findAll()) {
-      System.out.println(person);
+
+  private void listPeople(List<Person> people, String title) {
+    if (title != null) {
+      System.out.println(title);
     }
-    System.out.println();
-
-    /*
-    // Fetch an individual customer by ID
-    Person person = personRepository.getOne(1L);
-    System.out.println("Person found with getOne(1L):");
-    System.out.println("--------------------------------");
-    System.out.println(person);
-    System.out.println();
-    */
-
-    // Fetch customers by last name
-    System.out.println("Person found with findByLastName('Bauer'):");
-    System.out.println("--------------------------------------------");
-    for (Person bauer : personRepository.findByLastName("Bauer")) {
-      System.out.println(bauer);
+    for (Person person : people) {
+      System.out.println("   " + person.getFirstName() + " " + person.getLastName());
     }
   }
 }

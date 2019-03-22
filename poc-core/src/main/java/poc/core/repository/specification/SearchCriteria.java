@@ -7,14 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class SearchCriteria {
+public class SearchCriteria {
 
   private String key;
   private SearchOperation operation;
   private Object value;
 
 
-  SearchCriteria(String key, SearchOperation operation, Object value) {
+  public SearchCriteria(String key, SearchOperation operation, Object value) {
     setKey(key);
     setOperation(operation);
     setValue(value);

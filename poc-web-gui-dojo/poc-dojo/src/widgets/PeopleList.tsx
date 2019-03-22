@@ -39,7 +39,8 @@ const columnConfig = [
     },
     {
         id: "birthPlace",
-        title: "Birth place"
+        title: "Birth place",
+        filterable: true
     }
 ];
 
@@ -72,12 +73,10 @@ const fetcher = async (
                 }
             }
             if (filterParams.length > 0) {
-                filterParams += "&filters=" + filterParams.substr(0, filterParams.length - 1);
+                filterParams = "&filters=" + filterParams.substr(0, filterParams.length - 1);
             }
         }
         queryString += filterParams;
-
-
         return queryString;
     }
 
