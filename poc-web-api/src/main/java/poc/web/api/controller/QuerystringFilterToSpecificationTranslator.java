@@ -50,5 +50,4 @@ class QuerystringFilterToSpecificationTranslator<T> {
     return specs;
   }
 
-
 }

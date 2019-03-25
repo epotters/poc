@@ -1,9 +1,6 @@
 package poc.web.api.controller;
 
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,17 +12,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
-import poc.core.repository.specification.SearchOperation;
-import poc.core.repository.specification.SpecificationsBuilder;
 
 
+@CrossOrigin(origins = "http://localhost:9999")
 @Slf4j
 @RestController
 @RequestMapping("/api/people")
@@ -42,18 +41,22 @@ public class PersonController {
   }
 
 
-  @RequestMapping("/{id}")
-  public Person getPerson(@PathVariable Long id) {
+  @GetMapping("/{id}")
+  public Person getPerson(@PathVariable final Long id) {
     return personRepository.getOne(id);
+  }
+
+  @PostMapping("/{id}")
+  public Person updatePerson(@PathVariable final Long id, @RequestBody final Person person) {
+    return personRepository.save(person);
   }
 
 
   // page, size and sort parameters are supported by default
   // https://stackoverflow.com/questions/33953287/spring-boot-rest-webservice-jpa-pageable-and-filter
   // ?page=1&size=100&sort=firstName,asc&filters=firstName~jaco,lastName~bijk
-  @CrossOrigin(origins = "http://localhost:9999")
-  @RequestMapping("/")
-  public Iterable<Person> listPeople(Pageable pageable,
+  @GetMapping("/")
+  public Iterable<Person> listPeople(final Pageable pageable,
       @RequestParam(value = "filters", required = false) final String filters) {
 
 
@@ -69,9 +72,6 @@ public class PersonController {
     }
 
   }
-
-
-
 
 
   // http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html

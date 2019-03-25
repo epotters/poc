@@ -44,6 +44,8 @@ const columnConfig = [
     }
 ];
 
+const baseUrl = "http://127.0.0.1:8002/poc/api/people/";
+
 
 const fetcher = async (
     page: number,
@@ -84,7 +86,7 @@ const fetcher = async (
     console.log(queryString);
 
     const response = await fetch(
-        "http://127.0.0.1:8002/poc/api/people/" + queryString,
+        baseUrl + queryString,
         {
             method: "GET",
             headers: {
@@ -101,12 +103,23 @@ const fetcher = async (
     return {data: json.content, meta: {total: json.totalElements}};
 };
 
+
+const updater = async (item: any) => {
+    await fetch(baseUrl + `${item.id}`, {
+        method: 'POST',
+        body: JSON.stringify(item),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+};
+
 //
 export default class extends WidgetBase {
     protected render() {
         return (
             <div styles={{width: "100%"}}>
-                <Grid fetcher={fetcher} columnConfig={columnConfig} height={720} />
+                <Grid fetcher={fetcher} columnConfig={columnConfig} updater={updater} height={720} />
             </div>
         );
     }
