@@ -27,7 +27,7 @@ export default [
 ];
 
 
-export interface PersonProperties {
-	firstName?: string;
-	lastName?: string;
-};
+// export interface PersonProperties {
+// 	firstName?: string;
+// 	lastName?: string;
+// };

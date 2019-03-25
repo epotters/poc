@@ -1,5 +1,6 @@
 import {tsx} from "@dojo/framework/widget-core/tsx";
-import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
+import {v} from '@dojo/framework/widget-core/d';
 
 import Grid from "@dojo/widgets/grid";
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
@@ -8,7 +9,12 @@ import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
 const columnConfig = [
     {
         id: "id",
-        title: "ID"
+        title: "ID",
+        renderer: (item: any) => {
+            return(
+                v("a", {href: "#person/" + item.id})
+        );
+        }
     },
     {
         id: "firstName",

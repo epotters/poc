@@ -1,0 +1,34 @@
+.personEditor {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.personEditor fieldset,
+.personEditor label {
+  display: inline-block;
+  text-align: left;
+}
+
+.personEditor label {
+  margin-right: 10px;
+}
+
+.nameField {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.nameLabel {
+  font: 14px/1 sans-serif;
+  margin: 5px 0;
+}
+
+.personButton {
+  padding: 5px 20px;
+}
+
+
+.editorToolbar {
+
+}
