@@ -9,12 +9,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.junit.Assert.assertEquals;
 
 
-public class PocControllerTest extends BaseControllerTest {
+public class PersonControllerTest extends BaseControllerTest {
 
   @Test
-  public void getWelcomeMessage() throws Exception {
+  public void geSchema() throws Exception {
 
-    String uri = "/welcome";
+    String uri = "/api/people/schema";
 
     MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
         .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();

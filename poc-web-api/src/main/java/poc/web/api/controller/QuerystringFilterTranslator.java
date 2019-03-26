@@ -12,7 +12,7 @@ import poc.core.repository.specification.SearchOperation;
 import poc.core.repository.specification.SpecificationsBuilder;
 
 
-class QuerystringFilterToSpecificationTranslator<T> {
+class QuerystringFilterTranslator<T> {
 
   private static final String SEPARATOR = ",";
 

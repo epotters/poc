@@ -23,7 +23,7 @@ import java.io.IOException;
 @WebAppConfiguration
 public class BaseControllerTest {
 
-  protected MockMvc mvc;
+  MockMvc mvc;
 
   @Autowired
   WebApplicationContext webApplicationContext;

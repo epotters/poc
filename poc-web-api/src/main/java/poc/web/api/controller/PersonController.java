@@ -1,23 +1,18 @@
 package poc.web.api.controller;
 
 
+import java.io.IOException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import poc.core.domain.Person;
@@ -32,7 +27,7 @@ public class PersonController {
 
   private final PersonRepository personRepository;
 
-  private QuerystringFilterToSpecificationTranslator<Person> filterTanslator = new QuerystringFilterToSpecificationTranslator<>();
+  private QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>();
 
 
   @Autowired
@@ -59,7 +54,6 @@ public class PersonController {
   public Iterable<Person> listPeople(final Pageable pageable,
       @RequestParam(value = "filters", required = false) final String filters) {
 
-
     log.debug("filterParam: " + filters);
 
     if (filters != null & !"".equals(filters)) {
@@ -70,17 +64,13 @@ public class PersonController {
       log.debug("No filters provided");
       return personRepository.findAll(pageable);
     }
-
   }
 
 
-  // http://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html
-  @RequestMapping(method = RequestMethod.GET)
-  HttpEntity<PagedResources<Person>> people(Pageable pageable, PagedResourcesAssembler assembler) {
-
-    Page<Person> people = personRepository.findAll(pageable);
-
-    return new ResponseEntity<>(assembler.toResource(people), HttpStatus.OK);
+  @GetMapping("/schema")
+  public String schema() throws IOException {
+    JsonSchemaGenerator generator = new JsonSchemaGenerator();
+    return generator.generate(Person.class);
   }
 
 }
