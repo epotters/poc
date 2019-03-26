@@ -26,9 +26,10 @@ class Address implements Serializable {
   private String addressLine;
   private String street;
   private int number;
-  private String number_addition;
+  private String numberAddition;
   private String postalCode;
   private String place;
+  private String countryCode;
   private String country;
 
 }
