@@ -11,10 +11,13 @@ import static org.junit.Assert.assertEquals;
 
 public class PersonControllerTest extends BaseControllerTest {
 
+
   @Test
-  public void geSchema() throws Exception {
+  public void getSchema() throws Exception {
 
     String uri = "/api/people/schema";
+
+    assert(mvc != null);
 
     MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
         .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -22,9 +25,7 @@ public class PersonControllerTest extends BaseControllerTest {
     int status = mvcResult.getResponse().getStatus();
     assertEquals(200, status);
 
-
     String content = mvcResult.getResponse().getContentAsString();
-
     System.out.print(content);
   }
 }

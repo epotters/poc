@@ -26,7 +26,7 @@ class Household {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "displayName")
+  @Column(name = "display_name")
   private String displayName;
 
   @OneToMany(mappedBy = "household")

@@ -3,6 +3,7 @@ package poc.core.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,12 +24,19 @@ class Address implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name="address_line")
   private String addressLine;
   private String street;
   private int number;
+
+  @Column(name="number_addition")
   private String numberAddition;
+
+  @Column(name="postal_code")
   private String postalCode;
   private String place;
+
+  @Column(name="country_code")
   private String countryCode;
   private String country;
 

@@ -12,7 +12,6 @@ public class PocWebApi {
 
   private static final Log LOG = LogFactory.getLog(PocWebApi.class);
 
-
   public static void main(String[] args) {
     LOG.info("Starting Proof of Concept application");
     SpringApplication.run(PocWebApi.class, args);
