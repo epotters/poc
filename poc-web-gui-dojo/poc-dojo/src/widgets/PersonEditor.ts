@@ -2,7 +2,7 @@ import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 import Button from '@dojo/widgets/button';
 import TextInput from '@dojo/widgets/text-input';
-import ApplicationContext from './ApplicationContext';
+// import ApplicationContext from './ApplicationContext';
 
 import {theme, ThemedMixin} from '@dojo/framework/widget-core/mixins/Themed';
 import * as css from './styles/PersonEditor.m.css';
@@ -74,8 +74,8 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
             classes: this.theme(css.personEditor),
             onsubmit: this._onSubmit
         }, [
-            v('fieldset', {classes: this.theme(css.nameField)}, [
-                v('legend', {classes: this.theme(css.nameLabel)}, ['Name']),
+            v('fieldset', {classes: this.theme(css.field)}, [
+                v('legend', {classes: this.theme(css.label)}, ['Name']),
                 w(TextInput, {
                     key: 'firstNameInput',
                     label: 'First Name',

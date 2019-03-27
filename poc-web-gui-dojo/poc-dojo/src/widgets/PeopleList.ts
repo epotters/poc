@@ -1,9 +1,13 @@
-import {tsx} from "@dojo/framework/widget-core/tsx";
+// import {tsx} from "@dojo/framework/widget-core/tsx";
 import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
+import {w} from '@dojo/framework/widget-core/d';
 
 import Grid from "@dojo/widgets/grid";
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
+import Link from "@dojo/framework/routing/Link";
+
+import * as css from './styles/PeopleList.m.css';
+
 
 
 const columnConfig = [
@@ -11,9 +15,23 @@ const columnConfig = [
         id: "id",
         title: "ID",
         renderer: (item: any) => {
-            return(
-                v("a", {href: "#person/" + item.id})
-        );
+
+            console.log("Item: ");
+            console.log(item);
+
+            return (
+                w(Link, {
+                        to: "person",
+                        key: "person",
+                        classes: [css.link],
+                        // activeClasses: [css.linkSelected],
+                        params: {
+                            personId: item.value
+                        }
+                    },
+                    [item.value]
+                )
+            );
         }
     },
     {
@@ -120,13 +138,14 @@ const updater = async (item: any) => {
     });
 };
 
-//
+
 export default class extends WidgetBase {
     protected render() {
+
         return (
-            <div styles={{width: "100%"}}>
-                <Grid fetcher={fetcher} columnConfig={columnConfig} updater={updater} height={720} />
-            </div>
+            
+            w(Grid, {columnConfig: columnConfig, fetcher: fetcher, updater: updater, height: 720})
+ 
         );
     }
 }

@@ -3,6 +3,8 @@ import {v, w} from '@dojo/framework/widget-core/d';
 import Button from '@dojo/widgets/button';
 import TextInput from '@dojo/widgets/text-input';
 
+import * as css from './styles/Login.m.css';
+
 
 export default class Login extends WidgetBase {
 
@@ -20,11 +22,11 @@ export default class Login extends WidgetBase {
     }
 
     protected render() {
-        return v('div', {}, [
+        return v('div', { classes: css.root }, [
             v('form', {
                 onsubmit: this._onSubmit
             }, [
-                v('fieldset', {}, [
+                v('fieldset', { }, [
                     w(TextInput, {
                         key: 'email',
                         label: 'Email',
@@ -41,7 +43,7 @@ export default class Login extends WidgetBase {
                         required: true,
                         onInput: this._onPasswordInput
                     }),
-                    w(Button, {}, ['Login'])
+                    w(Button, { }, [ 'Login' ])
                 ]),
             ])
         ]);
