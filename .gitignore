@@ -12,3 +12,6 @@ target/
 # Node built projects
 package-lock.json
 node/
+
+
+environments/dev/poc-web-gui/app/
