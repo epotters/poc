@@ -1,10 +1,13 @@
 // import {tsx} from "@dojo/framework/widget-core/tsx";
+
 import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {w} from '@dojo/framework/widget-core/d';
 
 import Grid from "@dojo/widgets/grid";
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
 import Link from "@dojo/framework/routing/Link";
+
+import { baseUrl } from "../../config";
 
 import * as css from './styles/PeopleList.m.css';
 
@@ -67,9 +70,6 @@ const columnConfig = [
         filterable: true
     }
 ];
-
-const baseUrl = "http://127.0.0.1:8002/poc/api/people/";
-
 
 const fetcher = async (
     page: number,
