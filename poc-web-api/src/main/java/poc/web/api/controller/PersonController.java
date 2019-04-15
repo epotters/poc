@@ -19,7 +19,7 @@ import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
 
 
-@CrossOrigin(origins = "http://localhost:9999")
+@CrossOrigin(origins = "http://localhost:9998")
 @Slf4j
 @RestController
 @RequestMapping("/api/people")

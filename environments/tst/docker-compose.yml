@@ -6,7 +6,7 @@ services:
     image: mysql/mysql-server:8.0.15
     container_name: poc-db-tst
     ports:
-      - 23306:3306
+      - 23307:3306
     volumes:
       - poc-db-data:/var/lib/mysql
     networks:

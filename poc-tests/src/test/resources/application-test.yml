@@ -9,7 +9,11 @@ spring:
       name: epo
       password: 12345
 
-
+  # Data
+#  datasource:
+#    url: jdbc:mysql://localhost:23307/poc?useSSL=false&serverTimezone=Europe/Amsterdam
+#    username: poc
+#    password: b1vidh
 
 # Logging
 debug: true
