@@ -9,7 +9,7 @@
 }
 
 .personEditor fieldset,
-.personEditor label {
+.personEditor .label {
   display: inline-block;
   text-align: left;
   width: 100%;
@@ -19,7 +19,7 @@
   display: inline-block;
 }
 
-.personEditor label {
+.personEditor .label {
   margin-right: 10px;
 }
 
