@@ -72,6 +72,11 @@ export interface RegistrationRequest extends ResourceBased {
 }
 
 
+export interface Errors {
+  [index: string]: string[];
+}
+
+
 export interface State {
   personEditor: PersonEditor;
   settings: Settings;
@@ -79,5 +84,6 @@ export interface State {
   routing: Routing;
   login: Login;
   register: RegistrationRequest;
+  errors: Errors
 }
 

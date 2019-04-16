@@ -63,6 +63,7 @@ public class UserAccount implements UserDetails {
   }
 
 
+  @Override
   public Collection<UserRole> getAuthorities() {
     return this.authorities;
   }

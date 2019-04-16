@@ -3,5 +3,6 @@ export class User {
       public id: number,
       public name: string,
       public displayName: string,
-      public roles: string[]) { }
+      public roles: string[]) {
+  }
 }
