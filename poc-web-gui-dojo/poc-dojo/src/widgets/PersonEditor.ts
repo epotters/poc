@@ -2,30 +2,28 @@ import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 import Button from '@dojo/widgets/button';
 import TextInput from '@dojo/widgets/text-input';
-// import ApplicationContext from './ApplicationContext';
+
 
 import {theme, ThemedMixin} from '@dojo/framework/widget-core/mixins/Themed';
 import * as css from './styles/PersonEditor.m.css';
+import { Person } from '../interfaces';
+import {PersonIdPayload, PartialPersonPayload} from '../processes/interfaces';
 
-
-
-
-export interface PersonData {
-    id: string;
-    firstName: string;
-    prefix: string;
-    lastName: string;
-    gender: string;
-    birthDate: string;
-    birthPlace: string;
-}
 
 
 export interface PersonEditorProperties {
-    personId: string;
-    personData: Partial<PersonData>;
-    onFormInput: (data: Partial<PersonData>) => void;
+    person: Partial<Person>;
+    loaded: boolean;
+    isAuthenticated: any;
+    loggedInUser: string;
+
+    getPerson:  (opts: PersonIdPayload) => void;
+    savePerson: (opts: PartialPersonPayload) => void;
+    deletePerson: (opts: PersonIdPayload) => void;
+
+    onFormInput: (opts: Partial<Person>) => void;
     onFormSave: () => void;
+
 }
 
 
@@ -66,7 +64,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
     protected render() {
 
         const {
-            personData: {firstName, prefix, lastName, gender, birthDate, birthPlace}
+            person: {firstName, prefix, lastName, gender, birthDate, birthPlace}
         } = this.properties;
 
 

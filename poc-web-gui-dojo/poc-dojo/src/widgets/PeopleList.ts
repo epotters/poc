@@ -1,5 +1,3 @@
-// import {tsx} from "@dojo/framework/widget-core/tsx";
-
 import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {w} from '@dojo/framework/widget-core/d';
 

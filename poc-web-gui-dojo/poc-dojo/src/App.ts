@@ -4,7 +4,6 @@ import Outlet from '@dojo/framework/routing/Outlet';
 import Menu from './widgets/Menu';
 import Home from './widgets/Home';
 import People from "./widgets/People";
-// import PersonEditor, {PersonData} from "./widgets/PersonEditor";
 import About from './widgets/About';
 import Profile from './widgets/Profile';
 import Login from "./widgets/Login";
@@ -12,13 +11,17 @@ import Login from "./widgets/Login";
 import * as css from './App.m.css';
 import PersonEditor from "./widgets/PersonEditor";
 import {MatchDetails} from "@dojo/framework/routing/interfaces";
-// import {MatchDetails} from "@dojo/framework/routing/interfaces";
+
+import PersonContainer from "./containers/PersonEditorContainer";
 
 export default class App extends WidgetBase {
+
 	protected render() {
 
 
-		const personEditorProperties = {
+		const personEditorProperties =
+
+			{
 			personId: "-1",
 			personData: {},
 			onFormInput: function () {

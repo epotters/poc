@@ -1,16 +1,14 @@
-import {Person} from '../interfaces';
+import {Person} from "../interfaces";
 
 export interface PersonIdPayload {
-  id: number;
+  personId: number;
 }
 
-export interface NewHouseholdPayload {
-  member: Person;
+
+export interface PersonPayload {
+  person: Person;
 }
 
-export interface AddHouseholdPayload extends NewHouseholdPayload {
-}
-
-export interface DeleteHouseholdPayload {
-  id: number;
+export interface PartialPersonPayload {
+  person: Partial<Person>;
 }

@@ -10,18 +10,25 @@ export interface ResourceBased {
 }
 
 
-export interface Person extends ResourceBased {
+export interface Person {
   id: number;
   firstName: string;
+  prefix: string;
   lastName: string;
   gender: string;
   birthDate: string;
   birthPlace: string;
-  household: Household;
+  // household: Household;
 }
+
 
 export interface Household extends ResourceBased {
   members: Person[];
+}
+
+
+export interface PersonEditor extends ResourceBased {
+  person: Partial<Person>;
 }
 
 
@@ -66,6 +73,7 @@ export interface RegistrationRequest extends ResourceBased {
 
 
 export interface State {
+  personEditor: PersonEditor;
   settings: Settings;
   user: UserProfile;
   routing: Routing;
