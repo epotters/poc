@@ -1,8 +1,5 @@
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
 
-export interface Domain {
-}
-
 
 export interface ResourceBased {
   loading: boolean;
@@ -18,7 +15,6 @@ export interface Person {
   gender: string;
   birthDate: string;
   birthPlace: string;
-  // household: Household;
 }
 
 
@@ -86,4 +82,3 @@ export interface State {
   register: RegistrationRequest;
   errors: Errors
 }
-

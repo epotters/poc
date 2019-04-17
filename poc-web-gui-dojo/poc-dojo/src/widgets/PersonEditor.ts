@@ -9,6 +9,7 @@ import {PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
 
 
 export interface PersonEditorProperties {
+  personId: number;
   person: Partial<Person>;
   loaded: boolean;
   isAuthenticated: any;

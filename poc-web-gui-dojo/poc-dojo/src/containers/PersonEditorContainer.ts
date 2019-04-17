@@ -8,6 +8,7 @@ function getProperties(store: Store<State>, properties: PersonEditorProperties):
   const {get, path} = store;
 
   return {
+    personId: get(path('personEditor', 'personId')),
     person: get(path('personEditor', 'person')),
     loaded: get(path('personEditor', 'loaded')),
     isAuthenticated: !!get(path('user', 'token')),

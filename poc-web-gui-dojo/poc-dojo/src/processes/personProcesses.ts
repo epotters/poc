@@ -7,6 +7,7 @@ import {PartialPersonPayload, PersonIdPayload} from './interfaces';
 
 const startLoadingPersonCommand = commandFactory(({path}) => {
   return [
+    replace(path('personEditor', 'personId'), undefined),
     replace(path('personEditor', 'person'), undefined),
     replace(path('personEditor', 'loading'), true),
     replace(path('personEditor', 'loaded'), false)
@@ -22,6 +23,7 @@ const loadPersonCommand = commandFactory<PersonIdPayload>(async ({get, path, pay
   const json = await response.json();
 
   return [
+    replace(path('personEditor', 'personId'), personId),
     replace(path('personEditor', 'person'), json.person),
     replace(path('personEditor', 'loading'), false),
     replace(path('personEditor', 'loaded'), true)

@@ -23,9 +23,9 @@ export class App extends WidgetBase {
             return w(PersonEditorContainer, {});
           }
         }),
-        w(Outlet, {key: 'about', id: 'about', renderer: () => w(About, {})}),
         w(Outlet, {key: 'profile', id: 'profile', renderer: () => w(Profile, {username: 'Dojo User'})}),
         w(Outlet, {key: 'login', id: 'login', renderer: () => w(Login, {})}),
+        w(Outlet, {key: 'about', id: 'about', renderer: () => w(About, {})})
       ])
     ]);
   }
