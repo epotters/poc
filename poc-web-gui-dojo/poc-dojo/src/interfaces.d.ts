@@ -24,6 +24,7 @@ export interface Household extends ResourceBased {
 
 
 export interface PersonEditor extends ResourceBased {
+  personId: number;
   person: Partial<Person>;
 }
 
