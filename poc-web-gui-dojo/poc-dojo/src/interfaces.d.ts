@@ -1,3 +1,5 @@
+import PeopleList from "./widgets/PeopleList";
+
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
 
 
@@ -18,8 +20,13 @@ export interface Person {
 }
 
 
-export interface Household extends ResourceBased {
+export interface Household {
   members: Person[];
+}
+
+
+export interface PeopleList extends ResourceBased {
+  people: Person[];
 }
 
 
@@ -75,6 +82,7 @@ export interface Errors {
 
 
 export interface State {
+  peopleList: PeopleList;
   personEditor: PersonEditor;
   settings: Settings;
   user: UserProfile;

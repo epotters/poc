@@ -1,5 +1,7 @@
 import {Person, UserProfile} from "../interfaces";
 import {OutletContext} from '@dojo/framework/routing/interfaces';
+import {buildQueryString} from "./utils";
+import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
 
 
 export interface PersonIdPayload {
@@ -8,6 +10,13 @@ export interface PersonIdPayload {
 
 export interface PartialPersonPayload {
   person: Partial<Person>;
+}
+
+
+export interface PageSortFilterPayload {
+  page: number;
+  pageSize: number;
+  options: FetcherOptions;
 }
 
 

@@ -1,8 +1,40 @@
 import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
-import {commandFactory, getHeaders} from './utils';
+import {buildQueryString, commandFactory, getHeaders} from './utils';
 import {baseUrl} from '../../config';
-import {PartialPersonPayload, PersonIdPayload} from './interfaces';
+import {PageSortFilterPayload, PartialPersonPayload, PersonIdPayload} from './interfaces';
+
+
+// List people
+const listPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, path, payload: {page, pageSize, options}}) => {
+
+  const token = get(path('user', 'token'));
+
+  const queryString = buildQueryString(page, pageSize, options);
+  console.log(queryString);
+
+  const response = await fetch(
+      baseUrl + queryString,
+      {
+        method: "get",
+        headers: getHeaders(token)
+      }
+  );
+
+  const json = await response.json();
+
+  return [
+    replace(path("peopleList", "people"), json.content),
+    replace(path("peopleList", "meta"), json.content),
+  ];
+
+});
+
+
+const updatePersonCommand = commandFactory<PartialPersonPayload>(({path}) => {
+
+  return [];
+});
 
 
 const startLoadingPersonCommand = commandFactory(({path}) => {
@@ -56,11 +88,13 @@ const clearPersonEditorCommand = commandFactory(({path}) => {
 });
 
 
+export const listPeopleProcess = createProcess('list-people', [listPeopleCommand]);
 export const getPersonProcess = createProcess('get-person', [
   startLoadingPersonCommand,
   [loadPersonCommand]
 ]);
-export const clearPersonEditorProcess = createProcess('clear-person', [clearPersonEditorCommand]);
+export const clearPersonEditorProcess = createProcess('clear-person-editor', [clearPersonEditorCommand]);
 export const savePersonProcess = createProcess('save-person', [savePersonCommand]);
+export const updatePersonProcess = createProcess('update-person', [updatePersonCommand])
 export const deletePersonProcess = createProcess('delete-person', [deletePersonCommand]);
 
