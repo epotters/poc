@@ -3,13 +3,15 @@ import {v, w} from '@dojo/framework/widget-core/d';
 import Outlet from '@dojo/framework/routing/Outlet';
 import Menu from './widgets/Menu';
 import Home from './widgets/Home';
-import People from './widgets/People';
+// import People from './widgets/People';
 import About from './widgets/About';
 import Profile from './widgets/Profile';
 import Login from './widgets/Login';
 import * as css from './App.m.css';
 import {MatchDetails} from '@dojo/framework/routing/interfaces';
+import PeopleListContainer from './containers/PeopleListContainer';
 import PersonEditorContainer from './containers/PersonEditorContainer';
+
 
 export class App extends WidgetBase {
   protected render() {
@@ -17,7 +19,7 @@ export class App extends WidgetBase {
       w(Menu, {}),
       v('div', [
         w(Outlet, {key: 'home', id: 'home', renderer: () => w(Home, {})}),
-        w(Outlet, {key: 'people', id: 'people', renderer: () => w(People, {})}),
+        w(Outlet, {key: 'people', id: 'people', renderer: () => w(PeopleListContainer, {})}),
         w(Outlet, {key: 'person', id: 'person',
           renderer: (details: MatchDetails) => {
             return w(PersonEditorContainer, {});

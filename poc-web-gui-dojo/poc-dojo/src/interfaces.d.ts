@@ -1,4 +1,5 @@
 import PeopleList from "./widgets/PeopleList";
+import {PersonEditorProperties} from "./widgets/PersonEditor";
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
 

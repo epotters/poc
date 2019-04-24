@@ -12,13 +12,12 @@ export interface PersonEditorProperties {
   personId: number;
   person: Partial<Person>;
   loaded: boolean;
-  isAuthenticated: any;
+  // loading: boolean;
+  isAuthenticated: boolean;
   loggedInUser: string;
-
   getPerson: (opts: PersonIdPayload) => void;
   savePerson: (opts: PartialPersonPayload) => void;
   deletePerson: (opts: PersonIdPayload) => void;
-
   onFormInput: (opts: Partial<Person>) => void;
   onFormSave: () => void;
 }
@@ -54,9 +53,26 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
   protected render() {
 
+
+/*
     const {
-      person: {id, firstName, prefix, lastName, gender, birthDate, birthPlace}
+      personId,
+      person,
+      loaded,
+      isAuthenticated,
+      loggedInUser,
+      getPerson,
+      savePerson,
+      deletePerson,
+      onFormInput,
+      onFormSave
     } = this.properties;
+ */
+
+    const {
+      person
+    } = this.properties;
+
 
 
     return v('form', {
@@ -70,7 +86,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
         // type: 'hidden',
         labelHidden: true,
         placeholder: '',
-        value: ("" + id),
+        value: ("" + person.id),
         required: true
       }),
 
@@ -81,7 +97,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
           label: 'First Name',
           labelHidden: true,
           placeholder: 'Given name',
-          value: firstName,
+          value: person.firstName,
           required: true,
           onInput: this.onFirstNameInput
         }),
@@ -91,7 +107,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
           label: 'prefix',
           labelHidden: true,
           placeholder: 'Prefix',
-          value: prefix,
+          value: person.prefix,
           required: false,
           onInput: this.onPrefixInput
         }),
@@ -100,7 +116,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
           label: 'Last Name',
           labelHidden: true,
           placeholder: 'Surname name',
-          value: lastName,
+          value: person.lastName,
           required: true,
           onInput: this.onLastNameInput
         })
@@ -110,7 +126,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
         label: 'Gender',
         labelHidden: false,
         placeholder: 'M/F',
-        value: gender,
+        value: person.gender,
         required: false,
         onInput: this.onGenderInput
       }),
@@ -120,14 +136,14 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
         label: 'Birth date',
         labelHidden: false,
         placeholder: 'Date of birth',
-        value: birthDate,
+        value: person.birthDate,
         required: false,
         onInput: this.onBirthDateInput
       }),
       w(TextInput, {
         key: 'birthPlaceInput',
         label: 'Birth place',
-        value: birthPlace,
+        value: person.birthPlace,
         required: false,
         onInput: this.onBirthPlaceInput
       }),

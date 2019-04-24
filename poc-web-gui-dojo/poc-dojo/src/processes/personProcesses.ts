@@ -95,6 +95,6 @@ export const getPersonProcess = createProcess('get-person', [
 ]);
 export const clearPersonEditorProcess = createProcess('clear-person-editor', [clearPersonEditorCommand]);
 export const savePersonProcess = createProcess('save-person', [savePersonCommand]);
-export const updatePersonProcess = createProcess('update-person', [updatePersonCommand])
+export const updatePersonProcess = createProcess('update-person', [updatePersonCommand]);
 export const deletePersonProcess = createProcess('delete-person', [deletePersonCommand]);
 

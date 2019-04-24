@@ -1,24 +1,31 @@
 
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {PeopleList} from "../widgets/PeopleList";
+import PeopleList, {PeopleListProperties} from "../widgets/PeopleList";
 import {State} from "../interfaces";
 import {listPeopleProcess, updatePersonProcess} from "../processes/personProcesses";
+import {PersonEditorProperties} from "../widgets/PersonEditor";
 
 
-function getProperties(store: Store<State>): any {
+
+function getProperties(store: Store<State>, properties: PeopleListProperties): PeopleListProperties {
+
   const {get, path} = store;
 
   return {
     people: get(path("peopleList", "people")),
-    // result: get(path("result")),
+    page: get(path("peopleList", "page")),
+    pageSize: get(path("peopleList", "pageSize")),
+    options: get(path("peopleList", "options")),
     listPeople: listPeopleProcess(store),
-    updatePerson: updatePersonProcess(store)
+    updatePerson: updatePersonProcess(store),
+    meta: {}
   };
 }
 
+
 // Use a StoreContainer
-export const PeopleListContainer = StoreContainer(
+export default StoreContainer(
     PeopleList,
     "state",
     {getProperties}
