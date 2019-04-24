@@ -8,7 +8,6 @@ import * as css from './styles/PeopleList.m.css';
 import {Person} from "../interfaces";
 import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
-import {PersonEditorProperties} from "./PersonEditor";
 
 
 export interface PeopleListProperties {
