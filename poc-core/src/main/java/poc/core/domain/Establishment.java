@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "establishment")
 @Data
 @NoArgsConstructor
-class Establishment implements Serializable {
+class Establishment implements Addressable, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "household")
 @Data
 @NoArgsConstructor
-class Household implements Serializable {
+class Household implements Addressable, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
