@@ -13,12 +13,15 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+
 import poc.core.config.CoreContext;
 
 
 @Configuration
 @Import(CoreContext.class)
-@ComponentScan(basePackages = {"poc.web.api.service", "poc.web.api.controller"})
+@ComponentScan(basePackages = { "poc.web.api.service", "poc.web.api.controller" })
 public class RestContext {
 
   @Bean
@@ -43,4 +46,9 @@ public class RestContext {
     return new DefaultErrorAttributes();
   }
 
+
+  @Bean
+  protected Module module() {
+    return new Hibernate5Module();
+  }
 }

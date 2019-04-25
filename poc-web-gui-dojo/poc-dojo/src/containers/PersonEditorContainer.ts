@@ -10,13 +10,12 @@ function getProperties(store: Store<State>, properties: PersonEditorProperties):
 
   const {get, path} = store;
 
-  fetchPersonProcess(store)({personId: properties.personId});
+  // fetchPersonProcess(store)({personId: properties.personId});
 
   return {
     personId: properties.personId,
 
     person: get(path('personEditor', 'properties', 'person')),
-
     loaded: get(path('personEditor', 'loaded')),
     isAuthenticated: !!get(path('user', 'token')),
     loggedInUser: get(path('user', 'name')),

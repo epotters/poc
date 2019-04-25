@@ -8,7 +8,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update  # create-drop
 
   banner:
       location: classpath:dev/banner.txt

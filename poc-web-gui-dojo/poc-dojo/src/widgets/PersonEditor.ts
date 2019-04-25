@@ -54,15 +54,14 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
   protected render() {
 
-
     const {
       personId,
       person,
-        getPerson
+      // getPerson
     } = this.properties;
 
 
-    getPerson({personId: personId});
+    // getPerson({personId: personId});
 
 
 

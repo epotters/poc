@@ -39,6 +39,4 @@ public class PocController {
     messageBuilder.append(" op deze site");
     return messageBuilder.toString();
   }
-
-  ;
 }

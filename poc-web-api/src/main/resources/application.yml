@@ -22,8 +22,8 @@ management:
 
 # REST
 spring:
-  profiles:
-    active: development
+  #  profiles:
+  #    active: development - Use an environment variable instead
   data:
     rest:
       base-path: /api
