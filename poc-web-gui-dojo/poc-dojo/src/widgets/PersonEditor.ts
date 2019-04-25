@@ -4,7 +4,7 @@ import Button from '@dojo/widgets/button';
 import TextInput from '@dojo/widgets/text-input';
 import {theme, ThemedMixin} from '@dojo/framework/widget-core/mixins/Themed';
 import * as css from './styles/PersonEditor.m.css';
-import {Person} from '../interfaces';
+import {Person, ResourceBased} from '../interfaces';
 import {PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
 
 
@@ -12,7 +12,6 @@ export interface PersonEditorProperties {
   personId: number;
   person: Partial<Person>;
   loaded: boolean;
-  // loading: boolean;
   isAuthenticated: boolean;
   loggedInUser: string;
   getPerson: (opts: PersonIdPayload) => void;
@@ -24,8 +23,10 @@ export interface PersonEditorProperties {
 
 
 @theme(css)
-export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorProperties> {
+export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorProperties> implements ResourceBased {
 
+  loading: boolean;
+  loaded: boolean;
 
   protected onFirstNameInput(firstName: string) {
     this.properties.onFormInput({firstName});
@@ -54,24 +55,15 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
   protected render() {
 
 
-/*
     const {
       personId,
       person,
-      loaded,
-      isAuthenticated,
-      loggedInUser,
-      getPerson,
-      savePerson,
-      deletePerson,
-      onFormInput,
-      onFormSave
+        getPerson
     } = this.properties;
- */
 
-    const {
-      person
-    } = this.properties;
+
+    getPerson({personId: personId});
+
 
 
 
@@ -86,7 +78,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
         // type: 'hidden',
         labelHidden: true,
         placeholder: '',
-        value: ("" + person.id),
+        value: ("" + personId),
         required: true
       }),
 
@@ -156,7 +148,6 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
   private _onSubmit(event: Event) {
     event.preventDefault();
-
     this.properties.onFormSave();
   }
 }

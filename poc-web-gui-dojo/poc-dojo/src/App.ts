@@ -22,7 +22,7 @@ export class App extends WidgetBase {
         w(Outlet, {key: 'people', id: 'people', renderer: () => w(PeopleListContainer, {})}),
         w(Outlet, {key: 'person', id: 'person',
           renderer: (details: MatchDetails) => {
-            return w(PersonEditorContainer, {});
+            return w(PersonEditorContainer, {personId: parseInt(details.params.personId)});
           }
         }),
         w(Outlet, {key: 'profile', id: 'profile', renderer: () => w(Profile, {username: 'Dojo User'})}),

@@ -38,6 +38,7 @@ public class PersonController {
 
   @GetMapping("/{id}")
   public Person getPerson(@PathVariable final Long id) {
+    log.info("About to return person with id: " + id);
     return personRepository.getOne(id);
   }
 

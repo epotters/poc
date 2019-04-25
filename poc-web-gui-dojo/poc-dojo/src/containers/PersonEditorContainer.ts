@@ -1,20 +1,26 @@
-import PersonEditor, {PersonEditorProperties} from './../widgets/PersonEditor';
-import {getPersonProcess, savePersonProcess, deletePersonProcess} from './../processes/personProcesses';
+
 import {Store} from '@dojo/framework/stores/Store';
 import {State} from '../interfaces';
 import {StoreContainer} from '@dojo/framework/stores/StoreInjector';
+
+import PersonEditor, {PersonEditorProperties} from './../widgets/PersonEditor';
+import {fetchPersonProcess, savePersonProcess, deletePersonProcess} from './../processes/personProcesses';
 
 function getProperties(store: Store<State>, properties: PersonEditorProperties): PersonEditorProperties {
 
   const {get, path} = store;
 
+  fetchPersonProcess(store)({personId: properties.personId});
+
   return {
-    personId: get(path('personEditor', 'personId')),
-    person: get(path('personEditor', 'person')),
+    personId: properties.personId,
+
+    person: get(path('personEditor', 'properties', 'person')),
+
     loaded: get(path('personEditor', 'loaded')),
     isAuthenticated: !!get(path('user', 'token')),
     loggedInUser: get(path('user', 'name')),
-    getPerson: getPersonProcess(store),
+    getPerson: fetchPersonProcess(store),
     savePerson: savePersonProcess(store),
     deletePerson: deletePersonProcess(store),
     onFormInput: function () {

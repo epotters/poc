@@ -5,7 +5,7 @@ import {renderer} from '@dojo/framework/widget-core/vdom';
 import {w} from '@dojo/framework/widget-core/d';
 import {Store} from '@dojo/framework/stores/Store';
 import {registerRouterInjector} from '@dojo/framework/routing/RouterInjector';
-import {clearPersonEditorProcess, getPersonProcess} from './processes/personProcesses';
+import {clearPersonEditorProcess, fetchPersonProcess} from './processes/personProcesses';
 
 import {App} from './App';
 
@@ -54,7 +54,8 @@ router.on('outlet', ({outlet, action}) => {
         //   const isAuthenticated = !!store.get(store.path('user', 'token'));
         break;
       case 'personEditor':
-        getPersonProcess(store)({personId: parseInt(outlet.params.personId)});
+        console.log('About to load person with id: ' + outlet.params.personId);
+        fetchPersonProcess(store)({personId: parseInt(outlet.params.personId)});
         break;
 
         // case 'user':

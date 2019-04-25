@@ -1,5 +1,5 @@
 import PeopleList from "./widgets/PeopleList";
-import {PersonEditorProperties} from "./widgets/PersonEditor";
+import PersonEditor from "./widgets/PersonEditor";
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
 
@@ -27,13 +27,10 @@ export interface Household {
 
 
 export interface PeopleList extends ResourceBased {
-  people: Person[];
 }
 
 
 export interface PersonEditor extends ResourceBased {
-  personId: number;
-  person: Partial<Person>;
 }
 
 
@@ -56,12 +53,6 @@ export interface Settings extends UserProfile {
 }
 
 
-export interface Routing {
-  outlet: string;
-  params: { [index: string]: string };
-}
-
-
 export interface Login extends ResourceBased {
   email: string;
   password: string;
@@ -74,6 +65,12 @@ export interface RegistrationRequest extends ResourceBased {
   password: string;
   email: string;
   failed: boolean;
+}
+
+
+export interface Routing {
+  outlet: string;
+  params: { [index: string]: string };
 }
 
 

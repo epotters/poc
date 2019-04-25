@@ -1,6 +1,7 @@
 package poc.core.domain;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "household")
 @Data
 @NoArgsConstructor
-class Household {
+class Household implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

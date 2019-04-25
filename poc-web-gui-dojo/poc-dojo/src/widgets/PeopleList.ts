@@ -3,9 +3,8 @@ import {w} from '@dojo/framework/widget-core/d';
 import Grid from '@dojo/widgets/grid';
 import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
-import {baseUrl} from '../../config';
 import * as css from './styles/PeopleList.m.css';
-import {Person} from "../interfaces";
+import {Person, ResourceBased} from "../interfaces";
 import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
 
@@ -16,7 +15,7 @@ export interface PeopleListProperties {
   pageSize: number;
   options: FetcherOptions;
   meta: any;
-  listPeople: (opts: PageSortFilterPayload) => void;
+  fetchPeople: (opts: PageSortFilterPayload) => void;
   updatePerson: (opts: PartialPersonPayload) => void;
 }
 
@@ -26,7 +25,6 @@ const columnConfig = [
     id: "id",
     title: "ID",
     renderer: (item: any) => {
-      console.log(item);
       return (
           w(Link, {
                 to: "person",
@@ -77,49 +75,18 @@ const columnConfig = [
 ];
 
 
-const fetcher = async (
-    page: number,
-    pageSize: number,
-    options: FetcherOptions = {}
-) => {
-  return this.properties.listPeople();
-};
+export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProperties> implements ResourceBased {
 
-
-const updater = async (person: Partial<Person>) => {
-  await fetch(baseUrl + `${person.id}`, {
-    method: 'post',
-    body: JSON.stringify(person),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-};
-
-/*
-const gridProps: GridProperties = {};
-
-export interface GridProperties<S> extends ThemedProperties {
-    columnConfig: ColumnConfig[];
-    fetcher: Fetcher<S>;
-    height: number;
-    updater?: Updater<S>;
-    store?: Store<S>;
-    storeId?: string;
-    customRenderers?: CustomRenderers;
-}
- */
-
-
-
-
-export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProperties> {
-
+  loading: boolean;
+  loaded: boolean;
 
   protected render() {
 
     const {
-      listPeople
+      people,
+      meta,
+      fetchPeople,
+      updatePerson
     } = this.properties;
 
     const fetcher = async (
@@ -127,7 +94,13 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
         pageSize: number,
         options: FetcherOptions = {}
     ) => {
-      return listPeople({page: page, pageSize: pageSize, options: options});
+      await fetchPeople({page: page, pageSize: pageSize, options: options});
+      console.log({data: people, meta: meta});
+      return {data: people, meta: meta};
+    };
+
+    const updater = async (person: Partial<Person>) => {
+      await updatePerson({person: person});
     };
 
     return (
