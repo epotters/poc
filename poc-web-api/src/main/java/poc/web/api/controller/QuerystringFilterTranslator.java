@@ -18,7 +18,7 @@ class QuerystringFilterTranslator<T> {
 
   private final String operationSetExpr = "(" + String.join("|", SearchOperation.SIMPLE_OPERATION_SET) + ")";
 
-  private final Pattern pattern = Pattern.compile("(\\w+?)" + operationSetExpr + "(\\w+?)", Pattern.UNICODE_CHARACTER_CLASS);
+  private final Pattern pattern = Pattern.compile("(\\w+?)" + operationSetExpr + "(\\w+)", Pattern.UNICODE_CHARACTER_CLASS);
 
   private static final SearchCriteria ALWAYS_TRUE_CRITERIA = new SearchCriteria("1", SearchOperation.EQUALITY, "1");
 
