@@ -25,9 +25,3 @@ export default [
     outlet: 'login'
   }
 ];
-
-
-// export interface PersonProperties {
-// 	firstName?: string;
-// 	lastName?: string;
-// };
