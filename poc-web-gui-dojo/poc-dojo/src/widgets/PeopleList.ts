@@ -3,6 +3,8 @@ import {w} from '@dojo/framework/widget-core/d';
 import Grid from '@dojo/widgets/grid';
 import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
+
+
 import * as css from './styles/PeopleList.m.css';
 import {Person, ResourceBased} from "../interfaces";
 import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
@@ -96,7 +98,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
     ) => {
       await fetchPeople({page: page, pageSize: pageSize, options: options});
       console.log({data: people, meta: meta});
-      return {data: people, meta: meta};
+      return await {data: people, meta: meta};
     };
 
     const updater = async (person: Partial<Person>) => {

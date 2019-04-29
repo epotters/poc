@@ -3,7 +3,7 @@ import {v} from '@dojo/framework/widget-core/d';
 
 import * as css from './styles/AppInfo.m.css';
 
-export default class About extends WidgetBase {
+export default class AppInfo extends WidgetBase {
   appDisplayName: 'Proof of Concept!';
 
   protected render() {

@@ -69,7 +69,7 @@ router.on('outlet', ({outlet, action}) => {
         //
     }
   } else {
-    if (outlet.id === 'edit-post') {
+    if (outlet.id === 'edit-person') {
       clearPersonEditorProcess(store)({});
     }
   }

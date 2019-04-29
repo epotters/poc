@@ -12,6 +12,9 @@ function getProperties(store: Store<State>, properties: PersonEditorProperties):
 
   // fetchPersonProcess(store)({personId: properties.personId});
 
+
+
+
   return {
     personId: properties.personId,
 

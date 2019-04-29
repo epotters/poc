@@ -1,5 +1,4 @@
 .root {
-
 }
 
 .link {
@@ -8,4 +7,13 @@
 
 .linkSelected {
   color: orange;
+}
+
+/* grid-header.css overrides */
+.filter {
+  width: auto;
+}
+
+.cell {
+  padding: 0;
 }
