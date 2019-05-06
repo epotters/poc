@@ -4,19 +4,17 @@ import Grid from '@dojo/widgets/grid';
 import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
 
-
-import * as css from './styles/PeopleList.m.css';
 import {Person, ResourceBased} from "../interfaces";
 import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
-
+import * as css from './styles/PeopleList.m.css';
 
 export interface PeopleListProperties {
   people: Person[];
+  meta: any;
   page: number;
   pageSize: number;
   options: FetcherOptions;
-  meta: any;
   fetchPeople: (opts: PageSortFilterPayload) => void;
   updatePerson: (opts: PartialPersonPayload) => void;
 }
@@ -28,17 +26,17 @@ const columnConfig = [
     title: "ID",
     renderer: (item: any) => {
       return (
-          w(Link, {
-                to: "person",
-                key: "person",
-                classes: [css.link],
-                // activeClasses: [css.linkSelected],
-                params: {
-                  personId: item.value
-                }
-              },
-              [item.value]
-          )
+        w(Link, {
+            to: "person",
+            key: "person",
+            classes: [css.link],
+            // activeClasses: [css.linkSelected],
+            params: {
+              personId: item.value
+            }
+          },
+          [item.value]
+        )
       );
     }
   },
@@ -61,7 +59,7 @@ const columnConfig = [
     title: "M/F",
     renderer: (item: any) => {
       return (
-          (item.value == "MALE") ? "Man" : "Woman"
+        (item.value == "MALE") ? "Man" : "Woman"
       );
     }
   },
@@ -92,9 +90,9 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
     } = this.properties;
 
     const fetcher = async (
-        page: number,
-        pageSize: number,
-        options: FetcherOptions = {}
+      page: number,
+      pageSize: number,
+      options: FetcherOptions = {}
     ) => {
       await fetchPeople({page: page, pageSize: pageSize, options: options});
       console.log({data: people, meta: meta});
@@ -106,7 +104,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
     };
 
     return (
-        w(Grid, {columnConfig: columnConfig, fetcher: fetcher, updater: updater, height: 720})
+      w(Grid, {columnConfig: columnConfig, fetcher: fetcher, updater: updater, height: 720})
     );
   }
 }

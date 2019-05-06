@@ -1,6 +1,8 @@
 package poc.core.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
@@ -8,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
 import poc.core.domain.UserAccount;
 import poc.core.domain.UserRole;
 import poc.core.service.UserAccountsService;
@@ -21,6 +22,19 @@ public class UserAccountsServicePropertiesImpl implements UserAccountsService {
 
   private static final String USER_ACCOUNTS_PROPERTY_PATH = "user-accounts";
   private ResourceBundle userAccounts = ResourceBundle.getBundle(USER_ACCOUNTS_PROPERTY_PATH);
+
+
+  @Override
+  public List<UserAccount> findAll() {
+    List<UserAccount> userAccountList = new ArrayList<>();
+    for (String key : userAccounts.keySet()) {
+      if (key.contains(".displayName")) {
+        String username = key.split(".")[0];
+        userAccountList.add(loadUserAccountFromProperties(username));
+      }
+    }
+    return userAccountList;
+  }
 
 
   @Override
@@ -50,10 +64,17 @@ public class UserAccountsServicePropertiesImpl implements UserAccountsService {
 
       UserRole authority;
       for (String roleName : userAccounts.getString(username + ".roles").split(",")) {
-        authority = new UserRole(roleName);
-        userAccount.addAuthority(authority);
+
+        try {
+          UserRole role = UserRole.valueOf(roleName);
+          userAccount.addAuthority(role);
+        } catch(IllegalArgumentException iae) {
+          LOG.info("Skipping role " + roleName + " for user account " + username + ". Role does not exist.");
+          LOG.debug("IllegalArgumentException: " + iae.getLocalizedMessage());
+        }
       }
       return userAccount;
+
     } else {
       throw new UsernameNotFoundException("User name: " + username + " not found");
     }

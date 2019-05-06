@@ -3,25 +3,18 @@ package poc.core.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+public enum UserRole implements GrantedAuthority {
 
-@Setter
-@NoArgsConstructor
-public class UserRole implements GrantedAuthority {
+  USER, ADMIN, ACTUATOR;
 
   private String authorityName;
 
 
-  public UserRole(String authorityName) {
-    this.authorityName = authorityName;
-  }
-
 
   @Override
   public String getAuthority() {
-    return authorityName;
+    return name();
   }
 
 }

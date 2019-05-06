@@ -31,9 +31,9 @@ public class UserAccount implements UserDetails {
   private String password;
   private String displayName;
 
-  private LocalDate expiryDate = LocalDate.of(2019, 3, 23);
+  private LocalDate expiryDate = LocalDate.of(2021, 3, 23);
   private boolean enabled = true;
-  private LocalDate credentialsExpiryDate = LocalDate.of(2019, 3, 23);
+  private LocalDate credentialsExpiryDate = LocalDate.of(2021, 3, 23);
   private boolean locked = false;
 
   private Collection<UserRole> authorities = new ArrayList<>();

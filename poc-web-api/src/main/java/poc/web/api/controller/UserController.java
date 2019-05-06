@@ -4,11 +4,13 @@ package poc.web.api.controller;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import poc.core.domain.UserAccount;
 import poc.core.service.UserAccountsService;
 
 
@@ -49,6 +51,13 @@ public class UserController {
       LOG.debug(AUTHENTICATED_USER + " (\"" + currentUserName + "\")");
       return userAccountsService.loadUserByUsername(currentUserName);
     }
+  }
+
+
+//  @PreAuthorize("hasAuthority('ADMIN')")
+  @GetMapping("/")
+  public Iterable<UserAccount> listPeople() {
+    return userAccountsService.findAll();
   }
 
 }

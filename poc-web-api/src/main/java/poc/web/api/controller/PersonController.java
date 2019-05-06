@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +18,6 @@ import poc.core.domain.Person;
 import poc.core.repository.PersonRepository;
 
 
-@CrossOrigin(origins = "http://localhost:9998")
 @Slf4j
 @RestController
 @RequestMapping("/api/people")
@@ -34,19 +32,6 @@ public class PersonController {
   PersonController(PersonRepository personRepository) {
     this.personRepository = personRepository;
   }
-
-
-  @GetMapping("/{id}")
-  public Person getPerson(@PathVariable final Long id) {
-    log.info("About to return person with id: " + id);
-    return personRepository.getOne(id);
-  }
-
-  @PostMapping("/{id}")
-  public Person updatePerson(@PathVariable final Long id, @RequestBody final Person person) {
-    return personRepository.save(person);
-  }
-
 
   // page, size and sort parameters are supported by default
   // https://stackoverflow.com/questions/33953287/spring-boot-rest-webservice-jpa-pageable-and-filter
@@ -65,6 +50,17 @@ public class PersonController {
       log.debug("No filters provided");
       return personRepository.findAll(pageable);
     }
+  }
+
+  @GetMapping("/{id}")
+  public Person getPerson(@PathVariable final Long id) {
+    log.info("About to return person with id: " + id);
+    return personRepository.getOne(id);
+  }
+
+  @PostMapping("/{id}")
+  public Person updatePerson(@PathVariable final Long id, @RequestBody final Person person) {
+    return personRepository.save(person);
   }
 
 

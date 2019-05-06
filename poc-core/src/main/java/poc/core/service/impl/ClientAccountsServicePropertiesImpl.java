@@ -70,8 +70,14 @@ public class ClientAccountsServicePropertiesImpl implements ClientAccountsServic
 
       UserRole authority;
       for (String roleName : clientAccounts.getString(clientId + ".authorities").split(",")) {
-        authority = new UserRole(roleName);
-        clientAccount.addAuthority(authority);
+        try {
+          UserRole role = UserRole.valueOf(roleName);
+          clientAccount.addAuthority(role);
+        } catch(IllegalArgumentException iae) {
+          LOG.info("Skipping role " + roleName + " for client " + clientId + ". Role does not exist");
+          LOG.debug("IllegalArgumentException: " + iae.getLocalizedMessage());
+        }
+
       }
 
       return clientAccount;

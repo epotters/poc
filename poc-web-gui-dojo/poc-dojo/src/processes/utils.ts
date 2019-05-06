@@ -35,7 +35,7 @@ export function getHeaders(token?: string): any {
     'Content-Type': 'application/json'
   };
   if (token) {
-    headers['Authorization'] = `Token ${token}`;
+    headers['Authorization'] = token;
   }
   return headers;
 }

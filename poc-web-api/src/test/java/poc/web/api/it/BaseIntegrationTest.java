@@ -42,11 +42,6 @@ public class BaseIntegrationTest {
   // @Value("${management.endpoints.web.base-path}")
   protected String managementBasePath = "/actuator";
 
-  @Value("${spring.security.user.name}")
-  protected String username;
-
-  @Value("${spring.security.user.password}")
-  protected String password;
 
   OAuth2RestTemplate restTemplate;
 
@@ -138,7 +133,6 @@ public class BaseIntegrationTest {
   private void printServerProperties() {
     LOG.debug("Local server is listening on port " + port);
     LOG.debug("contextPath: " + contextPath + ", restBasePath: " + restBasePath);
-    // LOG.debug("username: " + username + ", password: " + password);
   }
 
 

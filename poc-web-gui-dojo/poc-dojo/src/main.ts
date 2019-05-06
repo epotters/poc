@@ -13,17 +13,22 @@ import {setSessionProcess} from './processes/loginProcesses';
 import {State} from './interfaces';
 import config from './routes';
 import {changeRouteProcess} from './processes/routeProcesses';
+import {sessionKey} from "../config";
 
 const store = new Store<State>();
 const registry = new Registry();
 
+
 let session;
 if (!has('build-time-render')) {
-  session = global.sessionStorage.getItem('poc-session');
+  session = global.sessionStorage.getItem(sessionKey);
 }
 if (session) {
   setSessionProcess(store)({session: JSON.parse(session)});
+} else {
+  console.log('No session yet');
 }
+
 
 registry.defineInjector('state', () => () => store);
 
@@ -51,22 +56,15 @@ router.on('outlet', ({outlet, action}) => {
   if (action === 'enter') {
     switch (outlet.id) {
       case 'home':
-        //   const isAuthenticated = !!store.get(store.path('user', 'token'));
+        // const isAuthenticated = !!store.get(store.path('user', 'token'));
         break;
-      case 'personEditor':
+      case 'currentUser':
+        // const isAuthenticated = !!store.get(store.path('user', 'token'));
+        break;
+      case 'person':
         console.log('About to load person with id: ' + outlet.params.personId);
         fetchPersonProcess(store)({personId: parseInt(outlet.params.personId)});
         break;
-
-        // case 'user':
-        // if (outlet.isExact()) {
-        //   getProfileProcess(store)({ username: outlet.params.username });
-        // }
-        // break;
-        // case 'settings':
-        //   getUserSettingsProcess(store)({});
-        //   break;
-        //
     }
   } else {
     if (outlet.id === 'edit-person') {

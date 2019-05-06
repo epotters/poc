@@ -65,7 +65,7 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
 
   @Test
   public void error401() throws URISyntaxException {
-    URI uri = new URI(getRestUri() + "/persons");
+    final URI uri = new URI(getRestUri() + "/persons");
     final String username = "epo";
     final String wrongPassword = "54321";
     try {

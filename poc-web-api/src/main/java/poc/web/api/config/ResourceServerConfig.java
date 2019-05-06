@@ -59,7 +59,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin")
 
         .antMatchers("/logout").permitAll()
-        .antMatchers(HttpMethod.OPTIONS).permitAll()
+        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
         .antMatchers("/api/people/**").permitAll()
         .antMatchers("/api/**").authenticated()

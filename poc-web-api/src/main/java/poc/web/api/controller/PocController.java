@@ -1,8 +1,12 @@
 package poc.web.api.controller;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +15,7 @@ import poc.web.api.service.LocalizedMessageService;
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api")
 public class PocController {
 
 
@@ -25,9 +29,11 @@ public class PocController {
 
   @RequestMapping("/welcome")
   @ResponseBody
-  public String home() {
+  public MessageContainer home() {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    return buildWelcomeMessage(username);
+    MessageContainer container = new MessageContainer();
+    container.setMessage(buildWelcomeMessage(username));
+    return container;
   }
 
 
@@ -38,5 +44,17 @@ public class PocController {
     messageBuilder.append(messageService.getMessage("greeting.welcome").toLowerCase());
     messageBuilder.append(" op deze site");
     return messageBuilder.toString();
+  }
+
+  @PostMapping("/list-params")
+  @ResponseBody
+  public String formLister(HttpServletRequest request) {
+
+    Map<String, String[]> map = request.getParameterMap();
+    for (Map.Entry<String, String[]> entry : map.entrySet()) {
+      System.out.println(entry.getKey() + ":" + entry.getValue()[0]);
+    }
+
+    return "OK";
   }
 }

@@ -1,5 +1,7 @@
 import PeopleList from "./widgets/PeopleList";
 import PersonEditor from "./widgets/PersonEditor";
+import Home from "./widgets/Home";
+import CurrentUser from "./widgets/CurrentUser";
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
 
@@ -35,36 +37,28 @@ export interface PersonEditor extends ResourceBased {
 
 
 export interface User {
-  id: number;
-  name: string;
+  username: string;
   displayName: string;
   roles: string[];
+  mail: string;
 }
 
 
-export interface UserProfile extends User, ResourceBased {
-  email: string;
+export interface UserSession extends User, ResourceBased {
   token: string;
-}
-
-
-export interface Settings extends UserProfile {
-  password: string;
+  refreshToken: string;
+  startTime: Date;
+  endTime: Date;
 }
 
 
 export interface Login extends ResourceBased {
-  email: string;
+  username: string;
   password: string;
   failed: boolean;
 }
 
-
-export interface RegistrationRequest extends ResourceBased {
-  username: string;
-  password: string;
-  email: string;
-  failed: boolean;
+export interface Logout extends ResourceBased {
 }
 
 
@@ -80,12 +74,12 @@ export interface Errors {
 
 
 export interface State {
-  peopleList: PeopleList;
-  personEditor: PersonEditor;
-  settings: Settings;
-  user: UserProfile;
+  home: Home;
+  user: UserSession;
   routing: Routing;
   login: Login;
-  register: RegistrationRequest;
-  errors: Errors
+  logout: CurrentUser;
+  errors: Errors;
+  peopleList: PeopleList;
+  personEditor: PersonEditor;
 }

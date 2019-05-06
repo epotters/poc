@@ -24,7 +24,7 @@ function getProperties(store: Store<State>, properties: PeopleListProperties): P
 
 // Use a StoreContainer
 export default StoreContainer(
-    PeopleList,
-    "state",
-    {getProperties}
+  PeopleList,
+  "state",
+  {getProperties}
 );

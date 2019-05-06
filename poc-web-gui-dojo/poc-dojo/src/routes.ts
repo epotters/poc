@@ -17,11 +17,11 @@ export default [
     outlet: 'about'
   },
   {
-    path: 'profile',
-    outlet: 'profile'
-  },
-  {
     path: 'login',
     outlet: 'login'
+  },
+  {
+    path: 'currentUser',
+    outlet: 'currentUser'
   }
 ];
