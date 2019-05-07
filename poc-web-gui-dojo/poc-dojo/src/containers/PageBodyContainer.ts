@@ -1,10 +1,10 @@
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {State} from "../interfaces";
+import {PocState} from "../interfaces";
 import PageBody, {PageBodyProperties} from './../widgets/PageBody';
 import {replace} from "@dojo/framework/stores/state/operations";
 
-function getProperties(store: Store<State>, properties: PageBodyProperties): PageBodyProperties {
+function getProperties(store: Store<PocState>, properties: PageBodyProperties): PageBodyProperties {
 
   const {get, path} = store;
 

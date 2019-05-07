@@ -4,7 +4,7 @@ import {replace} from '@dojo/framework/stores/state/operations';
 import {commandFactory, getHeaders} from './utils';
 import {apiUrl, authUrl, clientAuthenticationHeader, sessionKey} from '../../config';
 import {PasswordPayload, SetSessionPayload, UsernamePayload} from './interfaces';
-import {User} from "../interfaces";
+import {UserSession} from "../interfaces";
 
 
 // Login commands
@@ -74,7 +74,7 @@ const loginCommand = commandFactory(async ({get, path}) => {
     ];
   }
 
-  console.log('Logout successful');
+  console.log('Login successful');
 
   const tokenType = json.token_type;
   let token = json.access_token;
@@ -96,7 +96,7 @@ const loginCommand = commandFactory(async ({get, path}) => {
   global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
 
   return [
-    replace(path('user', ), userSession),
+    replace(path('user',), userSession),
     replace(path('login', 'loading'), false),
     replace(path('login', 'failed'), false),
     replace(path('errors'), undefined)
@@ -196,20 +196,24 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
     ];
   }
 
-  const currentUser: User = {
-    username: json.username,
-    displayName: json.displayName,
-    roles: json.authorities,
-    mail: json.mail
+  const currentSession = get(path('user'));
+  const userSession: UserSession = {
+    ...{
+      username: json.username,
+      displayName: json.displayName,
+      roles: json.authorities,
+      mail: json.mail
+    }, ...currentSession
   };
 
+  global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
+
   return [
-    replace(path('user'), currentUser),
+    replace(path('user'), userSession),
     replace(path('logout', 'loading'), false),
     replace(path('routing', 'outlet'), 'home')
   ];
 });
-
 
 
 export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputs]);

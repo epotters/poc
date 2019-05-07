@@ -4,9 +4,14 @@ import {buildQueryString, commandFactory, getHeaders} from './utils';
 import {peopleUrl} from '../../config';
 import {PageSortFilterPayload, PartialPersonPayload, PersonIdPayload} from './interfaces';
 
+
+
 // List people
 const fetchPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, path, payload: {page, pageSize, options}}) => {
+
+  // const storeId = 'peopleGridState';
   const token = get(path('user', 'token'));
+
   const queryString = buildQueryString(page, pageSize, options);
   console.log(queryString);
   const response = await fetch(
@@ -17,12 +22,15 @@ const fetchPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, pa
     }
   );
   const json = await response.json();
+
   console.log(json);
   return [
-    replace(path("peopleList", "properties", "people"), json.content),
-    replace(path("peopleList", "properties", "meta"), {total: json.totalElements})
+    // replace(path(storeId, 'data', 'pages', `page-${page}`), json.content),
+    // replace(path(storeId, 'meta', 'total'), json.totalElements),
+    // replace(path(storeId, 'meta', 'pageSize'), pageSize)
   ];
 });
+
 
 
 const createPersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
@@ -74,6 +82,7 @@ const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path
   const token = get(path('user', 'token'));
   const response = await fetch(peopleUrl + `${person.id}`, {
     method: 'post',
+    body: JSON.stringify(person),
     headers: getHeaders(token)
   });
   const json = await response.json();

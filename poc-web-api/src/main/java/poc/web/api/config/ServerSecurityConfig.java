@@ -29,4 +29,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter implement
     registry.addMapping("/**");
   }
 
+
+
+
 }

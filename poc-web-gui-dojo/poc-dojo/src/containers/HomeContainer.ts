@@ -1,15 +1,12 @@
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {State} from "../interfaces";
 
-
+import {PocState} from "../interfaces";
 import Home, {HomeProperties} from "../widgets/Home";
 
 
-function getProperties(store: Store<State>): HomeProperties {
 
-  console.log(store);
-
+function getProperties(store: Store<PocState>): HomeProperties {
 
   const {get, path} = store;
 

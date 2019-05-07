@@ -4,17 +4,19 @@ import Grid from '@dojo/widgets/grid';
 import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
 
-import {Person, ResourceBased} from "../interfaces";
+import {Person, PocState, ResourceBased} from "../interfaces";
 import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
 import * as css from './styles/PeopleList.m.css';
 
+import Store from "@dojo/framework/stores/Store";
+import {buildQueryString, getHeaders} from "../processes/utils";
+import {peopleUrl} from "../../config";
+
+
 export interface PeopleListProperties {
-  people: Person[];
-  meta: any;
-  page: number;
-  pageSize: number;
-  options: FetcherOptions;
+  store: Store<PocState>;
+  storeId: string;
   fetchPeople: (opts: PageSortFilterPayload) => void;
   updatePerson: (opts: PartialPersonPayload) => void;
 }
@@ -30,7 +32,6 @@ const columnConfig = [
             to: "person",
             key: "person",
             classes: [css.link],
-            // activeClasses: [css.linkSelected],
             params: {
               personId: item.value
             }
@@ -80,31 +81,54 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
   loading: boolean;
   loaded: boolean;
 
+
   protected render() {
 
     const {
-      people,
-      meta,
-      fetchPeople,
+      store,
+      storeId,
       updatePerson
     } = this.properties;
+
 
     const fetcher = async (
       page: number,
       pageSize: number,
       options: FetcherOptions = {}
     ) => {
-      await fetchPeople({page: page, pageSize: pageSize, options: options});
-      console.log({data: people, meta: meta});
-      return await {data: people, meta: meta};
+      const token = store.get(store.path('user', 'token'));
+
+      const queryString = buildQueryString(page, pageSize, options);
+
+      const response = await fetch(
+        peopleUrl + queryString,
+        {
+          method: "get",
+          headers: getHeaders(token)
+        }
+      );
+
+
+      const json = await response.json();
+      console.log(json);
+
+      return {data: json.content, meta: {total: json.totalElements}};
     };
+
 
     const updater = async (person: Partial<Person>) => {
       await updatePerson({person: person});
     };
 
     return (
-      w(Grid, {columnConfig: columnConfig, fetcher: fetcher, updater: updater, height: 720})
+      w(Grid, {
+        columnConfig: columnConfig,
+        fetcher: fetcher,
+        updater: updater,
+        store: store,
+        storeId: storeId,
+        height: 720
+      })
     );
   }
 }

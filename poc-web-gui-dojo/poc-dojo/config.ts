@@ -8,7 +8,7 @@ export const clientAuthenticationHeader = 'Basic cG9jOjk4NzY1NDMyMTA=';
 
 
 
-export const locale = 'NL_nl';
+export const locale = 'nl-NL';
 export const timezone = 'Europe/Amsterdam';
 export const dateFormatOptions = {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
 

@@ -1,20 +1,19 @@
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {State} from "../interfaces";
+import {PocState} from "../interfaces";
 
-import {currentUserProcesses, logoutProcess} from './../processes/loginProcesses';
+import {logoutProcess} from './../processes/loginProcesses';
 import CurrentUser, {CurrentUserProperties} from "../widgets/CurrentUser";
 
 
-function getProperties(store: Store<State>): CurrentUserProperties {
+function getProperties(store: Store<PocState>): CurrentUserProperties {
   const {get, path} = store;
 
   return {
     user: get(path('user')),
     errors: get(path('errors')),
     inProgress: get(path('logout', 'loading')),
-    onLogout: logoutProcess(store),
-    getCurrentUser: currentUserProcesses(store)
+    onLogout: logoutProcess(store)
   };
 
 }

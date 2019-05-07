@@ -10,12 +10,12 @@ import {clearPersonEditorProcess, fetchPersonProcess} from './processes/personPr
 import {App} from './App';
 
 import {setSessionProcess} from './processes/loginProcesses';
-import {State} from './interfaces';
+import {PocState} from './interfaces';
 import config from './routes';
 import {changeRouteProcess} from './processes/routeProcesses';
 import {sessionKey} from "../config";
 
-const store = new Store<State>();
+const store = new Store<PocState>();
 const registry = new Registry();
 
 

@@ -1,12 +1,12 @@
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {State} from "../interfaces";
+import {PocState} from "../interfaces";
 
 import {Login, LoginProperties} from './../widgets/Login';
 import {loginPasswordInputProcess, loginProcess, loginUsernameInputProcess} from './../processes/loginProcesses';
 
 
-function getProperties(store: Store<State>): LoginProperties {
+function getProperties(store: Store<PocState>): LoginProperties {
 
   const {get, path} = store;
 

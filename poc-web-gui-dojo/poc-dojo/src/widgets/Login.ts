@@ -24,10 +24,10 @@ export class Login extends WidgetBase<LoginProperties> {
     const {username, password, inProgress = false, errors} = this.properties;
 
     return v('div', {classes: ['container', 'page']}, [
-      v('div', {classes: 'row'}, [
-        v('div', {classes: ['col-md-6', 'offset-md-3', 'col-xs-12']}, [
-          v('h1', {classes: 'text-xs-center'}, ['Sign In']),
+      v('h1', {classes: 'text-xs-center'}, ['Sign In']),
 
+      v('div', {classes: ['panel', 'row']}, [
+        v('div', {classes: ['col-md-6', 'offset-md-3', 'col-xs-12']}, [
           errors ? w(ErrorList, {errors}) : null,
 
           v('form', {onsubmit: this._onLogin}, [
@@ -54,7 +54,7 @@ export class Login extends WidgetBase<LoginProperties> {
 
               v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
                 v('button', {
-                  classes: ['btn btn-lg', 'btn-primary', 'pull-xs-right'],
+                  classes: ['btn btn-lg', 'btn-primary', 'pull-right'],
                   disabled: inProgress,
                   type: 'submit'
                 }, ['Sign In'])

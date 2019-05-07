@@ -1,11 +1,11 @@
 import {Store} from '@dojo/framework/stores/Store';
-import {State} from '../interfaces';
+import {PocState} from '../interfaces';
 import {StoreContainer} from '@dojo/framework/stores/StoreInjector';
 
 import PersonEditor, {PersonEditorProperties} from './../widgets/PersonEditor';
 import {deletePersonProcess, fetchPersonProcess, savePersonProcess} from './../processes/personProcesses';
 
-function getProperties(store: Store<State>, properties: PersonEditorProperties): PersonEditorProperties {
+function getProperties(store: Store<PocState>, properties: PersonEditorProperties): PersonEditorProperties {
 
   const {get, path} = store;
 

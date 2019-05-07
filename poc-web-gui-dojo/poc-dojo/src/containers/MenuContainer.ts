@@ -1,10 +1,10 @@
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {State} from "../interfaces";
+import {PocState} from "../interfaces";
 import {Menu, MenuProperties} from './../widgets/Menu';
 
 
-function getProperties(store: Store<State>): MenuProperties {
+function getProperties(store: Store<PocState>): MenuProperties {
   const {get, path} = store;
 
   return {

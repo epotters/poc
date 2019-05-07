@@ -25,6 +25,8 @@ export default class PageBody extends ThemedMixin(WidgetBase)<PageBodyProperties
     if (authenticationRequired && !isAuthenticated) {
       this.properties.onUnauthorized({});
     }
-    return v('h1', {classes: [css.root]}, [pageTitle]);
+    return v('div', {classes: ['container', 'page']}, [
+      v('h1', {classes: [css.root]}, [pageTitle])
+    ]);
   }
 }

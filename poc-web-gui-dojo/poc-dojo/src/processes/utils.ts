@@ -1,5 +1,5 @@
 import {createCommandFactory} from '@dojo/framework/stores/process';
-import {State} from '../interfaces';
+import {PocState} from '../interfaces';
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
 
 
@@ -30,6 +30,7 @@ export function buildQueryString(page: number, pageSize: number, options: Fetche
   return queryString;
 }
 
+
 export function getHeaders(token?: string): any {
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/json'
@@ -40,4 +41,6 @@ export function getHeaders(token?: string): any {
   return headers;
 }
 
-export const commandFactory = createCommandFactory<State>();
+export const commandFactory = createCommandFactory<PocState>();
+
+

@@ -12,7 +12,6 @@ export interface CurrentUserProperties {
   inProgress?: boolean;
   errors: Errors;
   onLogout: (opts: object) => void;
-  getCurrentUser: (opts: object) => void;
 }
 
 
@@ -25,42 +24,38 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
 
 
     let rolesDisplay: string = '';
-    for (let role in user.roles) {
-      rolesDisplay += role + ', ';
+    for (let idx in user.roles) {
+      rolesDisplay += user.roles[idx] + ', ';
     }
     rolesDisplay = rolesDisplay.substring(0, rolesDisplay.length - 2);
 
+
     return [
-      v('h1', {}, ['Huidige gebruiker']),
+      v('div', {classes: ['container', 'page']}, [
+        v('h1', {}, ['Huidige gebruiker']),
 
-      errors ? w(ErrorList, {errors}) : null,
+        errors ? w(ErrorList, {errors}) : null,
 
-      // Current user
-      v('div', {classes: 'panel'}, [
-        v('form', {classes: 'form-horizontal'}, [
-          CurrentUser.createFormGroup('Naam', user.displayName),
-          CurrentUser.createFormGroup('Rollen', rolesDisplay),
-          CurrentUser.createFormGroup('E-mail', user.mail),
-          CurrentUser.createFormGroup('Session start', user.startTime.toLocaleString(locale)),
-          CurrentUser.createFormGroup('Session end', user.endTime.toLocaleString(locale))
-        ]),
+        // Current user
+        v('div', {classes: 'panel'}, [
+          v('form', {classes: 'form-horizontal'}, [
+            CurrentUser.createFormGroup('Naam', user.displayName),
+            CurrentUser.createFormGroup('Rollen', user.roles ? user.roles.join(', ') : ''),
+            CurrentUser.createFormGroup('E-mail', user.mail),
+            CurrentUser.createFormGroup('Session start', user.startTime.toLocaleString(locale)),
+            CurrentUser.createFormGroup('Session end', user.endTime.toLocaleString(locale)),
 
-        v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
-          v('button', {
-            classes: ['btn btn-lg', 'pull-xs-right'],
-            disabled: inProgress,
-            onclick: this._onCurrentUser,
-          }, ['Current user']),
 
-          v('button', {
-            classes: ['btn btn-lg', 'btn-primary', 'pull-xs-right'],
-            disabled: inProgress,
-            onclick: this._onLogout,
-          }, ['Sign out'])
+            v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
+              v('button', {
+                classes: ['btn btn-lg', 'btn-primary', 'pull-right'],
+                disabled: inProgress,
+                onclick: this._onLogout,
+              }, ['Sign out'])
+            ])
+          ])
         ])
-
       ])
-
     ];
   }
 
@@ -76,9 +71,5 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
 
   private _onLogout() {
     this.properties.onLogout({});
-  }
-
-  private _onCurrentUser() {
-    this.properties.getCurrentUser({});
   }
 };
