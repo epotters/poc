@@ -4,24 +4,22 @@ import {v, w} from '@dojo/framework/widget-core/d';
 import {Errors, UserSession} from '../interfaces';
 import {ErrorList} from './ErrorList';
 
-import {locale} from '../../config';
+import {dateFormatOptions, locale} from '../../config';
+import {RouteIdPayload} from "../processes/interfaces";
 
 
 export interface CurrentUserProperties {
   user: UserSession,
-  inProgress?: boolean;
   errors: Errors;
   onLogout: (opts: object) => void;
+  onRefreshToken: (opts: RouteIdPayload) => void;
 }
 
 
 export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
 
-  loading: boolean;
-
   protected render() {
-    const {user, inProgress = false, errors} = this.properties;
-
+    const {user, errors} = this.properties;
 
     let rolesDisplay: string = '';
     for (let idx in user.roles) {
@@ -37,21 +35,30 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
         errors ? w(ErrorList, {errors}) : null,
 
         // Current user
-        v('div', {classes: 'panel'}, [
-          v('form', {classes: 'form-horizontal'}, [
-            CurrentUser.createFormGroup('Naam', user.displayName),
-            CurrentUser.createFormGroup('Rollen', user.roles ? user.roles.join(', ') : ''),
-            CurrentUser.createFormGroup('E-mail', user.mail),
-            CurrentUser.createFormGroup('Session start', user.startTime.toLocaleString(locale)),
-            CurrentUser.createFormGroup('Session end', user.endTime.toLocaleString(locale)),
+        v('div', {classes: ['card', 'row']}, [
+          v('div', {classes: ['card-body']}, [
+
+            v('form', {classes: 'form-horizontal'}, [
+              CurrentUser.createFormGroup('Naam', user.displayName),
+              CurrentUser.createFormGroup('Rollen', user.roles ? user.roles.join(', ') : ''),
+              CurrentUser.createFormGroup('E-mail', user.mail),
+              CurrentUser.createFormGroup('Session start', user.startTime.toLocaleString(locale, dateFormatOptions)),
+              CurrentUser.createFormGroup('Session end', user.endTime.toLocaleString(locale, dateFormatOptions)),
 
 
-            v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
-              v('button', {
-                classes: ['btn btn-lg', 'btn-primary', 'pull-right'],
-                disabled: inProgress,
-                onclick: this._onLogout,
-              }, ['Sign out'])
+              v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
+                v('div', {classes: 'ml-auto'}, [
+                  v('button', {
+                    classes: ['btn', 'btn-outline-primary'],
+                    onclick: this._onRefreshToken,
+                  }, ['Refresh token']),
+
+                  v('button', {
+                    classes: ['btn', 'btn-primary'],
+                    onclick: this._onLogout,
+                  }, ['Sign out'])
+                ])
+              ])
             ])
           ])
         ])
@@ -61,8 +68,8 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
 
 
   private static createFormGroup(label: string, value: string) {
-    return v('div', {classes: ['form-group']}, [
-      v('label', {classes: ['col-sm-4', 'control-label']}, [label]),
+    return v('div', {classes: ['form-group', 'row']}, [
+      v('label', {classes: ['control-label', 'col-sm-4']}, [label]),
       v('div', {classes: ['col-sm-8']}, [
         v('div', {classes: ['form-control']}, [value])
       ])
@@ -71,5 +78,9 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
 
   private _onLogout() {
     this.properties.onLogout({});
+  }
+
+  private _onRefreshToken() {
+    this.properties.onRefreshToken({routeId: 'home'});
   }
 };

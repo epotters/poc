@@ -13,6 +13,8 @@ import CurrentUserContainer from "./containers/CurrentUserContainer";
 
 import PeopleListContainer from './containers/PeopleListContainer';
 import PersonEditorContainer from './containers/PersonEditorContainer';
+import OrganizationEditorContainer from "./containers/OrganizationEditorContainer";
+import OrganizationsListContainer from "./containers/OrganizationsListContainer";
 
 
 
@@ -33,6 +35,14 @@ export class App extends WidgetBase {
           key: 'person', id: 'person',
           renderer: (details: MatchDetails) => {
             return w(PersonEditorContainer, {personId: parseInt(details.params.personId)});
+          }
+        }),
+
+        w(Outlet, {key: 'organizations', id: 'organizations', renderer: () => w(OrganizationsListContainer, {})}),
+        w(Outlet, {
+          key: 'organization', id: 'organization',
+          renderer: (details: MatchDetails) => {
+            return w(OrganizationEditorContainer, {organizationId: parseInt(details.params.organizationId)});
           }
         }),
 

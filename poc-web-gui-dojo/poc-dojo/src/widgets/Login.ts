@@ -2,7 +2,7 @@ import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 import {Errors, WithTarget} from '../interfaces';
 import {ErrorList} from './ErrorList';
-import {PasswordPayload, UsernamePayload} from '../processes/interfaces';
+import {PasswordPayload, RouteIdPayload, UsernamePayload} from '../processes/interfaces';
 
 export interface LoginProperties {
   username: string;
@@ -13,7 +13,7 @@ export interface LoginProperties {
 
   onUsernameInput: (opts: UsernamePayload) => void;
   onPasswordInput: (opts: PasswordPayload) => void;
-  onLogin: (opts: object) => void;
+  onLogin: (opts: RouteIdPayload) => void;
 }
 
 export class Login extends WidgetBase<LoginProperties> {
@@ -24,41 +24,40 @@ export class Login extends WidgetBase<LoginProperties> {
     const {username, password, inProgress = false, errors} = this.properties;
 
     return v('div', {classes: ['container', 'page']}, [
-      v('h1', {classes: 'text-xs-center'}, ['Sign In']),
 
-      v('div', {classes: ['panel', 'row']}, [
-        v('div', {classes: ['col-md-6', 'offset-md-3', 'col-xs-12']}, [
+      v('h1', {}, ['Sign In']),
+
+      v('div', {classes: ['card', 'row']}, [
+        v('div', {classes: ['card-body']}, [
           errors ? w(ErrorList, {errors}) : null,
 
           v('form', {onsubmit: this._onLogin}, [
-            v('fieldset', [
 
-              v('fieldset', {classes: 'form-group'}, [
-                v('input', {
-                  classes: ['form-control', 'form-control-lg'],
-                  type: 'username',
-                  placeholder: 'Username',
-                  oninput: this._onUsernameInput,
-                  value: username
-                })
-              ]),
-              v('fieldset', {classes: 'form-group'}, [
-                v('input', {
-                  classes: ['form-control', 'form-control-lg'],
-                  type: 'password',
-                  placeholder: 'Password',
-                  oninput: this._onPasswordInput,
-                  value: password
-                })
-              ]),
+            v('div', {classes: ['form-group']}, [
+              v('input', {
+                classes: ['form-control'],
+                type: 'username',
+                placeholder: 'Username',
+                oninput: this._onUsernameInput,
+                value: username
+              })
+            ]),
+            v('div', {classes: ['form-group']}, [
+              v('input', {
+                classes: ['form-control'],
+                type: 'password',
+                placeholder: 'Password',
+                oninput: this._onPasswordInput,
+                value: password
+              })
+            ]),
 
-              v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
-                v('button', {
-                  classes: ['btn btn-lg', 'btn-primary', 'pull-right'],
-                  disabled: inProgress,
-                  type: 'submit'
-                }, ['Sign In'])
-              ])
+            v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
+              v('button', {
+                classes: ['btn', 'btn-primary', 'ml-auto'],
+                disabled: inProgress,
+                type: 'submit'
+              }, ['Sign In'])
             ])
           ])
         ])
@@ -67,6 +66,8 @@ export class Login extends WidgetBase<LoginProperties> {
   }
 
   private _onUsernameInput({target: {value: username}}: WithTarget) {
+    console.log('Username input');
+    console.log(arguments);
     this.properties.onUsernameInput({username});
   }
 
@@ -76,6 +77,6 @@ export class Login extends WidgetBase<LoginProperties> {
 
   private _onLogin(event: Event) {
     event.preventDefault();
-    this.properties.onLogin({});
+    this.properties.onLogin({routeId: 'currentUser'});
   }
 }

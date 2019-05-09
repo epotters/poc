@@ -7,7 +7,7 @@ const changeRouteCommand = commandFactory<ChangeRoutePayload>(({path, payload: {
   return [
     replace(path('routing', 'outlet'), outlet),
     replace(path('routing', 'params'), context.params),
-    replace(path('user', 'loaded'), false),
+    // replace(path('user', 'loaded'), false),
     replace(path('personEditor', 'loaded'), false),
     replace(path('errors'), undefined)
   ];

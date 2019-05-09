@@ -24,19 +24,17 @@ public class ClientAccountsServicePropertiesImpl implements ClientAccountsServic
   private static final Log LOG = LogFactory.getLog(ClientAccountsServicePropertiesImpl.class);
 
   private static final String CLIENT_ACCOUNTS_PROPERTY_PATH = "client-accounts";
-  private ResourceBundle clientAccounts = ResourceBundle.getBundle(CLIENT_ACCOUNTS_PROPERTY_PATH);
+  private final ResourceBundle clientAccounts = ResourceBundle.getBundle(CLIENT_ACCOUNTS_PROPERTY_PATH);
 
 
   @Override
   public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-
     return loadclientAccountFromProperties(clientId);
   }
 
 
   @Override
   public ClientAccount loadClientAccountByClientId(String clientId) {
-
     return loadclientAccountFromProperties(clientId);
   }
 

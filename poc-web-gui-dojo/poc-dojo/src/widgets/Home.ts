@@ -14,12 +14,8 @@ export default class Home extends WidgetBase<HomeProperties> {
     const {welcomeMessage} = this.properties;
 
     return v('div', {classes: ['container', 'page']}, [
-      v('div', {classes: 'row'}, [
-        v('div', {classes: ['col-md-6', 'offset-md-3', 'col-xs-12']}, [
-          v('h1', {classes: 'text-xs-center'}, ['Home Page']),
-          v('div', {classes: 'jumbotron'}, [welcomeMessage])
-        ])
-      ])
+      v('h1', {}, ['Home']),
+      v('div', {classes: 'jumbotron'}, [welcomeMessage])
     ]);
   }
 

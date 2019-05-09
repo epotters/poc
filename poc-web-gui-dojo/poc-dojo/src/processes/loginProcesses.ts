@@ -1,9 +1,9 @@
 import global from '@dojo/framework/shim/global';
 import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
-import {commandFactory, getHeaders} from './utils';
+import {commandFactory, getHeaders, objectToFormEncoded} from './utils';
 import {apiUrl, authUrl, clientAuthenticationHeader, sessionKey} from '../../config';
-import {PasswordPayload, SetSessionPayload, UsernamePayload} from './interfaces';
+import {PasswordPayload, RouteIdPayload, SetSessionPayload, UsernamePayload} from './interfaces';
 import {UserSession} from "../interfaces";
 
 
@@ -34,12 +34,7 @@ const loginCommand = commandFactory(async ({get, path}) => {
     password: get(path('login', 'password'))
   };
 
-  let requestBody: string = '';
-  let first = true;
-  for (let key in requestPayload) {
-    requestBody += (first ? '' : '&') + key + '=' + requestPayload[key];
-    first = false;
-  }
+  let requestBody: string = objectToFormEncoded(requestPayload);
   console.log('requestBody: ' + requestBody);
 
   const fullAuthUrl = authUrl + 'token';
@@ -48,7 +43,6 @@ const loginCommand = commandFactory(async ({get, path}) => {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': clientAuthenticationHeader
   };
-
 
   const response = await fetch(fullAuthUrl, {
     method: 'post',
@@ -67,10 +61,10 @@ const loginCommand = commandFactory(async ({get, path}) => {
     errors[json.error] = [json.error_description];
 
     return [
+      replace(path('user'), {}),
       replace(path('login', 'loading'), false),
       replace(path('login', 'failed'), true),
-      replace(path('errors'), errors),
-      replace(path('user'), {})
+      replace(path('errors'), errors)
     ];
   }
 
@@ -113,7 +107,7 @@ const setSessionCommand = commandFactory<SetSessionPayload>(({path, payload: {se
 
 const startLogoutCommand = commandFactory(({path}) => {
   console.log('Start logging out user');
-  return [replace(path('logout', 'loading'), true)];
+  return [replace(path('user', 'loading'), true)];
 });
 
 
@@ -148,7 +142,7 @@ const logoutCommand = commandFactory(async ({get, path}) => {
     errors[json.error] = [json.error_description];
 
     return [
-      replace(path('logout', 'loading'), false),
+      replace(path('user', 'loading'), false),
       replace(path('errors'), errors)
     ];
   }
@@ -161,8 +155,85 @@ const logoutCommand = commandFactory(async ({get, path}) => {
 
   return [
     replace(path('user'), {}),
-    replace(path('logout', 'loading'), false),
+    replace(path('user', 'loading'), false),
     replace(path('routing', 'outlet'), 'home')
+  ];
+});
+
+
+const refreshTokenCommand = commandFactory(async ({get, path}) => {
+
+  const refreshToken = get(path('user', 'refreshToken'));
+
+  console.log('Refreshing token');
+
+  if (refreshToken == undefined) {
+    console.log('No refresh token found');
+  }
+
+  // Is the current access token expired
+  const tokenEndTime = get(path('user', 'endTime'));
+  const tokenExpired = ((new Date()) > tokenEndTime);
+  console.log('Access token is ' + (tokenExpired) ? 'expired' : 'still valid');
+
+  const headers: { [key: string]: string } = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': clientAuthenticationHeader
+  };
+
+  const requestPayload: { [index: string]: string; } = {
+    grant_type: 'refresh_token',
+    'refresh_token': refreshToken
+  };
+  let requestBody: string = objectToFormEncoded(requestPayload);
+  console.log('requestBody: ' + requestBody);
+
+
+  const fullAuthUrl = authUrl + 'token';
+
+  const response = await fetch(fullAuthUrl, {
+    method: 'post',
+    body: requestBody,
+    headers: headers
+  });
+  const json = await response.json();
+
+  console.log('Refresh response on the next line:');
+  console.log(json);
+
+  if (!response.ok) {
+    let errors: { [index: string]: string[]; } = {};
+    errors[json.error] = [json.error_description];
+    return [
+      replace(path('errors'), errors),
+      replace(path('user'), {})
+    ];
+  }
+  console.log('Refresh successful');
+
+  const tokenType = json.token_type;
+  let token = json.access_token;
+  if (tokenType == 'bearer') {
+    token = "Bearer " + token;
+  }
+
+  let startTime = new Date();
+  let endTime = new Date(startTime.getTime() + parseInt(json.expires_in) * 1000);
+  const userSession = {
+    username: get(path('login', 'username')),
+    token: token,
+    refreshToken: json.refresh_token,
+    startTime: startTime,
+    endTime: endTime
+  };
+
+  global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
+
+  return [
+    replace(path('user',), userSession),
+    replace(path('login', 'loading'), false),
+    replace(path('login', 'failed'), false),
+    replace(path('errors'), undefined)
   ];
 });
 
@@ -197,6 +268,7 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
   }
 
   const currentSession = get(path('user'));
+
   const userSession: UserSession = {
     ...{
       username: json.username,
@@ -210,15 +282,23 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
 
   return [
     replace(path('user'), userSession),
-    replace(path('logout', 'loading'), false),
-    replace(path('routing', 'outlet'), 'home')
+    replace(path('user', 'loading'), false)
+    // , replace(path('routing', 'outlet'), 'home')
   ];
 });
 
 
-export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputs]);
+const redirectCommand = commandFactory<RouteIdPayload>(({path, payload: {routeId}}) => {
+  return [
+    replace(path('routing', 'outlet'), routeId)
+    ];
+});
+
+
+export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputs, redirectCommand]);
 export const loginUsernameInputProcess = createProcess('login-username-input', [loginUsernameInputCommand]);
 export const loginPasswordInputProcess = createProcess('login-password-input', [loginPasswordInputCommand]);
 export const setSessionProcess = createProcess('set-session', [setSessionCommand]);
 export const logoutProcess = createProcess('logout', [startLogoutCommand, logoutCommand]);
 export const currentUserProcesses = createProcess('current-user', [startCurrentUserCommand, currentUserCommand]);
+export const refreshTokenProcess = createProcess('refresh-token', [refreshTokenCommand, startCurrentUserCommand, currentUserCommand, redirectCommand]);

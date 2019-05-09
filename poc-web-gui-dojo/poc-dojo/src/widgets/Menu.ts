@@ -13,7 +13,7 @@ export class Menu extends WidgetBase<MenuProperties> {
 
   protected render() {
 
-    return v('nav', {classes: ['navbar']}, [
+    return v('nav', {classes: ['navbar', 'navbar-expand-lg', 'navbar-light', 'bg-light']}, [
       v('div', {classes: 'container'}, [
         v('a', {classes: 'navbar-brand'}, [applicationDisplayName]),
         this._leftMenu(),
@@ -26,13 +26,18 @@ export class Menu extends WidgetBase<MenuProperties> {
 
     const {isAuthenticated} = this.properties;
 
-    return v('ul', {classes: ['nav', 'navbar-nav', 'navbar-left']}, [
+    return v('ul', {classes: ['nav', 'navbar-nav', 'mr-auto', 'navbar-left']}, [
       v('li', {classes: 'nav-item'}, [
-        w(ActiveLink, {classes: ['nav-link'], activeClasses: ['active'], to: 'home'}, ['Home'])
+        w(ActiveLink, {to: 'home', classes: ['nav-link'], activeClasses: ['active']}, ['Home'])
       ]),
       (isAuthenticated) ?
         v('li', {key: 'people', classes: 'nav-item'}, [
           w(ActiveLink, {to: 'people', classes: ['nav-link'], activeClasses: ['active']}, ['People'])
+        ]) : '',
+
+      (isAuthenticated) ?
+        v('li', {key: 'organizations', classes: 'nav-item'}, [
+          w(ActiveLink, {to: 'organizations', classes: ['nav-link'], activeClasses: ['active']}, ['Organizations'])
         ]) : ''
     ])
   }

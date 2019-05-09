@@ -4,21 +4,21 @@ import Grid from '@dojo/widgets/grid';
 import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
 
-import {Person, PocState} from "../interfaces";
-import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
+import {Organization, PocState, ResourceBased} from "../interfaces";
+import {PageSortFilterPayload, PartialOrganizationPayload} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
-import * as css from './styles/PeopleList.m.css';
+import * as css from './styles/OrganizationsList.m.css';
 
 import Store from "@dojo/framework/stores/Store";
 import {buildQueryString, getHeaders} from "../processes/utils";
-import {peopleUrl} from "../../config";
+import {organizationsUrl} from "../../config";
 
 
-export interface PeopleListProperties {
+export interface OrganizationsListProperties {
   store: Store<PocState>;
   storeId: string;
-  fetchPeople: (opts: PageSortFilterPayload) => void;
-  updatePerson: (opts: PartialPersonPayload) => void;
+  fetchOrganizations: (opts: PageSortFilterPayload) => void;
+  updateOrganization: (opts: PartialOrganizationPayload) => void;
 }
 
 
@@ -29,11 +29,11 @@ const columnConfig = [
     renderer: (item: any) => {
       return (
         w(Link, {
-            to: "person",
-            key: "person",
+            to: "organization",
+            key: "organization",
             classes: [css.link],
             params: {
-              personId: item.value
+              organizationId: item.value
             }
           },
           [item.value]
@@ -42,41 +42,19 @@ const columnConfig = [
     }
   },
   {
-    id: "firstName",
-    title: "First Name",
+    id: "name",
+    title: "Name",
     sortable: true,
     editable: true,
-    filterable: true
-  },
-  {
-    id: "lastName",
-    title: "Last Name",
-    sortable: true,
-    editable: true,
-    filterable: true
-  },
-  {
-    id: "gender",
-    title: "M/F",
-    renderer: (item: any) => {
-      return (
-        (item.value == "MALE") ? "Man" : "Woman"
-      );
-    }
-  },
-  {
-    id: "birthDate",
-    title: "Birth date"
-  },
-  {
-    id: "birthPlace",
-    title: "Birth place",
     filterable: true
   }
 ];
 
 
-export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProperties> {
+export default class OrganizationsList extends ThemedMixin(WidgetBase)<OrganizationsListProperties> implements ResourceBased {
+
+  loading: boolean;
+  loaded: boolean;
 
 
   protected render() {
@@ -84,7 +62,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
     const {
       store,
       storeId,
-      updatePerson
+      updateOrganization
     } = this.properties;
 
 
@@ -98,7 +76,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
       const queryString = buildQueryString(page, pageSize, options);
 
       const response = await fetch(
-        peopleUrl + queryString,
+        organizationsUrl + queryString,
         {
           method: "get",
           headers: getHeaders(token)
@@ -112,12 +90,12 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
     };
 
 
-    const updater = async (person: Partial<Person>) => {
-      await updatePerson({person: person});
+    const updater = async (organization: Partial<Organization>) => {
+      await updateOrganization({organization: organization});
     };
 
-    return v('div', {classes: ['container', 'page']}, [
-      v('h1', {}, ['People']),
+    return [
+      v('h1', {classes: 'text-xs-center'}, ['Organizations']),
       w(Grid, {
         columnConfig: columnConfig,
         fetcher: fetcher,
@@ -126,7 +104,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
         storeId: storeId,
         height: 720
       })
-    ]);
+    ];
   }
 }
 

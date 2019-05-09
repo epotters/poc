@@ -1,10 +1,5 @@
 import {GridState} from "@dojo/widgets/grid/interfaces";
 
-import Home from "./widgets/Home";
-import CurrentUser from "./widgets/CurrentUser";
-import PeopleList from "./widgets/PeopleList";
-import PersonEditor from "./widgets/PersonEditor";
-
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
 
@@ -31,13 +26,30 @@ export interface Household {
 }
 
 
-// export interface PeopleList extends Grid<Person>, ResourceBased {
 export interface PeopleList extends ResourceBased {
-
 }
 
 
 export interface PersonEditor extends ResourceBased {
+  person: Person;
+}
+
+
+export interface Organization {
+  id: number;
+  name: string;
+}
+
+export interface OrganizationsList extends ResourceBased {
+}
+
+export interface OrganizationEditor extends ResourceBased {
+  organization: Organization;
+}
+
+
+export interface Home {
+  welcomeMessage: string;
 }
 
 
@@ -84,10 +96,14 @@ export interface PocState {
   routing: Routing;
   user: UserSession;
   login: Login;
-  logout: CurrentUser;
   feedback: Message;
   errors: Errors;
+
   peopleList: PeopleList;
   peopleGridState: GridState<Person>;
   personEditor: PersonEditor;
+
+  organizationsList: OrganizationsList;
+  organizationsGridState: GridState<Organization>;
+  organizationEditor: OrganizationEditor;
 }

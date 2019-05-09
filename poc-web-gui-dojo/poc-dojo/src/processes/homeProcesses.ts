@@ -17,7 +17,7 @@ const fetchWelcomeMessageCommand = commandFactory(async ({get, path}) => {
   const json = await response.json();
 
   return [
-    replace(path('home', 'properties', 'welcomeMessage'), json.message)
+    replace(path('home','welcomeMessage'), json.message)
   ];
 
 });

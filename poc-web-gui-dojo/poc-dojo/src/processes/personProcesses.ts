@@ -5,11 +5,26 @@ import {peopleUrl} from '../../config';
 import {PageSortFilterPayload, PartialPersonPayload, PersonIdPayload} from './interfaces';
 
 
+const personEditorInputCommand = commandFactory<PartialPersonPayload>(({get, path, payload: {person}}) => {
+
+  console.log('Updating state of person fields');
+  console.log(person);
+
+  const currentPerson = get(path('personEditor', 'person'));
+  // const updatedPerson = {...person, ...currentPerson};
+
+  const updatedPerson = {...currentPerson, ...person};
+
+  console.log('Updated state of person fields');
+  console.log(updatedPerson);
+
+  return [replace(path('personEditor', 'person'), updatedPerson)];
+});
+
 
 // List people
 const fetchPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, path, payload: {page, pageSize, options}}) => {
 
-  // const storeId = 'peopleGridState';
   const token = get(path('user', 'token'));
 
   const queryString = buildQueryString(page, pageSize, options);
@@ -24,13 +39,8 @@ const fetchPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, pa
   const json = await response.json();
 
   console.log(json);
-  return [
-    // replace(path(storeId, 'data', 'pages', `page-${page}`), json.content),
-    // replace(path(storeId, 'meta', 'total'), json.totalElements),
-    // replace(path(storeId, 'meta', 'pageSize'), pageSize)
-  ];
+  return []; // Updating the store is handled by the Grid component (for now)
 });
-
 
 
 const createPersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
@@ -48,8 +58,7 @@ const createPersonCommand = commandFactory<PartialPersonPayload>(async ({get, pa
 
 const startLoadingPersonCommand = commandFactory(({path}) => {
   return [
-    replace(path('personEditor', 'properties', 'personId'), undefined),
-    replace(path('personEditor', 'properties', 'person'), undefined),
+    replace(path('personEditor', 'person'), undefined),
     replace(path('personEditor', 'loading'), true),
     replace(path('personEditor', 'loaded'), false)
   ];
@@ -70,8 +79,7 @@ const loadPersonCommand = commandFactory<PersonIdPayload>(async ({get, path, pay
   }
 
   return [
-    replace(path('personEditor', 'properties', 'personId'), personId),
-    replace(path('personEditor', 'properties', 'person'), json.person),
+    replace(path('personEditor', 'person'), json),
     replace(path('personEditor', 'loading'), false),
     replace(path('personEditor', 'loaded'), true)
   ];
@@ -80,37 +88,59 @@ const loadPersonCommand = commandFactory<PersonIdPayload>(async ({get, path, pay
 
 const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
   const token = get(path('user', 'token'));
+
+  const updatedPerson = get(path('personEditor', 'person'));
+
   const response = await fetch(peopleUrl + `${person.id}`, {
     method: 'post',
-    body: JSON.stringify(person),
+    body: JSON.stringify(updatedPerson),
     headers: getHeaders(token)
   });
   const json = await response.json();
   console.log(json);
-  return [];
-});
 
+  if (!response.ok) {
+    console.log('Error saving person');
 
-const updatePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
-  const token = get(path('user', 'token'));
-  const response = await fetch(peopleUrl + `${person.id}`, {
-    method: 'post',
-    body: JSON.stringify(person),
-    headers: getHeaders(token)
-  });
-  const json = await response.json();
-  console.log(json);
-  return [];
+    let errors: { [index: string]: string[]; } = {};
+    errors[json.error] = [json.message];
+    return [
+      replace(path('errors'), errors)
+    ];
+  }
+
+  return [
+    replace(path('feedback'), {text: 'Person saved'}),
+    replace(path('errors'), undefined)
+  ];
 });
 
 
 const deletePersonCommand = commandFactory<PersonIdPayload>(async ({get, path, payload: {personId}}) => {
   const token = get(path('user', 'token'));
-  await fetch(peopleUrl + `${personId}`, {
+  const response = await fetch(peopleUrl + `${personId}`, {
     method: 'delete',
     headers: getHeaders(token)
   });
-  return [];
+
+  const json = await response.json();
+  console.log(json);
+
+  if (!response.ok) {
+    console.log('Error saving person');
+
+    let errors: { [index: string]: string[]; } = {};
+    errors[json.error] = [json.message];
+    return [
+      replace(path('errors'), errors)
+    ];
+  }
+
+  return [
+    replace(path('personEditor', 'person'), undefined),
+    replace(path('feedback'), {text: 'Person deleted'}),
+    replace(path('errors'), undefined)
+  ];
 });
 
 
@@ -120,14 +150,12 @@ const clearPersonEditorCommand = commandFactory(({path}) => {
 
 
 export const fetchPeopleProcess = createProcess('list-people', [fetchPeopleCommand]);
-export const fetchPersonProcess = createProcess('get-person', [
-  startLoadingPersonCommand,
-  [loadPersonCommand]
-]);
-export const clearPersonEditorProcess = createProcess('clear-person-editor', [clearPersonEditorCommand]);
-export const createPersonProcess = createProcess('update-person', [createPersonCommand]);
-
+export const fetchPersonProcess = createProcess('get-person', [startLoadingPersonCommand, loadPersonCommand]);
+export const createPersonProcess = createProcess('create-person', [createPersonCommand]);
 export const savePersonProcess = createProcess('save-person', [savePersonCommand]);
-export const updatePersonProcess = createProcess('update-person', [updatePersonCommand]);
 export const deletePersonProcess = createProcess('delete-person', [deletePersonCommand]);
+
+export const personEditorInputProcess = createProcess('person-editor-input', [personEditorInputCommand]);
+export const clearPersonEditorProcess = createProcess('clear-person-editor', [clearPersonEditorCommand]);
+
 

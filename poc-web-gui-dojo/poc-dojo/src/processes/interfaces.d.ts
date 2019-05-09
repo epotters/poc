@@ -1,4 +1,4 @@
-import {Person, UserSession} from "../interfaces";
+import {Organization, Person, UserSession} from "../interfaces";
 import {OutletContext} from '@dojo/framework/routing/interfaces';
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
 
@@ -10,6 +10,15 @@ export interface PersonIdPayload {
 export interface PartialPersonPayload {
   person: Partial<Person>;
 }
+
+export interface OrganizationIdPayload {
+  organizationId: number;
+}
+
+export interface PartialOrganizationPayload {
+  organization: Partial<Organization>;
+}
+
 
 export interface PageSortFilterPayload {
   page: number;
@@ -33,6 +42,10 @@ export interface PasswordPayload {
 
 export interface SetSessionPayload {
   session: UserSession;
+}
+
+export interface RouteIdPayload {
+  routeId: string;
 }
 
 export interface ChangeRoutePayload {

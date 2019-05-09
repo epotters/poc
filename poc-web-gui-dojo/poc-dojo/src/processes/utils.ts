@@ -30,6 +30,16 @@ export function buildQueryString(page: number, pageSize: number, options: Fetche
   return queryString;
 }
 
+export function objectToFormEncoded(object: { [index: string]: string }) {
+  let encoded: string = '';
+  let first = true;
+  for (let key in object) {
+    encoded += (first ? '' : '&') + key + '=' + object[key];
+    first = false;
+  }
+  return encoded;
+}
+
 
 export function getHeaders(token?: string): any {
   const headers: { [key: string]: string } = {

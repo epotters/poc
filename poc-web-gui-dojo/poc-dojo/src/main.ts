@@ -13,7 +13,10 @@ import {setSessionProcess} from './processes/loginProcesses';
 import {PocState} from './interfaces';
 import config from './routes';
 import {changeRouteProcess} from './processes/routeProcesses';
-import {sessionKey} from "../config";
+import {sessionKey, applicationDisplayName} from "../config";
+
+
+console.log('Starting application ' + applicationDisplayName);
 
 const store = new Store<PocState>();
 const registry = new Registry();
@@ -49,6 +52,10 @@ function onRouteChange() {
   }
 }
 
+// function onTokenExpires() {
+//   refreshTokenProcess(store)({routeId: 'home'});
+// }
+
 store.onChange(store.path('routing', 'outlet'), onRouteChange);
 store.onChange(store.path('routing', 'params'), onRouteChange);
 
@@ -64,6 +71,7 @@ router.on('outlet', ({outlet, action}) => {
       case 'person':
         console.log('About to load person with id: ' + outlet.params.personId);
         fetchPersonProcess(store)({personId: parseInt(outlet.params.personId)});
+        console.log('Loaded person  with id: ' + outlet.params.personId);
         break;
     }
   } else {

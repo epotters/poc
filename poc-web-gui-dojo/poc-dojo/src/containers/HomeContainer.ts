@@ -11,7 +11,7 @@ function getProperties(store: Store<PocState>): HomeProperties {
   const {get, path} = store;
 
   return {
-    welcomeMessage: get(path('home', 'properties', 'welcomeMessage'))
+    welcomeMessage: get(path('home', 'welcomeMessage'))
   };
 }
 

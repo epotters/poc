@@ -20,3 +20,4 @@ export const apiUrl = baseUrl + '/api';
 export const authUrl = baseUrl + '/oauth/';
 export const welcomeUrl = baseUrl + '/api/welcome/';
 export const peopleUrl = baseUrl + '/api/people/';
+export const organizationsUrl = baseUrl + '/api/organizations/';

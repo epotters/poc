@@ -21,7 +21,7 @@ public class UserAccountsServicePropertiesImpl implements UserAccountsService {
   private static final Log LOG = LogFactory.getLog(UserAccountsServicePropertiesImpl.class);
 
   private static final String USER_ACCOUNTS_PROPERTY_PATH = "user-accounts";
-  private ResourceBundle userAccounts = ResourceBundle.getBundle(USER_ACCOUNTS_PROPERTY_PATH);
+  private final ResourceBundle userAccounts = ResourceBundle.getBundle(USER_ACCOUNTS_PROPERTY_PATH);
 
 
   @Override

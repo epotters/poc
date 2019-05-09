@@ -61,7 +61,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .antMatchers("/logout").permitAll()
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-        .antMatchers("/api/people/**").permitAll()
+//        .antMatchers("/api/people/**").permitAll()
         .antMatchers("/api/**").authenticated()
 
         .antMatchers("/oauth/**").permitAll()

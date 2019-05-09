@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +62,11 @@ public class PersonController {
   @PostMapping("/{id}")
   public Person updatePerson(@PathVariable final Long id, @RequestBody final Person person) {
     return personRepository.save(person);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deletePerson(@PathVariable final Long id, @RequestBody final Person person) {
+    personRepository.delete(person);
   }
 
 
