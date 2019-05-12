@@ -26,7 +26,9 @@ spring:
     rest:
       base-path: /api
   jackson:
-    date-format: "yyyy-MM-dd HH:mm:ss"
+#    date-format: "yyyy-MM-dd HH:mm:ss"  // Used for java.util.Date only
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   banner:
     location: classpath:banner.txt
 

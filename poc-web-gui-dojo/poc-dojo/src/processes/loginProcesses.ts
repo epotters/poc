@@ -20,13 +20,17 @@ const clearLoginInputs = commandFactory(({path}) => {
   return [replace(path('login', 'username'), ''), replace(path('login', 'password'), '')];
 });
 
+
 const startLoginCommand = commandFactory(({path}) => {
-  console.log('Start logging in');
+  console.info('Start logging in...');
+
   return [replace(path('login', 'loading'), true)];
 });
 
+
 const loginCommand = commandFactory(async ({get, path}) => {
-  console.log('Logging in');
+  console.info('Continue logging in...');
+
 
   const requestPayload: { [index: string]: string; } = {
     grant_type: 'password',
@@ -35,7 +39,7 @@ const loginCommand = commandFactory(async ({get, path}) => {
   };
 
   let requestBody: string = objectToFormEncoded(requestPayload);
-  console.log('requestBody: ' + requestBody);
+  console.debug('requestBody: ' + requestBody);
 
   const fullAuthUrl = authUrl + 'token';
 
@@ -52,10 +56,11 @@ const loginCommand = commandFactory(async ({get, path}) => {
 
   const json = await response.json();
 
-  console.log('Login response on the next line:');
-  console.log(json);
+  console.debug('Login response on the next line:');
+  console.debug(json);
 
   if (!response.ok) {
+    console.error('Error logging in');
 
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.error_description];
@@ -68,26 +73,12 @@ const loginCommand = commandFactory(async ({get, path}) => {
     ];
   }
 
-  console.log('Login successful');
-
-  const tokenType = json.token_type;
-  let token = json.access_token;
-  if (tokenType == 'bearer') {
-    token = "Bearer " + token;
-  }
-
-  let startTime = new Date();
-  let endTime = new Date(startTime.getTime() + parseInt(json.expires_in) * 1000);
-
-  const userSession = {
-    username: get(path('login', 'username')),
-    token: token,
-    refreshToken: json.refresh_token,
-    startTime: startTime,
-    endTime: endTime
-  };
+  const username = get(path('login', 'username'));
+  const userSession: Partial<UserSession> = buildUserSession(json, username);
 
   global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
+
+  console.info('Login successful');
 
   return [
     replace(path('user',), userSession),
@@ -106,22 +97,25 @@ const setSessionCommand = commandFactory<SetSessionPayload>(({path, payload: {se
 
 
 const startLogoutCommand = commandFactory(({path}) => {
-  console.log('Start logging out user');
+  console.info('Start logging out user...');
   return [replace(path('user', 'loading'), true)];
 });
 
 
 const logoutCommand = commandFactory(async ({get, path}) => {
 
-  console.log('Logging out user');
+  console.info('Logging out user...');
 
   const token = get(path('user', 'token'));
-  const logoutHeaders = getHeaders(token);
-  logoutHeaders['Authorization'] = clientAuthenticationHeader;
 
+  if (!token) {
+    console.info('No user is logged in. Stopping.');
+    return [];
+  }
+
+  const logoutHeaders = getHeaders(clientAuthenticationHeader);
   const logoutUrl = authUrl + 'token';
-
-  console.log('logoutUrl: ' + logoutUrl);
+  console.debug('logoutUrl: ' + logoutUrl);
 
   const response = await fetch(logoutUrl, {
     method: 'delete',
@@ -130,13 +124,13 @@ const logoutCommand = commandFactory(async ({get, path}) => {
 
   const json = await response.json();
 
-  console.log('Logout response on the next line:');
-  console.log(json);
+  console.debug('Logout response on the next line:');
+  console.debug(json);
 
 
   if (!response.ok) {
 
-    console.log('Error logging out user remotely');
+    console.error('Error logging out user');
 
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.error_description];
@@ -147,11 +141,11 @@ const logoutCommand = commandFactory(async ({get, path}) => {
     ];
   }
 
-  console.log('About to remove session');
-
+  console.debug('About to remove session');
   global.sessionStorage.removeItem(sessionKey);
+  console.debug('Session removed, returning, redirecting to home page');
 
-  console.log('Session removed, returning, redirecting to home page');
+  console.info('User was logged out successfully');
 
   return [
     replace(path('user'), {}),
@@ -163,19 +157,48 @@ const logoutCommand = commandFactory(async ({get, path}) => {
 
 const refreshTokenCommand = commandFactory(async ({get, path}) => {
 
+  console.info('Checking access token validity...');
   const refreshToken = get(path('user', 'refreshToken'));
 
-  console.log('Refreshing token');
+  console.debug('Still alive');
+  console.debug('Refresh token: ' + refreshToken);
 
-  if (refreshToken == undefined) {
-    console.log('No refresh token found');
+
+  if (!refreshToken) {
+    console.info('No refresh token found');
+    return [];
   }
 
-  // Is the current access token expired
-  const tokenEndTime = get(path('user', 'endTime'));
-  const tokenExpired = ((new Date()) > tokenEndTime);
-  console.log('Access token is ' + (tokenExpired) ? 'expired' : 'still valid');
+  console.debug('Survived first check');
 
+  // Is the current access token expired
+  const refreshOverlap: number = 600;
+  const tokenEndTime = get(path('user', 'endTime'));
+  console.debug('tokenEndTime: ' + tokenEndTime);
+  console.debug('Still there?');
+  console.debug('tokenEndTime: ' + tokenEndTime.getTime());
+
+  console.debug('Gone');
+
+  const now = new Date();
+  console.debug('Now: ' + now.getTime());
+
+
+  const tokenExpired: boolean = (now.getTime() > tokenEndTime.getTime() - refreshOverlap);
+
+
+  console.debug('token expired?: ' + tokenExpired);
+
+
+
+  if (tokenExpired) {
+    console.info('Access token needs refreshing');
+  } else {
+    console.info('Access token is still valid');
+    return [];
+  }
+
+  // Preparing the refresh request
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': clientAuthenticationHeader
@@ -183,10 +206,10 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
 
   const requestPayload: { [index: string]: string; } = {
     grant_type: 'refresh_token',
-    'refresh_token': refreshToken
+    refresh_token: refreshToken
   };
   let requestBody: string = objectToFormEncoded(requestPayload);
-  console.log('requestBody: ' + requestBody);
+  console.debug('Refresh requestBody: ' + requestBody);
 
 
   const fullAuthUrl = authUrl + 'token';
@@ -198,34 +221,23 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
   });
   const json = await response.json();
 
-  console.log('Refresh response on the next line:');
-  console.log(json);
+  console.debug('Refresh response on the next line:');
+  console.debug(json);
 
+  // Error handling
   if (!response.ok) {
+    console.info('An error occurred while refreshing the access token');
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.error_description];
     return [
-      replace(path('errors'), errors),
-      replace(path('user'), {})
+      replace(path('user'), {}),
+      replace(path('errors'), errors)
     ];
   }
-  console.log('Refresh successful');
+  console.info('Access token refreshed successfully');
 
-  const tokenType = json.token_type;
-  let token = json.access_token;
-  if (tokenType == 'bearer') {
-    token = "Bearer " + token;
-  }
-
-  let startTime = new Date();
-  let endTime = new Date(startTime.getTime() + parseInt(json.expires_in) * 1000);
-  const userSession = {
-    username: get(path('login', 'username')),
-    token: token,
-    refreshToken: json.refresh_token,
-    startTime: startTime,
-    endTime: endTime
-  };
+  const username = get(path('login', 'username'));
+  const userSession: Partial<UserSession> = buildUserSession(json, username);
 
   global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
 
@@ -245,6 +257,8 @@ const startCurrentUserCommand = commandFactory(({path}) => {
 
 const currentUserCommand = commandFactory(async ({get, path}) => {
 
+  console.info('Updating the current user...');
+
   const token = get(path('user', 'token'));
 
   const currentUserUrl = apiUrl + '/users/me';
@@ -255,10 +269,11 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
 
   const json = await response.json();
 
-  console.log('Current user response on the next line:');
-  console.log(json);
+  console.info('Current user response on the next line:');
+  console.info(json);
 
   if (!response.ok) {
+    console.error('Error refreshing the user');
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.error_description];
     return [
@@ -267,7 +282,8 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
     ];
   }
 
-  const currentSession = get(path('user'));
+  console.debug('Updating the user session');
+  const currentSession: UserSession = get(path('user'));
 
   const userSession: UserSession = {
     ...{
@@ -279,11 +295,11 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
   };
 
   global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
+  console.debug('User session updated successfully with user data');
 
   return [
     replace(path('user'), userSession),
     replace(path('user', 'loading'), false)
-    // , replace(path('routing', 'outlet'), 'home')
   ];
 });
 
@@ -291,8 +307,27 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
 const redirectCommand = commandFactory<RouteIdPayload>(({path, payload: {routeId}}) => {
   return [
     replace(path('routing', 'outlet'), routeId)
-    ];
+  ];
 });
+
+
+
+function buildUserSession(tokenJson: any, username: string): Partial<UserSession> {
+  const tokenType = tokenJson.token_type;
+  let token = tokenJson.access_token;
+  if (tokenType == 'bearer') {
+    token = "Bearer " + token;
+  }
+  let startTime = new Date();
+  let endTime = new Date(startTime.getTime() + parseInt(tokenJson.expires_in) * 1000);
+  return {
+    username: username,
+    token: token,
+    refreshToken: tokenJson.refresh_token,
+    startTime: startTime,
+    endTime: endTime
+  };
+}
 
 
 export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputs, redirectCommand]);

@@ -1,4 +1,5 @@
 import {GridState} from "@dojo/widgets/grid/interfaces";
+import {ConfirmedPersonActionPayload} from "./processes/interfaces";
 
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
@@ -32,8 +33,17 @@ export interface PeopleList extends ResourceBased {
 
 export interface PersonEditor extends ResourceBased {
   person: Person;
+  confirmationRequest: ConfirmationRequest;
 }
 
+
+export interface ConfirmationRequest {
+  action: string;
+  confirming: boolean;
+  confirmed: boolean;
+  confirm: (opts: ConfirmedPersonActionPayload) => void;
+  cancel: (opts: ConfirmedPersonActionPayload) => void;
+}
 
 export interface Organization {
   id: number;
@@ -74,6 +84,7 @@ export interface Login extends ResourceBased {
   password: string;
   failed: boolean;
 }
+
 
 export interface Routing {
   outlet: string;

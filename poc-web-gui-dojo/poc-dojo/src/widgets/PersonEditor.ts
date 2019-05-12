@@ -2,9 +2,10 @@ import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 import {theme, ThemedMixin} from '@dojo/framework/widget-core/mixins/Themed';
 import * as css from './styles/PersonEditor.m.css';
-import {Errors, Person, WithTarget} from '../interfaces';
-import {PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
+import {ConfirmationRequest, Errors, Person, WithTarget} from '../interfaces';
+import {ConfirmedPersonActionPayload, PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
 import {ErrorList} from "./ErrorList";
+import {ConfirmationDialog} from "./ConfirmationDialog";
 
 
 export interface PersonEditorProperties {
@@ -12,11 +13,14 @@ export interface PersonEditorProperties {
   person: Person;
 
   loaded: boolean;
+  confirmationRequest: ConfirmationRequest;
+
   errors: Errors;
 
   getPerson: (opts: PersonIdPayload) => void;
   savePerson: (opts: PartialPersonPayload) => void;
-  deletePerson: (opts: PersonIdPayload) => void;
+  deletePerson: (opts: ConfirmedPersonActionPayload) => void;
+  cancelDeletePerson: (opts: Object) => void;
 
   clearEditor: (opts: Object) => void;
   editorInput: (opts: PartialPersonPayload) => void;
@@ -32,6 +36,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
     const {
       personId,
       person,
+      confirmationRequest,
       errors
     } = this.properties;
 
@@ -41,8 +46,15 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
       errors ? w(ErrorList, {errors}) : null,
 
+      !!confirmationRequest ?
+      w(ConfirmationDialog, {
+        message: {text: 'Are you sure...?'},
+        // visible: (confirmationRequest && confirmationRequest.confirming)
+        visible: true
+      }) : '',
 
-      v('div', {classes: ['card', 'row']}, [
+
+      v('div', {classes: ['card', 'row', 'bg-light']}, [
         v('div', {classes: ['card-body']}, [
 
           v('form', {
@@ -108,25 +120,10 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
               ])
             ]),
 
-            // v('div', {classes: ['form-group', 'form-row']}, [
-            //   v('label', {classes: ['control-label', 'col-sm-4']}, ['Gender']),
-            //   v('div', {classes: ['col-sm-8']}, [
-            //     v('input', {
-            //       classes: ['form-control'],
-            //       key: 'genderInput',
-            //       placeholder: 'M/F',
-            //       value: person.gender,
-            //       required: false,
-            //       oninput: this.onGenderInput
-            //     })
-            //   ])
-            // ]),
-
-
             v('div', {classes: ['form-group', 'form-row']}, [
               v('label', {classes: ['control-label', 'col-sm-4']}, ['Gender']),
               v('div', {classes: ['col-sm-8']}, [
-                v('div', {classes: ['form-check']}, [
+                v('div', {classes: ['form-check', 'form-check-inline']}, [
                   v('input', {
                     classes: ['form-check-input'],
                     key: 'genderInput',
@@ -139,7 +136,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
                   }),
                   v('label', {classes: ['form-check-label'], for: 'genderInputMale'}, ['Man'])
                 ]),
-                v('div', {classes: ['form-check']}, [
+                v('div', {classes: ['form-check', 'form-check-inline']}, [
                   v('input', {
                     classes: ['form-check-input'],
                     key: 'genderInput',
@@ -188,11 +185,13 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
               v('div', {classes: 'ml-auto'}, [
 
                 v('button', {
+                  type: 'button',
                   classes: ['btn', 'btn-outline-primary'],
                   onclick: this._onResetEditor,
                 }, ['Reset']),
 
                 v('button', {
+                  type: 'button',
                   classes: ['btn', 'btn-outline-primary'],
                   onclick: this._onDeletePerson,
                 }, ['Delete']),
@@ -255,7 +254,15 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
       personId
     } = this.properties;
 
-    this.properties.deletePerson({personId: personId});
+    const confirmationRequest = {
+      action: 'delete-person',
+      confirming: false,
+      confirmed: false,
+      confirm: this.properties.deletePerson,
+      cancel: this.properties.cancelDeletePerson
+    };
+
+    this.properties.deletePerson({personId: personId, confirmationRequest: confirmationRequest});
   }
 
   private _onResetEditor() {

@@ -9,7 +9,7 @@ import {clearPersonEditorProcess, fetchPersonProcess} from './processes/personPr
 
 import {App} from './App';
 
-import {setSessionProcess} from './processes/loginProcesses';
+import {refreshTokenProcess, setSessionProcess} from './processes/loginProcesses';
 import {PocState} from './interfaces';
 import config from './routes';
 import {changeRouteProcess} from './processes/routeProcesses';
@@ -28,6 +28,7 @@ if (!has('build-time-render')) {
 }
 if (session) {
   setSessionProcess(store)({session: JSON.parse(session)});
+  refreshTokenProcess(store)({routeId: 'home'});
 } else {
   console.log('No session yet');
 }
@@ -52,9 +53,7 @@ function onRouteChange() {
   }
 }
 
-// function onTokenExpires() {
-//   refreshTokenProcess(store)({routeId: 'home'});
-// }
+
 
 store.onChange(store.path('routing', 'outlet'), onRouteChange);
 store.onChange(store.path('routing', 'params'), onRouteChange);

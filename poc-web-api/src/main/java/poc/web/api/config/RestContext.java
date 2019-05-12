@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -47,6 +48,7 @@ public class RestContext implements WebMvcConfigurer {
   }
 
 
+
   @Bean
   public ErrorAttributes errorAttributes() {
     return new DefaultErrorAttributes();
@@ -61,21 +63,22 @@ public class RestContext implements WebMvcConfigurer {
       if (converter instanceof org.springframework.http.converter.json.MappingJackson2HttpMessageConverter) {
         ObjectMapper mapper = ((MappingJackson2HttpMessageConverter) converter).getObjectMapper();
         mapper.registerModule(new Hibernate5Module());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
       }
     }
   }
-
-
-  private static final String dateFormat = "yyyy-MM-dd";
-  private static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-
-  @Bean
-  public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-    return builder -> {
-      builder.simpleDateFormat(dateTimeFormat);
-      builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
-      builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
-    };
-  }
+//
+//
+//  private static final String dateFormat = "yyyy-MM-dd";
+//  private static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+//
+//  @Bean
+//  public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+//    return builder -> {
+//      builder.simpleDateFormat(dateTimeFormat);
+//      builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
+//      builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
+//    };
+//  }
 
 }

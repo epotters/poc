@@ -35,7 +35,7 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
         errors ? w(ErrorList, {errors}) : null,
 
         // Current user
-        v('div', {classes: ['card', 'row']}, [
+        v('div', {classes: ['card', 'row', 'bg-light']}, [
           v('div', {classes: ['card-body']}, [
 
             v('form', {classes: 'form-horizontal'}, [

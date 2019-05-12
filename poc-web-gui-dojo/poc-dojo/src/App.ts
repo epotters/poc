@@ -3,9 +3,8 @@ import {v, w} from '@dojo/framework/widget-core/d';
 import Outlet from '@dojo/framework/routing/Outlet';
 import {MatchDetails} from '@dojo/framework/routing/interfaces';
 
-import * as css from './App.m.css';
-
 import MenuContainer from "./containers/MenuContainer";
+import Banner from "./widgets/Banner";
 import PageBodyContainer from "./containers/PageBodyContainer";
 import HomeContainer from "./containers/HomeContainer";
 import LoginContainer from "./containers/LoginContainer";
@@ -17,20 +16,22 @@ import OrganizationEditorContainer from "./containers/OrganizationEditorContaine
 import OrganizationsListContainer from "./containers/OrganizationsListContainer";
 
 
-
 export class App extends WidgetBase {
   protected render() {
-    return v('div', {classes: [css.root]}, [
+    return [
 
       v('header', {}, [
+        w(Banner, {name: 'Banner content'}),
         w(MenuContainer, {})
       ]),
 
-      v('main', [
+      v('main', {classes: ['flex-shrink-0'], role: 'main'},[
 
         w(Outlet, {key: 'home', id: 'home', renderer: () => w(HomeContainer, {})}),
 
         w(Outlet, {key: 'people', id: 'people', renderer: () => w(PeopleListContainer, {})}),
+        w(Outlet, {key: 'new-person', id: 'new-person', renderer: () => w(PersonEditorContainer, {})}),
+
         w(Outlet, {
           key: 'person', id: 'person',
           renderer: (details: MatchDetails) => {
@@ -62,7 +63,9 @@ export class App extends WidgetBase {
 
       ]),
 
-      v('footer', {}, [])
-    ]);
+      v('footer', {classes: ['footer', 'mt-auto', 'py-3', 'bg-light'], role: 'footer'}, [
+        v('div', {classes: ['container', 'text-muted']}, ['Footer content'])
+      ])
+    ]
   }
 }

@@ -65,10 +65,10 @@ public class PersonController {
   }
 
   @DeleteMapping("/{id}")
-  public void deletePerson(@PathVariable final Long id, @RequestBody final Person person) {
+  public void deletePerson(@PathVariable final Long id) {
+    Person person = personRepository.getOne(id);
     personRepository.delete(person);
   }
-
 
   @GetMapping("/schema")
   public String schema() throws IOException {

@@ -13,6 +13,10 @@ export default [
     outlet: 'person'
   },
   {
+    path: 'new-person',
+    outlet: 'new-person'
+  },
+  {
     path: 'organizations',
     outlet: 'organizations'
   },

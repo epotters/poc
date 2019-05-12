@@ -27,7 +27,7 @@ export class Login extends WidgetBase<LoginProperties> {
 
       v('h1', {}, ['Sign In']),
 
-      v('div', {classes: ['card', 'row']}, [
+      v('div', {classes: ['card', 'row', 'bg-light']}, [
         v('div', {classes: ['card-body']}, [
           errors ? w(ErrorList, {errors}) : null,
 

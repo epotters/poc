@@ -2,7 +2,8 @@ import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
 import {buildQueryString, commandFactory, getHeaders} from './utils';
 import {peopleUrl} from '../../config';
-import {PageSortFilterPayload, PartialPersonPayload, PersonIdPayload} from './interfaces';
+import {ConfirmedPersonActionPayload, PageSortFilterPayload, PartialPersonPayload, PersonIdPayload} from './interfaces';
+import {Person} from "../interfaces";
 
 
 const personEditorInputCommand = commandFactory<PartialPersonPayload>(({get, path, payload: {person}}) => {
@@ -11,8 +12,6 @@ const personEditorInputCommand = commandFactory<PartialPersonPayload>(({get, pat
   console.log(person);
 
   const currentPerson = get(path('personEditor', 'person'));
-  // const updatedPerson = {...person, ...currentPerson};
-
   const updatedPerson = {...currentPerson, ...person};
 
   console.log('Updated state of person fields');
@@ -40,19 +39,6 @@ const fetchPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, pa
 
   console.log(json);
   return []; // Updating the store is handled by the Grid component (for now)
-});
-
-
-const createPersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
-  const token = get(path('user', 'token'));
-  const response = await fetch(peopleUrl, {
-    method: 'put',
-    body: JSON.stringify(person),
-    headers: getHeaders(token)
-  });
-  const json = await response.json();
-  console.log(json);
-  return [];
 });
 
 
@@ -86,10 +72,28 @@ const loadPersonCommand = commandFactory<PersonIdPayload>(async ({get, path, pay
 });
 
 
+const createPersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
+  const token = get(path('user', 'token'));
+  const response = await fetch(peopleUrl, {
+    method: 'put',
+    body: JSON.stringify(person),
+    headers: getHeaders(token)
+  });
+  const json = await response.json();
+  console.log(json);
+  return [];
+});
+
+
 const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
   const token = get(path('user', 'token'));
 
-  const updatedPerson = get(path('personEditor', 'person'));
+  const updatedPerson: Partial<Person> = get(path('personEditor', 'person'));
+
+  if (!updatedPerson) {
+    console.info('No updated person found. Quitting save process');
+    return [];
+  }
 
   const response = await fetch(peopleUrl + `${person.id}`, {
     method: 'post',
@@ -101,7 +105,6 @@ const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path
 
   if (!response.ok) {
     console.log('Error saving person');
-
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.message];
     return [
@@ -116,30 +119,63 @@ const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path
 });
 
 
-const deletePersonCommand = commandFactory<PersonIdPayload>(async ({get, path, payload: {personId}}) => {
-  const token = get(path('user', 'token'));
-  const response = await fetch(peopleUrl + `${personId}`, {
-    method: 'delete',
-    headers: getHeaders(token)
-  });
+const startDeleteCommand = commandFactory<ConfirmedPersonActionPayload>(({path, payload: {confirmationRequest}}) => {
 
-  const json = await response.json();
-  console.log(json);
-
-  if (!response.ok) {
-    console.log('Error saving person');
-
-    let errors: { [index: string]: string[]; } = {};
-    errors[json.error] = [json.message];
-    return [
-      replace(path('errors'), errors)
-    ];
+  if (confirmationRequest && confirmationRequest.action == 'delete-person' && confirmationRequest.confirmed) {
+    confirmationRequest.confirming = true;
   }
 
   return [
-    replace(path('personEditor', 'person'), undefined),
-    replace(path('feedback'), {text: 'Person deleted'}),
-    replace(path('errors'), undefined)
+    replace(path('personEditor', 'confirmationRequest'), confirmationRequest),
+  ];
+});
+
+
+const deletePersonCommand = commandFactory<ConfirmedPersonActionPayload>(async ({get, path, payload: {personId}}) => {
+
+    const confirmationRequest = get(path('personEditor', 'confirmationRequest'));
+    if (!confirmationRequest || confirmationRequest.action !== 'delete-person') {
+      return [];
+    }
+
+    if (confirmationRequest.confirmed === true) {
+      console.log('Delete is confirmed and will be executed');
+    } else {
+      console.log('Delete is not yet confirmed by the user Delete will not be executed');
+      return [];
+    }
+
+    const token = get(path('user', 'token'));
+    const response = await fetch(peopleUrl + `${personId}`, {
+      method: 'delete',
+      headers: getHeaders(token)
+    });
+
+    const json = await response.json();
+    console.log(json);
+
+    if (!response.ok) {
+      console.log('Error deleting person');
+      let errors: { [index: string]: string[]; } = {};
+      errors[json.error] = [json.message];
+      return [
+        replace(path('errors'), errors)
+      ];
+    }
+
+    return [
+      replace(path('personEditor', 'person'), undefined),
+      replace(path('personEditor', 'confirmationRequest'), undefined),
+      replace(path('feedback'), {text: 'Person deleted'}),
+      replace(path('errors'), undefined)
+    ];
+  }
+);
+
+
+const cancelPersonDeleteCommand = commandFactory(({path}) => {
+  return [
+    replace(path('personEditor', 'confirmationRequest'), undefined)
   ];
 });
 
@@ -153,9 +189,11 @@ export const fetchPeopleProcess = createProcess('list-people', [fetchPeopleComma
 export const fetchPersonProcess = createProcess('get-person', [startLoadingPersonCommand, loadPersonCommand]);
 export const createPersonProcess = createProcess('create-person', [createPersonCommand]);
 export const savePersonProcess = createProcess('save-person', [savePersonCommand]);
-export const deletePersonProcess = createProcess('delete-person', [deletePersonCommand]);
-
+export const deletePersonProcess = createProcess('delete-person', [startDeleteCommand, deletePersonCommand, clearPersonEditorCommand]);
 export const personEditorInputProcess = createProcess('person-editor-input', [personEditorInputCommand]);
 export const clearPersonEditorProcess = createProcess('clear-person-editor', [clearPersonEditorCommand]);
+
+export const cancelPersonDeleteProcess = createProcess('cancel-delete-person', [cancelPersonDeleteCommand]);
+
 
 
