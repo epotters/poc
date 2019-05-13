@@ -41,6 +41,19 @@
 
   </modules>
 
+  <scm>
+    <url>https://bitbucket.org/epotters/poc/</url>
+    <developerConnection>https://epotters@bitbucket.org/epotters/poc.git</developerConnection>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Eelko Potters</name>
+      <email>epotters@xs4all.nl</email>
+      <timezone>Europe/Amsterdam</timezone>
+    </developer>
+  </developers>
+
 
   <properties>
     <!-- Text encoding -->

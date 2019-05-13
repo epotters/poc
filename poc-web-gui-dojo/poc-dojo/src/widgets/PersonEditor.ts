@@ -47,11 +47,11 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
       errors ? w(ErrorList, {errors}) : null,
 
       !!confirmationRequest ?
-      w(ConfirmationDialog, {
-        message: {text: 'Are you sure...?'},
-        // visible: (confirmationRequest && confirmationRequest.confirming)
-        visible: true
-      }) : '',
+        w(ConfirmationDialog, {
+          message: {text: 'Are you sure...?'},
+          // visible: (confirmationRequest && confirmationRequest.confirming)
+          visible: true
+        }) : '',
 
 
       v('div', {classes: ['card', 'row', 'bg-light']}, [
@@ -82,40 +82,43 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
               v('label', {classes: ['control-label', 'col-sm-4']}, ['Name']),
               v('div', {classes: ['col-sm-8']}, [
-                v('div', {classes: ['row']}, [
-
-                  v('input', {
-                    classes: ['form-control', 'col'],
-                    key: 'firstNameInput',
-                    label: 'First Name',
-                    labelHidden: true,
-                    placeholder: 'Given name',
-                    value: person.firstName,
-                    required: true,
-                    oninput: this.onFirstNameInput
-                  }),
-
-                  v('input', {
-                    classes: ['form-control', 'col'],
-                    key: 'prefixInput',
-                    label: 'Prefix',
-                    labelHidden: true,
-                    placeholder: 'Prefix, e.g. van der',
-                    value: person.prefix,
-                    required: false,
-                    oninput: this.onPrefixInput
-                  }),
-
-                  v('input', {
-                    classes: ['form-control', 'col'],
-                    key: 'lastNameInput',
-                    label: 'Last Name',
-                    labelHidden: true,
-                    placeholder: 'Family name',
-                    value: person.lastName,
-                    required: true,
-                    oninput: this.onLastNameInput
-                  })
+                v('div', {classes: ['form-row']}, [
+                  v('div', {classes: ['col-md-4']}, [
+                    v('input', {
+                      classes: ['form-control'],
+                      key: 'firstNameInput',
+                      label: 'First Name',
+                      labelHidden: true,
+                      placeholder: 'Given name',
+                      value: person.firstName,
+                      required: true,
+                      oninput: this.onFirstNameInput
+                    })
+                  ]),
+                  v('div', {classes: ['col-md-2']}, [
+                    v('input', {
+                      classes: ['form-control'],
+                      key: 'prefixInput',
+                      label: 'Prefix',
+                      labelHidden: true,
+                      // placeholder: 'Prefix, e.g. van der',
+                      value: person.prefix,
+                      required: false,
+                      oninput: this.onPrefixInput
+                    })
+                  ]),
+                  v('div', {classes: ['col-md-6']}, [
+                    v('input', {
+                      classes: ['form-control'],
+                      key: 'lastNameInput',
+                      label: 'Last Name',
+                      labelHidden: true,
+                      placeholder: 'Family name',
+                      value: person.lastName,
+                      required: true,
+                      oninput: this.onLastNameInput
+                    })
+                  ])
                 ])
               ])
             ]),
@@ -262,7 +265,7 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
       cancel: this.properties.cancelDeletePerson
     };
 
-    this.properties.deletePerson({personId: personId, confirmationRequest: confirmationRequest});
+    this.properties.deletePerson({personId: personId, confirmationRequest: confirmationRequest, options: {}});
   }
 
   private _onResetEditor() {

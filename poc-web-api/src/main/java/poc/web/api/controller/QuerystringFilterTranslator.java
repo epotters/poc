@@ -1,6 +1,7 @@
 package poc.web.api.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,12 +43,32 @@ class QuerystringFilterTranslator<T> {
 
 
   // TODO: Add a unit test
+  // Batch
   public Specification<T> translate(List<String> filters) {
     Specification<T> specs = new BaseSpecification<T>(ALWAYS_TRUE_CRITERIA);
     for (String filter : filters) {
       specs.or(translate(filter));
     }
     return specs;
+  }
+
+
+  // Not prepared for multiple filtes yet
+  public List<String> fieldNames(String filterParam) {
+    List<String> fieldNames = new ArrayList<>();
+    String[] labelValueParts = filterParam.split(SEPARATOR);
+    Matcher matcher;
+    String fieldName;
+    for (String labelValue : labelValueParts) {
+      if (!"".equals(labelValue)) {
+        matcher = pattern.matcher(labelValue);
+        if (matcher.find()) {
+          fieldName = matcher.group(1);
+          fieldNames.add(fieldName);
+        }
+      }
+    }
+    return fieldNames;
   }
 
 }

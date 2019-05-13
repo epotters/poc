@@ -3,7 +3,13 @@ import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
 import {PocState} from "../interfaces";
 
 import PeopleList, {PeopleListProperties} from "../widgets/PeopleList";
-import {fetchPeopleProcess, savePersonProcess} from "../processes/personProcesses";
+import {
+  batchDeletePeopleProcess,
+  batchUpdatePeopleProcess, cancelPersonActionProcess,
+  fetchPeopleProcess,
+  savePersonProcess
+} from "../processes/personProcesses";
+import {redirectProcess} from "../processes/routeProcesses";
 
 
 function getProperties(store: Store<PocState>, properties: PeopleListProperties): PeopleListProperties {
@@ -11,7 +17,12 @@ function getProperties(store: Store<PocState>, properties: PeopleListProperties)
     store: store,
     storeId: 'peopleGridState',
     fetchPeople: fetchPeopleProcess(store),
-    updatePerson: savePersonProcess(store)
+    createPerson: redirectProcess(store),
+    updatePerson: savePersonProcess(store),
+
+    updatePeople: batchUpdatePeopleProcess(store),
+    deletePeople: batchDeletePeopleProcess(store),
+    cancelPersonAction: cancelPersonActionProcess(store)
   };
 }
 

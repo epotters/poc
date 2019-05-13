@@ -17,7 +17,8 @@ export const dateFormatOptions = {year: 'numeric', month: '2-digit', day: '2-dig
 const baseUrl = 'http://127.0.0.1:8002/poc';
 
 export const apiUrl = baseUrl + '/api';
-export const authUrl = baseUrl + '/oauth/';
+export const tokenUrl = baseUrl + '/oauth/token';
+
 export const welcomeUrl = baseUrl + '/api/welcome/';
 export const peopleUrl = baseUrl + '/api/people/';
 export const organizationsUrl = baseUrl + '/api/organizations/';

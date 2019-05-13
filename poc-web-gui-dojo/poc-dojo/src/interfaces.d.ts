@@ -28,12 +28,12 @@ export interface Household {
 
 
 export interface PeopleList extends ResourceBased {
+  personForBatchUpdate: Partial<Person>;
 }
 
 
 export interface PersonEditor extends ResourceBased {
   person: Person;
-  confirmationRequest: ConfirmationRequest;
 }
 
 
@@ -107,8 +107,10 @@ export interface PocState {
   routing: Routing;
   user: UserSession;
   login: Login;
+
   feedback: Message;
   errors: Errors;
+  confirmationRequest: ConfirmationRequest,
 
   peopleList: PeopleList;
   peopleGridState: GridState<Person>;

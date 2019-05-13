@@ -12,9 +12,9 @@ export interface PartialPersonPayload {
 }
 
 export interface ConfirmedPersonActionPayload extends PersonIdPayload {
-  confirmationRequest: ConfirmationRequest
+  confirmationRequest: ConfirmationRequest,
+  options: FetcherOptions
 }
-
 
 
 export interface OrganizationIdPayload {
@@ -32,6 +32,9 @@ export interface PageSortFilterPayload {
   options: FetcherOptions;
 }
 
+export interface ConfirmationPayload {
+  confirmationRequest: ConfirmationRequest
+}
 
 /*****/
 
@@ -44,9 +47,7 @@ export interface PasswordPayload {
 }
 
 
-export interface ConfirmationPayload {
-  confirmationRequest: ConfirmationRequest
-}
+
 
 
 /*****/

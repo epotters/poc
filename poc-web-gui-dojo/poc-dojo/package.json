@@ -1,6 +1,15 @@
 {
   "name": "poc-dojo",
   "version": "1.0.0",
+  "author": {
+    "name": "Eelko Potters",
+    "email": "epotters@xs4all.nl"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://epotters@bitbucket.org/epotters/poc.git"
+  },
   "scripts": {
     "dev": "dojo build --mode dev --watch file --serve",
     "build": "dojo build --mode dist",
@@ -11,16 +20,17 @@
     "test:all": "dojo build --mode unit && dojo build --mode functional && dojo test --all --config local"
   },
   "dependencies": {
-    "@dojo/framework": "^5.0.0",
-    "@dojo/themes": "^5.0.0",
-    "@dojo/widgets": "^5.0.0",
+    "@dojo/framework": "^6.0.0-alpha.1",
+    "@dojo/themes": "^5.0.1",
+    "@dojo/widgets": "^6.0.0-alpha.3",
+    "jwt-decode": "^2.2.0",
     "tslib": "~1.8.1"
   },
   "devDependencies": {
     "@dojo/cli": "^5.0.0",
-    "@dojo/cli-build-app": "^5.0.0",
+    "@dojo/cli-build-app": "^5.0.4",
     "@dojo/cli-test-intern": "^5.0.0",
-    "@types/node": "~9.6.5",
-    "typescript": "~2.6.1"
+    "@types/node": "^9.6.48",
+    "typescript": "^3.2.4"
   }
 }

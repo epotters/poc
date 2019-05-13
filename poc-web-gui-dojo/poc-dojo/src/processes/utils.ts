@@ -14,6 +14,15 @@ export function buildQueryString(page: number, pageSize: number, options: Fetche
   }
   queryString += sortParams;
 
+  queryString += "&" + buildFilterQueryStringFromOptions(options);
+  return queryString;
+}
+
+export function buildQueryStringForFilter(options: FetcherOptions) {
+  return "?" + buildFilterQueryStringFromOptions(options);
+}
+
+function buildFilterQueryStringFromOptions(options: FetcherOptions): string {
   let filterParams = "";
   if (options.filter != undefined) {
     for (let columnId in options.filter) {
@@ -23,11 +32,10 @@ export function buildQueryString(page: number, pageSize: number, options: Fetche
       }
     }
     if (filterParams.length > 0) {
-      filterParams = "&filters=" + filterParams.substr(0, filterParams.length - 1);
+      filterParams = "filters=" + filterParams.substr(0, filterParams.length - 1);
     }
   }
-  queryString += filterParams;
-  return queryString;
+  return filterParams;
 }
 
 export function objectToFormEncoded(object: { [index: string]: string }) {

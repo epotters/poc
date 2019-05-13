@@ -4,7 +4,7 @@ import Grid from '@dojo/widgets/grid';
 import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
 
-import {Organization, PocState, ResourceBased} from "../interfaces";
+import {Organization, PocState} from "../interfaces";
 import {PageSortFilterPayload, PartialOrganizationPayload} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
 import * as css from './styles/OrganizationsList.m.css';
@@ -51,10 +51,7 @@ const columnConfig = [
 ];
 
 
-export default class OrganizationsList extends ThemedMixin(WidgetBase)<OrganizationsListProperties> implements ResourceBased {
-
-  loading: boolean;
-  loaded: boolean;
+export default class OrganizationsList extends ThemedMixin(WidgetBase)<OrganizationsListProperties> {
 
 
   protected render() {
@@ -95,7 +92,7 @@ export default class OrganizationsList extends ThemedMixin(WidgetBase)<Organizat
     };
 
     return [
-      v('h1', {classes: 'text-xs-center'}, ['Organizations']),
+      v('h1', {classes: []}, ['Organizations']),
       w(Grid, {
         columnConfig: columnConfig,
         fetcher: fetcher,

@@ -2,7 +2,7 @@ import global from '@dojo/framework/shim/global';
 import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
 import {commandFactory, getHeaders, objectToFormEncoded} from './utils';
-import {apiUrl, authUrl, clientAuthenticationHeader, sessionKey} from '../../config';
+import {apiUrl, clientAuthenticationHeader, sessionKey, tokenUrl} from '../../config';
 import {PasswordPayload, RouteIdPayload, SetSessionPayload, UsernamePayload} from './interfaces';
 import {UserSession} from "../interfaces";
 
@@ -31,7 +31,6 @@ const startLoginCommand = commandFactory(({path}) => {
 const loginCommand = commandFactory(async ({get, path}) => {
   console.info('Continue logging in...');
 
-
   const requestPayload: { [index: string]: string; } = {
     grant_type: 'password',
     username: get(path('login', 'username')),
@@ -41,21 +40,18 @@ const loginCommand = commandFactory(async ({get, path}) => {
   let requestBody: string = objectToFormEncoded(requestPayload);
   console.debug('requestBody: ' + requestBody);
 
-  const fullAuthUrl = authUrl + 'token';
-
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': clientAuthenticationHeader
   };
 
-  const response = await fetch(fullAuthUrl, {
+  const response = await fetch(tokenUrl, {
     method: 'post',
     body: requestBody,
     headers: headers
   });
 
   const json = await response.json();
-
   console.debug('Login response on the next line:');
   console.debug(json);
 
@@ -81,7 +77,7 @@ const loginCommand = commandFactory(async ({get, path}) => {
   console.info('Login successful');
 
   return [
-    replace(path('user',), userSession),
+    replace(path('user'), userSession),
     replace(path('login', 'loading'), false),
     replace(path('login', 'failed'), false),
     replace(path('errors'), undefined)
@@ -114,10 +110,8 @@ const logoutCommand = commandFactory(async ({get, path}) => {
   }
 
   const logoutHeaders = getHeaders(clientAuthenticationHeader);
-  const logoutUrl = authUrl + 'token';
-  console.debug('logoutUrl: ' + logoutUrl);
 
-  const response = await fetch(logoutUrl, {
+  const response = await fetch(tokenUrl, {
     method: 'delete',
     headers: logoutHeaders
   });
@@ -160,7 +154,6 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
   console.info('Checking access token validity...');
   const refreshToken = get(path('user', 'refreshToken'));
 
-  console.debug('Still alive');
   console.debug('Refresh token: ' + refreshToken);
 
 
@@ -174,22 +167,8 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
   // Is the current access token expired
   const refreshOverlap: number = 600;
   const tokenEndTime = get(path('user', 'endTime'));
-  console.debug('tokenEndTime: ' + tokenEndTime);
-  console.debug('Still there?');
-  console.debug('tokenEndTime: ' + tokenEndTime.getTime());
-
-  console.debug('Gone');
-
   const now = new Date();
-  console.debug('Now: ' + now.getTime());
-
-
   const tokenExpired: boolean = (now.getTime() > tokenEndTime.getTime() - refreshOverlap);
-
-
-  console.debug('token expired?: ' + tokenExpired);
-
-
 
   if (tokenExpired) {
     console.info('Access token needs refreshing');
@@ -211,10 +190,7 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
   let requestBody: string = objectToFormEncoded(requestPayload);
   console.debug('Refresh requestBody: ' + requestBody);
 
-
-  const fullAuthUrl = authUrl + 'token';
-
-  const response = await fetch(fullAuthUrl, {
+  const response = await fetch(tokenUrl, {
     method: 'post',
     body: requestBody,
     headers: headers
@@ -311,7 +287,6 @@ const redirectCommand = commandFactory<RouteIdPayload>(({path, payload: {routeId
 });
 
 
-
 function buildUserSession(tokenJson: any, username: string): Partial<UserSession> {
   const tokenType = tokenJson.token_type;
   let token = tokenJson.access_token;
@@ -330,6 +305,7 @@ function buildUserSession(tokenJson: any, username: string): Partial<UserSession
 }
 
 
+// Processes
 export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputs, redirectCommand]);
 export const loginUsernameInputProcess = createProcess('login-username-input', [loginUsernameInputCommand]);
 export const loginPasswordInputProcess = createProcess('login-password-input', [loginPasswordInputCommand]);

@@ -1,7 +1,7 @@
 import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
 import {commandFactory} from './utils';
-import {ChangeRoutePayload} from './interfaces';
+import {ChangeRoutePayload, RouteIdPayload} from './interfaces';
 
 const changeRouteCommand = commandFactory<ChangeRoutePayload>(({path, payload: {outlet, context}}) => {
   return [
@@ -13,4 +13,13 @@ const changeRouteCommand = commandFactory<ChangeRoutePayload>(({path, payload: {
   ];
 });
 
+const redirectCommand = commandFactory<RouteIdPayload>(({path, payload: {routeId}}) => {
+  return [
+    replace(path('routing', 'outlet'), routeId)
+  ];
+});
+
+// Exports
 export const changeRouteProcess = createProcess('change-route', [changeRouteCommand]);
+export const redirectProcess = createProcess('redirect', [redirectCommand]);
+

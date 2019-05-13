@@ -5,7 +5,12 @@ import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
 import Link from '@dojo/framework/routing/Link';
 
 import {Person, PocState} from "../interfaces";
-import {PageSortFilterPayload, PartialPersonPayload} from "../processes/interfaces";
+import {
+  ConfirmationPayload,
+  PageSortFilterPayload,
+  PartialPersonPayload,
+  RouteIdPayload
+} from "../processes/interfaces";
 import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
 import * as css from './styles/PeopleList.m.css';
 
@@ -19,6 +24,13 @@ export interface PeopleListProperties {
   storeId: string;
   fetchPeople: (opts: PageSortFilterPayload) => void;
   updatePerson: (opts: PartialPersonPayload) => void;
+
+  createPerson: (opts: RouteIdPayload) => void;
+  updatePeople: (opts: ConfirmationPayload) => void;
+  deletePeople: (opts: ConfirmationPayload) => void;
+
+  cancelPersonAction: (opts: Object) => void;
+
 }
 
 
@@ -111,13 +123,37 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
       return {data: json.content, meta: {total: json.totalElements}};
     };
 
-
     const updater = async (person: Partial<Person>) => {
       await updatePerson({person: person});
     };
 
     return v('div', {classes: ['container', 'page']}, [
       v('h1', {}, ['People']),
+
+      v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
+
+        v('div', {classes: 'ml-auto'}, [
+
+          v('button', {
+            type: 'button',
+            classes: ['btn', 'btn-outline-primary'],
+            onclick: this._onBatchUpdatePeople,
+          }, ['Update all']),
+
+          v('button', {
+            type: 'button',
+            classes: ['btn', 'btn-outline-primary'],
+            onclick: this._onBatchDeletePeople,
+          }, ['Delete all']),
+
+          v('button', {
+            classes: ['btn', 'btn-primary'],
+            type: 'button',
+            onclick: this._onCreatePerson,
+          }, ['Create person'])
+        ])
+      ]),
+
       w(Grid, {
         columnConfig: columnConfig,
         fetcher: fetcher,
@@ -128,5 +164,39 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
       })
     ]);
   }
+
+  private _onCreatePerson() {
+    this.properties.createPerson({routeId: 'new-person'});
+  }
+
+  private _onBatchUpdatePeople() {
+
+    const confirmationRequest = {
+      action: 'update-people',
+      confirming: false,
+      confirmed: false,
+      confirm: this.properties.updatePeople,
+      cancel: this.properties.cancelPersonAction
+    };
+
+    this.properties.updatePeople({confirmationRequest: confirmationRequest});
+  }
+
+
+  private _onBatchDeletePeople() {
+
+    const confirmationRequest = {
+      action: 'delete-people',
+      confirming: false,
+      confirmed: false,
+      confirm: this.properties.deletePeople,
+      cancel: this.properties.cancelPersonAction
+    };
+
+    this.properties.deletePeople({confirmationRequest: confirmationRequest});
+  }
 }
+
+
+
 
