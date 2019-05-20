@@ -1,5 +1,6 @@
 import {GridState} from "@dojo/widgets/grid/interfaces";
-import {ConfirmedPersonActionPayload} from "./processes/interfaces";
+import {ConfirmationPayload} from "./processes/interfaces";
+import {Entity, EntityManagerState} from "./lib/entity-manager/interfaces";
 
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
@@ -10,6 +11,8 @@ export interface ResourceBased {
   loaded: boolean;
 }
 
+
+// Domain
 
 export interface Person {
   id: number;
@@ -34,57 +37,26 @@ export interface PeopleList extends ResourceBased {
 
 export interface PersonEditor extends ResourceBased {
   person: Person;
+
+  hasChanges: boolean;
+
+  canNavigate: boolean;
+  previousPerson: Person;
+  nextPerson: Person;
 }
 
 
-export interface ConfirmationRequest {
-  action: string;
-  confirming: boolean;
-  confirmed: boolean;
-  confirm: (opts: ConfirmedPersonActionPayload) => void;
-  cancel: (opts: ConfirmedPersonActionPayload) => void;
-}
-
-export interface Organization {
+export interface Organization extends Entity {
   id: number;
-  name: string;
-}
-
-export interface OrganizationsList extends ResourceBased {
-}
-
-export interface OrganizationEditor extends ResourceBased {
-  organization: Organization;
+  displyName: string;
 }
 
 
+
+// Base setup
 export interface Home {
   welcomeMessage: string;
 }
-
-
-export interface User {
-  username: string;
-  displayName: string;
-  roles: string[];
-  mail: string;
-}
-
-
-export interface UserSession extends User, ResourceBased {
-  token: string;
-  refreshToken: string;
-  startTime: Date;
-  endTime: Date;
-}
-
-
-export interface Login extends ResourceBased {
-  username: string;
-  password: string;
-  failed: boolean;
-}
-
 
 export interface Routing {
   outlet: string;
@@ -92,8 +64,45 @@ export interface Routing {
 }
 
 
+// Login
+export interface User extends ResourceBased {
+  username: string;
+  displayName: string;
+  roles: string[];
+  mail: string;
+}
+
+
+export interface Session {
+  username: string;
+  token: string;
+  startTime: Date;
+  endTime: Date;
+  refreshToken: string;
+}
+
+
+export interface LoginRequest extends ResourceBased {
+  username: string;
+  password: string;
+  failed: boolean;
+}
+
+
+
+// Conversation
 export interface Message {
+  title?: string;
   text: string;
+}
+
+export interface ConfirmationRequest {
+  action: string;
+  text: string;
+  confirming: boolean;
+  confirmed: boolean;
+  confirm: (opts: ConfirmationPayload) => void;
+  cancel: (opts: ConfirmationPayload) => void;
 }
 
 
@@ -102,21 +111,24 @@ export interface Errors {
 }
 
 
+
+// Main Application State
 export interface PocState {
   home: Home;
   routing: Routing;
-  user: UserSession;
-  login: Login;
+
+  user: User;
+  session: Session;
+  loginRequest: LoginRequest;
 
   feedback: Message;
+  confirmationRequest: ConfirmationRequest;
   errors: Errors;
-  confirmationRequest: ConfirmationRequest,
 
   peopleList: PeopleList;
   peopleGridState: GridState<Person>;
   personEditor: PersonEditor;
 
-  organizationsList: OrganizationsList;
-  organizationsGridState: GridState<Organization>;
-  organizationEditor: OrganizationEditor;
+  organizations: EntityManagerState<Organization>;
+
 }

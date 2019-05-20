@@ -2,16 +2,19 @@ import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 import ActiveLink from '@dojo/framework/routing/ActiveLink';
 import {applicationDisplayName} from '../../config';
-import {UserSession} from "../interfaces";
+import {User} from "../interfaces";
 
 export interface MenuProperties {
-  currentUser: UserSession;
+  currentUser: User;
   isAuthenticated: boolean;
 }
 
 export class Menu extends WidgetBase<MenuProperties> {
 
   protected render() {
+
+    console.debug('Start rendering the menu');
+
 
     return v('nav', {classes: ['navbar', 'navbar-expand-lg', 'navbar-light', 'bg-light']}, [
       v('div', {classes: 'container'}, [
@@ -45,12 +48,15 @@ export class Menu extends WidgetBase<MenuProperties> {
   private _rightMenu() {
 
     const {currentUser, isAuthenticated} = this.properties;
+    if (isAuthenticated) {
+      console.debug(currentUser);
+    }
 
     return v('ul', {classes: ['nav', 'navbar-nav', 'navbar-right']}, [
       (isAuthenticated) ?
         v('li', {key: 'currentUser', classes: 'nav-item'}, [
           w(ActiveLink, {to: 'currentUser', classes: ['nav-link'], activeClasses: ['active']}, [
-            (currentUser.displayName) ? currentUser.displayName : currentUser.username])
+            (currentUser && currentUser.displayName) ? currentUser.displayName : currentUser.username])
         ])
         :
         v('li', {key: 'sign-in', classes: 'nav-item'}, [

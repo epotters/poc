@@ -1,36 +1,30 @@
 import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
+import {GridPages} from "@dojo/widgets/grid/interfaces";
+
 import {buildQueryString, buildQueryStringForFilter, commandFactory, getHeaders} from './utils';
 import {peopleUrl} from '../../config';
-import {
-  ConfirmationPayload,
-  ConfirmedPersonActionPayload,
-  PageSortFilterPayload,
-  PartialPersonPayload,
-  PersonIdPayload
-} from './interfaces';
-import {Person} from "../interfaces";
+import {ConfirmationPayload, PageSortFilterPayload, PartialPersonPayload, PersonIdPayload} from './interfaces';
+import {ConfirmationRequest, Person} from "../interfaces";
 
 
 const personEditorInputCommand = commandFactory<PartialPersonPayload>(({get, path, payload: {person}}) => {
 
-  console.debug('Updating state of person fields');
-  console.debug(person);
-
   const currentPerson = get(path('personEditor', 'person'));
   const updatedPerson = {...currentPerson, ...person};
 
-  // console.debug('Updated state of person fields');
-  // console.debug(updatedPerson);
-
-  return [replace(path('personEditor', 'person'), updatedPerson)];
+  return [
+    replace(path('personEditor', 'person'), updatedPerson),
+    replace(path('personEditor', 'hasChanges'), true)
+  ];
 });
 
 
 // List people
 const fetchPeopleCommand = commandFactory<PageSortFilterPayload>(async ({get, path, payload: {page, pageSize, options}}) => {
 
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
+
   const queryString = buildQueryString(page, pageSize, options);
 
   console.debug(queryString);
@@ -58,7 +52,7 @@ const startFetchingPersonCommand = commandFactory(({path}) => {
 
 
 const fetchPersonCommand = commandFactory<PersonIdPayload>(async ({get, path, payload: {personId}}) => {
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
   const response = await fetch(peopleUrl + `${personId}`, {
     headers: getHeaders(token)
   });
@@ -73,26 +67,14 @@ const fetchPersonCommand = commandFactory<PersonIdPayload>(async ({get, path, pa
   return [
     replace(path('personEditor', 'person'), json),
     replace(path('personEditor', 'loading'), false),
-    replace(path('personEditor', 'loaded'), true)
+    replace(path('personEditor', 'loaded'), true),
+    replace(path('personEditor', 'hasChanges'), false)
   ];
 });
 
 
-const createPersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
-  const token = get(path('user', 'token'));
-  const response = await fetch(peopleUrl, {
-    method: 'put',
-    body: JSON.stringify(person),
-    headers: getHeaders(token)
-  });
-  const json = await response.json();
-  console.debug(json);
-  return [];
-});
-
-
 const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path, payload: {person}}) => {
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
 
   const updatedPerson: Partial<Person> = get(path('personEditor', 'person'));
 
@@ -104,7 +86,6 @@ const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path
   let url = peopleUrl;
   let method = 'put';
   if (updatedPerson.id != undefined) {
-
     url = peopleUrl + `${person.id}`;
     method = 'post';
   }
@@ -126,16 +107,19 @@ const savePersonCommand = commandFactory<PartialPersonPayload>(async ({get, path
     ];
   }
 
+  console.debug(json);
   console.info('Person saved successfully');
 
   return [
+    replace(path('personEditor', 'person'), json),
+    replace(path('personEditor', 'hasChanges'), false),
     replace(path('feedback'), {text: 'Person saved'}),
     replace(path('errors'), undefined)
   ];
 });
 
 
-const startDeletePersonCommand = commandFactory<ConfirmedPersonActionPayload>(({path, payload: {confirmationRequest}}) => {
+const startDeletePersonCommand = commandFactory<ConfirmationPayload>(({path, payload: {confirmationRequest}}) => {
 
   if (confirmationRequest && confirmationRequest.action == 'delete-person' && confirmationRequest.confirmed) {
     confirmationRequest.confirming = true;
@@ -147,7 +131,7 @@ const startDeletePersonCommand = commandFactory<ConfirmedPersonActionPayload>(({
 });
 
 
-const deletePersonCommand = commandFactory<ConfirmedPersonActionPayload>(async ({get, path, payload: {personId}}) => {
+const deletePersonCommand = commandFactory<ConfirmationPayload>(async ({get, path, payload: {}}) => {
 
     const confirmationRequest = get(path('confirmationRequest'));
     if (!confirmationRequest || confirmationRequest.action !== 'delete-person') {
@@ -161,26 +145,41 @@ const deletePersonCommand = commandFactory<ConfirmedPersonActionPayload>(async (
       return [];
     }
 
-    const token = get(path('user', 'token'));
-    const response = await fetch(peopleUrl + `${personId}`, {
+    const person: Partial<Person> = get(path('personEditor', 'person'));
+
+    console.debug('Person to delete found');
+    console.debug(person);
+
+    const url = peopleUrl + `${person.id}`;
+    console.debug('url: ' + url);
+
+    const token = get(path('session', 'token'));
+    const response = await fetch(url, {
       method: 'delete',
       headers: getHeaders(token)
     });
 
-    const json = await response.json();
-    console.debug(json);
+    console.debug('Response received');
+
+    console.debug(response);
+
 
     if (!response.ok) {
       console.error('Error deleting person');
+
+      // Only json for errors
+      const json = await response.json();
+      console.debug(json);
+
       let errors: { [index: string]: string[]; } = {};
       errors[json.error] = [json.message];
       return [
+        replace(path('confirmationRequest'), undefined),
         replace(path('errors'), errors)
       ];
     }
 
     console.info('Person deleted successfully');
-
 
     return [
       replace(path('personEditor', 'person'), undefined),
@@ -192,7 +191,9 @@ const deletePersonCommand = commandFactory<ConfirmedPersonActionPayload>(async (
 );
 
 
-const cancelPersonActionCommand = commandFactory(({path}) => {
+const cancelPersonActionCommand = commandFactory(({get, path}) => {
+  const confirmationRequest: ConfirmationRequest = get(path('confirmationRequest'));
+  console.info('Action cancelled ' + confirmationRequest.action);
   return [
     replace(path('confirmationRequest'), undefined)
   ];
@@ -200,7 +201,10 @@ const cancelPersonActionCommand = commandFactory(({path}) => {
 
 
 const clearPersonEditorCommand = commandFactory(({path}) => {
-  return [replace(path('personEditor'), {})];
+  return [
+    replace(path('personEditor'), {}),
+    replace(path('personEditor', 'hasChanges'), false)
+  ];
 });
 
 
@@ -232,7 +236,7 @@ const batchUpdatePeopleCommand = commandFactory<ConfirmationPayload>(async ({get
 
   const {meta} = get(path("peopleGridState", 'meta'));
   const queryString = buildQueryStringForFilter({filter: meta.filter});
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
 
   const response = await fetch(peopleUrl + queryString, {
     method: 'patch',
@@ -247,15 +251,17 @@ const batchUpdatePeopleCommand = commandFactory<ConfirmationPayload>(async ({get
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.message];
     return [
+      replace(path('confirmationRequest'), undefined),
       replace(path('errors'), errors)
     ];
   }
 
-  console.info('Batch of people updated successfully');
-
+  const feedbackText: string = 'Batch of people updated successfully';
+  console.info(feedbackText);
 
   return [
-    replace(path('confirmationRequest'), undefined),
+    replace(path('feedback'), {text: feedbackText}),
+    replace(path('confirmationRequest'), undefined)
   ];
 });
 
@@ -288,7 +294,7 @@ const batchDeletePeopleCommand = commandFactory<ConfirmationPayload>(async ({get
 
   const {meta} = get(path("peopleGridState", 'meta'));
   const queryString = buildQueryStringForFilter({filter: meta.filter});
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
 
 
   const response = await fetch(peopleUrl + queryString, {
@@ -303,6 +309,7 @@ const batchDeletePeopleCommand = commandFactory<ConfirmationPayload>(async ({get
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.message];
     return [
+      replace(path('confirmationRequest'), undefined),
       replace(path('errors'), errors)
     ];
   }
@@ -315,18 +322,94 @@ const batchDeletePeopleCommand = commandFactory<ConfirmationPayload>(async ({get
 });
 
 
+const relativeNavigationCommand = commandFactory(({get, path}) => {
+
+  const currentPerson: Person = get(path('personEditor', 'person'));
+
+  if (!currentPerson || !currentPerson.id) {
+    console.info('Currently there is no person loaded in the EntityEditor. Relative navigation is not possible.');
+    return [
+      replace(path('personEditor', 'canNavigate'), false),
+      replace(path('personEditor', 'previousPerson'), undefined),
+      replace(path('personEditor', 'nextPerson'), undefined)
+    ];
+  }
+
+  const pageNumber: number = get(path('peopleGridState', 'meta', 'page'));
+  const pages: GridPages<Person> = get(path('peopleGridState', 'data', 'pages'));
+  const currentPage: Person[] = pages['page-' + pageNumber];
+
+  let currentPersonIndex: number = -1;
+  if (Object.keys(pages).length > 0) {
+    for (const [index, person] of currentPage.entries()) {
+      if (person.id == currentPerson.id) {
+        currentPersonIndex = index;
+        break;
+      }
+    }
+  } else {
+    console.debug('No pages loaded yet');
+  }
+
+  if (currentPersonIndex == -1) {
+    return [
+      replace(path('personEditor', 'canNavigate'), false),
+      replace(path('personEditor', 'previousPerson'), undefined),
+      replace(path('personEditor', 'nextPerson'), undefined)
+    ];
+  } else {
+    console.debug('Current person found on page ' + pageNumber + ' at index ' + currentPersonIndex);
+  }
+
+  // Is the current person the first or last in the people loaded so far?
+  const isFirstPersonLoaded: boolean = (pageNumber == 1 && currentPersonIndex == 0);
+  const lastPageLoadedNumber: number = Object.keys(pages).length - 1;
+  const lastPage: Person[] = pages['page-' + lastPageLoadedNumber];
+  const isLastPersonLoaded: boolean = (pageNumber == lastPageLoadedNumber && currentPersonIndex == lastPage.length);
+
+
+  let previousPerson: Person | undefined;
+  if (!isFirstPersonLoaded) {
+    if (currentPersonIndex == 0) {
+      const previousPage: Person[] = pages['page-' + (pageNumber - 1)];
+      previousPerson = previousPage[previousPage.length - 1];
+    } else {
+      previousPerson = currentPage[currentPersonIndex - 1];
+    }
+    console.info('Previous person found with id ' + previousPerson.id);
+  }
+
+  let nextPerson: Person | undefined;
+  if (!isLastPersonLoaded) {
+    if (currentPersonIndex == currentPage.length - 1) {
+      const nextPage: Person[] = pages['page-' + (pageNumber + 1)];
+      nextPerson = nextPage[0];
+    } else {
+      nextPerson = currentPage[currentPersonIndex + 1];
+    }
+    console.info('Next person found with id ' + nextPerson.id);
+  }
+
+  return [
+    replace(path('personEditor', 'canNavigate'), true),
+    replace(path('personEditor', 'previousPerson'), (previousPerson ? previousPerson : undefined)),
+    replace(path('personEditor', 'nextPerson'), (nextPerson ? nextPerson : undefined))
+  ];
+});
+
+
 // Exports
 export const fetchPeopleProcess = createProcess('list-people', [fetchPeopleCommand]);
-export const fetchPersonProcess = createProcess('get-person', [startFetchingPersonCommand, fetchPersonCommand]);
-export const createPersonProcess = createProcess('create-person', [createPersonCommand]);
+export const fetchPersonProcess = createProcess('get-person', [startFetchingPersonCommand, fetchPersonCommand, relativeNavigationCommand]);
 export const savePersonProcess = createProcess('save-person', [savePersonCommand]);
-export const deletePersonProcess = createProcess('delete-person', [startDeletePersonCommand, deletePersonCommand, clearPersonEditorCommand]);
+export const deletePersonProcess = createProcess('delete-person', [startDeletePersonCommand, deletePersonCommand]);
 export const batchUpdatePeopleProcess = createProcess('update-people', [startBatchUpdatePeopleCommand, batchUpdatePeopleCommand]);
 export const batchDeletePeopleProcess = createProcess('delete-people', [startBatchDeletePeopleCommand, batchDeletePeopleCommand]);
 export const personEditorInputProcess = createProcess('person-editor-input', [personEditorInputCommand]);
 export const clearPersonEditorProcess = createProcess('clear-person-editor', [clearPersonEditorCommand]);
-
 export const cancelPersonActionProcess = createProcess('cancel-person-action', [cancelPersonActionCommand]);
+export const relativePeopleNavigationProcess = createProcess('relative-people-navigation', [relativeNavigationCommand]);
+
 
 
 

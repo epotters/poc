@@ -4,26 +4,129 @@ html {
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .card form {
-  width: 100%;
+    width: 100%;
 }
 
 .row.card,
 .form-row .row {
-  margin-left: 0;
-  margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .btn-toolbar button {
-  margin-left: 12px;
+    margin-left: 12px;
 }
 
 .banner {
-  height: 90px;
+    height: 90px;
 }
 
+.grid-toolbar {
+    margin-bottom: 12px;
+}
+
+footer .alert,
+footer .feedback-message {
+    margin-bottom: 0;
+}
+
+footer .alert {
+    padding: .50rem .75rem;
+}
+
+/* Grid */
+
+div[role=table] {
+    border: 0;
+}
+
+/* Grid header */
+
+div[role=table] > div:nth-child(1) {
+    border: 0;
+    border-bottom: 1px solid silver;
+}
+
+div[role=columnheader] {
+    padding: 0;
+    border-color: white;
+    border-bottom-color: silver;
+}
+
+div[role=columnheader][aria-sort=ascending] > div:nth-child(1),
+div[role=columnheader][aria-sort=descending] > div:nth-child(1) {
+    color: #424242;
+}
+
+
+div[role=columnheader] > div {
+    border-bottom: 1px solid silver;
+    text-align: left;
+    width: 100%;
+    text-wrap: none;
+    padding: 0;
+    margin: 0;
+    height: 32px;
+}
+
+div[role=columnheader] input[type=search] {
+    margin: 0;
+    width: 100%;
+    border: 0;
+    height: 32px;
+    text-overflow: ellipsis;
+}
+
+div[role=columnheader] button {
+    border: 0;
+    background: transparent;
+}
+
+
+/* Grid body */
+
+div[role=table] > div:nth-child(2) {
+    border: 0;
+}
+
+div[role=table] > div:nth-child(2) div[role=row] {
+    height: 32px;
+}
+
+div[role=cell] {
+    padding: 0;
+    border-color: white;
+    border-bottom-color: silver;
+}
+
+div[role=cell] > div,
+div[role=cell] input {
+    margin: 0;
+    border: 0;
+    width: 100%;
+    height: 30px;
+    text-overflow: ellipsis;
+}
+
+
+/* Grid Footer */
+
+div[role=table] > div:nth-child(3) {
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid silver;
+    border-left: 0;
+    border-right: 0;
+}
+
+div[role=table] > div:nth-child(3) > div {
+    height: 32px;
+    border: 0;
+}

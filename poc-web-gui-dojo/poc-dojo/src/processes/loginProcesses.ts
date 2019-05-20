@@ -3,28 +3,35 @@ import {createProcess} from '@dojo/framework/stores/process';
 import {replace} from '@dojo/framework/stores/state/operations';
 import {commandFactory, getHeaders, objectToFormEncoded} from './utils';
 import {apiUrl, clientAuthenticationHeader, sessionKey, tokenUrl} from '../../config';
-import {PasswordPayload, RouteIdPayload, SetSessionPayload, UsernamePayload} from './interfaces';
-import {UserSession} from "../interfaces";
+import {PartialLoginRequestPayload, RouteIdPayload, SetSessionPayload} from './interfaces';
+import {Session, User} from "../interfaces";
 
 
 // Login commands
-const loginUsernameInputCommand = commandFactory<UsernamePayload>(({path, payload: {username}}) => {
-  return [replace(path('login', 'username'), username)];
+const loginRequestInputCommand = commandFactory<PartialLoginRequestPayload>(({get, path, payload: {loginRequest}}) => {
+
+  const currentLoginRequest = get(path('loginRequest'));
+  const updatedLoginRequest = {...currentLoginRequest, ...loginRequest};
+
+  return [replace(path('loginRequest'), updatedLoginRequest)];
 });
 
-const loginPasswordInputCommand = commandFactory<PasswordPayload>(({path, payload: {password}}) => {
-  return [replace(path('login', 'password'), password)];
-});
 
-const clearLoginInputs = commandFactory(({path}) => {
-  return [replace(path('login', 'username'), ''), replace(path('login', 'password'), '')];
+const clearLoginInputsCommand = commandFactory(({path}) => {
+  console.debug('Clearing login form');
+
+  return [
+    replace(path('loginRequest'), {})
+  ];
 });
 
 
 const startLoginCommand = commandFactory(({path}) => {
   console.info('Start logging in...');
 
-  return [replace(path('login', 'loading'), true)];
+  return [
+    replace(path('loginRequest', 'loading'), true)
+  ];
 });
 
 
@@ -33,8 +40,8 @@ const loginCommand = commandFactory(async ({get, path}) => {
 
   const requestPayload: { [index: string]: string; } = {
     grant_type: 'password',
-    username: get(path('login', 'username')),
-    password: get(path('login', 'password'))
+    username: get(path('loginRequest', 'username')),
+    password: get(path('loginRequest', 'password'))
   };
 
   let requestBody: string = objectToFormEncoded(requestPayload);
@@ -63,23 +70,23 @@ const loginCommand = commandFactory(async ({get, path}) => {
 
     return [
       replace(path('user'), {}),
-      replace(path('login', 'loading'), false),
-      replace(path('login', 'failed'), true),
+      replace(path('loginRequest', 'loading'), false),
+      replace(path('loginRequest', 'failed'), true),
       replace(path('errors'), errors)
     ];
   }
 
-  const username = get(path('login', 'username'));
-  const userSession: Partial<UserSession> = buildUserSession(json, username);
+  const username = get(path('loginRequest', 'username'));
+  const session: Session = buildSession(json, username);
 
-  global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
+  global.sessionStorage.setItem(sessionKey, JSON.stringify(session));
 
   console.info('Login successful');
 
   return [
-    replace(path('user'), userSession),
-    replace(path('login', 'loading'), false),
-    replace(path('login', 'failed'), false),
+    replace(path('session'), session),
+    replace(path('feedback', 'text'), 'Login successful'),
+    replace(path('loginRequest'), undefined),
     replace(path('errors'), undefined)
   ];
 });
@@ -88,7 +95,7 @@ const loginCommand = commandFactory(async ({get, path}) => {
 
 
 const setSessionCommand = commandFactory<SetSessionPayload>(({path, payload: {session}}) => {
-  return [replace(path('user'), session)];
+  return [replace(path('session'), session)];
 });
 
 
@@ -102,7 +109,7 @@ const logoutCommand = commandFactory(async ({get, path}) => {
 
   console.info('Logging out user...');
 
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
 
   if (!token) {
     console.info('No user is logged in. Stopping.');
@@ -143,7 +150,8 @@ const logoutCommand = commandFactory(async ({get, path}) => {
 
   return [
     replace(path('user'), {}),
-    replace(path('user', 'loading'), false),
+    replace(path('session'), {}),
+    replace(path('feedback', 'text'), 'User was logged out successfully'),
     replace(path('routing', 'outlet'), 'home')
   ];
 });
@@ -152,21 +160,17 @@ const logoutCommand = commandFactory(async ({get, path}) => {
 const refreshTokenCommand = commandFactory(async ({get, path}) => {
 
   console.info('Checking access token validity...');
-  const refreshToken = get(path('user', 'refreshToken'));
-
-  console.debug('Refresh token: ' + refreshToken);
-
+  const refreshToken = get(path('session', 'refreshToken'));
 
   if (!refreshToken) {
     console.info('No refresh token found');
     return [];
   }
 
-  console.debug('Survived first check');
 
   // Is the current access token expired
   const refreshOverlap: number = 600;
-  const tokenEndTime = get(path('user', 'endTime'));
+  const tokenEndTime = get(path('session', 'endTime'));
   const now = new Date();
   const tokenExpired: boolean = (now.getTime() > tokenEndTime.getTime() - refreshOverlap);
 
@@ -187,7 +191,7 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
     grant_type: 'refresh_token',
     refresh_token: refreshToken
   };
-  let requestBody: string = objectToFormEncoded(requestPayload);
+  const requestBody: string = objectToFormEncoded(requestPayload);
   console.debug('Refresh requestBody: ' + requestBody);
 
   const response = await fetch(tokenUrl, {
@@ -200,27 +204,32 @@ const refreshTokenCommand = commandFactory(async ({get, path}) => {
   console.debug('Refresh response on the next line:');
   console.debug(json);
 
+
   // Error handling
+  // TODO Handle expired refresh token explicitly
+  // {
+  //   "error" : "invalid_token",
+  //   "error_description" : "Invalid refresh token (expired): eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicG9jLWFwaSJdLCJtYWlsIjoiZXBvdHRlcnNAeHM0YWxsLm5sIiwidXNlcl9uYW1lIjoiZXBvIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImF0aSI6ImNkYTE4NjE4LTMxYzktNDBjNy1hMGZkLTY1ODIyODU0NWE4NiIsImV4cCI6MTU1NzkxNDA5NiwiYXV0aG9yaXRpZXMiOlsiVVNFUiIsIkFDVFVBVE9SIiwiQURNSU4iXSwianRpIjoiYjQxODdkN2YtM2JiZC00MGVlLThhZjEtZTM5MjRkMThlNjZjIiwiY2xpZW50X2lkIjoicG9jIn0.OBvrKu4VN84yeRPdT5xJjKKYCPai1AvxjS-tIYiwgRM"
+  // }
+
   if (!response.ok) {
     console.info('An error occurred while refreshing the access token');
     let errors: { [index: string]: string[]; } = {};
     errors[json.error] = [json.error_description];
     return [
-      replace(path('user'), {}),
       replace(path('errors'), errors)
     ];
   }
   console.info('Access token refreshed successfully');
 
-  const username = get(path('login', 'username'));
-  const userSession: Partial<UserSession> = buildUserSession(json, username);
+  const username = get(path('session', 'username'));
+  const session: Session = buildSession(json, username);
 
-  global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
+  global.sessionStorage.setItem(sessionKey, JSON.stringify(session));
 
   return [
-    replace(path('user',), userSession),
-    replace(path('login', 'loading'), false),
-    replace(path('login', 'failed'), false),
+    replace(path('session',), session),
+    replace(path('feedback', 'text'), 'Access token refreshed successfully'),
     replace(path('errors'), undefined)
   ];
 });
@@ -235,7 +244,7 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
 
   console.info('Updating the current user...');
 
-  const token = get(path('user', 'token'));
+  const token = get(path('session', 'token'));
 
   const currentUserUrl = apiUrl + '/users/me';
   const response = await fetch(currentUserUrl, {
@@ -258,24 +267,22 @@ const currentUserCommand = commandFactory(async ({get, path}) => {
     ];
   }
 
-  console.debug('Updating the user session');
-  const currentSession: UserSession = get(path('user'));
+  const currentUser: User = {
+    username: json.username,
+    displayName: json.displayName,
+    roles: json.authorities,
+    mail: json.mail,
 
-  const userSession: UserSession = {
-    ...{
-      username: json.username,
-      displayName: json.displayName,
-      roles: json.authorities,
-      mail: json.mail
-    }, ...currentSession
+    loading: false,
+    loaded: true
   };
 
-  global.sessionStorage.setItem(sessionKey, JSON.stringify(userSession));
-  console.debug('User session updated successfully with user data');
+  console.debug('Current user refreshed');
 
   return [
-    replace(path('user'), userSession),
-    replace(path('user', 'loading'), false)
+    replace(path('user'), currentUser),
+    replace(path('feedback', 'text'), 'Current user refreshed'),
+    replace(path('errors'), undefined)
   ];
 });
 
@@ -287,14 +294,14 @@ const redirectCommand = commandFactory<RouteIdPayload>(({path, payload: {routeId
 });
 
 
-function buildUserSession(tokenJson: any, username: string): Partial<UserSession> {
+function buildSession(tokenJson: any, username: string): Session {
   const tokenType = tokenJson.token_type;
   let token = tokenJson.access_token;
   if (tokenType == 'bearer') {
     token = "Bearer " + token;
   }
-  let startTime = new Date();
-  let endTime = new Date(startTime.getTime() + parseInt(tokenJson.expires_in) * 1000);
+  const startTime = new Date();
+  const endTime = new Date(startTime.getTime() + parseInt(tokenJson.expires_in) * 1000);
   return {
     username: username,
     token: token,
@@ -306,10 +313,12 @@ function buildUserSession(tokenJson: any, username: string): Partial<UserSession
 
 
 // Processes
-export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputs, redirectCommand]);
-export const loginUsernameInputProcess = createProcess('login-username-input', [loginUsernameInputCommand]);
-export const loginPasswordInputProcess = createProcess('login-password-input', [loginPasswordInputCommand]);
+export const clearLoginProcess = createProcess('clear-login', [clearLoginInputsCommand])
+export const loginProcess = createProcess('login', [startLoginCommand, loginCommand, startCurrentUserCommand, currentUserCommand, clearLoginInputsCommand]);
+export const loginRequestInputProcess = createProcess('login-request-input', [loginRequestInputCommand]);
 export const setSessionProcess = createProcess('set-session', [setSessionCommand]);
 export const logoutProcess = createProcess('logout', [startLogoutCommand, logoutCommand]);
+export const refreshTokenProcess = createProcess('refresh-token', [refreshTokenCommand, redirectCommand]);
+
 export const currentUserProcesses = createProcess('current-user', [startCurrentUserCommand, currentUserCommand]);
-export const refreshTokenProcess = createProcess('refresh-token', [refreshTokenCommand, startCurrentUserCommand, currentUserCommand, redirectCommand]);
+

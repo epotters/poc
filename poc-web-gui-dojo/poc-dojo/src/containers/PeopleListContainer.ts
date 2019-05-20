@@ -13,13 +13,13 @@ import {redirectProcess} from "../processes/routeProcesses";
 
 
 function getProperties(store: Store<PocState>, properties: PeopleListProperties): PeopleListProperties {
+
   return {
     store: store,
     storeId: 'peopleGridState',
     fetchPeople: fetchPeopleProcess(store),
     createPerson: redirectProcess(store),
     updatePerson: savePersonProcess(store),
-
     updatePeople: batchUpdatePeopleProcess(store),
     deletePeople: batchDeletePeopleProcess(store),
     cancelPersonAction: cancelPersonActionProcess(store)
@@ -28,5 +28,5 @@ function getProperties(store: Store<PocState>, properties: PeopleListProperties)
 
 
 // Use a StoreContainer
-export default StoreContainer(PeopleList, 'state', {paths: [['peopleList']], getProperties});
+export default StoreContainer(PeopleList, 'state', {paths: [['peopleList'], ['peopleGridState']], getProperties});
 

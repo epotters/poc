@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import poc.core.repository.PersonRepository;
+import poc.core.repository.OrganizationRepository;
 import poc.web.api.config.TestRestConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,26 +23,26 @@ import static org.junit.Assert.assertEquals;
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestRestConfiguration.class)
-@WebMvcTest(PersonController.class)
-public class PersonControllerTest {
+@WebMvcTest(OrganizationController.class)
+public class OrganizationControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
-  private PersonRepository personRepository;
+  private OrganizationRepository organizationRepository;
 
   @Test
   public void contexLoads() throws Exception {
     assertThat(mockMvc).isNotNull();
-    assertThat(personRepository).isNotNull();
+    assertThat(organizationRepository).isNotNull();
   }
 
 
   @Test
   public void getSchema() throws Exception {
 
-    String uri = "/api/people/schema";
+    String uri = "/api/organizations/schema";
 
     assert (mockMvc != null);
 

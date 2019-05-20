@@ -1,4 +1,4 @@
-import {ConfirmationRequest, Organization, Person, UserSession} from "../interfaces";
+import {ConfirmationRequest, LoginRequest, Organization, Person, Session} from "../interfaces";
 import {OutletContext} from '@dojo/framework/routing/interfaces';
 import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
 
@@ -36,24 +36,17 @@ export interface ConfirmationPayload {
   confirmationRequest: ConfirmationRequest
 }
 
+
 /*****/
 
-export interface UsernamePayload {
-  username: string;
+export interface PartialLoginRequestPayload {
+  loginRequest: Partial<LoginRequest>;
 }
-
-export interface PasswordPayload {
-  password: string;
-}
-
-
-
-
 
 /*****/
 
 export interface SetSessionPayload {
-  session: UserSession;
+  session: Session;
 }
 
 export interface RouteIdPayload {

@@ -2,57 +2,58 @@ import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 import {theme, ThemedMixin} from '@dojo/framework/widget-core/mixins/Themed';
 import * as css from './styles/PersonEditor.m.css';
-import {ConfirmationRequest, Errors, Person, WithTarget} from '../interfaces';
-import {ConfirmedPersonActionPayload, PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
+import {Errors, Person, WithTarget} from '../interfaces';
+import {ChangeRoutePayload, ConfirmationPayload, PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
 import {ErrorList} from "./ErrorList";
-import {ConfirmationDialog} from "./ConfirmationDialog";
+import {OutletContext} from "@dojo/framework/routing/interfaces";
 
 
 export interface PersonEditorProperties {
-  personId: number;
-  person: Person;
+
+  person: Partial<Person>;
+
+  canNavigate: boolean;
+  previousPerson: Person;
+  nextPerson: Person;
+  hasPrevious: boolean;
+  hasNext: boolean;
 
   loaded: boolean;
-  confirmationRequest: ConfirmationRequest;
-
+  isNew: boolean;
+  hasChanges: boolean;
   errors: Errors;
 
   getPerson: (opts: PersonIdPayload) => void;
   savePerson: (opts: PartialPersonPayload) => void;
-  deletePerson: (opts: ConfirmedPersonActionPayload) => void;
-  cancelDeletePerson: (opts: Object) => void;
-
-  clearEditor: (opts: Object) => void;
+  deletePerson: (opts: ConfirmationPayload) => void;
+  cancelPersonAction: (opts: Object) => void;
   editorInput: (opts: PartialPersonPayload) => void;
+  clearEditor: (opts: Object) => void;
+
+  changeRoute: (opts: ChangeRoutePayload) => void;
 }
 
 
 @theme(css)
 export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorProperties> {
 
-
   protected render() {
 
     const {
-      personId,
       person,
-      confirmationRequest,
+      isNew,
+      hasChanges,
+      canNavigate,
+      hasPrevious,
+      hasNext,
       errors
     } = this.properties;
 
 
     return v('div', {classes: ['container', 'page']}, [
-      v('h1', {}, ['Person Editor']),
+      v('h1', {}, [isNew ? 'New Person' : 'Edit person']),
 
-      errors ? w(ErrorList, {errors}) : null,
-
-      !!confirmationRequest ?
-        w(ConfirmationDialog, {
-          message: {text: 'Are you sure...?'},
-          // visible: (confirmationRequest && confirmationRequest.confirming)
-          visible: true
-        }) : '',
-
+      errors ? w(ErrorList, {key: 'person-editor-errors', errors}) : '',
 
       v('div', {classes: ['card', 'row', 'bg-light']}, [
         v('div', {classes: ['card-body']}, [
@@ -60,18 +61,17 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
           v('form', {
             classes: ['form-horizontal'],
             onsubmit: this._onSubmit
-
           }, [
 
             v('div', {classes: ['form-group', 'form-row']}, [
               v('label', {classes: ['control-label', 'col-sm-4']}, ['ID']),
-              v('div', {classes: ['col-sm-8']}, [
+              v('div', {classes: ['col-sm-2']}, [
                 v('input', {
                   classes: ['form-control'],
                   key: 'idInput',
                   readOnly: true,
                   placeholder: 'ID',
-                  value: this.toString(personId),
+                  value: (person && person.id) ? this.toString(person.id) : '',
                   required: true
                 })
               ])
@@ -87,36 +87,39 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
                     v('input', {
                       classes: ['form-control'],
                       key: 'firstNameInput',
+                      name: 'firstName',
                       label: 'First Name',
                       labelHidden: true,
                       placeholder: 'Given name',
                       value: person.firstName,
                       required: true,
-                      oninput: this.onFirstNameInput
+                      oninput: this._onInput
                     })
                   ]),
                   v('div', {classes: ['col-md-2']}, [
                     v('input', {
                       classes: ['form-control'],
                       key: 'prefixInput',
+                      name: 'prefix',
                       label: 'Prefix',
                       labelHidden: true,
                       // placeholder: 'Prefix, e.g. van der',
                       value: person.prefix,
                       required: false,
-                      oninput: this.onPrefixInput
+                      oninput: this._onInput
                     })
                   ]),
                   v('div', {classes: ['col-md-6']}, [
                     v('input', {
                       classes: ['form-control'],
                       key: 'lastNameInput',
+                      name: 'lastName',
                       label: 'Last Name',
                       labelHidden: true,
                       placeholder: 'Family name',
                       value: person.lastName,
                       required: true,
-                      oninput: this.onLastNameInput
+                      oninput: this._onInput
                     })
                   ])
                 ])
@@ -128,27 +131,27 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
               v('div', {classes: ['col-sm-8']}, [
                 v('div', {classes: ['form-check', 'form-check-inline']}, [
                   v('input', {
-                    classes: ['form-check-input'],
                     key: 'genderInput',
-                    name: 'genderInput',
+                    name: 'gender',
                     id: 'genderInputMale',
                     type: 'radio',
                     value: 'MALE',
                     checked: (person.gender == 'MALE'),
-                    oninput: this.onGenderInput
+                    oninput: this._onInput,
+                    classes: ['form-check-input']
                   }),
                   v('label', {classes: ['form-check-label'], for: 'genderInputMale'}, ['Man'])
                 ]),
                 v('div', {classes: ['form-check', 'form-check-inline']}, [
                   v('input', {
-                    classes: ['form-check-input'],
                     key: 'genderInput',
-                    name: 'genderInput',
+                    name: 'gender',
                     id: 'genderInputFemale',
                     type: 'radio',
                     value: 'FEMALE',
                     checked: (person.gender == 'FEMALE'),
-                    oninput: this.onGenderInput
+                    oninput: this._onInput,
+                    classes: ['form-check-input']
                   }),
                   v('label', {classes: ['form-check-label'], for: 'genderInputFemale'}, ['Woman'])
                 ])
@@ -158,26 +161,29 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
             v('div', {classes: ['form-group', 'form-row']}, [
               v('label', {classes: ['control-label', 'col-sm-4']}, ['Date of birth']),
-              v('div', {classes: ['col-sm-8']}, [
+              v('div', {classes: ['col-sm-4']}, [
                 v('input', {
-                  classes: ['form-control'],
                   key: 'birthDateInput',
+                  type: 'date',
+                  name: 'birthDate',
                   placeholder: 'Date of birth',
                   value: person.birthDate,
-                  oninput: this.onBirthDateInput
+                  oninput: this._onInput,
+                  classes: ['form-control']
                 })
               ])
             ]),
 
             v('div', {classes: ['form-group', 'form-row']}, [
               v('label', {classes: ['control-label', 'col-sm-4']}, ['Place of birth']),
-              v('div', {classes: ['col-sm-8']}, [
+              v('div', {classes: ['col-sm-5']}, [
                 v('input', {
-                  classes: ['form-control'],
                   key: 'birthPlaceInput',
+                  name: 'birthPlace',
                   placeholder: 'Birth place',
                   value: person.birthPlace,
-                  oninput: this.onBirthPlaceInput
+                  oninput: this._onInput,
+                  classes: ['form-control']
                 })
               ])
             ]),
@@ -185,23 +191,53 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
 
             v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
 
-              v('div', {classes: 'ml-auto'}, [
+              v('div', {classes: ['editor-buttons-left']}, [
+                canNavigate ?
+                  v('button', {
+                    key: 'previous-button',
+                    type: 'button',
+                    disabled: !hasPrevious,
+                    onclick: this._onPrevious,
+                    classes: ['btn', 'btn-outline-primary']
+                  }, [
+                    v('i', {classes: ['fa', 'fa-angle-left']})
+                  ]) : '',
+
+                canNavigate ?
+                  v('button', {
+                    key: 'next-button',
+                    type: 'button',
+                    disabled: !hasNext,
+                    onclick: this._onNext,
+                    classes: ['btn', 'btn-outline-primary']
+                  }, [
+                    v('i', {classes: ['fa', 'fa-angle-right']})
+                  ]) : ''
+              ]),
+
+              v('div', {classes: ['editor-buttons-right', 'ml-auto']}, [
 
                 v('button', {
+                  key: 'reset-button',
                   type: 'button',
-                  classes: ['btn', 'btn-outline-primary'],
+                  disabled: !hasChanges,
                   onclick: this._onResetEditor,
+                  classes: ['btn', 'btn-outline-primary']
                 }, ['Reset']),
 
-                v('button', {
-                  type: 'button',
-                  classes: ['btn', 'btn-outline-primary'],
-                  onclick: this._onDeletePerson,
-                }, ['Delete']),
+                isNew ? '' :
+                  v('button', {
+                    key: 'delete-button',
+                    type: 'button',
+                    onclick: this._onDeletePerson,
+                    classes: ['btn', 'btn-outline-primary']
+                  }, ['Delete']),
 
                 v('button', {
-                  classes: ['btn', 'btn-primary'],
-                  type: 'submit'
+                  key: 'save-button',
+                  type: 'submit',
+                  disabled: !hasChanges,
+                  classes: ['btn', 'btn-primary']
                 }, ['Save'])
               ])
             ])
@@ -211,41 +247,15 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
     ]);
   }
 
-
-  // Field input handlers
-  protected onFirstNameInput({target: {value: firstName}}: WithTarget) {
-    console.log('Arguments on the next line:');
-    console.log(arguments);
-    this.properties.editorInput({person: {firstName: firstName}});
-  }
-
-  protected onPrefixInput({target: {value: prefix}}: WithTarget) {
-    this.properties.editorInput({person: {prefix: prefix}});
-  }
-
-  protected onLastNameInput({target: {value: lastName}}: WithTarget) {
-    this.properties.editorInput({person: {lastName: lastName}});
-  }
-
-  protected onGenderInput({target: {value: gender}}: WithTarget) {
-    this.properties.editorInput({person: {gender: gender}});
-  }
-
-  protected onBirthDateInput({target: {value: birthDate}}: WithTarget) {
-    this.properties.editorInput({person: {birthDate: birthDate}});
-  }
-
-  private onBirthPlaceInput({target: {value: birthPlace}}: WithTarget) {
-    this.properties.editorInput({person: {birthPlace: birthPlace}});
+  private _onInput({target: {name: fieldName, value: fieldValue}}: WithTarget) {
+    this.properties.editorInput({person: {[fieldName]: fieldValue}});
   }
 
 
   private _onSubmit(event: Event) {
     event.preventDefault();
 
-    const {
-      person
-    } = this.properties;
+    const {person} = this.properties;
 
     console.log('Person about to save:');
     console.log(person);
@@ -253,23 +263,59 @@ export default class PersonEditor extends ThemedMixin(WidgetBase)<PersonEditorPr
   }
 
   private _onDeletePerson() {
-    const {
-      personId
-    } = this.properties;
+
+    console.debug('Delete button on the editor clicked');
 
     const confirmationRequest = {
       action: 'delete-person',
+      text: 'Are you sure you want to delete this person?',
       confirming: false,
       confirmed: false,
       confirm: this.properties.deletePerson,
-      cancel: this.properties.cancelDeletePerson
+      cancel: this.properties.cancelPersonAction
     };
 
-    this.properties.deletePerson({personId: personId, confirmationRequest: confirmationRequest, options: {}});
+    this.properties.deletePerson({confirmationRequest: confirmationRequest});
   }
 
   private _onResetEditor() {
-    this.properties.clearEditor({});
+    const {person, isNew} = this.properties;
+    if (isNew) {
+      this.properties.clearEditor({});
+    } else {
+      this.properties.getPerson({personId: (person && person.id) ? person.id : -1});
+    }
+  }
+
+  private _onPrevious() {
+    const {previousPerson} = this.properties;
+    console.info('Go to the previous person with id ' + previousPerson.id);
+    this.goToPerson(previousPerson.id);
+  }
+
+  private _onNext() {
+    const {nextPerson} = this.properties;
+    console.info('Go to the next person with id ' + nextPerson.id);
+    this.goToPerson(nextPerson.id);
+  }
+
+
+  private goToPerson(personId: number) {
+    const context: OutletContext = {
+      id: 'person',
+      type: 'index',
+      params: {
+        personId: this.toString(personId)
+      },
+      queryParams: {},
+      isError: function () {
+        return false;
+      },
+      isExact: function () {
+        return true;
+      }
+    };
+    this.properties.changeRoute({outlet: 'person', context: context});
   }
 
 

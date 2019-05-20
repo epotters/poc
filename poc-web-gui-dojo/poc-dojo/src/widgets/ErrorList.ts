@@ -17,7 +17,6 @@ export class ErrorList extends WidgetBase<ErrorListProperties> {
         ...errors[errorCategories[i]].map((error: string) => `${errorCategories[i]} ${error}`)
       ];
     }
-    errorList;
 
     return v('div', {classes: 'alert alert-danger', role: 'alert'}, [
       v('ul', {classes: 'error-messages'}, errorList.map((error: string) => v('li', [error])))

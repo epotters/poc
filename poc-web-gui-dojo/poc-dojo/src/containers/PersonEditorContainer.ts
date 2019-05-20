@@ -11,12 +11,13 @@ import {
   personEditorInputProcess,
   savePersonProcess
 } from './../processes/personProcesses';
+import {changeRouteProcess} from "../processes/routeProcesses";
 
 function getProperties(store: Store<PocState>, properties: PersonEditorProperties): PersonEditorProperties {
 
   const {get, path} = store;
 
-  const newPerson: Partial<Person> = {
+  const emptyPerson: Partial<Person> = {
     id: undefined,
     firstName: undefined,
     prefix: undefined,
@@ -27,21 +28,33 @@ function getProperties(store: Store<PocState>, properties: PersonEditorPropertie
   };
 
 
-  return {
-    personId: properties.personId,
-    person: get(path('personEditor', 'person')) || newPerson,
-    loaded: get(path('personEditor', 'loaded')),
-    confirmationRequest: get(path('confirmationRequest')),
-    errors: get(path('errors')),
+  const person: Person = get(path('personEditor', 'person')) || emptyPerson;
+  const previousPerson: Person = get(path('personEditor', 'previousPerson'));
+  const nextPerson: Person = get(path('personEditor', 'nextPerson'));
 
+
+  return {
+    person: person,
+
+    canNavigate: get(path('personEditor', 'canNavigate')),
+    previousPerson: previousPerson,
+    nextPerson: nextPerson,
+    hasPrevious: !!previousPerson,
+    hasNext: !!nextPerson,
+    isNew: (!person || !person.id),
+    loaded: get(path('personEditor', 'loaded')),
+    hasChanges: get(path('personEditor', 'hasChanges')) || false,
+
+    errors: get(path('errors')),
     getPerson: fetchPersonProcess(store),
     savePerson: savePersonProcess(store),
     deletePerson: deletePersonProcess(store),
-    cancelDeletePerson: cancelPersonActionProcess(store),
-
+    cancelPersonAction: cancelPersonActionProcess(store),
+    editorInput: personEditorInputProcess(store),
     clearEditor: clearPersonEditorProcess(store),
-    editorInput: personEditorInputProcess(store)
+    changeRoute: changeRouteProcess(store)
   };
 }
 
-export default StoreContainer(PersonEditor, 'state', {paths: [['user'], ['personEditor']], getProperties});
+
+export default StoreContainer(PersonEditor, 'state', {paths: [['personEditor'], ['errors']], getProperties});

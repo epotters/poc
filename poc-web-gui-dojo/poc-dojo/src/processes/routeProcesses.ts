@@ -7,13 +7,19 @@ const changeRouteCommand = commandFactory<ChangeRoutePayload>(({path, payload: {
   return [
     replace(path('routing', 'outlet'), outlet),
     replace(path('routing', 'params'), context.params),
-    // replace(path('user', 'loaded'), false),
-    replace(path('personEditor', 'loaded'), false),
+
+    // Clear the conversation
+    replace(path('feedback'), undefined),
+    replace(path('confirmationRequest'), undefined),
     replace(path('errors'), undefined)
   ];
 });
 
+
+
 const redirectCommand = commandFactory<RouteIdPayload>(({path, payload: {routeId}}) => {
+
+  console.debug('Redirecting to ' + routeId);
   return [
     replace(path('routing', 'outlet'), routeId)
   ];

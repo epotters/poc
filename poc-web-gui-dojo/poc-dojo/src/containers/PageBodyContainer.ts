@@ -11,9 +11,9 @@ function getProperties(store: Store<PocState>, properties: PageBodyProperties): 
   return {
     pageTitle: properties.pageTitle,
     authenticationRequired: properties.authenticationRequired,
-    isAuthenticated: !!get(path('user', 'token')),
+    isAuthenticated: !!get(path('session', 'token')),
     onUnauthorized: function() {return replace(path('routing', 'outlet'), 'home')}
   };
 }
 
-export default StoreContainer(PageBody, 'state', {paths: [['user']], getProperties});
+export default StoreContainer(PageBody, 'state', {paths: [['user'], ['session']], getProperties});

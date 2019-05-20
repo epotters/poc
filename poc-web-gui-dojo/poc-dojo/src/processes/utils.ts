@@ -51,7 +51,8 @@ export function objectToFormEncoded(object: { [index: string]: string }) {
 
 export function getHeaders(token?: string): any {
   const headers: { [key: string]: string } = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Accept-Language': 'en',
   };
   if (token) {
     headers['Authorization'] = token;

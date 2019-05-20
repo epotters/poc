@@ -1,34 +1,42 @@
-import has from '@dojo/framework/has/has';
+// import has from '@dojo/framework/has/has';
 import global from '@dojo/framework/shim/global';
 import {Registry} from '@dojo/framework/widget-core/Registry';
 import {renderer} from '@dojo/framework/widget-core/vdom';
 import {w} from '@dojo/framework/widget-core/d';
 import {Store} from '@dojo/framework/stores/Store';
+import {replace} from "@dojo/framework/stores/state/operations";
 import {registerRouterInjector} from '@dojo/framework/routing/RouterInjector';
-import {clearPersonEditorProcess, fetchPersonProcess} from './processes/personProcesses';
 
 import {App} from './App';
 
-import {refreshTokenProcess, setSessionProcess} from './processes/loginProcesses';
-import {PocState} from './interfaces';
+import {PocState, Session} from './interfaces';
 import config from './routes';
+import {applicationDisplayName, sessionKey} from "../config";
 import {changeRouteProcess} from './processes/routeProcesses';
-import {sessionKey, applicationDisplayName} from "../config";
+import {currentUserProcesses, refreshTokenProcess, setSessionProcess} from './processes/loginProcesses';
+import {welcomeMessageProcess} from "./processes/homeProcesses";
+import {clearPersonEditorProcess, fetchPersonProcess} from './processes/personProcesses';
 
 
-console.log('Starting application ' + applicationDisplayName);
+console.info('Starting application ' + applicationDisplayName);
+document.title = applicationDisplayName;
 
 const store = new Store<PocState>();
+
 const registry = new Registry();
 
+// if (!has('build-time-render')) {
+let sessionFromStorage: string = global.sessionStorage.getItem(sessionKey);
+// }
 
-let session;
-if (!has('build-time-render')) {
-  session = global.sessionStorage.getItem(sessionKey);
-}
-if (session) {
-  setSessionProcess(store)({session: JSON.parse(session)});
+if (sessionFromStorage) {
+  setSessionProcess(store)({session: deserializeSession(sessionFromStorage)});
+  console.info('Loaded session from storage');
+
   refreshTokenProcess(store)({routeId: 'home'});
+
+  currentUserProcesses(store)({routeId: 'home'});
+
 } else {
   console.log('No session yet');
 }
@@ -54,15 +62,17 @@ function onRouteChange() {
 }
 
 
-
 store.onChange(store.path('routing', 'outlet'), onRouteChange);
 store.onChange(store.path('routing', 'params'), onRouteChange);
 
 router.on('outlet', ({outlet, action}) => {
+
+  console.debug('action: ' + action + ' ' + outlet.id);
+
   if (action === 'enter') {
     switch (outlet.id) {
       case 'home':
-        // const isAuthenticated = !!store.get(store.path('user', 'token'));
+        welcomeMessageProcess(store)({});
         break;
       case 'currentUser':
         // const isAuthenticated = !!store.get(store.path('user', 'token'));
@@ -72,14 +82,40 @@ router.on('outlet', ({outlet, action}) => {
         fetchPersonProcess(store)({personId: parseInt(outlet.params.personId)});
         console.log('Loaded person  with id: ' + outlet.params.personId);
         break;
+      case 'new-person':
+        clearPersonEditorProcess(store)({});
+        break;
     }
   } else {
     if (outlet.id === 'edit-person') {
+      console.debug('Outlet id edit-person, clearing the person editor. Is this necessary?');
       clearPersonEditorProcess(store)({});
     }
   }
 });
 
+
+// Init the store
+const {get, path} = store;
+replace(path('loginRequest'), {username: '', password: ''});
+console.debug(get(path('loginRequest')));
+
+
+console.debug('Starting the renderer');
 const r = renderer(() => w(App, {}));
 r.mount({domNode: document.getElementById('app')!, registry});
+
+
+function deserializeSession(sessionFromStorage: string): Session {
+  const sessionOnlyStrings: any = JSON.parse(sessionFromStorage);
+
+  return {
+    username: sessionOnlyStrings.username,
+    token: sessionOnlyStrings.token,
+    refreshToken: sessionOnlyStrings.refreshToken,
+    startTime: new Date(sessionOnlyStrings.startTime),
+    endTime: new Date(sessionOnlyStrings.endTime)
+  };
+
+}
 

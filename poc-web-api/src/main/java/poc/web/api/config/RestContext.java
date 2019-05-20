@@ -21,7 +21,9 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import poc.core.config.CoreContext;
 
@@ -34,8 +36,20 @@ public class RestContext implements WebMvcConfigurer {
   @Bean
   public LocaleResolver localeResolver() {
     SessionLocaleResolver slr = new SessionLocaleResolver();
-    slr.setDefaultLocale(Locale.US);
+    slr.setDefaultLocale(Locale.ENGLISH);
     return slr;
+  }
+
+  @Bean
+  public LocaleChangeInterceptor localeChangeInterceptor() {
+    LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+    lci.setParamName("lang");
+    return lci;
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(localeChangeInterceptor());
   }
 
 
@@ -67,18 +81,5 @@ public class RestContext implements WebMvcConfigurer {
       }
     }
   }
-//
-//
-//  private static final String dateFormat = "yyyy-MM-dd";
-//  private static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-//
-//  @Bean
-//  public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-//    return builder -> {
-//      builder.simpleDateFormat(dateTimeFormat);
-//      builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
-//      builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
-//    };
-//  }
 
 }

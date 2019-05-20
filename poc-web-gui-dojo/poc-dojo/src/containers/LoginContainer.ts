@@ -1,24 +1,28 @@
 import {Store} from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
-import {PocState} from "../interfaces";
+import {LoginRequest, PocState} from "../interfaces";
 
 import {Login, LoginProperties} from './../widgets/Login';
-import {loginPasswordInputProcess, loginProcess, loginUsernameInputProcess} from './../processes/loginProcesses';
+import {loginProcess, loginRequestInputProcess} from './../processes/loginProcesses';
 
 
 function getProperties(store: Store<PocState>): LoginProperties {
 
   const {get, path} = store;
 
+  const emptyLoginRequest: Partial<LoginRequest> = {
+    username: undefined,
+    password: undefined,
+  };
+
+
   return {
-    username: get(path('login', 'username')),
-    password: get(path('login', 'password')),
+    loginRequest: get(path('loginRequest')) || emptyLoginRequest,
+    inProgress: get(path('loginRequest', 'loading')),
     errors: get(path('errors')),
-    inProgress: get(path('login', 'loading')),
-    onUsernameInput: loginUsernameInputProcess(store),
-    onPasswordInput: loginPasswordInputProcess(store),
+    onLoginRequestInput: loginRequestInputProcess(store),
     onLogin: loginProcess(store)
   };
 }
 
-export default StoreContainer(Login, 'state', {paths: [['login'], ['errors']], getProperties});
+export default StoreContainer(Login, 'state', {paths: [['session'], ['loginRequest'], ['errors']], getProperties});

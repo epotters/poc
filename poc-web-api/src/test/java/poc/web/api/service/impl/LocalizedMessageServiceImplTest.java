@@ -12,16 +12,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import poc.web.api.config.AuthorizationServerConfig;
 import poc.web.api.config.RestContext;
 import poc.web.api.service.LocalizedMessageService;
 
-
-@SpringBootTest(classes = {RestContext.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
+@ActiveProfiles("test")
+@SpringBootTest(classes = {RestContext.class, AuthorizationServerConfig.class})
+//@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 @RunWith(SpringRunner.class)
 public class LocalizedMessageServiceImplTest {
 

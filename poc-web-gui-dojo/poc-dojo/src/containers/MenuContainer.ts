@@ -9,8 +9,8 @@ function getProperties(store: Store<PocState>): MenuProperties {
 
   return {
     currentUser: get(path('user')),
-    isAuthenticated: !!get(path('user', 'token'))
+    isAuthenticated: !!get(path('session', 'token'))
   };
 }
 
-export default StoreContainer(Menu, 'state', {paths: [['user']], getProperties});
+export default StoreContainer(Menu, 'state', {paths: [['user'], ['session']], getProperties});

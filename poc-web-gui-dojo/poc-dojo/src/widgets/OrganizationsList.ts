@@ -68,7 +68,7 @@ export default class OrganizationsList extends ThemedMixin(WidgetBase)<Organizat
       pageSize: number,
       options: FetcherOptions = {}
     ) => {
-      const token = store.get(store.path('user', 'token'));
+      const token = store.get(store.path('session', 'token'));
 
       const queryString = buildQueryString(page, pageSize, options);
 

@@ -30,7 +30,6 @@ export interface PeopleListProperties {
   deletePeople: (opts: ConfirmationPayload) => void;
 
   cancelPersonAction: (opts: Object) => void;
-
 }
 
 
@@ -38,6 +37,9 @@ const columnConfig = [
   {
     id: "id",
     title: "ID",
+    sortable: true,
+    editable: false,
+    filterable: true,
     renderer: (item: any) => {
       return (
         w(Link, {
@@ -70,19 +72,27 @@ const columnConfig = [
   {
     id: "gender",
     title: "M/F",
+    sortable: true,
+    editable: true,
+    filterable: true,
     renderer: (item: any) => {
       return (
-        (item.value == "MALE") ? "Man" : "Woman"
+        (item.value == "MALE") ? "Male" : "Female"
       );
     }
   },
   {
     id: "birthDate",
-    title: "Birth date"
+    title: "Birth date",
+    sortable: true,
+    editable: true,
+    filterable: true
   },
   {
     id: "birthPlace",
     title: "Birth place",
+    sortable: true,
+    editable: true,
     filterable: true
   }
 ];
@@ -96,7 +106,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
     const {
       store,
       storeId,
-      updatePerson
+      updatePerson,
     } = this.properties;
 
 
@@ -105,7 +115,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
       pageSize: number,
       options: FetcherOptions = {}
     ) => {
-      const token = store.get(store.path('user', 'token'));
+      const token = store.get(store.path('session', 'token'));
 
       const queryString = buildQueryString(page, pageSize, options);
 
@@ -127,26 +137,30 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
       await updatePerson({person: person});
     };
 
+
     return v('div', {classes: ['container', 'page']}, [
       v('h1', {}, ['People']),
 
-      v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
+      v('div', {classes: ['grid-toolbar', 'btn-toolbar'], role: 'toolbar'}, [
 
         v('div', {classes: 'ml-auto'}, [
 
           v('button', {
+            key: 'update-people-button',
             type: 'button',
             classes: ['btn', 'btn-outline-primary'],
             onclick: this._onBatchUpdatePeople,
           }, ['Update all']),
 
           v('button', {
+            key: 'delete-people-button',
             type: 'button',
             classes: ['btn', 'btn-outline-primary'],
             onclick: this._onBatchDeletePeople,
           }, ['Delete all']),
 
           v('button', {
+            key: 'create-person-button',
             classes: ['btn', 'btn-primary'],
             type: 'button',
             onclick: this._onCreatePerson,
@@ -155,12 +169,12 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
       ]),
 
       w(Grid, {
+        store: store,
+        storeId: storeId,
         columnConfig: columnConfig,
         fetcher: fetcher,
         updater: updater,
-        store: store,
-        storeId: storeId,
-        height: 720
+        height: 480
       })
     ]);
   }
@@ -171,8 +185,10 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
 
   private _onBatchUpdatePeople() {
 
+
     const confirmationRequest = {
       action: 'update-people',
+      text: 'Are you sure you want to update all people found?',
       confirming: false,
       confirmed: false,
       confirm: this.properties.updatePeople,
@@ -187,6 +203,7 @@ export default class PeopleList extends ThemedMixin(WidgetBase)<PeopleListProper
 
     const confirmationRequest = {
       action: 'delete-people',
+      text: 'Are you sure you want to delete all people found?',
       confirming: false,
       confirmed: false,
       confirm: this.properties.deletePeople,

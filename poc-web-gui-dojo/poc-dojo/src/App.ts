@@ -14,6 +14,7 @@ import PeopleListContainer from './containers/PeopleListContainer';
 import PersonEditorContainer from './containers/PersonEditorContainer';
 import OrganizationEditorContainer from "./containers/OrganizationEditorContainer";
 import OrganizationsListContainer from "./containers/OrganizationsListContainer";
+import FooterContainer from "./containers/FooterContainer";
 
 
 export class App extends WidgetBase {
@@ -25,17 +26,24 @@ export class App extends WidgetBase {
         w(MenuContainer, {})
       ]),
 
-      v('main', {classes: ['flex-shrink-0'], role: 'main'},[
+      v('main', {classes: ['flex-shrink-0'], role: 'main'}, [
 
-        w(Outlet, {key: 'home', id: 'home', renderer: () => w(HomeContainer, {})}),
+        w(Outlet, {key: 'home', id: 'home', renderer: () => w(HomeContainer, {key: 'home'})}),
 
-        w(Outlet, {key: 'people', id: 'people', renderer: () => w(PeopleListContainer, {})}),
-        w(Outlet, {key: 'new-person', id: 'new-person', renderer: () => w(PersonEditorContainer, {})}),
+        w(Outlet, {key: 'people', id: 'people', renderer: () => w(PeopleListContainer, {key: 'people-list'})}),
+        w(Outlet, {
+          key: 'new-person',
+          id: 'new-person',
+          renderer: () => w(PersonEditorContainer, {key: 'person-editor-new'})
+        }),
 
         w(Outlet, {
           key: 'person', id: 'person',
           renderer: (details: MatchDetails) => {
-            return w(PersonEditorContainer, {personId: parseInt(details.params.personId)});
+            return w(PersonEditorContainer, {
+              key: 'person-editor-edit',
+              person: {id: parseInt(details.params.personId)}
+            });
           }
         }),
 
@@ -63,8 +71,8 @@ export class App extends WidgetBase {
 
       ]),
 
-      v('footer', {classes: ['footer', 'mt-auto', 'py-3', 'bg-light'], role: 'footer'}, [
-        v('div', {classes: ['container', 'text-muted']}, ['Footer content'])
+      v('footer', {classes: ['footer', 'mt-auto', 'bg-light'], role: 'footer'}, [
+        w(FooterContainer, {})
       ])
     ]
   }

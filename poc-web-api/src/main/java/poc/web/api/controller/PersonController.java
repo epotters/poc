@@ -79,7 +79,6 @@ public class PersonController {
     return personRepository.save(person);
   }
 
-
   @PatchMapping("/")
   public void updatePeople(@RequestParam(value = "filters", required = true) final String filters,
       final @RequestBody Map<String, Object> partialPerson) {
@@ -123,12 +122,6 @@ public class PersonController {
       personRepository.saveAll(peopleToUpdate);
       personRepository.flush();
     }
-
-
-
-
-
-
   }
 
   @DeleteMapping("/{id}")

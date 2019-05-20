@@ -1,7 +1,7 @@
 import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
 import {v, w} from '@dojo/framework/widget-core/d';
 
-import {Errors, UserSession} from '../interfaces';
+import {Errors, User, Session} from '../interfaces';
 import {ErrorList} from './ErrorList';
 
 import {dateFormatOptions, locale} from '../../config';
@@ -9,7 +9,8 @@ import {RouteIdPayload} from "../processes/interfaces";
 
 
 export interface CurrentUserProperties {
-  user: UserSession,
+  user: User,
+  session: Session;
   errors: Errors;
   onLogout: (opts: object) => void;
   onRefreshToken: (opts: RouteIdPayload) => void;
@@ -19,18 +20,12 @@ export interface CurrentUserProperties {
 export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
 
   protected render() {
-    const {user, errors} = this.properties;
-
-    let rolesDisplay: string = '';
-    for (let idx in user.roles) {
-      rolesDisplay += user.roles[idx] + ', ';
-    }
-    rolesDisplay = rolesDisplay.substring(0, rolesDisplay.length - 2);
+    const {user, session, errors} = this.properties;
 
 
     return [
       v('div', {classes: ['container', 'page']}, [
-        v('h1', {}, ['Huidige gebruiker']),
+        v('h1', {}, ['Current user']),
 
         errors ? w(ErrorList, {errors}) : null,
 
@@ -39,11 +34,13 @@ export default class CurrentUser extends WidgetBase<CurrentUserProperties> {
           v('div', {classes: ['card-body']}, [
 
             v('form', {classes: 'form-horizontal'}, [
+
               CurrentUser.createFormGroup('Naam', user.displayName),
               CurrentUser.createFormGroup('Rollen', user.roles ? user.roles.join(', ') : ''),
               CurrentUser.createFormGroup('E-mail', user.mail),
-              CurrentUser.createFormGroup('Session start', user.startTime.toLocaleString(locale, dateFormatOptions)),
-              CurrentUser.createFormGroup('Session end', user.endTime.toLocaleString(locale, dateFormatOptions)),
+
+              CurrentUser.createFormGroup('Session start', session.startTime.toLocaleString(locale, dateFormatOptions)),
+              CurrentUser.createFormGroup('Session end', session.endTime.toLocaleString(locale, dateFormatOptions)),
 
 
               v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
