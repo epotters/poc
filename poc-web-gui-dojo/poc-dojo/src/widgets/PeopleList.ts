@@ -63,6 +63,16 @@ const columnConfig = [
     filterable: true
   },
   {
+    id: "prefix",
+    title: "Prefix",
+    sortable: true,
+    editable: true,
+    filterable: true,
+    renderer: (item: any) => {
+      return (item.value !== 'null' ? item.value : '');
+    }
+  },
+  {
     id: "lastName",
     title: "Last Name",
     sortable: true,
