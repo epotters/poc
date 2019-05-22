@@ -1,5 +1,6 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v} from "@dojo/framework/widget-core/d";
+
 
 export interface BannerProperties {
   name: string;

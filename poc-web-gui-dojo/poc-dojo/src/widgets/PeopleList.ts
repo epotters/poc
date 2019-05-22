@@ -1,8 +1,10 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v, w} from '@dojo/framework/widget-core/d';
-import Grid from '@dojo/widgets/grid';
-import {FetcherOptions} from '@dojo/widgets/grid/interfaces';
-import Link from '@dojo/framework/routing/Link';
+import Store from "@dojo/framework/stores/Store";
+import Link from "@dojo/framework/routing/Link";
+import {v, w} from "@dojo/framework/widget-core/d";
+import ThemedMixin from "@dojo/framework/widget-core/mixins/Themed";
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {FetcherOptions} from "@dojo/widgets/grid/interfaces";
+import Grid from "@dojo/widgets/grid";
 
 import {Person, PocState} from "../interfaces";
 import {
@@ -11,12 +13,11 @@ import {
   PartialPersonPayload,
   RouteIdPayload
 } from "../processes/interfaces";
-import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
 import * as css from './styles/PeopleList.m.css';
-
-import Store from "@dojo/framework/stores/Store";
 import {buildQueryString, getHeaders} from "../processes/utils";
 import {peopleUrl} from "../../config";
+
+
 
 
 export interface PeopleListProperties {

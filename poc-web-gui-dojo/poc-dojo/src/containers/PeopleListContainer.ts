@@ -1,18 +1,20 @@
-import {Store} from "@dojo/framework/stores/Store";
+import Store from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
+
 import {PocState} from "../interfaces";
 
 import PeopleList, {PeopleListProperties} from "../widgets/PeopleList";
 import {
   batchDeletePeopleProcess,
-  batchUpdatePeopleProcess, cancelPersonActionProcess,
+  batchUpdatePeopleProcess,
+  cancelPersonActionProcess,
   fetchPeopleProcess,
   savePersonProcess
 } from "../processes/personProcesses";
 import {redirectProcess} from "../processes/routeProcesses";
 
 
-function getProperties(store: Store<PocState>, properties: PeopleListProperties): PeopleListProperties {
+function getProperties(store: Store<PocState>): PeopleListProperties {
 
   return {
     store: store,

@@ -1,6 +1,6 @@
-import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
 import {Errors} from '../interfaces';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v} from "@dojo/framework/widget-core/d";
 
 interface ErrorListProperties {
   errors: Errors;

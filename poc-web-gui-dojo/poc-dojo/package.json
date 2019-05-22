@@ -24,6 +24,7 @@
     "@dojo/themes": "^5.0.1",
     "@dojo/widgets": "^5.0.0",
     "jwt-decode": "^2.2.0",
+    "oidc-client": "^1.7.1",
     "tslib": "~1.8.1"
   },
   "devDependencies": {

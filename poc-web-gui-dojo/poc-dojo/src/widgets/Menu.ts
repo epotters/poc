@@ -1,8 +1,10 @@
-import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
-import {v, w} from '@dojo/framework/widget-core/d';
-import ActiveLink from '@dojo/framework/routing/ActiveLink';
+import {v, w} from "@dojo/framework/widget-core/d";
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import ActiveLink from "@dojo/framework/routing/ActiveLink";
+
 import {applicationDisplayName} from '../../config';
 import {User} from "../interfaces";
+
 
 export interface MenuProperties {
   currentUser: User;
@@ -31,16 +33,11 @@ export class Menu extends WidgetBase<MenuProperties> {
 
     return v('ul', {classes: ['nav', 'navbar-nav', 'mr-auto', 'navbar-left']}, [
       v('li', {classes: 'nav-item'}, [
-        w(ActiveLink, {to: 'home', classes: ['nav-link'], activeClasses: ['active']}, ['Home'])
+        w(ActiveLink, {to: 'home', classes: ['nav-link'], activeClasses: ['active']}, ['Home']),
       ]),
       (isAuthenticated) ?
         v('li', {key: 'people', classes: 'nav-item'}, [
           w(ActiveLink, {to: 'people', classes: ['nav-link'], activeClasses: ['active']}, ['People'])
-        ]) : '',
-
-      (isAuthenticated) ?
-        v('li', {key: 'organizations', classes: 'nav-item'}, [
-          w(ActiveLink, {to: 'organizations', classes: ['nav-link'], activeClasses: ['active']}, ['Organizations'])
         ]) : ''
     ])
   }

@@ -1,5 +1,6 @@
-import {Store} from "@dojo/framework/stores/Store";
+import Store from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
+
 import {PocState} from "../interfaces";
 import {Menu, MenuProperties} from './../widgets/Menu';
 

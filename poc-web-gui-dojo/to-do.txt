@@ -2,10 +2,11 @@
 
 Towards a stable version, before any major refactorings
 
-Downgrade Dojo to latest stable version
 
 
 Stlyling grid cells jump between div and input
+
+Ellipsis doesn't work on cells
 
 
 Filter on numbers
@@ -42,6 +43,9 @@ Add Total rows and Total found to the Grid Footer
 Change 'rows' in GridFooter to 'people/person'
 
 
+Remove redirect Home after refresh
+
+
 
 
 Preparation for Entity Manager
@@ -57,6 +61,13 @@ Consider splitting the toolbars to separate widgets: ListToolbar, EditorToolbar,
 OIDC
 
 Move to using a separate library for authentication
+
+
+
+
+Done
+
+Downgrade Dojo to latest stable version
 
 
 

@@ -1,12 +1,12 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v, w} from '@dojo/framework/widget-core/d';
-import {theme, ThemedMixin} from '@dojo/framework/widget-core/mixins/Themed';
+import {OutletContext} from "@dojo/framework/routing/interfaces";
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import ThemedMixin, {theme} from "@dojo/framework/widget-core/mixins/Themed";
+import {v, w} from "@dojo/framework/widget-core/d";
+
 import * as css from './styles/PersonEditor.m.css';
 import {Errors, Person, WithTarget} from '../interfaces';
 import {ChangeRoutePayload, ConfirmationPayload, PartialPersonPayload, PersonIdPayload} from '../processes/interfaces';
 import {ErrorList} from "./ErrorList";
-import {OutletContext} from "@dojo/framework/routing/interfaces";
-
 
 export interface PersonEditorProperties {
 

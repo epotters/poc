@@ -1,7 +1,8 @@
-import {Store} from '@dojo/framework/stores/Store';
-import {Person, PocState} from '../interfaces';
-import {StoreContainer} from '@dojo/framework/stores/StoreInjector';
+import Store from "@dojo/framework/stores/Store";
+import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
 
+import {changeRouteProcess} from "../processes/routeProcesses";
+import {Person, PocState} from '../interfaces';
 import PersonEditor, {PersonEditorProperties} from './../widgets/PersonEditor';
 import {
   cancelPersonActionProcess,
@@ -11,9 +12,9 @@ import {
   personEditorInputProcess,
   savePersonProcess
 } from './../processes/personProcesses';
-import {changeRouteProcess} from "../processes/routeProcesses";
 
-function getProperties(store: Store<PocState>, properties: PersonEditorProperties): PersonEditorProperties {
+
+function getProperties(store: Store<PocState>): PersonEditorProperties {
 
   const {get, path} = store;
 

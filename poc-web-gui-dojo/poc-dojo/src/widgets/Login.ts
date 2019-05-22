@@ -1,8 +1,10 @@
-import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
-import {v, w} from '@dojo/framework/widget-core/d';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v, w} from "@dojo/framework/widget-core/d";
+
 import {Errors, LoginRequest, WithTarget} from '../interfaces';
 import {ErrorList} from './ErrorList';
 import {PartialLoginRequestPayload, RouteIdPayload} from '../processes/interfaces';
+
 
 export interface LoginProperties {
 

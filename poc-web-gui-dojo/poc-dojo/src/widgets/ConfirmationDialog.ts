@@ -1,6 +1,8 @@
-import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
+import {v} from "@dojo/framework/widget-core/d";
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+
 import {ConfirmationRequest} from '../interfaces';
+
 
 export interface ConfirmationDialogProperties {
   visible: boolean;

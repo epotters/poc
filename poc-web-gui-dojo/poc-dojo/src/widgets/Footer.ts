@@ -1,6 +1,7 @@
-import {ConfirmationRequest, Message} from "../interfaces";
-import {WidgetBase} from "@dojo/framework/widget-core/WidgetBase";
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
 import {v, w} from "@dojo/framework/widget-core/d";
+
+import {ConfirmationRequest, Message} from "../interfaces";
 import {Feedback} from "./Feedback";
 import ConfirmationDialogContainer from "../containers/ConfirmationDialogContainer";
 

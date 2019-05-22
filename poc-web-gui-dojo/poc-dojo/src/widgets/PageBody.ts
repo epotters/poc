@@ -1,8 +1,7 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
-import {ThemedMixin} from "@dojo/framework/widget-core/mixins/Themed";
-
 import * as css from './styles/PageBody.m.css';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import ThemedMixin from "@dojo/framework/widget-core/mixins/Themed";
+import {v} from "@dojo/framework/widget-core/d";
 
 
 export interface PageBodyProperties {

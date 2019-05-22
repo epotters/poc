@@ -1,8 +1,7 @@
-import {WidgetBase} from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v} from "@dojo/framework/widget-core/d";
+
 import {Message} from "../interfaces";
-
-
 interface FeedbackProperties {
   message: Message;
 }

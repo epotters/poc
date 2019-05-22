@@ -17,14 +17,6 @@ export default [
     outlet: 'new-person'
   },
   {
-    path: 'organizations',
-    outlet: 'organizations'
-  },
-  {
-    path: 'organizations/{personId}',
-    outlet: 'organization'
-  },
-  {
     path: 'about',
     outlet: 'about'
   },

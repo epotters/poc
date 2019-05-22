@@ -1,8 +1,10 @@
-import {Store} from "@dojo/framework/stores/Store";
+import Store from "@dojo/framework/stores/Store";
 import {StoreContainer} from "@dojo/framework/stores/StoreInjector";
+
 import {PocState} from "../interfaces";
 import PageBody, {PageBodyProperties} from './../widgets/PageBody';
 import {replace} from "@dojo/framework/stores/state/operations";
+
 
 function getProperties(store: Store<PocState>, properties: PageBodyProperties): PageBodyProperties {
 
@@ -12,7 +14,9 @@ function getProperties(store: Store<PocState>, properties: PageBodyProperties): 
     pageTitle: properties.pageTitle,
     authenticationRequired: properties.authenticationRequired,
     isAuthenticated: !!get(path('session', 'token')),
-    onUnauthorized: function() {return replace(path('routing', 'outlet'), 'home')}
+    onUnauthorized: function () {
+      return replace(path('routing', 'outlet'), 'home')
+    }
   };
 }
 

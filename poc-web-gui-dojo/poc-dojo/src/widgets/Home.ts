@@ -1,6 +1,8 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v} from '@dojo/framework/widget-core/d';
+
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v} from "@dojo/framework/widget-core/d";
 import {User} from "../interfaces";
+
 
 export interface HomeProperties {
   currentUser: User;

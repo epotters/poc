@@ -1,9 +1,8 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v, w} from '@dojo/framework/widget-core/d';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v, w} from "@dojo/framework/widget-core/d";
 
-import {Errors, User, Session} from '../interfaces';
+import {Errors, Session, User} from '../interfaces';
 import {ErrorList} from './ErrorList';
-
 import {dateFormatOptions, locale} from '../../config';
 import {RouteIdPayload} from "../processes/interfaces";
 
