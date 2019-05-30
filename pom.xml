@@ -20,6 +20,7 @@
 
 
   <modules>
+    <module>poc-authorization-server</module>
     <module>poc-core</module>
     <module>poc-web-api</module>
 

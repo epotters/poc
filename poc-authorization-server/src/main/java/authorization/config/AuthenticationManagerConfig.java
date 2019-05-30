@@ -1,4 +1,4 @@
-package poc.web.api.config;
+package authorization.config;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;

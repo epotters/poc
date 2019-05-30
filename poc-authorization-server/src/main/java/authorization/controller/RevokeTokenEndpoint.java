@@ -1,4 +1,4 @@
-package poc.web.api.controller;
+package authorization.controller;
 
 
 import javax.annotation.Resource;
