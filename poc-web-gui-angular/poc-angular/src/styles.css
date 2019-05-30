@@ -1,0 +1,74 @@
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+
+.fill-remaining-space {
+  /* This fills the remaining space, by using flexbox.
+     Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
+}
+
+/* List card */
+.list-card {
+
+}
+
+
+/* Forms */
+
+.form-card {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-row {
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+mat-footer-row, mat-row {
+  min-height: 36px !important;
+}
+
+.mat-cell, .mat-footer-cell {
+  font-size: 16px;
+}
+
+
+
+/* Messy radio group styling */
+mat-radio-button {
+  margin-right: 0.5em;
+}
+/*
+.radio-group-wrapper .mat-form-field-wrapper {
+  margin-top: 0.5em;
+  padding-bottom: 1.0em;
+}
+
+.radio-group-wrapper .mat-form-field-wrapper mat-label {
+
+  color: rgba(0,0,0,.54);
+  margin-right: 12px;
+}
+
+ */
+
+
+
+
+
+
+

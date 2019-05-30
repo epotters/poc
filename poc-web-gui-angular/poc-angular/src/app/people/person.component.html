@@ -1,0 +1,106 @@
+<h1>Person</h1>
+
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>Person Editor</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="personForm">
+
+      <!-- ID-->
+      <div>
+        <mat-form-field>
+          <mat-label>ID</mat-label>
+          <input matInput formControlName="id" name="id" readonly>
+        </mat-form-field>
+      </div>
+
+      <!-- First name-->
+      <div>
+        <mat-form-field>
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" name="firstName" required>
+          <mat-error *ngFor="let validation of personValidationMessages.firstName">
+            <mat-error class="error-message" *ngIf="hasErrorOfType('firstName', validation.type)">
+              {{validation.message}}
+            </mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Prefix-->
+      <div>
+        <mat-form-field>
+          <mat-label>Prefix</mat-label>
+          <input matInput formControlName="prefix" name="prefix">
+          <mat-hint>For example van der or de la</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Last name-->
+      <div>
+        <mat-form-field>
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" name="lastName" required>
+          <mat-hint>Enter your family name here</mat-hint>
+          <mat-error *ngFor="let validation of personValidationMessages.lastName">
+            <mat-error class="error-message" *ngIf="hasErrorOfType('lastName', validation.type)">
+              {{validation.message}}
+            </mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <!-- Gender-->
+      <div class="radio-group-wrapper">
+        <div>
+          <div class="mat-form-field-wrapper">
+            <!-- <mat-label>Gender</mat-label>-->
+            <mat-radio-group formControlName="gender" name="gender" required>
+              <mat-radio-button value="MALE" id="gender-option-male">Male</mat-radio-button>
+              <mat-radio-button value="FEMALE" id="gender-option-female">Female</mat-radio-button>
+            </mat-radio-group>
+            <!-- <div class="mat-form-field-subscript-wrapper">-->
+            <!-- <mat-hint>Choose this persons gender</mat-hint>-->
+            <!-- </div>-->
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Date of birth-->
+      <div>
+        <mat-form-field>
+          <mat-label>Date of birth</mat-label>
+          <input matInput formControlName="birthDate" [matDatepicker]="myPicker" placeholder="date">
+          <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
+          <mat-datepicker #myPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+
+      <!-- Place of birth-->
+      <div>
+        <mat-form-field>
+          <mat-label>Place of birth</mat-label>
+          <input matInput formControlName="birthPlace" name="birthPlace">
+          <mat-hint>Native place city</mat-hint>
+        </mat-form-field>
+      </div>
+
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-raised-button (click)="deletePerson()" [disabled]="isNew()">Delete
+    </button>
+    <button mat-raised-button (click)="revert()" [disabled]="!personForm.dirty">Revert
+    </button>
+    <button mat-raised-button color="primary" (click)="savePerson()"
+            [disabled]="!personForm.dirty || personForm.invalid">Save
+    </button>
+  </mat-card-actions>
+
+</mat-card>

@@ -1,0 +1,61 @@
+<div>
+  <header>
+    <mat-toolbar color="primary">
+
+      <button mat-icon-button (click)="toggleSidenav.emit()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span>{{ Constants.applicationDisplayName }}</span>
+
+      <button mat-icon-button routerLinkActive="active" routerLink="/home">
+        <mat-icon>home</mat-icon>
+      </button>
+
+      <button mat-button routerLinkActive="active" routerLink="/people">
+        <span>People</span>
+      </button>
+
+      <span class="fill-remaining-space"></span>
+
+      <button mat-button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)='onLogin()' [disabled]="false"><span>Login</span></button>
+        <button mat-menu-item (click)='onRenewToken()' [disabled]="false"><span>Renew Token</span></button>
+        <button mat-menu-item (click)='onLogout()' [disabled]="false"><span>Logout</span></button>
+        <button mat-menu-item><span>Settings</span></button>
+      </mat-menu>
+
+    </mat-toolbar>
+  </header>
+
+  <main class="mat-typography">
+
+    <mat-sidenav-container class="example-container">
+      <mat-sidenav #sidenav mode="over">
+        <mat-card>
+          <h2>Developer info</h2>
+          <pre>{{currentUserJson}}</pre>
+          <div>
+            <h2>Messages</h2>
+            <ul>
+              <li *ngFor='let msg of messages'>{{msg}}</li>
+            </ul>
+          </div>
+        </mat-card>
+      </mat-sidenav>
+    </mat-sidenav-container>
+
+
+    <router-outlet></router-outlet>
+
+  </main>
+  <footer></footer>
+
+</div>
+
+
+
