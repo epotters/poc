@@ -1,6 +1,5 @@
 import {GridState} from "@dojo/widgets/grid/interfaces";
 import {ConfirmationPayload} from "./processes/interfaces";
-import {Entity, EntityManagerState} from "./lib/entity-manager/interfaces";
 
 
 export type WithTarget<T extends Event = Event, E extends HTMLElement = HTMLInputElement> = T & { target: E };
@@ -46,11 +45,10 @@ export interface PersonEditor extends ResourceBased {
 }
 
 
-export interface Organization extends Entity {
+export interface Organization {
   id: number;
   displyName: string;
 }
-
 
 
 // Base setup
@@ -89,7 +87,6 @@ export interface LoginRequest extends ResourceBased {
 }
 
 
-
 // Conversation
 export interface Message {
   title?: string;
@@ -111,7 +108,6 @@ export interface Errors {
 }
 
 
-
 // Main Application State
 export interface PocState {
   home: Home;
@@ -128,7 +124,5 @@ export interface PocState {
   peopleList: PeopleList;
   peopleGridState: GridState<Person>;
   personEditor: PersonEditor;
-
-  organizations: EntityManagerState<Organization>;
 
 }
