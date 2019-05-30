@@ -1,4 +1,4 @@
-package poc.web.api.controller;
+package poc.web.api.controller.dojo;
 
 
 import java.util.Map;

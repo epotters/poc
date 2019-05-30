@@ -1,9 +1,3 @@
-# Custom properties
-poc:
-  security-realm: POC Realm
-  oauth:
-    tokenTimeout: 2400
-
 
 # Embedded server
 server:

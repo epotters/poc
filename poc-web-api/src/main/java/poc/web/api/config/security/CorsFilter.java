@@ -25,7 +25,7 @@ Source: https://stackoverflow.com/questions/37516755/spring-boot-rest-service-op
 @Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class SimpleCorsFilter implements Filter {
+public class CorsFilter implements Filter {
 
   @Override
   public void init(FilterConfig fc) throws ServletException {
@@ -41,7 +41,7 @@ public class SimpleCorsFilter implements Filter {
     response.setHeader("Access-Control-Max-Age", "3600");
     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, authorization, credential, x-requested-with, X-XSRF-TOKEN");
 
-    // log.info("Parameters: " + listParameters(request));
+    // log.debug("Parameters: " + listParameters(request));
 
     /* Always return OK for requests using request method OPTIONS */
     if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
