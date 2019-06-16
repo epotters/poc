@@ -23,7 +23,6 @@
     "@dojo/framework": "^5.0.4",
     "@dojo/themes": "^5.0.1",
     "@dojo/widgets": "^5.0.0",
-    "jwt-decode": "^2.2.0",
     "oidc-client": "^1.7.1",
     "tslib": "~1.8.1"
   },
@@ -31,7 +30,7 @@
     "@dojo/cli": "^5.0.0",
     "@dojo/cli-build-app": "^5.0.4",
     "@dojo/cli-test-intern": "^5.0.0",
-    "@types/node": "^9.6.48",
-    "typescript": "^3.2.4"
+    "@types/node": "^9.6.49",
+    "typescript": "^3.5.1"
   }
 }
