@@ -11,7 +11,7 @@
   </parent>
 
   <groupId>nl.xs4all.epotters.poc</groupId>
-  <artifactId>authorization-server</artifactId>
+  <artifactId>poc-authorization-server</artifactId>
   <name>POC Authorization Server</name>
   <packaging>jar</packaging>
 
