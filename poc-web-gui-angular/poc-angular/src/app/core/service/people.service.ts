@@ -6,6 +6,7 @@ import {map} from 'rxjs/operators';
 import {FilterSet} from "../../common/filter.model";
 import {ApiService} from './api.service';
 import {Person} from '../domain';
+import {PeopleResult} from "../domain/people-result.model";
 
 
 @Injectable()
@@ -16,7 +17,6 @@ export class PeopleService {
   }
 
 
-  // list(filterSet: FilterSet): Observable<{ people: Person[], peopleCount: number }> {
   list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
     // Build filter params
@@ -39,9 +39,15 @@ export class PeopleService {
         console.debug(response);
         return response;
       })).pipe(
-        // { people: res["content"], peopleCount: res["total"] }
-        map(res => res["content"])
-      );
+        map(res => {
+
+          let result: PeopleResult = {
+            people: res["content"],
+            total: res['total']
+          };
+          return result;
+
+        }))
   }
 
   get(id: string): Observable<any> {

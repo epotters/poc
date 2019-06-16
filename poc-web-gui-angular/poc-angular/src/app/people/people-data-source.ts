@@ -8,9 +8,10 @@ import {FilterSet} from "../common/filter.model";
 export class PeopleDataSource implements DataSource<Person> {
 
   private peopleSubject = new BehaviorSubject<Person[]>([]);
-
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
+
+  private totalSubject = new BehaviorSubject<number>(0);
 
   constructor(private peopleService: PeopleService) {
   }
@@ -24,6 +25,8 @@ export class PeopleDataSource implements DataSource<Person> {
     console.debug('Disconnecting...');
     this.peopleSubject.complete();
     this.loadingSubject.complete();
+
+    this.totalSubject.complete();
   }
 
   loadPeople(filter: FilterSet, sortField: string, sortDirection: string, pageNumber: number, pageSize: number) {
@@ -36,6 +39,9 @@ export class PeopleDataSource implements DataSource<Person> {
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe(people => this.peopleSubject.next(people));
+      .subscribe(peopleResult => {
+        this.peopleSubject.next(peopleResult.people)
+        this.totalSubject.next(peopleResult.total)
+      });
   }
 }

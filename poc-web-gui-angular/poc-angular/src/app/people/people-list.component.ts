@@ -2,13 +2,10 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {ActivatedRoute, Router} from "@angular/router";
 import {fromEvent, merge} from "rxjs";
 import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
-
-
-import {FilterSet} from "../common/filter.model";
-
-import {PeopleService} from "../core/service/people.service";
-import {PeopleDataSource} from "./PeopleDataSource";
 import {MatDialog, MatDialogConfig, MatPaginator, MatSort} from "@angular/material";
+import {FilterSet} from "../common/filter.model";
+import {PeopleService} from "../core/service/people.service";
+import {PeopleDataSource} from "./people-data-source";
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 
 
@@ -19,14 +16,18 @@ import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 })
 export class PeopleListComponent implements OnInit, AfterViewInit {
 
-
   displayedColumns: string[] = ['id', 'firstName', 'prefix', 'lastName', 'gender', 'birthDate', 'birthPlace'];
   dataSource: PeopleDataSource;
   total: number = 1000; // TODO: get this from the api call response
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  defaultSortField: string = 'lastName';
+  defaultSortDirection: string = 'asc';
+  defaultPageSize: number = 100;
+
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('input') input: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
 
   constructor(private peopleService: PeopleService, private router: Router,
@@ -42,10 +43,10 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
     this.dataSource = new PeopleDataSource(this.peopleService);
 
     let filters: FilterSet = {
-      filters: [{name: 'lastName', value: 'Potters'}]
+      filters: []
     };
 
-    this.dataSource.loadPeople(filters, 'lastName', 'asc', 1, 100);
+    this.dataSource.loadPeople(filters, this.defaultSortField, this.defaultSortDirection, 1, this.defaultPageSize);
   }
 
 
