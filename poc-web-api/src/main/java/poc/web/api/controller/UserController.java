@@ -4,14 +4,11 @@ package poc.web.api.controller;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import poc.core.domain.UserAccount;
-import poc.core.service.UserAccountsService;
 
 
 @RestController
@@ -24,19 +21,14 @@ public class UserController {
   private static final String ANONYMOUS_USER = "User is not authenticated (Anounymous user)";
   private static final String AUTHENTICATED_USER = "Authenticated user";
 
-  private UserAccountsService userAccountsService;
-
 
   @Autowired
-  UserController(UserAccountsService userAccountsService) {
-    this.userAccountsService = userAccountsService;
+  UserController() {
   }
 
 
   @RequestMapping("/me")
-  public UserDetails getMe(Authentication authentication) {
-
-    // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+  public DefaultOidcUser getMe(Authentication authentication) {
 
     if (authentication == null) {
       LOG.debug(NO_AUTHENTICATION);
@@ -46,18 +38,16 @@ public class UserController {
       return null;
     } else {
       String currentUserName = authentication.getName();
-      // User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      DefaultOidcUser user = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 
       LOG.debug(AUTHENTICATED_USER + " (\"" + currentUserName + "\")");
-      return userAccountsService.loadUserByUsername(currentUserName);
+
+      LOG.debug(AUTHENTICATED_USER + " (\"" + user.toString() + "\")");
+
+      return user;
     }
   }
 
-
-//  @PreAuthorize("hasAuthority('ADMIN')")
-  @GetMapping("/")
-  public Iterable<UserAccount> listPeople() {
-    return userAccountsService.findAll();
-  }
 
 }

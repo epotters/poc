@@ -13,26 +13,26 @@ spring:
   banner:
       location: classpath:dev/banner.txt
 
-  security:
-    oauth2:
-      client:
-        registration:
-
-          # @see https://console.developers.google.com/apis/ to create your client credentials
-          google:
-            provider: google
-            client-id: 831648620820-c56ksoupbvl5603gkjvk5mb64lc253gt.apps.googleusercontent.com
-            client-secret: 1pIsztS3eGvTK190ckBGeiSL
-            client-authentication-method: basic
-            authorization-grant-type: authorization_code
-            scope:
-              - openid
-              - email
-              - profile
-              - https://www.googleapis.com/auth/tasks.readonly
-        provider:
-          google:
-            issuer-uri: https://accounts.google.com
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#
+#          # @see https://console.developers.google.com/apis/ to create your client credentials
+#          google:
+#            provider: google
+#            client-id: 831648620820-c56ksoupbvl5603gkjvk5mb64lc253gt.apps.googleusercontent.com
+#            client-secret: 1pIsztS3eGvTK190ckBGeiSL
+#            client-authentication-method: basic
+#            authorization-grant-type: authorization_code
+#            scope:
+#              - openid
+#              - email
+#              - profile
+#              - https://www.googleapis.com/auth/tasks.readonly
+#        provider:
+#          google:
+#            issuer-uri: https://accounts.google.com
 
 # Logging
 debug: true

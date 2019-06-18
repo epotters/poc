@@ -56,26 +56,29 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .requestMatchers(EndpointRequest.to("health", "info")).permitAll()
         .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin")
 
-        .antMatchers("/logout").permitAll()
+
+        .antMatchers("/login/oauth2/code/keycloak").permitAll()
+//        .antMatchers("/logout").permitAll()
+
+
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+        .antMatchers("/api/**").authenticated();
 
-        // .antMatchers("/api/people/**").permitAll()
-        .antMatchers("/api/**").authenticated()
 
-//        .antMatchers("/oauth/**").permitAll()
+//        .anyRequest().authenticated();
 
-        .anyRequest().authenticated()
-        .and().httpBasic()
-        .and().csrf().disable();
+//        .and().httpBasic()
+//        .and().csrf().disable();
 
-    http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
+//    http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
 
-    http
-        .formLogin().loginPage("/login").permitAll()
-        .successHandler(restAuthenticationSuccessHandler)
-        .failureHandler(new SimpleUrlAuthenticationFailureHandler());
 
-    http.logout().logoutSuccessHandler(restLogoutSuccessHandler);
+//    http
+//        .formLogin().loginPage("/login").permitAll()
+//        .successHandler(restAuthenticationSuccessHandler)
+//        .failureHandler(new SimpleUrlAuthenticationFailureHandler());
+//
+//    http.logout().logoutSuccessHandler(restLogoutSuccessHandler);
 
     // @formatter:on
   }
