@@ -1,16 +1,12 @@
 package poc.web.api.config;
 
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
@@ -60,7 +56,6 @@ public class RestContext implements WebMvcConfigurer {
     messageSource.setCacheSeconds(3600); // Refresh cache once per hour
     return messageSource;
   }
-
 
 
   @Bean

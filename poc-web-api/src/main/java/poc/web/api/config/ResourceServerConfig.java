@@ -18,7 +18,6 @@ import poc.web.api.config.security.RestLogoutSuccessHandler;
 
 
 @Configuration
-//@EnableResourceServer
 @ComponentScan("poc.web.api.config.security")
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
@@ -28,8 +27,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   private final RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
   private final RestLogoutSuccessHandler restLogoutSuccessHandler;
   private final ResourceServerTokenServices tokenServices;
-//  private final TokenStore tokenStore;
-//  private final JwtAccessTokenConverter accessTokenConverter;
 
 
   @Autowired
@@ -57,7 +54,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin")
 
 
-        .antMatchers("/login/oauth2/code/keycloak").permitAll()
+        .antMatchers("/login/oauth2/code/**").permitAll()
 //        .antMatchers("/logout").permitAll()
 
 
@@ -66,7 +63,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
 //        .anyRequest().authenticated();
-
 //        .and().httpBasic()
 //        .and().csrf().disable();
 

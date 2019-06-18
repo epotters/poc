@@ -7,7 +7,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-
 import poc.web.api.PocWebApi;
 
 
@@ -16,8 +15,8 @@ import poc.web.api.PocWebApi;
 @EnableAutoConfiguration
 @Import(RestContext.class)
 public class WebInitializer extends SpringBootServletInitializer {
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(PocWebApi.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    return application.sources(PocWebApi.class);
+  }
 }
