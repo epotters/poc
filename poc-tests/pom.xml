@@ -22,9 +22,53 @@
     <maven.test.skip>true</maven.test.skip>
     <skip.it>true</skip.it>
 
-    <cucumber-java.version>1.2.4</cucumber-java.version>
-    <cucumber-reporting.version>4.3.0</cucumber-reporting.version>
+    <cucumber.version>4.4.0</cucumber.version>
+    <cucumber-reporting.version>4.7.0</cucumber-reporting.version>
+
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-core -->
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-core</artifactId>
+        <version>${cucumber.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-jvm -->
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-jvm</artifactId>
+        <version>${cucumber.version}</version>
+        <type>pom</type>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-junit</artifactId>
+        <version>${cucumber.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-spring -->
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-spring</artifactId>
+        <version>${cucumber.version}</version>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting -->
+      <dependency>
+        <groupId>net.masterthought</groupId>
+        <artifactId>cucumber-reporting</artifactId>
+        <version>${cucumber-reporting.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 
   <dependencies>
@@ -35,49 +79,41 @@
       <version>${project.parent.version}</version>
     </dependency>
 
-
     <!-- Selenium -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>${selenium.version}</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.htmlunit</groupId>
       <artifactId>htmlunit</artifactId>
-      <version>${htmlunit.version}</version>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>htmlunit-driver</artifactId>
-      <version>${selenium-htmlunit.version}</version>
     </dependency>
 
 
-    <!-- Cucumber tests -->
+    <!-- Cucumber -->
     <dependency>
-      <groupId>info.cukes</groupId>
+      <groupId>io.cucumber</groupId>
       <artifactId>cucumber-core</artifactId>
-      <version>${cucumber-java.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-java</artifactId>
-      <version>${cucumber-java.version}</version>
-      <scope>test</scope>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-jvm</artifactId>
     </dependency>
     <dependency>
-      <groupId>info.cukes</groupId>
+      <groupId>io.cucumber</groupId>
       <artifactId>cucumber-junit</artifactId>
-      <version>${cucumber-java.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>info.cukes</groupId>
+      <groupId>io.cucumber</groupId>
       <artifactId>cucumber-spring</artifactId>
-      <version>${cucumber-java.version}</version>
-      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.masterthought</groupId>
+      <artifactId>cucumber-reporting</artifactId>
     </dependency>
 
   </dependencies>
