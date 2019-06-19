@@ -4,10 +4,6 @@ spring:
     active: integration-tests
   banner:
     location: classpath:banner-test.txt
-  security:
-    user:
-      name: epo
-      password: 12345
 
   # Data
 #  datasource:
@@ -29,8 +25,9 @@ logging:
     org.hibernateSQL: WARN
 
 
+# Application to test
 it:
   remote:
     host: "localhost"
     protocoll: "http"
-    port:
+    port: 8002
