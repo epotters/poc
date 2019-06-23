@@ -17,18 +17,17 @@ spring:
     rest:
       base-path: /api
   jackson:
-    #    date-format: "yyyy-MM-dd HH:mm:ss"  // Used for java.util.Date only
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
   banner:
     location: classpath:banner.txt
 
 
-#  # Persistence: DB will be provided externally, see: docker-compose.yml
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/poc?serverTimezone=Europe/Amsterdam
-#    username: poc
-#    password: b1vidh
+  #  # Persistence: DB will be provided externally, see: docker-compose.yml
+  #  datasource:
+  #    url: jdbc:mysql://localhost:3306/poc?serverTimezone=Europe/Amsterdam
+  #    username: poc
+  #    password: b1vidh
 
   jpa:
     properties:
@@ -40,28 +39,14 @@ spring:
       ddl-auto: validate
     show-sql: true
 
-
+  # OAuth Resource server
   security:
     oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: poc-api
-            client-secret: 134931f4-6585-4eba-8fa4-564aa5ac27ca
-            clientName: Keycloak
-            authorization-grant-type: authorization_code
-            redirectUriTemplate: '{baseUrl}/login/oauth2/code/{registrationId}'
-            scope:
-              - openid
-              - profile
-              - email
-        provider:
-          keycloak:
-            authorization-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/auth
-            token-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/token
-            user-info-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/userinfo
-            jwk-set-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/certs
-            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+#          issuer-uri: http://keycloak.localhost/auth/realms/epo
+          jwk-set-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/certs
+
 
 
 # Logging
@@ -69,5 +54,4 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.hibernate: INFO
-
 
