@@ -1,4 +1,4 @@
-package features;
+package poc.test.features;
 
 
 import java.io.IOException;
@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
-import poc.web.api.PocWebApi;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@SpringBootTest(classes = { PocWebApi.class, FeatureTestConfig.class},
+@SpringBootTest(classes = {FeatureTestConfig.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
 public class SpringIntegrationTest {
@@ -28,7 +28,7 @@ public class SpringIntegrationTest {
   protected static ResponseResults latestResponse = null;
 
   @Autowired
-  protected RestTemplate restTemplate;
+  protected OAuth2RestTemplate oauth2RestTemplate;
 
 
   protected void executeGet(String url) throws IOException {
@@ -37,8 +37,8 @@ public class SpringIntegrationTest {
     final HeaderSettingRequestCallback requestCallback = new HeaderSettingRequestCallback(headers);
     final ResponseResultErrorHandler errorHandler = new ResponseResultErrorHandler();
 
-    restTemplate.setErrorHandler(errorHandler);
-    latestResponse = restTemplate.execute(url, HttpMethod.GET, requestCallback, new ResponseExtractor<ResponseResults>() {
+    oauth2RestTemplate.setErrorHandler(errorHandler);
+    latestResponse = oauth2RestTemplate.execute(url, HttpMethod.GET, requestCallback, new ResponseExtractor<ResponseResults>() {
       @Override
       public ResponseResults extractData(ClientHttpResponse response) throws IOException {
         if (errorHandler.hadError) {
@@ -57,12 +57,9 @@ public class SpringIntegrationTest {
     final HeaderSettingRequestCallback requestCallback = new HeaderSettingRequestCallback(headers);
     final ResponseResultErrorHandler errorHandler = new ResponseResultErrorHandler();
 
-    if (restTemplate == null) {
-      restTemplate = new RestTemplate();
-    }
 
-    restTemplate.setErrorHandler(errorHandler);
-    latestResponse = restTemplate.execute(url, HttpMethod.POST, requestCallback, new ResponseExtractor<ResponseResults>() {
+    oauth2RestTemplate.setErrorHandler(errorHandler);
+    latestResponse = oauth2RestTemplate.execute(url, HttpMethod.POST, requestCallback, new ResponseExtractor<ResponseResults>() {
       @Override
       public ResponseResults extractData(ClientHttpResponse response) throws IOException {
         if (errorHandler.hadError) {

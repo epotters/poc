@@ -15,10 +15,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
-import poc.core.domain.UserAccount;
+//import poc.core.domain.UserAccount;
 
 
 @Profile("integration-test")
@@ -56,9 +58,9 @@ public class GeneralControllerIntegrationTest extends BaseIntegrationTest {
 
   @Test
   public void currentUser() {
-    final UserDetails currentUser = restTemplate.getForObject(getRestUri() + "/users/me", UserAccount.class);
+    final OidcUser currentUser = restTemplate.getForObject(getRestUri() + "/users/me", DefaultOidcUser.class);
     System.out.println(currentUser);
-    Assert.assertEquals("Unexpected current user found", "epo", currentUser.getUsername());
+    Assert.assertEquals("Unexpected current user found", "eelko", currentUser.getName());
   }
 
 

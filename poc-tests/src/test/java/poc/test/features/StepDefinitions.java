@@ -1,4 +1,4 @@
-package features;
+package poc.test.features;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,10 +13,12 @@ import cucumber.api.java.en.When;
 
 public class StepDefinitions extends SpringIntegrationTest {
 
+  private final String baseUrl = "http://localhost:8002/poc/api";
 
-  @When("^the client calls /info$")
-  public void the_client_issues_GET_version() throws Throwable {
-    executeGet("http://localhost:8080/poc/api/info");
+
+  @When("^the client calls (.+)$")
+  public void the_client_calls_url(String relativeUrl) throws Throwable {
+    executeGet(baseUrl + relativeUrl);
   }
 
 

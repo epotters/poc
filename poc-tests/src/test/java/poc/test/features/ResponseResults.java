@@ -1,4 +1,4 @@
-package features;
+package poc.test.features;
 
 
 import java.io.IOException;
@@ -19,8 +19,7 @@ public class ResponseResults {
     final InputStream bodyInputStream = response.getBody();
     if (null == bodyInputStream) {
       this.body = "{}";
-    }
-    else {
+    } else {
       final StringWriter stringWriter = new StringWriter();
       IOUtils.copy(bodyInputStream, stringWriter);
       this.body = stringWriter.toString();

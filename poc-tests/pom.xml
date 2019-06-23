@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>poc</artifactId>
-    <groupId>nl.xs4all.epotters</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.1.4.RELEASE</version>
   </parent>
 
   <groupId>nl.xs4all.epotters.poc</groupId>
@@ -17,8 +17,6 @@
   <packaging>jar</packaging>
 
   <properties>
-    <start-class>poc.web.api.PocWebApi</start-class>
-
     <maven.test.skip>true</maven.test.skip>
     <skip.it>true</skip.it>
 
@@ -74,15 +72,50 @@
   <dependencies>
 
     <dependency>
-      <groupId>nl.xs4all.epotters.poc</groupId>
-      <artifactId>poc-web-api</artifactId>
-      <version>${project.parent.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Testing -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security.oauth</groupId>
+      <artifactId>spring-security-oauth2</artifactId>
+      <version>2.3.5.RELEASE</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+
+
+    <!-- Boilerplate prevention -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
     </dependency>
 
 
@@ -109,6 +142,7 @@
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-jvm</artifactId>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>io.cucumber</groupId>
@@ -159,13 +193,6 @@
           <skip>${skip.it}</skip>
         </configuration>
       </plugin>
-
-      <!-- https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting -->
-      <!--<plugin>-->
-      <!--<groupId>net.masterthought</groupId>-->
-      <!--<artifactId>cucumber-reporting</artifactId>-->
-      <!--<version>${cucumber-reporting.version}</version>-->
-      <!--</plugin>-->
 
     </plugins>
   </build>

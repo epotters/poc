@@ -1,4 +1,4 @@
-package features;
+package poc.test.features;
 
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class HeaderSettingRequestCallback implements RequestCallback {
   private String body;
 
 
-  public HeaderSettingRequestCallback(final Map<String, String> headers) {
+  HeaderSettingRequestCallback(final Map<String, String> headers) {
     this.requestHeaders = headers;
   }
 
