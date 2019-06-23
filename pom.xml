@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.4.RELEASE</version>
+    <version>2.1.6.RELEASE</version>
   </parent>
 
   <groupId>nl.xs4all.epotters</groupId>
@@ -70,8 +70,8 @@
     <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
 
 
-    <spring-security-oauth2>2.3.5.RELEASE</spring-security-oauth2>
-    <spring-security-oauth2-autoconfigure.version>2.1.4.RELEASE</spring-security-oauth2-autoconfigure.version>
+    <spring-security-oauth2>2.3.6.RELEASE</spring-security-oauth2>
+    <spring-security-oauth2-autoconfigure.version>2.1.6.RELEASE</spring-security-oauth2-autoconfigure.version>
 
     <jib-maven-plugin.version>1.0.2</jib-maven-plugin.version>
   </properties>
