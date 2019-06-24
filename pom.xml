@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -20,7 +20,6 @@
 
 
   <modules>
-    <module>poc-authorization-server</module>
     <module>poc-core</module>
     <module>poc-web-api</module>
 
@@ -33,12 +32,12 @@
     <module>poc-tests</module>
 
 
-     <module>poc-evernote</module>
+    <module>poc-evernote</module>
 
-    <!-- module>poc-cordova</module -->
-    <!--<module>poc-web-gui-dojo-1</module>-->
-    <!-- module>poc-jcr</module -->
-    <!-- module>poc-sencha</module -->
+    <!--    <module>poc-authorization-server</module>-->
+    <!--    <module>poc-cordova</module>-->
+    <!--    <module>poc-jcr</module>-->
+    <!--    <module>poc-sencha</module>-->
 
   </modules>
 
@@ -69,10 +68,6 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
 
-
-    <spring-security-oauth2>2.3.6.RELEASE</spring-security-oauth2>
-    <spring-security-oauth2-autoconfigure.version>2.1.6.RELEASE</spring-security-oauth2-autoconfigure.version>
-
     <jib-maven-plugin.version>1.0.2</jib-maven-plugin.version>
   </properties>
 
@@ -87,12 +82,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-
-    <!-- TODO: Check if this can be removed in Spring Security 5.1+ -->
-    <dependency>
-      <groupId>org.springframework.security.oauth</groupId>
-      <artifactId>spring-security-oauth2</artifactId>
     </dependency>
 
 
@@ -130,20 +119,6 @@
 
   </dependencies>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.security.oauth</groupId>
-        <artifactId>spring-security-oauth2</artifactId>
-        <version>${spring-security-oauth2}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.security.oauth.boot</groupId>
-        <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-        <version>${spring-security-oauth2-autoconfigure.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <build>
 

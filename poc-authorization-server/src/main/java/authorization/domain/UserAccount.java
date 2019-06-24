@@ -1,32 +1,22 @@
-package poc.core.domain;
+package authorization.domain;
 
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 @Data
 @NoArgsConstructor
 public class UserAccount implements UserDetails {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  private String mail;
   private String username;
+  private String mail;
   @JsonIgnore
   private String password;
   private String displayName;

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,11 +25,9 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import poc.core.config.CoreContext;
 
 
 @Configuration
-@Import(CoreContext.class)
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
@@ -84,29 +81,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   public void configure(AuthorizationServerSecurityConfigurer server) throws Exception {
 
     // @formatter:off
-
-    // Allow remote checking token validity
-//    server
-//        .tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
-//        .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
-//        .allowFormAuthenticationForClients();
-
     server
         .tokenKeyAccess("permitAll()")
         .checkTokenAccess("isAuthenticated()")
         .passwordEncoder(passwordEncoder);
-    ;
-//
-//        .and().httpBasic()
-//        .and().csrf().disable();
-
     // @formatter:on
   }
 
 
   @Bean
   public TokenEnhancer tokenEnhancer() {
-    return new CustomTokenEnhancer();
+    return new CustomTokenEnhancer(this.userAccountsService);
   }
 
 

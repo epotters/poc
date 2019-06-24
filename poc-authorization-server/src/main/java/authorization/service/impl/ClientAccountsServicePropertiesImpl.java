@@ -1,4 +1,4 @@
-package poc.core.service.impl;
+package authorization.service.impl;
 
 
 import java.util.Arrays;
@@ -6,16 +6,13 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import authorization.domain.ClientAccount;
+import authorization.domain.UserRole;
+import authorization.service.ClientAccountsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Component;
-
-import poc.core.domain.ClientAccount;
-import poc.core.domain.UserRole;
-import poc.core.service.ClientAccountsService;
 
 
 @Component
@@ -27,8 +24,7 @@ public class ClientAccountsServicePropertiesImpl implements ClientAccountsServic
   private final ResourceBundle clientAccounts = ResourceBundle.getBundle(CLIENT_ACCOUNTS_PROPERTY_PATH);
 
 
-  @Override
-  public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+  public ClientAccount loadClientByClientId(String clientId) {
     return loadclientAccountFromProperties(clientId);
   }
 
@@ -71,7 +67,7 @@ public class ClientAccountsServicePropertiesImpl implements ClientAccountsServic
         try {
           UserRole role = UserRole.valueOf(roleName);
           clientAccount.addAuthority(role);
-        } catch(IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
           LOG.info("Skipping role " + roleName + " for client " + clientId + ". Role does not exist");
           LOG.debug("IllegalArgumentException: " + iae.getLocalizedMessage());
         }

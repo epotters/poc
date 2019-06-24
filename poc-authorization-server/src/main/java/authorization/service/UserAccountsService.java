@@ -1,12 +1,11 @@
-package poc.core.service;
+package authorization.service;
 
 
 import java.util.List;
 
+import authorization.domain.UserAccount;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import poc.core.domain.UserAccount;
 
 
 public interface UserAccountsService extends UserDetailsService {

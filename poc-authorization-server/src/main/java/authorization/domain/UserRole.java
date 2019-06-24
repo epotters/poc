@@ -1,4 +1,4 @@
-package poc.core.domain;
+package authorization.domain;
 
 
 import org.springframework.security.core.GrantedAuthority;

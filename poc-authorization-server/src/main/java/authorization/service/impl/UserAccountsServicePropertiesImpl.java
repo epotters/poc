@@ -1,18 +1,18 @@
-package poc.core.service.impl;
+package authorization.service.impl;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import authorization.domain.UserAccount;
+import authorization.domain.UserRole;
+import authorization.service.UserAccountsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import poc.core.domain.UserAccount;
-import poc.core.domain.UserRole;
-import poc.core.service.UserAccountsService;
 
 
 @Component
@@ -68,7 +68,7 @@ public class UserAccountsServicePropertiesImpl implements UserAccountsService {
         try {
           UserRole role = UserRole.valueOf(roleName);
           userAccount.addAuthority(role);
-        } catch(IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
           LOG.info("Skipping role " + roleName + " for user account " + username + ". Role does not exist.");
           LOG.debug("IllegalArgumentException: " + iae.getLocalizedMessage());
         }
