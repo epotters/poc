@@ -13,5 +13,5 @@ public class CollectorsProperties {
   private String driverName;
   private boolean headless = false;
   private String outputPath;
-  private String oscreenshotsPath;
+  private String screenshotsPath;
 }
