@@ -40,9 +40,6 @@ public class UserController {
       String currentUserName = authentication.getName();
       DefaultOidcUser user = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-
-      LOG.debug(AUTHENTICATED_USER + " (\"" + currentUserName + "\")");
-
       LOG.debug(AUTHENTICATED_USER + " (\"" + user.toString() + "\")");
 
       return user;
