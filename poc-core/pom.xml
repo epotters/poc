@@ -10,22 +10,16 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
-
   <groupId>nl.xs4all.epotters.poc</groupId>
   <artifactId>poc-core</artifactId>
   <name>POC Core</name>
   <description>Central module</description>
-
 
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security.oauth.boot</groupId>
-      <artifactId>spring-security-oauth2-autoconfigure</artifactId>
     </dependency>
   </dependencies>
 
