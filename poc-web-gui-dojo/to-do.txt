@@ -71,5 +71,30 @@ Downgrade Dojo to latest stable version
 
 
 
+Finish entity-meta
+EntityMeta
+	name
+	namePlural
+	displayName
+	displayNamePlural
+
+	fields: FieldMeta[]
+
+
+FieldMeta
+	name
+	label
+	type
+	helpText
+
+	options
+
+
+Option
+	label
+	value
+
+
+
 
 
