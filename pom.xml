@@ -34,7 +34,7 @@
 
     <module>poc-evernote</module>
 
-    <!--    <module>poc-authorization-server</module>-->
+    <module>poc-authorization-server</module>
     <!--    <module>poc-cordova</module>-->
     <!--    <module>poc-jcr</module>-->
     <!--    <module>poc-sencha</module>-->
