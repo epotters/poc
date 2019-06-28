@@ -4,7 +4,7 @@ import {Person} from "../core/domain";
 import {tap} from "rxjs/operators";
 import {PeopleService} from "../core/service";
 import {ActivatedRoute} from "@angular/router";
-import {MatDialog, MatDialogConfig} from "@angular/material";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 
 
