@@ -1,4 +1,4 @@
-package poc.web.api.it.config;
+package poc.test.config;
 
 
 import lombok.Data;

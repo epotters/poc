@@ -1,4 +1,9 @@
-# General
+it:
+  remote:
+    host: "localhost"
+    protocoll: "http"
+    port: 8002
+
 spring:
   profiles:
     active: integration-tests
@@ -11,11 +16,12 @@ spring:
       client:
         registration:
           keycloak:
+            client-name: poc
             client-id: poc-api
             client-secret: 134931f4-6585-4eba-8fa4-564aa5ac27ca
-            clientName: Keycloak
             authorization-grant-type: authorization_code
-            redirectUriTemplate: '{baseUrl}/login/oauth2/code/{registrationId}'
+            redirect-uri-template: '{baseUrl}/login/oauth2/code/{registrationId}'
+#           redirect-uri-template: '{baseUrl}/authorize/oauth2/code/{registrationId}'
             scope:
               - openid
               - profile
@@ -43,9 +49,4 @@ logging:
     org.hibernateSQL: WARN
 
 
-# Application to test
-it:
-  remote:
-    host: "localhost"
-    protocoll: "http"
-    port: 8002
+

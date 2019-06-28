@@ -18,14 +18,30 @@
   <packaging>jar</packaging>
 
   <properties>
-    <start-class>poc.test.IntegrationTestStarter</start-class>
+    <!-- Text encoding -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <maven.test.skip>true</maven.test.skip>
-    <skip.it>true</skip.it>
-    
+    <!-- Java version -->
+    <java.version>11</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
+
+    <integration-test.skip>true</integration-test.skip>
+
+    <project.selenium.profile>local</project.selenium.profile>
+    <project.selenium.browser>chrome</project.selenium.browser>
+    <project.environment>dev</project.environment>
+
     <cucumber.version>4.4.0</cucumber.version>
-    <cucumber-reporting.version>4.7.0</cucumber-reporting.version>
+    <maven-cucumber-reporting.version>4.7.0</maven-cucumber-reporting.version>
+    <cucumber.options> </cucumber.options>
+
+    <webdriverextensions-maven-plugin.version>3.2.0</webdriverextensions-maven-plugin.version>
+
   </properties>
+
 
   <dependencyManagement>
     <dependencies>
@@ -62,12 +78,6 @@
         <version>${cucumber.version}</version>
       </dependency>
 
-      <!-- https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting -->
-      <dependency>
-        <groupId>net.masterthought</groupId>
-        <artifactId>cucumber-reporting</artifactId>
-        <version>${cucumber-reporting.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -105,6 +115,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
+
+    <!-- for WecClient -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 
 
@@ -149,49 +165,274 @@
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-spring</artifactId>
     </dependency>
-    <dependency>
-      <groupId>net.masterthought</groupId>
-      <artifactId>cucumber-reporting</artifactId>
-    </dependency>
 
   </dependencies>
 
 
   <build>
+
+    <pluginManagement>
+
+      <plugins>
+
+        <!-- https://mvnrepository.com/artifact/com.github.webdriverextensions/webdriverextensions-maven-plugin -->
+        <plugin>
+          <groupId>com.github.webdriverextensions</groupId>
+          <artifactId>webdriverextensions-maven-plugin</artifactId>
+          <version>${webdriverextensions-maven-plugin.version}</version>
+        </plugin>
+
+        <!-- https://mvnrepository.com/artifact/net.masterthought/maven-cucumber-reporting -->
+        <plugin>
+          <groupId>net.masterthought</groupId>
+          <artifactId>maven-cucumber-reporting</artifactId>
+          <version>${maven-cucumber-reporting.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>pre-integration-test</id>
-            <goals>
-              <goal>start</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.it}</skip>
-            </configuration>
-          </execution>
-          <execution>
-            <id>post-integration-test</id>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.it}</skip>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+
+      <!--      <plugin>-->
+      <!--        <groupId>org.springframework.boot</groupId>-->
+      <!--        <artifactId>spring-boot-maven-plugin</artifactId>-->
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <id>pre-integration-test</id>-->
+      <!--            <goals>-->
+      <!--              <goal>start</goal>-->
+      <!--            </goals>-->
+      <!--            <configuration>-->
+      <!--              <skip>${integration-test.skip}</skip>-->
+      <!--            </configuration>-->
+      <!--          </execution>-->
+      <!--          <execution>-->
+      <!--            <id>post-integration-test</id>-->
+      <!--            <goals>-->
+      <!--              <goal>stop</goal>-->
+      <!--            </goals>-->
+      <!--            <configuration>-->
+      <!--              <skip>${integration-test.skip}</skip>-->
+      <!--            </configuration>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+      <!--      </plugin>-->
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
+        <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <skip>${skip.it}</skip>
+          <!-- tests are run from maven-failsafe-plugin! -->
+          <skipTests>true</skipTests>
         </configuration>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>integration-test</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <skipTests>${integration-test.skip}</skipTests>
+          <testFailureIgnore>true</testFailureIgnore>
+          <systemPropertyVariables>
+            <selenium.profile>${project.selenium.profile}</selenium.profile>
+            <selenium.browser>${project.selenium.browser}</selenium.browser>
+            <env>${project.environment}</env>
+            <cucumber.options>${cucumber.options}</cucumber.options>
+            <!--            <selenium.webdriver.marionette>true</selenium.webdriver.marionette>-->
+            <!--            <webdriver.gecko.driver>${project.build.directory}/drivers/geckodriver${project.selenium.webdriversuffix}</webdriver.gecko.driver>-->
+          </systemPropertyVariables>
+          <includes>
+            <include>**/*Test.class</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+
+      <!--      <plugin>-->
+      <!--        &lt;!&ndash; Build an executable JAR &ndash;&gt;-->
+      <!--        <groupId>org.apache.maven.plugins</groupId>-->
+      <!--        <artifactId>maven-jar-plugin</artifactId>-->
+      <!--        <version>${maven-jar-plugin.version}</version>-->
+
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <goals>-->
+      <!--              <goal>test-jar</goal>-->
+      <!--            </goals>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+
+
+      <!--        &lt;!&ndash;        <configuration>&ndash;&gt;-->
+      <!--        &lt;!&ndash;          <archive>&ndash;&gt;-->
+      <!--        &lt;!&ndash;            <manifest>&ndash;&gt;-->
+      <!--        &lt;!&ndash;              <addClasspath>true</addClasspath>&ndash;&gt;-->
+      <!--        &lt;!&ndash;              <classpathPrefix>lib/</classpathPrefix>&ndash;&gt;-->
+      <!--        &lt;!&ndash;              <mainClass>com.mypackage.MyClass</mainClass>&ndash;&gt;-->
+      <!--        &lt;!&ndash;            </manifest>&ndash;&gt;-->
+      <!--        &lt;!&ndash;          </archive>&ndash;&gt;-->
+      <!--        &lt;!&ndash;        </configuration>&ndash;&gt;-->
+
+      <!--      </plugin>-->
+
+      <!--      <plugin>-->
+      <!--        <groupId>org.apache.maven.plugins</groupId>-->
+      <!--        <artifactId>maven-assembly-plugin</artifactId>-->
+      <!--        <configuration>-->
+      <!--          <descriptors>-->
+      <!--            <descriptor>src/main/assembly/test-jar-assembly.xml</descriptor>-->
+      <!--          </descriptors>-->
+      <!--        </configuration>-->
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <phase>package</phase>-->
+      <!--            <goals>-->
+      <!--              <goal>single</goal>-->
+      <!--            </goals>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+      <!--      </plugin>-->
+
+
     </plugins>
   </build>
+
+
+  <profiles>
+
+    <profile>
+      <id>integration-test</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <integration-test.skip>false</integration-test.skip>
+<!--        <cucumber.options>&#45;&#45;format html:target/cucumber</cucumber.options>-->
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-profile1</id>
+                <phase>validate</phase>
+                <configuration>
+                  <outputDirectory>target/firefox-profiles/Bevrager/</outputDirectory>
+                  <includeArtifactIds>uid-112226-0001031007</includeArtifactIds>
+                  <includeGroupIds>nl.abz.firefox-profiles</includeGroupIds>
+                  <excludeTransitive>true</excludeTransitive>
+                  <overWriteSnapshots>true</overWriteSnapshots>
+                </configuration>
+                <goals>
+                  <goal>unpack-dependencies</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>unpack-trust</id>
+                <phase>validate</phase>
+                <configuration>
+                  <outputDirectory>target/classes/certificates/truststore/</outputDirectory>
+                  <includeArtifactIds>trust</includeArtifactIds>
+                  <includeGroupIds>nl.abz.test-profiles</includeGroupIds>
+                  <excludeTransitive>true</excludeTransitive>
+                  <overWriteSnapshots>true</overWriteSnapshots>
+                </configuration>
+                <goals>
+                  <goal>unpack-dependencies</goal>
+                </goals>
+              </execution>
+              <!--              <execution>-->
+              <!--                <id>unpack-abc</id>-->
+              <!--                <phase>validate</phase>-->
+              <!--                <configuration>-->
+              <!--                  <outputDirectory>target/classes/certificates/abc/</outputDirectory>-->
+              <!--                  <includeArtifactIds>uid-104007</includeArtifactIds>-->
+              <!--                  <includeGroupIds>nl.abz.test-profiles</includeGroupIds>-->
+              <!--                  <excludeTransitive>true</excludeTransitive>-->
+              <!--                  <overWriteSnapshots>true</overWriteSnapshots>-->
+              <!--                </configuration>-->
+              <!--                <goals>-->
+              <!--                  <goal>unpack-dependencies</goal>-->
+              <!--                </goals>-->
+              <!--              </execution>-->
+            </executions>
+          </plugin>
+
+          <!-- https://mvnrepository.com/artifact/com.github.webdriverextensions/webdriverextensions-maven-plugin -->
+          <plugin>
+            <groupId>com.github.webdriverextensions</groupId>
+            <artifactId>webdriverextensions-maven-plugin</artifactId>
+            <version>${webdriverextensions-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>install-drivers</goal>
+                </goals>
+                <phase>pre-integration-test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <installationDirectory>${project.build.directory}/drivers</installationDirectory>
+              <drivers>
+                <driver>
+                  <name>chromedriver</name>
+                </driver>
+                <driver>
+                  <name>chromedriver-beta</name>
+                  <platform>mac</platform>
+                  <bit>64</bit>
+                  <version>75.0.3770.8</version>
+                  <url>http://chromedriver.storage.googleapis.com/75.0.3770.8/chromedriver_mac64.zip</url>
+                </driver>
+              </drivers>
+            </configuration>
+          </plugin>
+
+
+          <plugin>
+            <groupId>net.masterthought</groupId>
+            <artifactId>maven-cucumber-reporting</artifactId>
+            <version>${maven-cucumber-reporting.version}</version>
+            <executions>
+              <execution>
+                <id>execution</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <configuration>
+                  <projectName>POC</projectName>
+                  <outputDirectory>${project.build.directory}/cucumber-reports</outputDirectory>
+                  <buildNumber>${project.parent.artifactId} ${project.version}</buildNumber>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>local-selenium</id>
+      <properties>
+        <project.selenium.profile>local</project.selenium.profile>
+      </properties>
+    </profile>
+    <profile>
+      <id>remote-selenium</id>
+      <properties>
+        <project.selenium.profile>remote</project.selenium.profile>
+      </properties>
+    </profile>
+
+
+  </profiles>
 
 </project>
