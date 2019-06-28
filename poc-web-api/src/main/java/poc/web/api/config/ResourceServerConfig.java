@@ -1,19 +1,19 @@
 package poc.web.api.config;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import poc.web.api.config.security.RestAuthenticationEntryPoint;
-import poc.web.api.config.security.RestAuthenticationSuccessHandler;
-import poc.web.api.config.security.RestLogoutSuccessHandler;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.ComponentScan;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.http.HttpMethod;
+    import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+    import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+    import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+    import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+    import poc.web.api.config.security.RestAuthenticationEntryPoint;
+    import poc.web.api.config.security.RestAuthenticationSuccessHandler;
+    import poc.web.api.config.security.RestLogoutSuccessHandler;
 
 
 @Configuration
@@ -21,12 +21,9 @@ import poc.web.api.config.security.RestLogoutSuccessHandler;
 @ComponentScan("poc.web.api.config.security")
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // extends ResourceServerConfigurerAdapter {
 
-  private static final String RESOURCE_ID = "poc-api";
-
   private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
   private final RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
   private final RestLogoutSuccessHandler restLogoutSuccessHandler;
-
 
 
   @Autowired
@@ -57,7 +54,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // exte
 
         .and()
         .oauth2ResourceServer()
-          .jwt();
+        .jwt();
 
 //    http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
 //    http

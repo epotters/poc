@@ -47,11 +47,11 @@ mat-footer-row, mat-row {
 }
 
 
-
 /* Messy radio group styling */
 mat-radio-button {
   margin-right: 0.5em;
 }
+
 /*
 .radio-group-wrapper .mat-form-field-wrapper {
   margin-top: 0.5em;

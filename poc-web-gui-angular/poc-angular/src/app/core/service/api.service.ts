@@ -4,12 +4,13 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import 'rxjs/Rx';
+import {AuthService} from "./auth.service";
 
 
 @Injectable()
 export class ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
 
@@ -19,10 +20,10 @@ export class ApiService {
     console.debug('URL to get: ' + `${environment.apiUrl}${path}`);
 
     let headers = new HttpHeaders({
-      'Accept': 'application/json'
-      // TODO: , 'Authorization': 'Bearer ' + token
+      'Accept': 'application/json',
+      'Authorization': this.authService.getAuthorizationHeaderValue()
     });
-
+    
 
     return this.http.get(`${environment.apiUrl}${path}`, {params, headers: headers})
       .pipe(catchError(this.formatErrors));

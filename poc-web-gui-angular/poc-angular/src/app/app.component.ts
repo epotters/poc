@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 
-import {AppAuthNService, User} from './core/service/app-auth-n.service';
+import {AuthService, User} from './core/service/auth.service';
 import {Constants} from '../constants';
 import {ApiService} from "./core/service";
 
@@ -11,55 +11,60 @@ import {ApiService} from "./core/service";
 })
 export class AppComponent {
 
+  currentUser: User;
+  Constants: any = Constants;
+  messages: string[] = [];
 
   // From oidc-client sample
-  constructor(public authn: AppAuthNService, public apiService: ApiService) {
+  constructor(public authService: AuthService, public apiService: ApiService) {
 
     console.debug('Constructing the AppComponent');
   }
-
-  messages: string[] = [];
 
   get currentUserJson(): string {
     return JSON.stringify(this.currentUser, null, 2);
   }
 
-  currentUser: User;
-  Constants: any = Constants;
 
   ngOnInit(): void {
-    this.authn.getUser().then(user => {
-      this.currentUser = user;
-
-      if (user) {
-        this.addMessage('User Logged In');
-      } else {
-        this.addMessage('User Not Logged In');
-      }
-    }).catch(err => this.addError(err));
+    console.debug("Initializing application...");
+    // this.loadUser();
   }
 
-  public onLogin() {
-    this.clearMessages();
-    this.authn.login().catch(err => {
-      this.addError(err);
-    });
-  }
 
-  public onRenewToken() {
-    this.clearMessages();
-    this.authn.renewToken()
-      .then(user => {
-        this.currentUser = user;
-        this.addMessage('Silent Renew Success');
-      })
-      .catch(err => this.addError(err));
-  }
+  // public loadUser() {
+  //   this.authService.getUser().then(user => {
+  //     this.currentUser = user;
+  //
+  //     if (user) {
+  //       this.addMessage('User Logged In');
+  //     } else {
+  //       this.addMessage('User Not Logged In');
+  //     }
+  //   }).catch(err => this.addError(err));
+  // }
 
-  public onLogout() {
-    this.clearMessages();
-    this.authn.logout().catch(err => this.addError(err));
-  }
+  // public onLogin() {
+  //   this.clearMessages();
+  //   this.authService.login().catch(err => {
+  //     this.addError(err);
+  //   });
+  // }
+  //
+  // public onRenewToken() {
+  //   this.clearMessages();
+  //   this.authService.renewToken()
+  //     .then(user => {
+  //       this.currentUser = user;
+  //       this.addMessage('Silent Renew Success');
+  //     })
+  //     .catch(err => this.addError(err));
+  // }
+  //
+  // public onLogout() {
+  //   this.clearMessages();
+  //   this.authService.logout().catch(err => this.addError(err));
+  // }
 
   private clearMessages() {
     while (this.messages.length) {

@@ -34,6 +34,7 @@ export class PeopleDataSource implements DataSource<Person> {
 
     this.loadingSubject.next(true);
 
+
     this.peopleService.list(filter, sortField, sortDirection, pageNumber, pageSize)
       .pipe(
         catchError(() => of([])),

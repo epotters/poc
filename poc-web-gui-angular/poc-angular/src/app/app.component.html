@@ -2,30 +2,30 @@
   <header>
     <mat-toolbar color="primary">
 
-      <button mat-icon-button (click)="toggleSidenav.emit()">
+      <button (click)="toggleSidenav.emit()" mat-icon-button>
         <mat-icon>menu</mat-icon>
       </button>
 
       <span>{{ Constants.applicationDisplayName }}</span>
 
-      <button mat-icon-button routerLinkActive="active" routerLink="/home">
+      <button mat-icon-button routerLink="/home" routerLinkActive="active">
         <mat-icon>home</mat-icon>
       </button>
 
-      <button mat-button routerLinkActive="active" routerLink="/people">
+      <button mat-button routerLink="/people" routerLinkActive="active">
         <span>People</span>
       </button>
 
       <span class="fill-remaining-space"></span>
 
-      <button mat-button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <button [matMenuTriggerFor]="userMenu" mat-button mat-icon-button>
         <mat-icon>more_vert</mat-icon>
       </button>
 
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)='onLogin()' [disabled]="false"><span>Login</span></button>
-        <button mat-menu-item (click)='onRenewToken()' [disabled]="false"><span>Renew Token</span></button>
-        <button mat-menu-item (click)='onLogout()' [disabled]="false"><span>Logout</span></button>
+        <button (click)='onLogin()' [disabled]="false" mat-menu-item><span>Login</span></button>
+        <button (click)='onRenewToken()' [disabled]="false" mat-menu-item><span>Renew Token</span></button>
+        <button (click)='onLogout()' [disabled]="false" mat-menu-item><span>Logout</span></button>
         <button mat-menu-item><span>Settings</span></button>
       </mat-menu>
 

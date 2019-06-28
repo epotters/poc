@@ -3,11 +3,15 @@ export class Constants {
   public static applicationDisplayName = 'Proof of concept in Angular';
 
   // OIDC
-  public static stsAuthority = 'https://demo.identityserver.io/';
-  public static clientId = 'implicit';
+  public static oidcAuthority = 'http://keycloak.localhost/auth/realms/epo';
+  public static clientId = 'poc-gui';
   public static clientRoot = 'http://localhost:4200/';
-  public static clientScope = 'openid profile email api';
+  public static clientScope = 'openid profile email';
+
+  public static redirectUri = Constants.clientRoot + 'auth-callback';
+
+  public static silentRedirectUri = Constants.clientRoot + 'assets/silent-callback.html';
 
   // API
-  public static apiRoot = 'https://demo.identityserver.io/api/';
+  public static apiRoot = 'https://localhost:8002/poc/api';
 }
