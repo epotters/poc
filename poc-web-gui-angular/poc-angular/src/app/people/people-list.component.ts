@@ -25,9 +25,9 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
   defaultPageSize: number = 100;
 
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('input') input: ElementRef;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('input', { static: true }) input: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
 
   constructor(private peopleService: PeopleService, private router: Router,
