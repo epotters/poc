@@ -94,11 +94,11 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button mat-raised-button (click)="deletePerson()" [disabled]="isNew()">Delete
+    <button mat-button (click)="deletePerson()" [disabled]="isNew()">Delete
     </button>
-    <button mat-raised-button (click)="revert()" [disabled]="!personForm.dirty">Revert
+    <button mat-button (click)="revert()" [disabled]="!personForm.dirty">Revert
     </button>
-    <button mat-raised-button color="primary" (click)="savePerson()"
+    <button mat-button color="primary" (click)="savePerson()"
             [disabled]="!personForm.dirty || personForm.invalid">Save
     </button>
   </mat-card-actions>

@@ -2,12 +2,13 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {ActivatedRoute, Router} from "@angular/router";
 import {fromEvent, merge} from "rxjs";
 import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 import {FilterSet} from "../common/filter.model";
-import {PeopleService} from "../core/service/people.service";
 import {PeopleDataSource} from "./people-data-source";
+import {PeopleService} from "../core/service/people.service";
+
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 
 
@@ -27,15 +28,21 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
   defaultPageSize: number = 100;
 
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild('input', { static: true }) input: ElementRef;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild('input', {static: true}) input: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
 
-  constructor(private peopleService: PeopleService, private router: Router,
-              private route: ActivatedRoute, private dialog: MatDialog) {
+  constructor(
+    private peopleService: PeopleService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private dialog: MatDialog
+  ) {
 
     console.debug('Constructing the PeopleListComponent');
+
+    console.debug(route.snapshot);
   }
 
 
@@ -52,13 +59,13 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
   }
 
 
-  onRowClicked(person) {
+  private onRowClicked(person): void {
     console.log('Person clicked: ', person);
     this.router.navigate(['//people/' + person.id]);
   }
 
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
     // server-side search
     fromEvent(this.input.nativeElement, 'keyup')
@@ -85,7 +92,6 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
   updatePeople() {
     const dialogRef = this.openConfirmationDialog('Confirm batch update',
       'Are you sure you want to update all selected people?');
-
     dialogRef.afterClosed().subscribe(
       data => {
         console.debug("Dialog output:", data);
@@ -101,7 +107,6 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
   deletePeople() {
     const dialogRef = this.openConfirmationDialog('Confirm deletion',
       'Are you sure you want to delete all selected people?');
-
     dialogRef.afterClosed().subscribe(
       data => {
         console.debug("Dialog output:", data);
@@ -113,6 +118,7 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
 
   loadPeoplePage() {
     this.dataSource.loadPeople(
@@ -126,7 +132,6 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
 
 
   openConfirmationDialog(title: string, message: string) {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -135,7 +140,6 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
       title: title,
       message: message
     };
-
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
 

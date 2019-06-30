@@ -4,15 +4,15 @@
 
   <mat-card-actions align="end">
 
-    <button mat-raised-button (click)="deletePeople()">
+    <button mat-button (click)="deletePeople()">
       <span>Delete people</span>
     </button>
 
-    <button mat-raised-button (click)="updatePeople()">
+    <button mat-button (click)="updatePeople()">
       <span>Update people</span>
     </button>
 
-    <button mat-raised-button routerLinkActive="active" routerLink="/people/new">
+    <button mat-button routerLinkActive="active" routerLink="/people/new">
       <span>New person</span>
     </button>
   </mat-card-actions>

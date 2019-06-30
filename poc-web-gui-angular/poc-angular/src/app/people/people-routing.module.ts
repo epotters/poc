@@ -2,19 +2,23 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {PeopleListComponent} from './people-list.component';
 import {PersonComponent} from "./person.component";
+import {AuthGuardService} from "../lib/auth-module/auth-guard.service";
 
 const routes: Routes = [
   {
     path: 'people',
-    component: PeopleListComponent
+    component: PeopleListComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'people/new',
-    component: PersonComponent
+    component: PersonComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'people/:id',
-    component: PersonComponent
+    component: PersonComponent,
+    canActivate: [AuthGuardService]
   }
 ];
 

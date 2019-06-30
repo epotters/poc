@@ -4,14 +4,17 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import 'rxjs/Rx';
-import {AuthService} from "./auth.service";
+import {AuthService} from "../../lib/auth-module/auth.service";
 
 
 @Injectable()
 export class ApiService {
 
+
   constructor(private http: HttpClient, private authService: AuthService) {
   }
+
+
 
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
@@ -19,28 +22,27 @@ export class ApiService {
     console.debug('Inside ApiService.get()');
     console.debug('URL to get: ' + `${environment.apiUrl}${path}`);
 
-    let headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': this.authService.getAuthorizationHeaderValue()
-    });
-    
-
-    return this.http.get(`${environment.apiUrl}${path}`, {params, headers: headers})
+    return this.http.get(`${environment.apiUrl}${path}`, {params, headers: this.getHeaders()})
       .pipe(catchError(this.formatErrors));
   }
 
   put(path: string, body: Object = {}): Observable<any> {
 
+    let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+
     return this.http.put(
       `${environment.apiUrl}${path}`,
-      JSON.stringify(body),{headers: this.getHeaders()}
+      JSON.stringify(body),{headers: headers}
     ).pipe(catchError(this.formatErrors));
   }
 
   post(path: string, body: Object = {}): Observable<any> {
+
+   let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+
     return this.http.post(
       `${environment.apiUrl}${path}`,
-      JSON.stringify(body), {headers: this.getHeaders()}
+      JSON.stringify(body), {headers: headers}
     ).pipe(catchError(this.formatErrors));
   }
 
@@ -50,13 +52,17 @@ export class ApiService {
     ).pipe(catchError(this.formatErrors));
   }
 
-  private formatErrors(error: any) {
-    return throwError(error.error);
+
+  private getHeaders(): HttpHeaders {
+      return new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': this.authService.getAuthorizationHeaderValue()
+      });
   }
 
-  private getHeaders() {
-    return {
-      'Content-Type': 'application/json'
-    };
+
+  private formatErrors(error: any) {
+    console.error('An error occurred: ' + error);
+    return throwError(error.error);
   }
 }

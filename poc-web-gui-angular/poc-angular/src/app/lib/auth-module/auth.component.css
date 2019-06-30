@@ -1,0 +1,19 @@
+.full-screen {
+  opacity: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #fff;
+  z-index: -1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.full-screen .centered-message {
+  font: 400 24px/32px Roboto, "Helvetica Neue", sans-serif;
+}
+

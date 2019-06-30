@@ -16,7 +16,6 @@ export class PeopleService {
   constructor(private apiService: ApiService) {
   }
 
-
   list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
     // Build filter params
@@ -33,6 +32,7 @@ export class PeopleService {
     if (filterParams.length > 0) {
       params.set('filters', filterParams.substr(0, filterParams.length - 1));
     }
+
 
     return this.apiService.get(this.peopleBase, params)
       .pipe(map((response: Response) => {
@@ -60,14 +60,15 @@ export class PeopleService {
       }))
   }
 
+
   destroy(id: string) {
     return this.apiService.delete(this.peopleBase + id);
   }
 
+
   save(person: Person): Observable<Person> {
 
     // Update existing
-
     console.debug('people.service.save:');
     person.household = null;
     console.debug(person);

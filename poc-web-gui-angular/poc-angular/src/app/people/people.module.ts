@@ -6,7 +6,7 @@ import {PersonComponent} from "./person.component";
 import {PeopleRoutingModule} from './people-routing.module';
 import {CdkTableModule} from "@angular/cdk/table";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ApiService, JwtService, PeopleService} from "../core/service";
+import {ApiService, PeopleService} from "../core/service";
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 
 
@@ -31,7 +31,7 @@ import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
   ],
   providers: [
     ApiService,
-    JwtService,
+    // JwtService,
     PeopleService
   ]
 })

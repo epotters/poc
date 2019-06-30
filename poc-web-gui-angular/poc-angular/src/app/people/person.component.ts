@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Person} from "../core/domain";
 import {tap} from "rxjs/operators";
-import {PeopleService} from "../core/service";
 import {ActivatedRoute} from "@angular/router";
-import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 
+import {Person} from "../core/domain";
+import {PeopleService} from "../core/service";
 
 @Component({
   selector: 'person-card',
@@ -16,7 +16,6 @@ import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 export class PersonComponent implements OnInit {
 
   personForm: FormGroup;
-
   personNamePattern: string = '[a-zA-Z -]*';
 
   personValidationMessages = {
@@ -31,9 +30,13 @@ export class PersonComponent implements OnInit {
     ]
   };
 
+  constructor(
+    private peopleService: PeopleService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog
+  ) {
 
-  constructor(private formBuilder: FormBuilder, private peopleService: PeopleService,
-              private route: ActivatedRoute, private dialog: MatDialog) {
     console.debug('Constructing the PersonComponent');
 
     this.buildForm(formBuilder);
@@ -49,7 +52,6 @@ export class PersonComponent implements OnInit {
       console.info('Editor for a new person');
     }
   }
-
 
   loadPerson(personId) {
     this.peopleService.get(personId).pipe(
@@ -74,15 +76,12 @@ export class PersonComponent implements OnInit {
     }
   }
 
-
   deletePerson() {
-    if (this.isNew) {
+    if (this.isNew()) {
       return;
     }
-
     const dialogRef = this.openConfirmationDialog('Confirm delete',
       'Are you sure you want to delete this person?');
-
     dialogRef.afterClosed().subscribe(
       data => {
         console.debug("Dialog output:", data);
@@ -142,7 +141,6 @@ export class PersonComponent implements OnInit {
   }
 
   openConfirmationDialog(title: string, message: string) {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -151,7 +149,6 @@ export class PersonComponent implements OnInit {
       title: title,
       message: message
     };
-
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
 

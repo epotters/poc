@@ -1,17 +1,18 @@
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from "@angular/common/http";
+import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from './material.module';
-import {BrowserModule} from "@angular/platform-browser";
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
+
+import {AuthGuardService} from "./lib/auth-module/auth-guard.service";
+import {AuthService} from "./lib/auth-module/auth.service";
+import {AuthModule} from "./lib/auth-module/auth.module";
+
 import {HomeModule} from "./home/home.module";
 import {PeopleModule} from "./people/people.module";
-
-import {AuthGuardService} from "./core/service/auth-guard.service";
-import {AuthService} from "./core/service/auth.service";
-import {AuthCallbackModule} from "./auth-callback/auth-callback.module";
 
 
 @NgModule({
@@ -26,11 +27,10 @@ import {AuthCallbackModule} from "./auth-callback/auth-callback.module";
     MaterialModule,
     BrowserAnimationsModule,
 
-    AuthCallbackModule,
+    AuthModule,
 
     HomeModule,
     PeopleModule
-
   ],
   providers: [AuthGuardService, AuthService],
   bootstrap: [AppComponent]
