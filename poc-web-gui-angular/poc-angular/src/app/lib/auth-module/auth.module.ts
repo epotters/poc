@@ -9,6 +9,8 @@ import {AuthLoginCallbackComponent} from "./auth-login-callback.component";
 import {AuthSilentCallbackComponent} from "./auth-silent-callback.component";
 import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
 
+import {AuthGuardService} from "./auth-guard.service";
+import {AuthService} from "./auth.service";
 
 @NgModule({
   imports: [AuthRoutingModule],
@@ -26,13 +28,15 @@ import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
     AuthSilentCallbackComponent,
     AuthLogoutCallbackComponent
   ],
-  providers: [{
-    provide: 'externalUrlRedirectResolver',
-    useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-      window.location.href = (route.data as any).externalUrl;
-    }
-  }
-  ]
+  providers: [
+    AuthGuardService,
+    AuthService, {
+      provide: 'externalUrlRedirectResolver',
+      useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+        window.location.href = (route.data as any).externalUrl;
+      }
+    }]
+
 })
 export class AuthModule {
 }

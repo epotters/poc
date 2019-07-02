@@ -31,7 +31,6 @@ import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
   ],
   providers: [
     ApiService,
-    // JwtService,
     PeopleService
   ]
 })

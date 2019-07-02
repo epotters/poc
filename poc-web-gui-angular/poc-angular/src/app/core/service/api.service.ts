@@ -11,10 +11,10 @@ import {AuthService} from "../../lib/auth-module/auth.service";
 export class ApiService {
 
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService) {
   }
-
-
 
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
@@ -26,38 +26,40 @@ export class ApiService {
       .pipe(catchError(this.formatErrors));
   }
 
+
   put(path: string, body: Object = {}): Observable<any> {
-
-    let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
-
     return this.http.put(
       `${environment.apiUrl}${path}`,
-      JSON.stringify(body),{headers: headers}
+      JSON.stringify(body), {headers: this.getHeaders()}
     ).pipe(catchError(this.formatErrors));
   }
+
 
   post(path: string, body: Object = {}): Observable<any> {
 
-   let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+    // let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
 
     return this.http.post(
       `${environment.apiUrl}${path}`,
-      JSON.stringify(body), {headers: headers}
+      JSON.stringify(body), {headers: this.getHeaders()}
     ).pipe(catchError(this.formatErrors));
   }
 
+
   delete(path): Observable<any> {
     return this.http.delete(
-      `${environment.apiUrl}${path}`
+      `${environment.apiUrl}${path}`,
+      {headers: this.getHeaders()}
     ).pipe(catchError(this.formatErrors));
   }
 
 
   private getHeaders(): HttpHeaders {
-      return new HttpHeaders({
-        'Accept': 'application/json',
-        'Authorization': this.authService.getAuthorizationHeaderValue()
-      });
+    return new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': this.authService.getAuthorizationHeaderValue()
+    });
   }
 
 
@@ -65,4 +67,5 @@ export class ApiService {
     console.error('An error occurred: ' + error);
     return throwError(error.error);
   }
+
 }

@@ -7,12 +7,11 @@ import {MaterialModule} from './material.module';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 
-import {AuthGuardService} from "./lib/auth-module/auth-guard.service";
-import {AuthService} from "./lib/auth-module/auth.service";
-import {AuthModule} from "./lib/auth-module/auth.module";
+import {AuthModule, AuthGuardService, AuthService} from "./lib/auth-module/";
 
 import {HomeModule} from "./home/home.module";
 import {PeopleModule} from "./people/people.module";
+import {OrganizationModule} from "./organizations/organization.module";
 
 
 @NgModule({
@@ -30,7 +29,8 @@ import {PeopleModule} from "./people/people.module";
     AuthModule,
 
     HomeModule,
-    PeopleModule
+    PeopleModule,
+    OrganizationModule
   ],
   providers: [AuthGuardService, AuthService],
   bootstrap: [AppComponent]

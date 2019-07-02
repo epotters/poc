@@ -1,6 +1,6 @@
 
 
-export interface Person {
+export interface Person extends Identifiable {
   id: number;
   firstName: string;
   prefix: string;
