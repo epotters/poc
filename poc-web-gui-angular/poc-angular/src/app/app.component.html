@@ -8,11 +8,11 @@
 
       <span>{{ Constants.applicationDisplayName }}</span>
 
-      <button mat-icon-button routerLink="/home" routerLinkActive="active">
+      <button mat-icon-button routerLink="home" routerLinkActive="active">
         <mat-icon>home</mat-icon>
       </button>
 
-      <button mat-button routerLink="/people" routerLinkActive="active">
+      <button mat-button routerLink="people" routerLinkActive="active">
         <span>People</span>
       </button>
 
@@ -23,18 +23,19 @@
       <span class="fill-remaining-space"></span>
 
 
-      <button mat-button [hidden]="!authService.isLoggedIn()" [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
-        <span class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : ''}}</span>
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>
+        <mat-icon *ngIf="authService.isLoggedIn()">account_circle</mat-icon>
+        <span class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : 'Unknown'}}</span>
       </button>
 
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="/auth-login" [disabled]="authService.isLoggedIn()">
+        <button mat-menu-item routerLink="auth-login" [disabled]="authService.isLoggedIn()">
           <span>Login</span>
         </button>
-        <button mat-menu-item routerLink="/auth-logout" [disabled]="!authService.isLoggedIn()">
+        <button mat-menu-item routerLink="auth-logout" [disabled]="!authService.isLoggedIn()">
           <span>Logout</span></button>
-        <button mat-menu-item routerLink="/account" [disabled]="!authService.isLoggedIn()">
+        <button mat-menu-item routerLink="account" [disabled]="!authService.isLoggedIn()">
           <span>Account</span>
         </button>
       </mat-menu>
