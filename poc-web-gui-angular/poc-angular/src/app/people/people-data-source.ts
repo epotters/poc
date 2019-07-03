@@ -10,7 +10,6 @@ export class PeopleDataSource implements DataSource<Person> {
   private peopleSubject = new BehaviorSubject<Person[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
-
   private totalSubject = new BehaviorSubject<number>(0);
 
   constructor(private peopleService: PeopleService) {

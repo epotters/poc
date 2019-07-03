@@ -52,7 +52,7 @@
     </mat-table>
 
 
-    <mat-paginator (page)="pageChangeEvent($event)" [length]="total" [pageSize]="meta.defaultPageSize"></mat-paginator>
+    <mat-paginator [length]="dataSource.total" [pageSize]="meta.defaultPageSize"></mat-paginator>
 
   </mat-card-content>
 </mat-card>

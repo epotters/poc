@@ -1,28 +1,30 @@
 import {AfterViewInit, ElementRef, Injectable, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {fromEvent, merge} from "rxjs";
-import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-
+import {fromEvent, merge} from "rxjs";
+import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
 import {FilterSet} from "../../common/filter.model";
 
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 import {EntityService} from "./entity.service";
-import {EntityDataSource} from "./entity-data-source";
 import {EntityMeta} from "./domain/entity-meta.model";
+import {EntityDataSource} from "./entity-data-source";
 
 
 @Injectable()
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   dataSource: EntityDataSource<T>;
+  // dataSource = new MatTableDataSource(this.service.list());
+  // private entitiesDataSource: MatTableDataSource<T> = new MatTableDataSource();
 
   total: number = 0;
-
-  defaultSortDirection: string = 'asc';
-  defaultPageSize: number = 100;
+  filters: FilterSet = {
+    filters: []
+  };
+  startPage: number = 0;
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -46,12 +48,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
-    let filters: FilterSet = {
-      filters: []
-    };
+    // this.dataSource = new MatTableDataSource(this.service.list());
 
-    this.dataSource.loadEntities(filters, this.meta.defaultSortField, this.meta.defaultSortDirection,
-      1, this.meta.defaultPageSize);
+    this.dataSource.loadEntities(this.filters, this.meta.defaultSortField, this.meta.defaultSortDirection,
+      this.startPage, this.meta.defaultPageSize);
   }
 
 
@@ -70,27 +70,63 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       .subscribe();
 
     // Reset the paginator after sorting
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0
+      this.total = this.dataSource.getTotal();
+    });
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadEntitiesPage())
+        tap(() => {
+          this.loadEntitiesPage();
+          this.total = this.dataSource.getTotal();
+        })
       )
       .subscribe();
   }
 
 
-  pageChangeEvent(event) {
-    console.debug('Page changed to number ' + event.pageIndex);
-    this.total = this.dataSource.getTotal();
-    console.debug('Total ' + this.dataSource.getTotal());
-  }
-  
-  
+  // private entities: T[];
+
+  // resultsLength = 0;
+  // isLoadingResults = false;
+  // isRateLimitReached = false;
+
+  // public ngAfterViewInit() {
+  //
+  //   // If the user changes the sort order, reset back to the first page.
+  //   this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+  //
+  //   merge(this.sort.sortChange, this.paginator.page)
+  //     .pipe(
+  //       startWith({}),
+  //       switchMap(() => {
+  //         this.isLoadingResults = true;
+  //         return this.service.list(this.filters, this.sort.active, this.sort.direction,
+  //           this.paginator.pageIndex + 1, this.paginator.pageSize
+  //           // (total) => this.resultsLength = total
+  //         );
+  //       }),
+  //       map(data => {
+  //         this.isLoadingResults = false;
+  //         this.isRateLimitReached = false;
+  //         //alternatively to response headers;
+  //         //this.resultsLength = data.total;
+  //         return data;
+  //       }),
+  //       catchError(() => {
+  //         this.isLoadingResults = false;
+  //         this.isRateLimitReached = true;
+  //         return observableOf([]);
+  //       })
+  //     ).subscribe(data => this.entitiesDataSource.data = data);
+  // }
+
+
   loadEntitiesPage() {
     this.dataSource.loadEntities(
-      {filters: []},
-      '',
+      this.filters,
+      this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize
@@ -128,7 +164,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       }
     );
   }
-  
+
 
   openConfirmationDialog(title: string, message: string) {
     const dialogConfig = new MatDialogConfig();

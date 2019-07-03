@@ -7,35 +7,29 @@ import {FilterSet} from "../../common/filter.model";
 import {ApiService} from "../../core/service";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
-import {MetaConfig} from "../../meta-config";
-
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class EntityService<T extends Identifiable> implements OnInit {
-  
+
   constructor(
-    public meta: EntityMeta<T>, 
+    public meta: EntityMeta<T>,
     public apiService: ApiService) {
     console.debug('Start constructing entity service for type ' + this.meta.displayName);
   }
 
-  
+
   ngOnInit() {
     console.debug('Initializing the Entity Service');
   }
 
 
-  setMeta(typeName: string) {
-    console.debug('Setting meta for ' + typeName);
-    this.meta = MetaConfig.metas.get(typeName);
-  }
-
-
   public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
+  // public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize,
+  //             initTotal: Function = () => {}): Observable<T[]> {
     // Build filter params
     let filterParams: string = '';
     for (let filter of filterSet.filters) {
@@ -79,11 +73,6 @@ export class EntityService<T extends Identifiable> implements OnInit {
   }
 
 
-  destroy(id: string) {
-    return this.apiService.delete(this.meta.apiBase + id);
-  }
-
-
   save(entity: T): Observable<T> {
 
     // Update existing
@@ -100,5 +89,11 @@ export class EntityService<T extends Identifiable> implements OnInit {
         .pipe(map(data => data.entity));
     }
   }
+
+  destroy(id: string) {
+    console.debug('About to destroy ' + this.meta.displayName.toLowerCase() + ' with id ' + id);
+    return this.apiService.delete(this.meta.apiBase + id);
+  }
+
 
 }

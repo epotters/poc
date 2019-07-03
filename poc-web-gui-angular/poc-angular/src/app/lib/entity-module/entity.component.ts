@@ -36,7 +36,7 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
 
   ngOnInit() {
     console.debug('Initializing the EntityComponent');
-    const entityId = this.route.snapshot.paramMap.get('id');
+    let entityId = this.route.snapshot.paramMap.get('id');
     if (entityId) {
       this.loadEntity(entityId);
     } else {
@@ -74,6 +74,9 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
     if (this.isNew()) {
       return;
     }
+
+    let entity = this.entityForm.getRawValue();
+
     const dialogRef = this.openConfirmationDialog('Confirm delete',
       'Are you sure you want to delete this '+this.meta.displayName+'?');
     dialogRef.afterClosed().subscribe(
@@ -81,6 +84,8 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
         console.debug("Dialog output:", data);
         if (data.confirmed) {
           console.info('User confirmed delete action, so it will be executed');
+          this.service.destroy(entity.id);
+          
         } else {
           console.info('User canceled delete action');
         }

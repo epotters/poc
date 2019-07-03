@@ -22,31 +22,40 @@ export class ApiService {
     console.debug('Inside ApiService.get()');
     console.debug('URL to get: ' + `${environment.apiUrl}${path}`);
 
-    return this.http.get(`${environment.apiUrl}${path}`, {params, headers: this.getHeaders()})
+    return this.http.get(
+      `${environment.apiUrl}${path}`,
+      {params, headers: this.getHeaders()})
       .pipe(catchError(this.formatErrors));
   }
 
 
   put(path: string, body: Object = {}): Observable<any> {
+
+    let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+    
     return this.http.put(
       `${environment.apiUrl}${path}`,
-      JSON.stringify(body), {headers: this.getHeaders()}
+      JSON.stringify(body), {headers: headers}
     ).pipe(catchError(this.formatErrors));
   }
 
 
   post(path: string, body: Object = {}): Observable<any> {
 
-    // let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+    let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
 
     return this.http.post(
       `${environment.apiUrl}${path}`,
-      JSON.stringify(body), {headers: this.getHeaders()}
+      JSON.stringify(body), {headers: headers}
     ).pipe(catchError(this.formatErrors));
   }
 
 
   delete(path): Observable<any> {
+
+    console.debug('Inside ApiService.delete()');
+    console.debug('Resource to delete: ' + `${environment.apiUrl}${path}`);
+
     return this.http.delete(
       `${environment.apiUrl}${path}`,
       {headers: this.getHeaders()}
@@ -57,7 +66,7 @@ export class ApiService {
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Authorization': this.authService.getAuthorizationHeaderValue()
     });
   }

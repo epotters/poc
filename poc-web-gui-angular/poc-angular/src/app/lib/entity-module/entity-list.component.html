@@ -39,6 +39,8 @@
         <mat-cell *matCellDef="let entity">{{entity.id}}</mat-cell>
       </ng-container>
 
+      <!-- Rest of the columns go here -->
+
 
       <mat-header-row *matHeaderRowDef="meta.displayedColumns"></mat-header-row>
       <mat-row (click)="onRowClicked(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
@@ -46,7 +48,7 @@
     </mat-table>
 
 
-    <mat-paginator (page)="pageChangeEvent($event)" [length]="total" [pageSize]="meta.defaultPageSize"></mat-paginator>
+    <mat-paginator [length]="dataSource.total" [pageSize]="meta.defaultPageSize"></mat-paginator>
 
   </mat-card-content>
 </mat-card>

@@ -10,10 +10,9 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   private entitiesSubject = new BehaviorSubject<T[]>([]);
   private totalSubject = new BehaviorSubject<number>(0);
+  public total =  this.totalSubject.asObservable();
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
-
-  
 
   constructor(
     public meta: EntityMeta<T>,
@@ -23,23 +22,27 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   }
 
   public connect(collectionViewer: CollectionViewer): Observable<T[]> {
-    console.debug('Connecting...');
+    console.debug('Connecting datasource...');
     return this.entitiesSubject.asObservable();
   }
 
   public disconnect(collectionViewer: CollectionViewer): void {
-    console.debug('Disconnecting...');
+    console.debug('Disconnecting datasource...');
     this.entitiesSubject.complete();
     this.totalSubject.complete();
     this.loadingSubject.complete();
   }
 
-  public loadEntities(filter: FilterSet, sortField: string, sortDirection: string, pageNumber: number, pageSize: number) {
+  public loadEntities (
+    filter: FilterSet,
+    sortField: string,
+    sortDirection: string,
+    pageNumber: number,
+    pageSize: number): void {
 
     console.debug('Loading ' + this.meta.displayNamePlural.toLowerCase() + '...');
 
     this.loadingSubject.next(true);
-
 
     this.service.list(filter, sortField, sortDirection, pageNumber, pageSize)
       .pipe(
@@ -52,8 +55,9 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
         this.loadingSubject.next(false);
       });
   }
-  
+
   public getTotal() {
+    console.debug('Total requested ' + this.totalSubject.getValue());
     return this.totalSubject.getValue();
   }
 }

@@ -55,7 +55,7 @@ export class PeopleListComponent implements OnInit, AfterViewInit {
       filters: []
     };
 
-    this.dataSource.loadPeople(filters, this.defaultSortField, this.defaultSortDirection, 1, this.defaultPageSize);
+    this.dataSource.loadPeople(filters, this.defaultSortField, this.defaultSortDirection, 0, this.defaultPageSize);
   }
 
 
