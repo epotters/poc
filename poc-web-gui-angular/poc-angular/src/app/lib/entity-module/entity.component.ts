@@ -1,7 +1,7 @@
-import {Injectable, OnInit} from '@angular/core';
+import {OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {tap} from "rxjs/operators";
-import {ActivatedRoute, Route, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
@@ -9,15 +9,9 @@ import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 
 
-@Injectable()
 export abstract class EntityComponent<T extends Identifiable> implements OnInit {
 
-
   entityForm: FormGroup;
-
-
-  namePattern: string = '[a-zA-Z -]*';
-
 
   constructor(
     public meta: EntityMeta<T>,

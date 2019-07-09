@@ -4,9 +4,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {PersonListComponent} from "./person-list.component";
 import {PersonComponent} from "./person.component";
 import {AuthGuardService} from "../lib/auth-module";
-import {PersonMeta} from "./person-meta";
+import {personMeta} from "./person-meta";
 
-const meta = new PersonMeta();
+const meta = personMeta;
 
 const routes: Routes = [
   {

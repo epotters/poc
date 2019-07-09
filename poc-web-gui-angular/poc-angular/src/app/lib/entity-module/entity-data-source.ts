@@ -1,7 +1,7 @@
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
-import {FilterSet} from "../../common/filter.model";
+import {FilterSet} from "./domain/filter.model";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 

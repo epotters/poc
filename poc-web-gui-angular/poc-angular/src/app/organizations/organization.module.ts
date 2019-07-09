@@ -10,7 +10,6 @@ import {OrganizationService} from "./organization.service";
 import {OrganizationRoutingModule} from "./organization-routing.module";
 
 
-
 @NgModule({
   imports: [
     EntityCommonModule,

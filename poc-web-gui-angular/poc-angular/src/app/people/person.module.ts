@@ -1,14 +1,13 @@
 import {NgModule} from '@angular/core';
 
 import {EntityCommonModule} from "../lib/entity-module/entity-common.module";
-
+import {DialogModule} from "../lib/entity-module/dialog.module";
 
 import {ApiService} from "../core/service";
 import {PersonComponent} from "./person.component";
 import {PersonListComponent} from "./person-list.component";
 import {PersonService} from "./person.service";
 import {PersonRoutingModule} from "./person-routing.module";
-import {DialogModule} from "../lib/entity-module/dialog.module";
 
 
 @NgModule({

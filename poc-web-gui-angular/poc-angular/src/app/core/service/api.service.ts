@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import 'rxjs/Rx';
-import {AuthService} from "../../lib/auth-module/auth.service";
+
+import {environment} from '../../../environments/environment';
+import {AuthService} from "../../lib/auth-module/";
 
 
 @Injectable()
@@ -32,7 +34,7 @@ export class ApiService {
   put(path: string, body: Object = {}): Observable<any> {
 
     let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
-    
+
     return this.http.put(
       `${environment.apiUrl}${path}`,
       JSON.stringify(body), {headers: headers}

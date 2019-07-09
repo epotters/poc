@@ -1,6 +1,5 @@
-import {Component, enableProdMode} from '@angular/core';
+import {Component} from '@angular/core';
 import {Constants} from '../constants';
-import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "./lib/auth-module/";
 
 
@@ -15,15 +14,9 @@ export class AppComponent {
   messages: string[] = [];
 
   constructor(
-    private authService: AuthService,
-    private route: ActivatedRoute
+    public authService: AuthService
   ) {
     console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
-
-
-    if (Constants.environment != 'dev') {
-      enableProdMode();
-    }
   }
 
 

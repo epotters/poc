@@ -2,8 +2,6 @@ import {UserManagerSettings} from "oidc-client";
 
 export class Constants {
   
-  public static environment = 'dev';
-
   public static timezone = 'Europe/Amsterdam';
   public static locale = 'NL-NL';
 

@@ -1,17 +1,14 @@
-import {Injectable, OnInit} from '@angular/core';
+import {OnInit} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {FilterSet} from "../../common/filter.model";
+import {FilterSet} from "./domain/filter.model";
 import {ApiService} from "../../core/service";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
 
 
-@Injectable({
-  providedIn: 'root',
-})
 export class EntityService<T extends Identifiable> implements OnInit {
 
   constructor(
@@ -20,16 +17,15 @@ export class EntityService<T extends Identifiable> implements OnInit {
     console.debug('Start constructing entity service for type ' + this.meta.displayName);
   }
 
-
   ngOnInit() {
     console.debug('Initializing the Entity Service');
   }
 
-
   public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
-  // public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize,
-  //             initTotal: Function = () => {}): Observable<T[]> {
+    // public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize,
+    //             initTotal: Function = () => {}): Observable<T[]> {
+
     // Build filter params
     let filterParams: string = '';
     for (let filter of filterSet.filters) {
@@ -57,8 +53,8 @@ export class EntityService<T extends Identifiable> implements OnInit {
             total: res['totalElements']
           };
           return result;
-
-        }))
+        })
+      );
   }
 
 
@@ -69,7 +65,7 @@ export class EntityService<T extends Identifiable> implements OnInit {
         console.debug('Response on the next line');
         console.debug(response);
         return response;
-      }))
+      }));
   }
 
 

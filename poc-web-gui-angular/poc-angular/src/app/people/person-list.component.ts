@@ -4,7 +4,7 @@ import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {PersonService} from "./person.service";
-import {PersonMeta} from "./person-meta";
+import {personMeta} from "./person-meta";
 
 @Component({
   selector: 'person-list-card',
@@ -13,14 +13,13 @@ import {PersonMeta} from "./person-meta";
 export class PersonListComponent extends EntityListComponent<Person> {
 
   constructor(
-    public meta: PersonMeta,
     public service: PersonService,
     public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog
   ) {
 
-    super(meta, service, router, route, dialog);
+    super(personMeta, service, router, route, dialog);
   }
 
 }

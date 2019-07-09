@@ -5,7 +5,7 @@ import {MatDialog} from "@angular/material";
 
 import {EntityComponent} from "../lib/entity-module";
 import {Person} from "../core/domain/";
-import {PersonMeta} from "./person-meta";
+import {personMeta} from "./person-meta";
 import {PersonService} from "./person.service";
 
 @Component({
@@ -17,16 +17,14 @@ export class PersonComponent extends EntityComponent<Person> {
   personNamePattern: string = '[a-zA-Z -]*';
 
   constructor(
-    public meta: PersonMeta,
     public service: PersonService,
     public router: Router,
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
     public dialog: MatDialog
   ) {
-    super(meta, service, router, route, formBuilder, dialog);
+    super(personMeta, service, router, route, formBuilder, dialog);
   }
-
 
 
   buildForm(formBuilder: FormBuilder) {

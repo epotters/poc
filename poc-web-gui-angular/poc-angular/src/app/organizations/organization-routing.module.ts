@@ -3,10 +3,10 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {OrganizationListComponent} from "./organization-list.component";
 import {OrganizationComponent} from "./organization.component";
-import {OrganizationMeta} from "./organization-meta";
+import {organizationMeta} from "./organization-meta";
 import {AuthGuardService} from "../lib/auth-module";
 
-const meta = new OrganizationMeta();
+const meta = organizationMeta;
 
 const routes: Routes = [
   {

@@ -4,7 +4,7 @@ import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {OrganizationService} from "./organization.service";
-import {OrganizationMeta} from "./organization-meta";
+import {organizationMeta} from "./organization-meta";
 
 @Component({
   selector: 'organization-list-card',
@@ -14,14 +14,13 @@ import {OrganizationMeta} from "./organization-meta";
 export class OrganizationListComponent extends EntityListComponent<Organization> {
 
   constructor(
-    public meta: OrganizationMeta,
     public service: OrganizationService,
     public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog
   ) {
 
-    super(meta, service, router, route, dialog);
+    super(organizationMeta, service, router, route, dialog);
   }
 
 }

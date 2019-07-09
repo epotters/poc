@@ -30,7 +30,6 @@
     </div>
 
 
-
     <mat-table [dataSource]="dataSource" class="mat-elevation-z2" matSort matSortActive="lastName"
                matSortDirection="asc"
                matSortDisableClear>
@@ -62,7 +61,8 @@
       <!-- Gender Column -->
       <ng-container matColumnDef="gender">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Gender</mat-header-cell>
-        <mat-cell *matCellDef="let person">{{(person.gender == 'MALE') ? 'Male' : (person.gender == 'FEMALE') ? 'Female' : ''}}</mat-cell>
+        <mat-cell
+          *matCellDef="let person">{{(person.gender == 'MALE') ? 'Male' : (person.gender == 'FEMALE') ? 'Female' : ''}}</mat-cell>
       </ng-container>
 
       <!-- Birth date Column -->

@@ -1,11 +1,11 @@
-import {AfterViewInit, ElementRef, Injectable, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {fromEvent, merge} from "rxjs";
 import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
-import {FilterSet} from "../../common/filter.model";
+import {FilterSet} from "./domain/filter.model";
 
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 import {EntityService} from "./entity.service";
@@ -13,7 +13,6 @@ import {EntityMeta} from "./domain/entity-meta.model";
 import {EntityDataSource} from "./entity-data-source";
 
 
-@Injectable()
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   dataSource: EntityDataSource<T>;
