@@ -33,7 +33,18 @@ import {AuthService} from "./auth.service";
     AuthService, {
       provide: 'externalUrlRedirectResolver',
       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-        window.location.href = (route.data as any).externalUrl;
+
+        let routeData = (route.data as any);
+        let url = routeData.externalUrl;
+        if(routeData.queryParams) {
+          let isFirst = true;
+          for (let key in routeData.queryParams) {
+            let value = routeData.queryParams[key];
+            url += ((isFirst) ? '?' : '&') + key + '=' + value;
+            isFirst = false;
+          }
+        }
+        window.location.href = url;
       }
     }]
 

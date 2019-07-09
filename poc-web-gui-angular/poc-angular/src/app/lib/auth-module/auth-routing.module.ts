@@ -29,7 +29,11 @@ const routes: Routes = [
       url: 'externalUrlRedirectResolver'
     },
     data: {
-      externalUrl: Constants.accountUrl
+      externalUrl: Constants.accountUrl,
+      queryParams: {
+        referer: Constants.userManagerSettings.client_id,
+        referrer_uri: Constants.clientRoot + Constants.applicationBasePath
+      }
     }
   },
   {
