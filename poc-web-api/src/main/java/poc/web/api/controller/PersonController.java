@@ -33,9 +33,7 @@ import poc.core.repository.PersonRepository;
 public class PersonController {
 
   private final int batchPageSize = 100;
-
   private final PersonRepository personRepository;
-
   private QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>();
 
 
@@ -82,7 +80,6 @@ public class PersonController {
   @PatchMapping("/")
   public void updatePeople(@RequestParam(value = "filters", required = true) final String filters,
       final @RequestBody Map<String, Object> partialPerson) {
-
 
     // Validate the partial person
     List<String> fieldNamesInFilter = filterTanslator.fieldNames(filters);
