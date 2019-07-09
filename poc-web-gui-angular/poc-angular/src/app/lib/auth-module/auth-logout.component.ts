@@ -8,7 +8,7 @@ import {AuthService} from "./auth.service";
 })
 export class AuthLogoutComponent implements OnInit {
 
-  private message: string = 'Auth Logout Page';
+  message: string = 'Auth Logout Page';
 
   constructor(private authService: AuthService) {
   }

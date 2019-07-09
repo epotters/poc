@@ -25,7 +25,6 @@ export class AuthGuardService implements CanActivate {
   }
 
 
-
   private debugLog(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): void {
 
     console.debug(this.router);
@@ -42,7 +41,6 @@ export class AuthGuardService implements CanActivate {
   }
 
 
-  
   private isRouteProtected(path: string): boolean {
     for (let key in this.router.config) {
       let config = this.router.config[key];

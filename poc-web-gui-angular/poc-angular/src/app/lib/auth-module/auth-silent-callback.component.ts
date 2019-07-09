@@ -8,7 +8,7 @@ import {AuthService} from "./auth.service";
 })
 export class AuthSilentCallbackComponent implements OnInit {
 
-  private message: string = 'Auth Silent Refresh Page';
+  message: string = 'Auth Silent Refresh Page';
 
   constructor(private authService: AuthService) {
   }
