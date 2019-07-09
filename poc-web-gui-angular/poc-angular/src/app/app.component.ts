@@ -1,7 +1,8 @@
 import {Component, enableProdMode} from '@angular/core';
 import {Constants} from '../constants';
 import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "./lib/auth-module/auth.service";
+import {AuthService} from "./lib/auth-module/";
+
 
 @Component({
   selector: 'app-root',
@@ -14,17 +15,19 @@ export class AppComponent {
   messages: string[] = [];
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {
     console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
 
-    
+
     if (Constants.environment != 'dev') {
       enableProdMode();
     }
   }
 
+
+  // Message service
   private clearMessages() {
     while (this.messages.length) {
       this.messages.pop();

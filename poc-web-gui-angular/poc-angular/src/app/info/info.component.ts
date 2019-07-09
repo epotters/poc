@@ -5,18 +5,16 @@ import {Constants} from '../../constants';
 
 @Component({
   selector: 'app-home-page',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './info.component.html',
+  styleUrls: ['./info.component.css']
 })
-export class HomeComponent implements OnInit {
+export class InfoComponent {
   Constants: any = Constants;
+  
+  public pageTitle = 'General information';
 
   constructor(private router: Router) {
     console.debug('Constructing the InfoComponent');
-  }
-
-
-  ngOnInit() {
   }
 
 }

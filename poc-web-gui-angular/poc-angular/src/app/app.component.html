@@ -1,6 +1,6 @@
 <div>
   <header>
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" class="mat-elevation-z6">
 
       <button (click)="sidenav.toggle()" mat-icon-button>
         <mat-icon>menu</mat-icon>
@@ -20,8 +20,13 @@
         <span>Organizations</span>
       </button>
 
+
       <span class="fill-remaining-space"></span>
 
+
+      <button mat-button routerLink="info" routerLinkActive="active">
+        <span>Info</span>
+      </button>
 
       <button mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>

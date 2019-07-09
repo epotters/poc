@@ -7,13 +7,14 @@ export class Constants {
   public static timezone = 'Europe/Amsterdam';
   public static locale = 'NL-NL';
 
-  
 
   public static applicationDisplayName = 'Proof of concept in Angular';
 
+  public static applicationBasePath = '/poc/';
+
 
   // OIDC
-  public static clientRoot = 'http://localhost:4200/';
+  public static clientRoot = 'http://localhost:4200';
 
   public static oidcProviderRoot = 'http://keycloak.localhost/auth/';
   public static realm = 'epo';
@@ -28,9 +29,9 @@ export class Constants {
     client_id: 'poc-gui',
     response_type: "code",
     scope: 'openid profile email',
-    redirect_uri: Constants.clientRoot + 'auth-callback',
-    silent_redirect_uri: Constants.clientRoot + 'auth-silent-callback',
-    post_logout_redirect_uri: Constants.clientRoot + 'auth-logout-callback',
+    redirect_uri: Constants.clientRoot + '/auth-callback',
+    silent_redirect_uri: Constants.clientRoot + '/auth-silent-callback',
+    post_logout_redirect_uri: Constants.clientRoot + '/auth-logout-callback',
     filterProtocolClaims: true,
     loadUserInfo: true
   };

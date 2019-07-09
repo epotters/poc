@@ -1,6 +1,6 @@
 
 import {Component} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material";
 
@@ -18,11 +18,12 @@ export class OrganizationComponent extends EntityComponent<Organization> {
   constructor(
     public meta: OrganizationMeta,
     public service: OrganizationService,
+    public router: Router,
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
     public dialog: MatDialog
   ) {
-    super(meta, service, route, formBuilder, dialog);
+    super(meta, service, router, route, formBuilder, dialog);
   }
 
 

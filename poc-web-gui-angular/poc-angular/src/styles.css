@@ -8,11 +8,26 @@ body {
   border: 0;
 }
 
+.nav-link {
+  cursor: pointer;
+}
+
 
 .fill-remaining-space {
   /* This fills the remaining space, by using flexbox.
      Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
+}
+
+header .mat-toolbar-row, header .mat-toolbar-single-row {
+  height: 45px;
+}
+
+
+.mat-typography h1 {
+  margin-top: 6px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 /* List card */
@@ -65,6 +80,14 @@ mat-radio-button {
 }
 
  */
+
+
+.content {
+  column-count: 2;
+  column-gap: 30px;
+  column-rule: 1px solid silver;
+  margin: 0 15px 30px 15px;
+}
 
 
 

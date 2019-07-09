@@ -21,7 +21,7 @@
 
     <!-- New part: this is the search box -->
     <mat-form-field>
-      <input #input matInput placeholder="Search entities">
+      <input #input matInput placeholder="Search {{meta.displayNamePlural.toLowerCase()}}">
     </mat-form-field>
 
 
@@ -30,8 +30,8 @@
     </div>
 
 
-    <mat-table [dataSource]="dataSource" class="mat-elevation-z2" matSort matSortActive="lastName"
-               matSortDirection="asc" matSortDisableClear>
+    <mat-table [dataSource]="dataSource" matSort matSortActive="lastName"
+               matSortDirection="asc" class="mat-elevation-z2" matSortDisableClear>
 
       <!-- ID Column -->
       <ng-container matColumnDef="id">

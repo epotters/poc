@@ -13,8 +13,6 @@ import {OrganizationMeta} from "./organization-meta";
 })
 export class OrganizationListComponent extends EntityListComponent<Organization> {
 
-  typeName: string = 'Organization';
-
   constructor(
     public meta: OrganizationMeta,
     public service: OrganizationService,

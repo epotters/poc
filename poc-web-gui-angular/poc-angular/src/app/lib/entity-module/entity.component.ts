@@ -1,12 +1,11 @@
 import {Injectable, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {tap} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Route, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
 import {EntityService} from "./entity.service";
-import {Entity} from "./domain/entity.model";
 import {EntityMeta} from "./domain/entity-meta.model";
 
 
@@ -23,6 +22,7 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
   constructor(
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
+    public router: Router,
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
     public dialog: MatDialog
@@ -63,6 +63,8 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
 
       console.debug('Ready to save ' + this.meta.displayName + ': ' + JSON.stringify(entity));
       this.service.save(entity).subscribe((response) => {
+        let msg = this.meta.displayName + ' with id ' + entity.id + ' is saved successfully';
+        console.info(msg);
         console.log('repsonse ', response);
       });
     } else {
@@ -78,14 +80,23 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
     let entity = this.entityForm.getRawValue();
 
     const dialogRef = this.openConfirmationDialog('Confirm delete',
-      'Are you sure you want to delete this '+this.meta.displayName+'?');
+      'Are you sure you want to delete this ' + this.meta.displayName + '?');
+
     dialogRef.afterClosed().subscribe(
       data => {
         console.debug("Dialog output:", data);
         if (data.confirmed) {
           console.info('User confirmed delete action, so it will be executed');
-          this.service.destroy(entity.id);
-          
+          this.service.destroy(entity.id).subscribe((response) => {
+            console.info('response ', response);
+            let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
+            console.info(msg);
+
+            // Redirect to the list view
+            this.router.navigate([this.meta.namePlural]);
+
+          });
+
         } else {
           console.info('User canceled delete action');
         }

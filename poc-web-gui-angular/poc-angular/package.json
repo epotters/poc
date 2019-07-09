@@ -22,6 +22,8 @@
     "@angular/platform-browser-dynamic": "~8.0.3",
     "@angular/router": "~8.0.3",
     "@pebula/ngrid": "^1.0.0-alpha.26",
+    "@pebula/ngrid-material": "^1.0.0-alpha.26",
+    "@pebula/utils": "^1.0.0-alpha.3",
     "core-js": "^2.6.9",
     "hammerjs": "^2.0.8",
     "oidc-client": "^1.8.2",

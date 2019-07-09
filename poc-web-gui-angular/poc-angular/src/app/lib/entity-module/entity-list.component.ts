@@ -71,7 +71,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
     // Reset the paginator after sorting
     this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0
+      this.paginator.pageIndex = 0;
       this.total = this.dataSource.getTotal();
     });
 
