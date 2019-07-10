@@ -6,7 +6,7 @@ import {catchError} from 'rxjs/operators';
 import 'rxjs/Rx';
 
 import {environment} from '../../../environments/environment';
-import {AuthService} from "../../lib/auth-module/";
+import {AuthService} from "../../lib/auth-module";
 
 
 @Injectable()

@@ -10,7 +10,6 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   private entitiesSubject = new BehaviorSubject<T[]>([]);
   private totalSubject = new BehaviorSubject<number>(0);
-  public total =  this.totalSubject.asObservable();
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
 
@@ -33,14 +32,14 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
     this.loadingSubject.complete();
   }
 
-  public loadEntities (
+  public loadEntities(
     filter: FilterSet,
     sortField: string,
     sortDirection: string,
     pageNumber: number,
     pageSize: number): void {
 
-    console.debug('Loading ' + this.meta.displayNamePlural.toLowerCase() + '...');
+    console.debug('Datasource loading ' + this.meta.displayNamePlural.toLowerCase() + '...');
 
     this.loadingSubject.next(true);
 
@@ -50,14 +49,21 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe(entityResult => {
+        
+        console.debug('Datasource entityResult:');
+        console.debug(entityResult);
+
         this.entitiesSubject.next(entityResult.entities);
         this.totalSubject.next(entityResult.total);
         this.loadingSubject.next(false);
       });
   }
 
-  public getTotal() {
-    console.debug('Total requested ' + this.totalSubject.getValue());
+  public getTotal(): number {
     return this.totalSubject.getValue();
+  }
+
+  public getEntities(): T[] {
+    return this.entitiesSubject.getValue();
   }
 }

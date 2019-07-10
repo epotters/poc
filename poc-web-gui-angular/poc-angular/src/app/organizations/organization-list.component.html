@@ -30,7 +30,7 @@
     </div>
 
 
-    <mat-table [dataSource]="dataSource" matSort matSortActive="lastName"
+    <mat-table [dataSource]="dataSource" matSort matSortActive="name"
                matSortDirection="asc" class="mat-elevation-z2" matSortDisableClear>
 
       <!-- ID Column -->
@@ -52,7 +52,7 @@
     </mat-table>
 
 
-    <mat-paginator [length]="dataSource.total" [pageSize]="meta.defaultPageSize"></mat-paginator>
+    <mat-paginator [length]="dataSource.getTotal()" [pageSize]="meta.defaultPageSize"></mat-paginator>
 
   </mat-card-content>
 </mat-card>

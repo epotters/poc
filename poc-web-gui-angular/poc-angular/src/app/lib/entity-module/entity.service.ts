@@ -4,27 +4,22 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {FilterSet} from "./domain/filter.model";
-import {ApiService} from "../../core/service";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
 
+import {ApiService} from "../../core/service/api.service";
 
-export class EntityService<T extends Identifiable> implements OnInit {
+
+export class EntityService<T extends Identifiable> {
 
   constructor(
     public meta: EntityMeta<T>,
     public apiService: ApiService) {
     console.debug('Start constructing entity service for type ' + this.meta.displayName);
   }
-
-  ngOnInit() {
-    console.debug('Initializing the Entity Service');
-  }
+  
 
   public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
-
-    // public list(filterSet: FilterSet, sortField, sortDirection = 'asc', pageNumber = 0, pageSize,
-    //             initTotal: Function = () => {}): Observable<T[]> {
 
     // Build filter params
     let filterParams: string = '';

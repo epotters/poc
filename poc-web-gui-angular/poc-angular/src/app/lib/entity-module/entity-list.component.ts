@@ -16,8 +16,6 @@ import {EntityDataSource} from "./entity-data-source";
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   dataSource: EntityDataSource<T>;
-  // dataSource = new MatTableDataSource(this.service.list());
-  // private entitiesDataSource: MatTableDataSource<T> = new MatTableDataSource();
 
   total: number = 0;
   filters: FilterSet = {
@@ -37,8 +35,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
-    console.debug(route.snapshot);
-    console.debug('List of ' + this.meta.displayNamePlural);
   }
 
 
@@ -47,8 +43,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
-    // this.dataSource = new MatTableDataSource(this.service.list());
-
     this.dataSource.loadEntities(this.filters, this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.meta.defaultPageSize);
   }
@@ -56,7 +50,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   ngAfterViewInit(): void {
 
-    // server-side search
+    // Server-side search
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
         debounceTime(150),
@@ -68,10 +62,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       )
       .subscribe();
 
+
     // Reset the paginator after sorting
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
-      this.total = this.dataSource.getTotal();
     });
 
     merge(this.sort.sortChange, this.paginator.page)
@@ -83,43 +77,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       )
       .subscribe();
   }
-
-
-  // private entities: T[];
-
-  // resultsLength = 0;
-  // isLoadingResults = false;
-  // isRateLimitReached = false;
-
-  // public ngAfterViewInit() {
-  //
-  //   // If the user changes the sort order, reset back to the first page.
-  //   this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-  //
-  //   merge(this.sort.sortChange, this.paginator.page)
-  //     .pipe(
-  //       startWith({}),
-  //       switchMap(() => {
-  //         this.isLoadingResults = true;
-  //         return this.service.list(this.filters, this.sort.active, this.sort.direction,
-  //           this.paginator.pageIndex + 1, this.paginator.pageSize
-  //           // (total) => this.resultsLength = total
-  //         );
-  //       }),
-  //       map(data => {
-  //         this.isLoadingResults = false;
-  //         this.isRateLimitReached = false;
-  //         //alternatively to response headers;
-  //         //this.resultsLength = data.total;
-  //         return data;
-  //       }),
-  //       catchError(() => {
-  //         this.isLoadingResults = false;
-  //         this.isRateLimitReached = true;
-  //         return observableOf([]);
-  //       })
-  //     ).subscribe(data => this.entitiesDataSource.data = data);
-  // }
 
 
   loadEntitiesPage() {
@@ -156,7 +113,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       data => {
         console.debug("Dialog output:", data);
         if (data.confirmed) {
-          console.info('User confirmed batch delete action, so ik will be executed');
+          console.info('User confirmed batch delete action, so it will be executed');
         } else {
           console.info('User canceled batch delete action');
         }
@@ -179,8 +136,86 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   private onRowClicked(entity): void {
-    console.log(this.meta.displayName + ' clicked: ', entity);
+    console.info(this.meta.displayName + ' clicked: ', entity);
     this.router.navigate([this.meta.namePlural + '/' + entity.id]);
+  }
+
+
+
+  // Relative navigation
+
+  public isFirstEntity(currentEntityId: number): boolean {
+    if (this.paginator.hasPreviousPage()) {
+      let firstEntity: T = this.getByPosition(this.dataSource.getEntities(), 0);
+      return (firstEntity.id === currentEntityId);
+    }
+    return false;
+  }
+
+  public isLastEntity(currentEntityId: number): boolean {
+    if (!this.paginator.hasNextPage()) {
+      let lastPageLength: number = this.paginator.length % this.paginator.pageSize;
+      let lastEntity = this.getByPosition(this.dataSource.getEntities(), lastPageLength - 1);
+      return (lastEntity.id === currentEntityId);
+    }
+    return false;
+  }
+
+  private positionOnCurrentPage(currentEntityId: number): number {
+    let entities = this.dataSource.getEntities();
+    let idx: number = -1;
+    for (let entity of entities) {
+      if (entity.id === currentEntityId) {
+        break;
+      }
+      idx++;
+    }
+    return idx;
+  }
+
+
+  private getByPosition(entities: T[], idx: number): T {
+    let currentIdx: number = 0;
+    for (let entity of entities) {
+      if (currentIdx == idx) {
+        return entity;
+      }
+      idx++;
+    }
+    return null;
+  }
+
+
+  public getNextEntityId(currentEntityId: number): number {
+    let entities = this.dataSource.getEntities();
+    let idx: number = 0;
+    let currentFound: boolean = false;
+    for (let entity of entities) {
+      if (currentFound) {
+        return entity.id;
+      }
+      if (entity.id == currentEntityId) {
+        currentFound = true;
+
+        if (idx != entities.length - 1) {
+          this.paginator.nextPage();
+        }
+      }
+      idx++;
+    }
+  }
+
+  public getPreviousEntityId(currentEntityId: number): number {
+    let entities = this.dataSource.getEntities();
+    let previousEntity: T;
+    for (let entity of entities) {
+      if (entity.id == currentEntityId) {
+        if (previousEntity !== null) {
+          return previousEntity.id;
+        }
+      }
+      previousEntity = entity;
+    }
   }
 
 }
