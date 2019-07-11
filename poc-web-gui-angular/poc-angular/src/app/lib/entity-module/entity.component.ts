@@ -1,17 +1,21 @@
-import {OnInit} from '@angular/core';
+import {Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {tap} from "rxjs/operators";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {tap} from "rxjs/operators";
 
-import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
+import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 
 
-export abstract class EntityComponent<T extends Identifiable> implements OnInit {
+export abstract class EntityComponent<T extends Identifiable> implements OnInit, OnChanges {
+
+  @Input() entityToLoad: T;
 
   entityForm: FormGroup;
+
+  isVisible: boolean = true;
 
   constructor(
     public meta: EntityMeta<T>,
@@ -30,12 +34,46 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
 
   ngOnInit() {
     console.debug('Initializing the EntityComponent');
+
     let entityId = this.route.snapshot.paramMap.get('id');
+
     if (entityId) {
       this.loadEntity(entityId);
     } else {
       console.info('Editor for a new entity');
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    if (changes.entityToLoad.currentValue &&
+      changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue) {
+
+      console.debug('EntityToLoad has changed:');
+      console.debug(changes.entityToLoad.previousValue);
+      console.debug(changes.entityToLoad.currentValue);
+
+      this.loadNewEntity(changes.entityToLoad.currentValue);
+
+      // You can also use categoryId.previousValue and
+      // categoryId.firstChange for comparing old and new values
+    }
+
+  }
+
+  loadNewEntity(entity: T) {
+
+    if (entity !== null) {
+      this.loadEntity(entity.id);
+    } else {
+      this.entityToLoad = null;
+      this.clearEditor();
+    }
+  }
+
+  clearEditor() {
+      this.entityForm.reset();
+      console.debug('TODO: Clear the form');
   }
 
 
@@ -145,6 +183,15 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit 
       message: message
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+  }
+
+
+  public show(): void {
+    this.isVisible = true;
+  }
+
+  public hide(): void {
+    this.isVisible = false;
   }
 
 }

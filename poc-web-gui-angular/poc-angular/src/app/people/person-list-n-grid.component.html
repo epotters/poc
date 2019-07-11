@@ -1,0 +1,22 @@
+<h1>{{meta.displayName}} grid</h1>
+
+<p>Grid based upon @pebula/ngrid material starter</p>
+
+<pbl-ngrid id="unique-people-id-for-grid" persistState
+           identityProp="id"
+           matHeaderContextMenu="excelMenu"
+           rowReorder
+           columnReorder
+           blockUi
+           matSort
+           vScrollFixed
+           cellTooltip
+           matCheckboxSelection="selection"
+           focusMode="cell"
+           [dataSource]="dataSource"
+           [columns]="columns"
+           (cellClick)="$event.context && $event.context.startEdit()"
+           style="height: 500px"
+           class="pbl-ngrid-cell-ellipsis pbl-ngrid-header-cell-ellipsis"
+>
+</pbl-ngrid>

@@ -1,20 +1,8 @@
-<h1>{{meta.displayNamePlural}}</h1>
 
 <mat-card class="list-card">
 
   <mat-card-actions align="end">
-
-    <button (click)="deleteEntities()" mat-button>
-      <span>Delete {{meta.namePlural}}</span>
-    </button>
-
-    <button (click)="updateEntities()" mat-button>
-      <span>Update {{meta.namePlural}}</span>
-    </button>
-
-    <button mat-button routerLink="/{{meta.namePlural}}/new" routerLinkActive="active">
-      <span>New {{meta.name}}</span>
-    </button>
+<entity-list-actions></entity-list-actions>
   </mat-card-actions>
 
   <mat-card-content>

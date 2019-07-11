@@ -1,31 +1,36 @@
 import {NgModule} from '@angular/core';
 
 import {EntityCommonModule} from "../lib/entity-module/entity-common.module";
-import {DialogModule} from "../lib/entity-module/dialog.module";
+import {DialogModule} from "../lib/entity-module/dialog/dialog.module";
 
-import {ApiService} from "../core/service";
+import {PocApiService} from "../core/service";
 import {PersonComponent} from "./person.component";
 import {PersonListComponent} from "./person-list.component";
 import {PersonService} from "./person.service";
 import {PersonRoutingModule} from "./person-routing.module";
+import {PersonListNGridComponent} from "./person-list-n-grid.component";
+import {NGridModule} from "../core/n-grid/n-grid.module";
 
 
 @NgModule({
   imports: [
     EntityCommonModule,
+    NGridModule,
     DialogModule,
     PersonRoutingModule
   ],
   declarations: [
     PersonListComponent,
-    PersonComponent
+    PersonComponent,
+    PersonListNGridComponent
   ],
   entryComponents: [
     PersonListComponent,
-    PersonComponent
+    PersonComponent,
+    PersonListNGridComponent
   ],
   providers: [
-    ApiService,
+    PocApiService,
     PersonService
   ]
 })

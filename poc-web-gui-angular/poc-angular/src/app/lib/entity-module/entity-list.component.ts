@@ -1,19 +1,24 @@
-import {AfterViewInit, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {fromEvent, merge} from "rxjs";
 import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
-import {FilterSet} from "./domain/filter.model";
 
-import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
-import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
+import {FilterSet} from "./domain/filter.model";
+import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
+import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
 
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
+
+  @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
+
+  isVisible: boolean = true;
+  useRouter: boolean = false;
 
   dataSource: EntityDataSource<T>;
 
@@ -23,7 +28,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   };
   startPage: number = 0;
 
-  @ViewChild('input', {static: true}) input: ElementRef;
+  @ViewChild('filter', {static: true}) filterField: ElementRef;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -51,11 +56,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   ngAfterViewInit(): void {
 
     // Server-side search
-    fromEvent(this.input.nativeElement, 'keyup')
+    fromEvent(this.filterField.nativeElement, 'keyup')
       .pipe(
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
+          this.buildFilters(this.filterField.nativeElement.value);
           this.paginator.pageIndex = 0;
           this.loadEntitiesPage();
         })
@@ -87,6 +93,31 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
+  }
+
+
+  selectEntity(entity): void {
+
+    console.info(this.meta.displayName + ' selected: ', entity);
+    this.entitySelector.emit(entity);
+
+    if (this.useRouter) {
+      this.router.navigate([this.meta.namePlural + '/' + entity.id]);
+    }
+  }
+
+  private buildFilters(term: string): void {
+    this.filters.filters = [{name: this.meta.defaultFilterField, value: term}];
+  }
+
+
+  markSelectedRow(): void {
+    // https://material.angular.io/components/table/overview look for SelectionModel
+  }
+
+
+  newEntity() {
+    this.selectEntity(null);
   }
 
 
@@ -133,13 +164,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
-
-
-  private onRowClicked(entity): void {
-    console.info(this.meta.displayName + ' clicked: ', entity);
-    this.router.navigate([this.meta.namePlural + '/' + entity.id]);
-  }
-
 
 
   // Relative navigation
@@ -216,6 +240,15 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       }
       previousEntity = entity;
     }
+  }
+
+
+  public show(): void {
+    this.isVisible = true;
+  }
+
+  public hide(): void {
+    this.isVisible = false;
   }
 
 }

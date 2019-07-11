@@ -1,6 +1,8 @@
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
+
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
+
 import {FilterSet} from "./domain/filter.model";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
@@ -41,6 +43,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
     console.debug('Datasource loading ' + this.meta.displayNamePlural.toLowerCase() + '...');
 
+
     this.loadingSubject.next(true);
 
     this.service.list(filter, sortField, sortDirection, pageNumber, pageSize)
@@ -49,7 +52,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe(entityResult => {
-        
+
         console.debug('Datasource entityResult:');
         console.debug(entityResult);
 
@@ -58,6 +61,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
         this.loadingSubject.next(false);
       });
   }
+
 
   public getTotal(): number {
     return this.totalSubject.getValue();

@@ -7,10 +7,11 @@ import 'rxjs/Rx';
 
 import {environment} from '../../../environments/environment';
 import {AuthService} from "../../lib/auth-module";
+import {ApiService} from "../../lib/entity-module";
 
 
 @Injectable()
-export class ApiService {
+export class PocApiService implements ApiService {
 
 
   constructor(
@@ -21,7 +22,7 @@ export class ApiService {
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
 
-    console.debug('Inside ApiService.get()');
+    console.debug('Inside PocApiService.get()');
     console.debug('URL to get: ' + `${environment.apiUrl}${path}`);
 
     return this.http.get(
@@ -55,7 +56,7 @@ export class ApiService {
 
   delete(path): Observable<any> {
 
-    console.debug('Inside ApiService.delete()');
+    console.debug('Inside PocApiService.delete()');
     console.debug('Resource to delete: ' + `${environment.apiUrl}${path}`);
 
     return this.http.delete(

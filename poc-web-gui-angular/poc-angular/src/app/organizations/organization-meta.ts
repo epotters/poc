@@ -15,8 +15,9 @@ export const organizationMeta: EntityMeta<Organization> = {
 
   // List
   defaultPageSize: 150,
-  defaultSortField: 'id',
+  defaultSortField: 'name',
   defaultSortDirection: 'asc',
+  defaultFilterField: 'name',
   displayedColumns: ['id', 'name']
 
 };

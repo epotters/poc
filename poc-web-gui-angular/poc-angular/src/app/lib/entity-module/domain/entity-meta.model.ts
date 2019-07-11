@@ -13,6 +13,7 @@ export interface EntityMeta<T extends Identifiable> {
   defaultPageSize: number;
   defaultSortField: string;
   defaultSortDirection: string; // 'asc' | 'desc';
+  defaultFilterField: string;
   displayedColumns: string[];
   
   // Form

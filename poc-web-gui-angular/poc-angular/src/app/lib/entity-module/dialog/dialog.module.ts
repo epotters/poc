@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
-import {EntityCommonModule} from "./entity-common.module";
+import {EntityCommonModule} from "../entity-common.module";
 
 
 @NgModule({

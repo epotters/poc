@@ -1,3 +1,3 @@
 
-export * from './api.service';
+export * from './poc-api.service';
 

@@ -21,7 +21,7 @@
 
     <!-- New part: this is the search box -->
     <mat-form-field>
-      <input #input matInput placeholder="Search {{meta.displayNamePlural.toLowerCase()}}">
+      <input #filter matInput placeholder="Search {{meta.displayNamePlural.toLowerCase()}}">
     </mat-form-field>
 
 
@@ -79,7 +79,7 @@
 
 
       <mat-header-row *matHeaderRowDef="meta.displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: meta.displayedColumns;" (click)="onRowClicked(row)"></mat-row>
+      <mat-row *matRowDef="let row; columns: meta.displayedColumns;" (click)="selectEntity(row)"></mat-row>
 
     </mat-table>
 
