@@ -59,10 +59,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.startPage, this.meta.defaultPageSize);
   }
 
-  updateFilter() {
-    console.debug('Process this.tableFilter.filterJson: ' + this.tableFilter.filterJson);
-  }
-
   ngAfterViewInit(): void {
 
     console.log('tableFilter: ', this.tableFilter);
@@ -160,18 +156,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  buildFilterControls() {
-    for (let columnName of this.meta.displayedColumns) {
-      let formControl = new FormControl('');
-      this.filterControls[columnName] = formControl;
-      formControl.valueChanges.subscribe(
-        value => {
-          this.filterValues[columnName] = value;
-        }
-      );
-    }
-  }
-
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     let value = entity[fieldName];
@@ -182,8 +166,27 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+  /* Filter */
+  updateFilter() {
+    console.debug('Process this.tableFilter.filterJson: ' + this.tableFilter.filterJson);
+  }
+
+
   private buildFilters(term: string): void {
     this.filters.filters = [{name: this.meta.defaultFilterField, value: term}];
+  }
+
+
+  buildFilterControls() {
+    for (let columnName of this.meta.displayedColumns) {
+      let formControl = new FormControl('');
+      this.filterControls[columnName] = formControl;
+      formControl.valueChanges.subscribe(
+        value => {
+          this.filterValues[columnName] = value;
+        }
+      );
+    }
   }
 
 
@@ -235,85 +238,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
-
-
-  // Relative navigation
-  public isFirstEntity(currentEntityId: number): boolean {
-    if (this.paginator.hasPreviousPage()) {
-      let firstEntity: T = this.getByPosition(this.dataSource.getEntities(), 0);
-      return (firstEntity.id === currentEntityId);
-    }
-    return false;
-  }
-
-
-  public isLastEntity(currentEntityId: number): boolean {
-    if (!this.paginator.hasNextPage()) {
-      let lastPageLength: number = this.paginator.length % this.paginator.pageSize;
-      let lastEntity = this.getByPosition(this.dataSource.getEntities(), lastPageLength - 1);
-      return (lastEntity.id === currentEntityId);
-    }
-    return false;
-  }
-
-
-  private positionOnCurrentPage(currentEntityId: number): number {
-    let entities = this.dataSource.getEntities();
-    let idx: number = -1;
-    for (let entity of entities) {
-      if (entity.id === currentEntityId) {
-        break;
-      }
-      idx++;
-    }
-    return idx;
-  }
-
-
-  private getByPosition(entities: T[], idx: number): T {
-    let currentIdx: number = 0;
-    for (let entity of entities) {
-      if (currentIdx == idx) {
-        return entity;
-      }
-      idx++;
-    }
-    return null;
-  }
-
-
-  public getNextEntityId(currentEntityId: number): number {
-    let entities = this.dataSource.getEntities();
-    let idx: number = 0;
-    let currentFound: boolean = false;
-    for (let entity of entities) {
-      if (currentFound) {
-        return entity.id;
-      }
-      if (entity.id == currentEntityId) {
-        currentFound = true;
-
-        if (idx != entities.length - 1) {
-          this.paginator.nextPage();
-        }
-      }
-      idx++;
-    }
-  }
-
-
-  public getPreviousEntityId(currentEntityId: number): number {
-    let entities = this.dataSource.getEntities();
-    let previousEntity: T;
-    for (let entity of entities) {
-      if (entity.id == currentEntityId) {
-        if (previousEntity !== null) {
-          return previousEntity.id;
-        }
-      }
-      previousEntity = entity;
-    }
-  }
+  
 
 
   public show(): void {

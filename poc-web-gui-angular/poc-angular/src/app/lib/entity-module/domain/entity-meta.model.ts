@@ -1,4 +1,4 @@
-import {FilterConfig} from "../table-filter/components/filter-template/filter-cell.component";
+import {FilterConfig} from "../table-filter/components/filter-cell/filter-cell.component";
 
 export interface ColumnConfig {
   label: string;

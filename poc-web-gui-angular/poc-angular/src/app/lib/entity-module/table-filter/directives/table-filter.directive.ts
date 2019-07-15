@@ -1,7 +1,7 @@
 import {Directive, EventEmitter, Input, Output} from '@angular/core';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
-import {IFilter} from "../../domain/filter.model";
+import {FieldFilter} from "../../domain/filter.model";
 
 
 
@@ -10,12 +10,10 @@ import {IFilter} from "../../domain/filter.model";
 })
 export class TableFilterDirective {
 
-  filters = new Map<string, IFilter>();
-
+  filters = new Map<string, FieldFilter>();
   filterJson = "{}";
 
   @Input() appTableFilterOf: any[];
-
   @Output('matSortChange') readonly filterChange: EventEmitter<string> = new EventEmitter<string>();
 
   debouncer: Subject<string> = new Subject<string>();
@@ -25,17 +23,17 @@ export class TableFilterDirective {
       .subscribe((val) => this.filterChange.emit(this.filterJson));
   }
 
-  public register(filter: IFilter) {
+  public register(filter: FieldFilter) {
     this.filters.set(filter.id, filter);
   }
 
-  public deregister(filter: IFilter): void {
+  public deregister(filter: FieldFilter): void {
     this.filters.delete(filter.id);
   }
 
-  public filter(filter: IFilter): void {
+  public filter(filter: FieldFilter): void {
     let filterArray = {};
-    this.filters.forEach((f: IFilter, key: string) => {
+    this.filters.forEach((f: FieldFilter, key: string) => {
       if (f.filterData != '') {
         filterArray[f.id] = f.filterData;
       }

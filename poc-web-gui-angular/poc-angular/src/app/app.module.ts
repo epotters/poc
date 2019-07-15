@@ -9,10 +9,11 @@ import {MomentDateAdapter} from "@angular/material-moment-adapter";
 
 import {EntityCommonModule} from "./lib/entity-module/entity-common.module";
 import {TableFilterModule} from "./lib/entity-module/table-filter/table-filter-module";
+import {AuthGuardService, AuthModule, AuthService} from "./lib/auth-module/";
+
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {Constants, POC_DATE_FORMATS} from "../constants";
-import {AuthGuardService, AuthModule, AuthService} from "./lib/auth-module/";
 import {HomeModule} from "./home/home.module";
 import {InfoModule} from "./info/info.module";
 import {OrganizationModule} from "./organizations/organization.module";

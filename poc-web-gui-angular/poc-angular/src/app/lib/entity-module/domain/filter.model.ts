@@ -1,18 +1,17 @@
-
-
 export interface FilterSet {
   // type: string;
   filters: Filter[];
 }
 
+
 export interface Filter {
-    name: string;
-    value: string;
+  name: string;
+  value: string;
 }
 
 
 /* Filter for one field */
-export interface IFilter {
+export interface FieldFilter {
   id: string;
   filterData: string;
 }
@@ -20,13 +19,6 @@ export interface IFilter {
 
 
 
-/*
-Filter definition for one field of an entity
- */
-// export interface EntityFieldFilter {
-//   key: string;
-//   filterData: string;
-// }
 
 /*
 entityFilter is a Map<string, EntityFieldFilter> possably containing EntityFieldFilters for each field of an entity
@@ -39,6 +31,3 @@ A set of filters. Each will be applied using logical OR
 // export interface EntityFilterSet {
 //   entityFilters: Map<string, EntityFieldFilter>[];
 // }
-
-
-

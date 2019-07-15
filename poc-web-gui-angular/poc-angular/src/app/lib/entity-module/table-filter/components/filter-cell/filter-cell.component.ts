@@ -35,6 +35,7 @@ export class FilterCellComponent implements OnInit, OnDestroy {
     this.filter.deregister(this);
   }
 
+  
   onTextChange(value: string) {
     console.debug('Text for filter "' + this.id + '" changed to "' + value + '"');
     this.filterData = value;
