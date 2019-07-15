@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Constants} from '../../constants';
 
 
@@ -13,7 +13,7 @@ export class InfoComponent {
   
   public pageTitle = 'General information';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, ) {
     console.debug('Constructing the InfoComponent');
   }
 

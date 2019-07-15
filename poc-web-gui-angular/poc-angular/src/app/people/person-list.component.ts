@@ -4,11 +4,11 @@ import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {PersonService} from "./person.service";
-import {personMeta} from "./person-meta";
+import {personMeta as meta} from "./person-meta";
 
 @Component({
   selector: 'person-list-card',
-  templateUrl: './person-list.component.html'
+  templateUrl: '../lib/entity-module/entity-list.component.html'
 })
 export class PersonListComponent extends EntityListComponent<Person> {
 
@@ -19,7 +19,7 @@ export class PersonListComponent extends EntityListComponent<Person> {
     public dialog: MatDialog
   ) {
 
-    super(personMeta, service, router, route, dialog);
+    super(meta, service, router, route, dialog);
   }
 
 }

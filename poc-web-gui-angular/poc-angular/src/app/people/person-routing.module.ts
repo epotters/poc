@@ -6,6 +6,8 @@ import {PersonComponent} from "./person.component";
 import {AuthGuardService} from "../lib/auth-module";
 import {personMeta} from "./person-meta";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
+import {OrganizationManagerComponent} from "../organizations/organization-manager.component";
+import {PersonManagerComponent} from "./person-manager.component";
 
 const meta = personMeta;
 
@@ -23,6 +25,11 @@ const routes: Routes = [
   {
     path: meta.namePlural + '/:id',
     component: PersonComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: meta.namePlural + '-manager',
+    component: PersonManagerComponent,
     canActivate: [AuthGuardService]
   },
   {

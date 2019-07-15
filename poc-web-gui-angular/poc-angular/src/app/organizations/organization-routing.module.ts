@@ -7,6 +7,7 @@ import {organizationMeta} from "./organization-meta";
 import {AuthGuardService} from "../lib/auth-module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
+import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
 
 const meta = organizationMeta;
 
@@ -35,6 +36,13 @@ const routes: Routes = [
   {
     path: meta.namePlural + '-n-grid',
     component: OrganizationListNGridComponent,
+    canActivate: [AuthGuardService]
+  },
+
+
+  {
+    path: meta.namePlural + '-list-of-cards',
+    component: OrganizationListOfCardsComponent,
     canActivate: [AuthGuardService]
   }
 ];

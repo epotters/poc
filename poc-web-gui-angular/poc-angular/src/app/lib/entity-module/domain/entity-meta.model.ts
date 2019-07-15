@@ -1,3 +1,22 @@
+import {FilterConfig} from "../table-filter/components/filter-template/filter-cell.component";
+
+export interface ColumnConfig {
+  label: string;
+  helpText?: string;
+  renderer?: (value: string) => string;
+  editor?: FieldEditor;
+}
+
+export interface FieldEditor {
+  type: 'text' | 'select' | 'date';
+  options?: SelectOption[]
+}
+
+export interface SelectOption {
+  value: string,
+  label: string
+}
+
 export interface EntityMeta<T extends Identifiable> {
 
   // General
@@ -5,17 +24,21 @@ export interface EntityMeta<T extends Identifiable> {
   namePlural: string;
   displayName: string;
   displayNamePlural: string;
-  
+
   // API
   apiBase: string;
-  
+
   // List
   defaultPageSize: number;
   defaultSortField: string;
-  defaultSortDirection: string; // 'asc' | 'desc';
+  defaultSortDirection: 'asc' | 'desc';
   defaultFilterField: string;
+
   displayedColumns: string[];
-  
+  filteredColumns: Record<string, FilterConfig>;
+
+  columnConfigs: Record<string, ColumnConfig>;
+
   // Form
   validationMessages?: any;
 }

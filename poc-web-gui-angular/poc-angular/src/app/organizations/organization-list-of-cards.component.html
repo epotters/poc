@@ -1,0 +1,34 @@
+<mat-card class="list-card">
+
+  <mat-card-actions align="end">
+  </mat-card-actions>
+
+  <mat-card-content>
+
+    <!-- Search box -->
+    <mat-form-field>
+      <input #filter matInput placeholder="Search {{meta.displayNamePlural.toLowerCase()}}">
+    </mat-form-field>
+
+
+    <div *ngIf="dataSource.loading$ | async" class="spinner-container">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+
+
+    <!--TODO: Where do I ge a collectionViewer-->
+    <mat-grid-list>
+      <mat-grid-tile *ngFor="let organization of dataSource.getEntities()">
+        <div>
+          <mat-card class="example-card">
+            mat-card content here..
+          </mat-card>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+
+    <mat-paginator [length]="dataSource.getTotal()" [pageSize]="meta.defaultPageSize"></mat-paginator>
+
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,33 @@
+
+<div *ngIf="filterConfig.type == 'none'" class="filter-field-container text-filter-container">
+  <mat-form-field [floatLabel]="'never'">
+    <mat-label></mat-label>
+    <input matInput disabled (input)="onTextChange($event.target.value)">
+  </mat-form-field>
+</div>
+
+<div *ngIf="filterConfig.type == 'text'" class="filter-field-container text-filter-container">
+  <mat-form-field [floatLabel]="'never'">
+    <mat-label>...</mat-label>
+    <input matInput (input)="onTextChange($event.target.value)">
+  </mat-form-field>
+</div>
+
+<div *ngIf="filterConfig.type == 'select'" class="filter-field-container text-filter-container">
+  <mat-form-field [floatLabel]="'never'">
+    <mat-select (selectionChange)="onTextChange($event.value)" placeholder="...">
+      <mat-option [value]="">-</mat-option>
+      <mat-option [value]="option.value" *ngFor="let option of filterConfig.options">{{option.label}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div *ngIf="filterConfig.type == 'date'" class="filter-field-container text-filter-container">
+  <mat-form-field [floatLabel]="'never'">
+    <mat-label>...</mat-label>
+    <input matInput [matDatepicker]="datePicker" (input)="onTextChange($event.target.value)">
+    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+    <mat-datepicker #datePicker></mat-datepicker>
+  </mat-form-field>
+</div>
+

@@ -38,4 +38,17 @@ export class Constants {
 
   // API
   public static apiRoot = 'https://localhost:8002/poc/api';
+
 }
+
+export const POC_DATE_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};

@@ -1,4 +1,5 @@
 <div>
+
   <header>
     <mat-toolbar color="primary" class="mat-elevation-z6">
 
@@ -31,7 +32,8 @@
       <button mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>
         <mat-icon *ngIf="authService.isLoggedIn()">account_circle</mat-icon>
-        <span class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : 'Unknown'}}</span>
+        <span
+          class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : 'Unknown'}}</span>
       </button>
 
       <mat-menu #userMenu="matMenu">
@@ -52,7 +54,7 @@
   <main class="mat-typography">
 
     <mat-sidenav-container class="example-container">
-      <mat-sidenav #sidenav mode="over">
+      <mat-sidenav #sidenav mode="over" fixedInViewport="true">
         <mat-card>
           <h2>Developer info</h2>
           <div>
@@ -63,10 +65,11 @@
           </div>
         </mat-card>
       </mat-sidenav>
+
+
+      <router-outlet></router-outlet>
+
     </mat-sidenav-container>
-
-
-    <router-outlet></router-outlet>
 
   </main>
   <footer></footer>

@@ -1,5 +1,3 @@
-<h1>{{meta.displayName}}</h1>
-
 <mat-card class="form-card">
   <mat-card-header>
     <mat-card-title>{{meta.displayName}} Editor</mat-card-title>
@@ -8,16 +6,23 @@
 
     <form [formGroup]="entityForm">
 
-      <!-- ID-->
-      <div>
-        <mat-form-field>
-          <mat-label>ID</mat-label>
-          <input matInput formControlName="id" name="id" readonly>
-        </mat-form-field>
+      <div class="form-row">
+
+        <!-- ID-->
+        <div>
+          <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="id" name="id" readonly>
+            <mat-hint>Generated id</mat-hint>
+          </mat-form-field>
+        </div>
+
       </div>
 
-      <!-- First name-->
-      <div>
+
+      <div class="form-row">
+
+        <!-- First name-->
         <mat-form-field>
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstName" name="firstName" required>
@@ -27,20 +32,16 @@
             </mat-error>
           </mat-error>
         </mat-form-field>
-      </div>
 
-      <!-- Prefix-->
-      <div>
-        <mat-form-field>
+        <!-- Prefix-->
+        <mat-form-field style="flex: 1">
           <mat-label>Prefix</mat-label>
           <input matInput formControlName="prefix" name="prefix">
           <mat-hint>For example van der or de la</mat-hint>
         </mat-form-field>
-      </div>
 
-      <!-- Last name-->
-      <div>
-        <mat-form-field>
+        <!-- Last name-->
+        <mat-form-field style="flex: 3">
           <mat-label>Last Name</mat-label>
           <input matInput formControlName="lastName" name="lastName" required>
           <mat-hint>Enter your family name here</mat-hint>
@@ -52,10 +53,10 @@
         </mat-form-field>
       </div>
 
+      <div class="form-row">
 
-      <!-- Gender-->
-      <div class="radio-group-wrapper">
-        <div>
+        <!-- Gender-->
+        <div style="flex: 2" class="radio-group-wrapper">
           <div class="mat-form-field-wrapper">
             <mat-radio-group formControlName="gender" name="gender" required>
               <mat-radio-button value="MALE" id="gender-option-male">Male</mat-radio-button>
@@ -63,27 +64,40 @@
             </mat-radio-group>
           </div>
         </div>
-      </div>
 
-
-      <!-- Date of birth-->
-      <div>
-        <mat-form-field>
-          <mat-label>Date of birth</mat-label>
-          <input matInput formControlName="birthDate" [matDatepicker]="myPicker" placeholder="date">
-          <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
-          <mat-datepicker #myPicker></mat-datepicker>
+        <!-- Filler -->
+        <mat-form-field style="flex: 2">
+          <mat-label></mat-label>
+          <input matInput>
         </mat-form-field>
+
       </div>
 
 
-      <!-- Place of birth-->
-      <div>
-        <mat-form-field>
+      <div class="form-row">
+
+        <!-- Date of birth-->
+        <mat-form-field style="flex: 2">
+          <mat-label>Date of birth</mat-label>
+          <input matInput formControlName="birthDate" [matDatepicker]="birthDatePicker">
+          <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #birthDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Place of birth-->
+        <mat-form-field style="flex: 3">
           <mat-label>Place of birth</mat-label>
           <input matInput formControlName="birthPlace" name="birthPlace">
           <mat-hint>Native place city</mat-hint>
         </mat-form-field>
+
+        <!-- Country of birth-->
+        <mat-form-field style="flex: 1">
+          <mat-label></mat-label>
+          <input matInput name="birthCountryCode">
+          <mat-hint>Country code will be added soon</mat-hint>
+        </mat-form-field>
+
       </div>
 
     </form>
@@ -92,8 +106,8 @@
   <mat-card-actions align="end">
     <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>Delete</button>
     <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>Revert</button>
-    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary"
-            mat-button>Save
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-button>
+      Save
     </button>
   </mat-card-actions>
 

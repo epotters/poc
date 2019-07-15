@@ -12,7 +12,9 @@ import {CommonModule} from "@angular/common";
   declarations: [
     InfoComponent
   ],
-  entryComponents: [InfoComponent],
+  entryComponents: [
+    InfoComponent
+  ],
   providers: []
 })
 export class InfoModule {

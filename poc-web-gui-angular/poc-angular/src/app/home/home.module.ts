@@ -8,12 +8,13 @@ import {CommonModule} from "@angular/common";
   imports: [
     CommonModule,
     MaterialModule,
-    // BrowserAnimationsModule
   ],
   declarations: [
     HomeComponent
   ],
-  entryComponents: [HomeComponent],
+  entryComponents: [
+    HomeComponent
+  ],
   providers: []
 })
 export class HomeModule {

@@ -1,0 +1,23 @@
+<h1>{{meta.displayName}} manager</h1>
+
+
+<div class="manager-buttons">
+
+  <button (click)="showList()" mat-icon-button>
+    <mat-icon>dehaze</mat-icon>
+  </button>
+
+  <button (click)="showEditor()" mat-icon-button>
+    <mat-icon>crop_portrait</mat-icon>
+  </button>
+</div>
+
+
+
+<person-card [entityToLoad]="selectedEntity"></person-card>
+
+<person-list-card (entitySelector)="onEntitySelected($event)"></person-list-card>
+
+
+
+

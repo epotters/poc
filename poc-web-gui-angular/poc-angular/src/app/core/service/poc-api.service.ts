@@ -28,7 +28,7 @@ export class PocApiService implements ApiService {
     return this.http.get(
       `${environment.apiUrl}${path}`,
       {params, headers: this.getHeaders()})
-      .pipe(catchError(this.formatErrors));
+      .pipe(catchError(this.handleError));
   }
 
 
@@ -39,7 +39,7 @@ export class PocApiService implements ApiService {
     return this.http.put(
       `${environment.apiUrl}${path}`,
       JSON.stringify(body), {headers: headers}
-    ).pipe(catchError(this.formatErrors));
+    ).pipe(catchError(this.handleError));
   }
 
 
@@ -50,7 +50,7 @@ export class PocApiService implements ApiService {
     return this.http.post(
       `${environment.apiUrl}${path}`,
       JSON.stringify(body), {headers: headers}
-    ).pipe(catchError(this.formatErrors));
+    ).pipe(catchError(this.handleError));
   }
 
 
@@ -62,7 +62,7 @@ export class PocApiService implements ApiService {
     return this.http.delete(
       `${environment.apiUrl}${path}`,
       {headers: this.getHeaders()}
-    ).pipe(catchError(this.formatErrors));
+    ).pipe(catchError(this.handleError));
   }
 
 
@@ -75,8 +75,14 @@ export class PocApiService implements ApiService {
   }
 
 
-  private formatErrors(error: any) {
-    console.error('An error occurred: ' + error);
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred: ' + error.status + ' ' + error.message);
+
+    if(error.status === 401) {
+      console.info('Unauthorized, token probably expired');
+    }
+    console.debug(error);
+
     return throwError(error.error);
   }
 

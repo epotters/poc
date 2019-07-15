@@ -18,6 +18,19 @@ export const organizationMeta: EntityMeta<Organization> = {
   defaultSortField: 'name',
   defaultSortDirection: 'asc',
   defaultFilterField: 'name',
-  displayedColumns: ['id', 'name']
 
+  displayedColumns: ['id', 'name'],
+  filteredColumns: {
+    id: {type: 'text'},
+    name: {type: 'text'}
+  },
+
+  columnConfigs: {
+    id: {
+      label: 'ID',
+    },
+    name: {
+      label: 'Name'
+    }
+  }
 };

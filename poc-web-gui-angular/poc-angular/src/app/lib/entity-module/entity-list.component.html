@@ -1,42 +1,56 @@
-
 <mat-card class="list-card">
 
   <mat-card-actions align="end">
-<entity-list-actions></entity-list-actions>
+
+    <button (click)="deleteEntities()" mat-button>
+      <span>Delete {{meta.namePlural}}</span>
+    </button>
+
+    <button (click)="updateEntities()" mat-button>
+      <span>Update {{meta.namePlural}}</span>
+    </button>
+
+    <!--    <button mat-button routerLink="/{{meta.namePlural}}/new" routerLinkActive="active">-->
+    <button (click)="newEntity()" mat-button>
+      <span>New {{meta.name}}</span>
+    </button>
   </mat-card-actions>
 
   <mat-card-content>
 
-    <!-- New part: this is the search box -->
-    <mat-form-field>
-      <input #input matInput placeholder="Search entities">
-    </mat-form-field>
-
-
-    <div *ngIf="dataSource.loading$ | async" class="spinner-container">
-      <mat-spinner></mat-spinner>
+    <div *ngIf="false && dataSource.loading$ | async" class="spinner-container">
+      <mat-spinner [diameter]="30"></mat-spinner>
     </div>
 
 
-    <mat-table [dataSource]="dataSource" class="mat-elevation-z2" matSort matSortActive="lastName"
-               matSortDirection="asc" matSortDisableClear>
+    <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultFilterField}}"
+               matSortDirection="asc" class="mat-elevation-z4" matSortDisableClear>
 
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
-        <mat-cell *matCellDef="let entity">{{entity.id}}</mat-cell>
+      <ng-container *ngFor="let column of meta.displayedColumns" matColumnDef="{{column}}">
+        <mat-header-cell *matHeaderCellDef>
+          <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{getCellDisplayValue(row, column)}}</mat-cell>
       </ng-container>
 
-      <!-- Rest of the columns go here -->
+      <ng-container *matHeaderRowDef="meta.displayedColumns">
+        <mat-header-row></mat-header-row>
+        <div class="filter-header-row" appTableFilter>
+          <!--          <filter-cell *ngFor="let filter of meta.filteredColumns | keyvalue" [id]="filter.key" [filterConfig]="filter.value"-->
+          <!--                       [ngClass]="'filter-cell-' + filter.key"></filter-cell>-->
+
+          <filter-cell *ngFor="let key of meta.displayedColumns" [id]="key" [filterConfig]="meta.filteredColumns[key]"
+                       [ngClass]="'filter-cell-' + key"></filter-cell>
+        </div>
 
 
-      <mat-header-row *matHeaderRowDef="meta.displayedColumns"></mat-header-row>
-      <mat-row (click)="onRowClicked(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
+      </ng-container>
+
+      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
 
     </mat-table>
 
-
-    <mat-paginator [length]="dataSource.total" [pageSize]="meta.defaultPageSize"></mat-paginator>
+    <mat-paginator [length]="dataSource.getTotal()" [pageSize]="meta.defaultPageSize"></mat-paginator>
 
   </mat-card-content>
 </mat-card>

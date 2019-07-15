@@ -11,6 +11,8 @@ import {OrganizationRoutingModule} from "./organization-routing.module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {NGridModule} from "../core/n-grid/n-grid.module";
+import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
+import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
 
 
 @NgModule({
@@ -18,19 +20,22 @@ import {NGridModule} from "../core/n-grid/n-grid.module";
     EntityCommonModule,
     NGridModule,
     DialogModule,
+    TableFilterModule,
     OrganizationRoutingModule
   ],
   declarations: [
     OrganizationManagerComponent,
     OrganizationListComponent,
+    OrganizationComponent,
     OrganizationListNGridComponent,
-    OrganizationComponent
+    OrganizationListOfCardsComponent
   ],
   entryComponents: [
     OrganizationManagerComponent,
     OrganizationListComponent,
+    OrganizationComponent,
     OrganizationListNGridComponent,
-    OrganizationComponent
+    OrganizationListOfCardsComponent
   ],
   providers: [
     PocApiService,
