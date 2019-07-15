@@ -41,6 +41,8 @@ public class Person implements Serializable {
   private LocalDate birthDate;
   private String birthPlace;
 
+  private String birthCountry;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "household_id")
   private Household household;
@@ -51,7 +53,7 @@ public class Person implements Serializable {
       cascade = CascadeType.ALL,
       orphanRemoval = true
   )
-  private List<Employee> employers;
+  private List<Organization> employers;
 
 
   public Person() {
