@@ -4,7 +4,7 @@ import {EntityCommonModule} from "../lib/entity-module/entity-common.module";
 import {DialogModule} from "../lib/entity-module/dialog/dialog.module";
 
 import {PocApiService} from "../core/service";
-import {OrganizationComponent} from "./organization.component";
+import {OrganizationEditorComponent} from "./organization-editor.component";
 import {OrganizationListComponent} from "./organization-list.component";
 import {OrganizationService} from "./organization.service";
 import {OrganizationRoutingModule} from "./organization-routing.module";
@@ -15,7 +15,7 @@ import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.com
 import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
 import {OrganizationEmployeeListComponent} from "./employees/organization-employees-list.component";
 import {OrganizationEmployeeService} from "./employees/organization-employee.service";
-import {OrganizationEmployeeComponent} from "./employees/organization-employee.component";
+import {OrganizationEmployeeEditorComponent} from "./employees/organization-employee-editor.component";
 import {OrganizationSelectorComponent} from "./organization-selector.component";
 
 
@@ -30,9 +30,9 @@ import {OrganizationSelectorComponent} from "./organization-selector.component";
   declarations: [
     OrganizationManagerComponent,
     OrganizationListComponent,
-    OrganizationComponent,
+    OrganizationEditorComponent,
     OrganizationEmployeeListComponent,
-    OrganizationEmployeeComponent,
+    OrganizationEmployeeEditorComponent,
     OrganizationListNGridComponent,
     OrganizationListOfCardsComponent,
     OrganizationSelectorComponent
@@ -40,9 +40,9 @@ import {OrganizationSelectorComponent} from "./organization-selector.component";
   entryComponents: [
     OrganizationManagerComponent,
     OrganizationListComponent,
-    OrganizationComponent,
+    OrganizationEditorComponent,
     OrganizationEmployeeListComponent,
-    OrganizationEmployeeComponent,
+    OrganizationEmployeeEditorComponent,
     OrganizationListNGridComponent,
     OrganizationListOfCardsComponent,
     OrganizationSelectorComponent

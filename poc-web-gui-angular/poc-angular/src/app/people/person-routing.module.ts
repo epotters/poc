@@ -5,7 +5,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from "../lib/auth-module";
 import {personMeta} from "./person-meta";
 import {PersonListComponent} from "./person-list.component";
-import {PersonComponent} from "./person.component";
+import {PersonEditorComponent} from "./person-editor.component";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {PersonManagerComponent} from "./person-manager.component";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
@@ -20,12 +20,12 @@ const routes: Routes = [
   },
   {
     path: meta.namePlural + '/new',
-    component: PersonComponent,
+    component: PersonEditorComponent,
     canActivate: [AuthGuardService]
   },
   {
     path: meta.namePlural + '/:id',
-    component: PersonComponent,
+    component: PersonEditorComponent,
     canActivate: [AuthGuardService]
   },
   {

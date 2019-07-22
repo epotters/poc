@@ -9,7 +9,7 @@ import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 
 
-export abstract class EntityComponent<T extends Identifiable> implements OnInit, OnChanges {
+export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges {
 
   @Input() entityToLoad: T;
 
@@ -27,14 +27,14 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
     public formBuilder: FormBuilder,
     public dialog: MatDialog
   ) {
-    console.debug('Constructing the EntityComponent for type ' + this.meta.displayName);
+    console.debug('Constructing the EntityEditorComponent for type ' + this.meta.displayName);
 
     this.buildForm(formBuilder);
 
   }
 
   ngOnInit() {
-    console.debug('Initializing the EntityComponent');
+    console.debug('Initializing the EntityEditorComponent');
 
     let entityIdToLoad = parseInt(this.route.snapshot.paramMap.get('id'));
 

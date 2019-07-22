@@ -3,17 +3,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material";
 
-import {EntityComponent} from "../lib/entity-module";
+import {EntityEditorComponent} from "../lib/entity-module";
 import {Organization} from "../core/domain/";
 import {organizationMeta} from "./organization-meta";
 import {OrganizationService} from "./organization.service";
 
 @Component({
   selector: 'organization-card',
-  templateUrl: './organization.component.html',
-  styleUrls: ['../lib/entity-module/entity.component.css']
+  templateUrl: './organization-editor.component.html',
+  styleUrls: ['../lib/entity-module/entity-editor.component.css']
 })
-export class OrganizationComponent extends EntityComponent<Organization> {
+export class OrganizationEditorComponent extends EntityEditorComponent<Organization> {
   constructor(
     public service: OrganizationService,
     public router: Router,

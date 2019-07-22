@@ -5,7 +5,7 @@ export * from './domain/api-service.model';
 export * from './entity.service';
 export * from './entity-data-source';
 
-export * from './entity.component';
+export * from './entity-editor.component';
 export * from './entity-list.component';
 export * from './entity-manager.component';
 

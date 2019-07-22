@@ -3,16 +3,16 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material";
 
-import {EntityComponent} from "../lib/entity-module";
+import {EntityEditorComponent} from "../lib/entity-module";
 import {Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {PersonService} from "./person.service";
 
 @Component({
   selector: 'person-card',
-  templateUrl: './person.component.html'
+  templateUrl: './person-editor.component.html'
 })
-export class PersonComponent extends EntityComponent<Person> {
+export class PersonEditorComponent extends EntityEditorComponent<Person> {
 
   personNamePattern: string = '[a-zA-Z -]*';
 
