@@ -22,7 +22,6 @@ export const personMeta: EntityMeta<Person> = {
   defaultPageSize: 150,
   defaultSortField: 'lastName',
   defaultSortDirection: 'asc',
-  defaultFilterField: 'lastName',
 
   displayedColumns: ['id', 'firstName', 'prefix', 'lastName', 'gender', 'birthDate', 'birthPlace'],
 

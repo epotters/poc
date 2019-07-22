@@ -56,20 +56,27 @@
       <div class="form-row">
 
         <!-- Gender-->
-        <div style="flex: 2" class="radio-group-wrapper">
-          <div class="mat-form-field-wrapper">
-            <mat-radio-group formControlName="gender" name="gender" required>
-              <mat-radio-button value="MALE" id="gender-option-male">Male</mat-radio-button>
-              <mat-radio-button value="FEMALE" id="gender-option-female">Female</mat-radio-button>
-            </mat-radio-group>
-          </div>
-        </div>
 
-        <!-- Filler -->
-        <mat-form-field style="flex: 2">
-          <mat-label></mat-label>
-          <input matInput>
+        <mat-form-field style="flex: 2" >
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender" name="gender" required>
+            <mat-option [value]="">-</mat-option>
+            <mat-option [value]="option.value" [id]="'gender-option-' + option.value.toLowerCase()"
+                        *ngFor="let option of meta.filteredColumns['gender'].options">{{option.label}}</mat-option>
+          </mat-select>
         </mat-form-field>
+
+
+        <!--        <div style="flex: 2" class="radio-group-wrapper">-->
+        <!--          <div class="mat-form-field-wrapper">-->
+        <!--            <mat-radio-group formControlName="gender" name="gender" required>-->
+        <!--              <mat-radio-button value="MALE" id="gender-option-male">Male</mat-radio-button>-->
+        <!--              <mat-radio-button value="FEMALE" id="gender-option-female">Female</mat-radio-button>-->
+        <!--            </mat-radio-group>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+        <div style="flex: 3"></div>
 
       </div>
 
@@ -104,10 +111,23 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>Delete</button>
-    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>Revert</button>
+    <button (click)="goToList()" *ngIf="!isManaged" mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span class="fill-remaining-space"></span>
+
+    <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>
+      <mat-icon>delete_outline</mat-icon>
+<!--      Delete-->
+    </button>
+    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>
+      <mat-icon>keyboard_return</mat-icon>
+<!--      Revert-->
+    </button>
     <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-button>
-      Save
+      <mat-icon>done</mat-icon>
+<!--      Save-->
     </button>
   </mat-card-actions>
 

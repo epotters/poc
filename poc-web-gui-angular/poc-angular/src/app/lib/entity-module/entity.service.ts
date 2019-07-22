@@ -2,7 +2,7 @@ import {HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {FilterSet} from "./domain/filter.model";
+import {FieldFilter} from "./domain/filter.model";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
 import {ApiService} from "./domain/api-service.model";
@@ -17,25 +17,15 @@ export class EntityService<T extends Identifiable> {
   }
 
 
-  public list(filterSet?: FilterSet, sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
+  public list(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
-    // Build filter params
-    let filterParams: string = '';
-    if (filterSet) {
-      for (let filter of filterSet.filters) {
-        filterParams += filter.name + '~' + filter.value + ',';
-      }
-      filterParams = (filterParams.length > 0) ? filterParams.substr(0, filterParams.length - 1) : '';
-    }
     let params: HttpParams = new HttpParams()
-      .set('filters', filterParams)
+      .set('filters', this.buildFilterParams(filters))
       .set('sort', sortField + ',' + sortDirection)
       .set('page', pageNumber.toString())
       .set('size', pageSize.toString());
 
-
     console.log('Params: ', params);
-
 
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(map((response: Response) => {
@@ -54,26 +44,16 @@ export class EntityService<T extends Identifiable> {
   }
 
 
+  public listEntitiesOnly(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 5): Observable<any> {
 
-  public listEntitiesOnly(filterSet?: FilterSet, sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 5): Observable<any> {
 
-    // Build filter params
-    let filterParams: string = '';
-    if (filterSet) {
-      for (let filter of filterSet.filters) {
-        filterParams += filter.name + '~' + filter.value + ',';
-      }
-      filterParams = (filterParams.length > 0) ? filterParams.substr(0, filterParams.length - 1) : '';
-    }
     let params: HttpParams = new HttpParams()
-      .set('filters', filterParams)
+      .set('filters', this.buildFilterParams(filters))
       .set('sort', sortField + ',' + sortDirection)
       .set('page', pageNumber.toString())
       .set('size', pageSize.toString());
 
-
     console.log('Params: ', params);
-
 
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(map((response: Response) => {
@@ -85,7 +65,6 @@ export class EntityService<T extends Identifiable> {
         })
       );
   }
-
 
 
   get(id: string): Observable<any> {
@@ -119,6 +98,27 @@ export class EntityService<T extends Identifiable> {
   destroy(id: string) {
     console.debug('About to destroy ' + this.meta.displayName.toLowerCase() + ' with id ' + id);
     return this.apiService.delete(this.meta.apiBase + id);
+  }
+
+
+  private buildFilterParams(filters?: FieldFilter[]): string {
+    let filterParams: string = '';
+    let exactMatchOperator = ':';
+    if (filters) {
+      for (let filter of filters) {
+        let operator: string = '~';
+        if(this.meta.filteredColumns[filter.name].type == 'select') {
+          operator = exactMatchOperator;
+        } else  if(this.meta.filteredColumns[filter.name].type == 'date') {
+          operator = exactMatchOperator;
+        } else if (filter.name === 'id') {
+          operator = exactMatchOperator;
+        }
+        filterParams += filter.name + operator + filter.rawValue + ',';
+      }
+      filterParams = (filterParams.length > 0) ? filterParams.substr(0, filterParams.length - 1) : '';
+    }
+    return filterParams;
   }
 
 

@@ -1,44 +1,39 @@
-import {AfterViewInit, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {FormControl} from "@angular/forms";
 
 import {merge, of as observableOf} from "rxjs";
 import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
 
-import {FilterSet} from "./domain/filter.model";
-import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
-import {TableFilterDirective} from "./table-filter/directives/table-filter.directive";
-
+import {FieldFilter} from "./domain/filter.model";
 import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
+
+import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
+import {FilterRowComponent} from "./table-filter/filter-row/filter-row.component";
 
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
+  @Input() isManaged: boolean = false;
+
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
   isVisible: boolean = true;
-  useRouter: boolean = false;
+
 
   dataSource: EntityDataSource<T>;
 
+  fieldFilters: FieldFilter[] = [];
+
   startPage: number = 0;
 
-  filters: FilterSet = {
-    filters: []
-  };
-
-  // Filter row
-  public filterControls: Map<string, FormControl> = new Map<string, FormControl>([]);
-  public filterValues: Partial<T> = {};
-
-  @ViewChild(TableFilterDirective, {static: false}) tableFilter: TableFilterDirective;
+  @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(
     public meta: EntityMeta<T>,
@@ -53,92 +48,43 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   ngOnInit() {
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
-    this.buildFilterControls();
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
-    this.dataSource.loadEntities(this.filters, this.meta.defaultSortField, this.meta.defaultSortDirection,
+
+    this.dataSource.loadEntities(this.fieldFilters, this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.meta.defaultPageSize);
   }
 
-  ngAfterViewInit(): void {
 
-    console.log('tableFilter: ', this.tableFilter);
+  ngAfterViewInit(): void {
 
     // Reset the paginator after sorting
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
     });
 
-    merge(this.sort.sortChange, this.paginator.page, this.tableFilter.filterChange)
+
+    merge(this.sort.sortChange, this.paginator.page, this.filterRow.filterChange)
       .pipe(
         startWith({}),
         delay(0), // Workarond for "Expression has changed" error
         switchMap(() => {
-          // this.isLoadingResults = true;
-          // return this.dataService.getRepoIssues(this.sort.active, this.sort.direction, this.paginator.pageIndex, );
-
-          this.updateFilter();
           this.loadEntitiesPage();
           return this.dataSource.getEntities();
         }),
         map(data => {
-          // this.isLoadingResults = false;
-          // this.resultsLength = data.total_count;
-          // return data.items;
-
           return this.dataSource.getEntities();
         }),
         catchError(() => {
-          // this.isLoadingResults = false;
           return observableOf([]);
         })
-      ).subscribe(data => {
-        // this.dataSource.data = data;
-      }
+      ).subscribe(data => {}
     );
-
-
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     tap(() => {
-    //       this.loadEntitiesPage();
-    //       this.total = this.dataSource.getTotal();
-    //     })
-    //   )
-    //   .subscribe();
-
-
-    // TODO: Remove this
-    // Server-side search
-    // fromEvent(this.filterField.nativeElement, 'keyup')
-    //   .pipe(
-    //     debounceTime(150),
-    //     distinctUntilChanged(),
-    //     tap(() => {
-    //       this.buildFilters(this.filterField.nativeElement.value);
-    //       this.paginator.pageIndex = 0;
-    //       this.loadEntitiesPage();
-    //     })
-    //   )
-    //   .subscribe();
-
   }
-
-
-  // ngOnChanges () { // ngOnChanges is a component LifeCycle Hook that should run the following code when there is a change to the components view (like when the child elements appear in the DOM for example)
-  //   this.tableFilter.changes.subscribe( // subscribe to any changes to the ref which should change from undefined to an actual value once showMe is switched to true (which triggers *ngIf to show the component)
-  //     (result) => {
-  //       console.log(result.first['_results'][0].nativeElement);
-  //       console.log(result.first.nativeElement);
-  //
-  //       // Do Stuff with referenced element here...
-  //     }
-  //   ); // end subscribe
-  // } // end onChanges
 
 
   loadEntitiesPage() {
     this.dataSource.loadEntities(
-      this.filters,
+      this.fieldFilters,
       this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
@@ -149,9 +95,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   selectEntity(entity): void {
     console.info(this.meta.displayName + ' selected: ', entity);
-    this.entitySelector.emit(entity);
-    if (this.useRouter) {
-      this.router.navigate([this.meta.namePlural + '/' + entity.id]);
+    if (this.isManaged) {
+      this.entitySelector.emit(entity);
+    } else {
+      this.router.navigate([this.meta.apiBase + '/' + entity.id]);
     }
   }
 
@@ -159,6 +106,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     let value = entity[fieldName];
+    if(fieldName.indexOf('.')) {
+      let fieldNameParts = fieldName.split('.');
+      value = entity[fieldNameParts.shift()];
+      for(let fieldNamePart of fieldNameParts) {
+        value = value[fieldNamePart];
+      }
+    }
     if (columnConfig.renderer) {
       return columnConfig.renderer(value);
     }
@@ -166,34 +120,54 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  /* Filter */
-  updateFilter() {
-    console.debug('Process this.tableFilter.filterJson: ' + this.tableFilter.filterJson);
+  public onFilterChanged($event) {
+    console.debug('onFilterChanged: Event received');
+    console.debug($event);
+    this.fieldFilters = this.filtersAsArray($event);
   }
 
 
-  private buildFilters(term: string): void {
-    this.filters.filters = [{name: this.meta.defaultFilterField, value: term}];
+  public clearFilter() {
+    this.filterRow.clearFilter();
   }
 
 
-  buildFilterControls() {
-    for (let columnName of this.meta.displayedColumns) {
-      let formControl = new FormControl('');
-      this.filterControls[columnName] = formControl;
-      formControl.valueChanges.subscribe(
-        value => {
-          this.filterValues[columnName] = value;
+  public toggleFilterVisibility() {
+  }
+
+
+  private filtersAsArray(entityFilter: object): FieldFilter[] {
+    let filtersArray: FieldFilter[] = [];
+    if (this.filterRow) {
+      Object.entries(entityFilter).forEach(
+        ([key, value]) => {
+          // console.log(key, value);
+          if (value && value !== "") {
+            let name: string = key.substring(0, (key.length - 'Filter'.length));
+            filtersArray.push({
+              name: name,
+              rawValue: value
+            })
+          }
         }
       );
+    } else {
+      console.debug('No tableFilter yet');
+    }
+    return filtersArray;
+  }
+
+
+  public newEntity() {
+    if(this.isManaged) {
+      this.selectEntity(null);
+    } else {
+      this.router.navigate([this.meta.namePlural + '/new']);
     }
   }
 
 
-  newEntity() {
-    this.selectEntity(null);
-  }
-
+  /////
 
   updateEntities() {
     const dialogRef = this.openConfirmationDialog('Confirm batch update',
@@ -238,7 +212,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
-  
 
 
   public show(): void {

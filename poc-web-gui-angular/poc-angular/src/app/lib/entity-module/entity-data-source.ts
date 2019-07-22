@@ -3,7 +3,7 @@ import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
 
-import {FilterSet} from "./domain/filter.model";
+import {FieldFilter} from "./domain/filter.model";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 
@@ -35,7 +35,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   }
 
   public loadEntities(
-    filter: FilterSet,
+    filter: FieldFilter[],
     sortField: string,
     sortDirection: string,
     pageNumber: number,

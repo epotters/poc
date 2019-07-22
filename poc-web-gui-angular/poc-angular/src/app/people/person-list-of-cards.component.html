@@ -8,21 +8,39 @@
 
     <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
       <div fxLayout="row wrap">
-        <ng-container *ngFor="let organization of dataSource.getEntities()">
+        <ng-container *ngFor="let person of dataSource.getEntities()">
           <mat-card class="example-card" (onclick)="selectEntity($event)">
-            <h4>{{organization.name}}</h4>
+            <h4>{{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}</h4>
           </mat-card>
         </ng-container>
       </div>
     </div>
 
+  </mat-card-content>
 
+  <mat-card-actions>
     <mat-paginator
       [length]="dataSource.getTotal()"
       [pageSize]="pageSize"
       [hidePageSize]="true"
       class="list-of-cards-paginator">
     </mat-paginator>
+  </mat-card-actions>
 
-  </mat-card-content>
 </mat-card>
+
+
+<h3>Use in a form</h3>
+<!-- Employee -->
+
+<mat-form-field>
+  <mat-label>Employee</mat-label>
+  <input matInput name="employee" [matAutocomplete]="personSelector">
+
+
+
+</mat-form-field>
+
+
+
+

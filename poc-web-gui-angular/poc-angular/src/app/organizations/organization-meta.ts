@@ -17,7 +17,6 @@ export const organizationMeta: EntityMeta<Organization> = {
   defaultPageSize: 150,
   defaultSortField: 'name',
   defaultSortDirection: 'asc',
-  defaultFilterField: 'name',
 
   displayedColumns: ['id', 'name'],
   filteredColumns: {
@@ -32,5 +31,9 @@ export const organizationMeta: EntityMeta<Organization> = {
     name: {
       label: 'Name'
     }
-  }
+  },
+
+  relatedEntities: ['employees']
+
+
 };

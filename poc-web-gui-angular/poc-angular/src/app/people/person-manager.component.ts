@@ -1,10 +1,9 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component} from "@angular/core";
 import {Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {PersonService} from "./person.service";
 import {EntityManagerComponent} from "../lib/entity-module";
-import {PersonListComponent} from "./person-list.component";
-import {PersonComponent} from "./person.component";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'person-manager',
@@ -12,14 +11,12 @@ import {PersonComponent} from "./person.component";
   styleUrls: []
 })
 export class PersonManagerComponent extends EntityManagerComponent<Person> {
-
-  // @ViewChild(OrganizationListComponent, {static: true}) list: OrganizationListComponent;
-  // @ViewChild(OrganizationComponent, {static: true}) editor: OrganizationComponent;
-
+  
   constructor(
     public service: PersonService,
+    public route: ActivatedRoute
   ) {
-    super(personMeta, service);
+    super(personMeta, service, route);
   }
 
 }

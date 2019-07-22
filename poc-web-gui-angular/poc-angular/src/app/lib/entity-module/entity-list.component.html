@@ -2,19 +2,32 @@
 
   <mat-card-actions align="end">
 
-    <button (click)="deleteEntities()" mat-button>
-      <span>Delete {{meta.namePlural}}</span>
+    <button (click)="clearFilter()" mat-button>
+      <span>Clear filter</span>
     </button>
 
-    <button (click)="updateEntities()" mat-button>
-      <span>Update {{meta.namePlural}}</span>
-    </button>
-
-    <!--    <button mat-button routerLink="/{{meta.namePlural}}/new" routerLinkActive="active">-->
     <button (click)="newEntity()" mat-button>
       <span>New {{meta.name}}</span>
     </button>
+
+
+    <button mat-button [matMenuTriggerFor]="batchActionsMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+
+    <mat-menu #batchActionsMenu="matMenu">
+      <button (click)="deleteEntities()" mat-button>
+        <span>Delete {{meta.namePlural}}</span>
+      </button>
+
+      <button (click)="updateEntities()" mat-button>
+        <span>Update {{meta.namePlural}}</span>
+      </button>
+    </mat-menu>
+
   </mat-card-actions>
+
 
   <mat-card-content>
 
@@ -22,9 +35,8 @@
       <mat-spinner [diameter]="30"></mat-spinner>
     </div>
 
-
-    <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultFilterField}}"
-               matSortDirection="asc" class="mat-elevation-z4" matSortDisableClear>
+    <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultSortField}}"
+               matSortDirection="asc" class="mat-elevation-z2" matSortDisableClear>
 
       <ng-container *ngFor="let column of meta.displayedColumns" matColumnDef="{{column}}">
         <mat-header-cell *matHeaderCellDef>
@@ -35,22 +47,26 @@
 
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
-        <div class="filter-header-row" appTableFilter>
-          <!--          <filter-cell *ngFor="let filter of meta.filteredColumns | keyvalue" [id]="filter.key" [filterConfig]="filter.value"-->
-          <!--                       [ngClass]="'filter-cell-' + filter.key"></filter-cell>-->
-
-          <filter-cell *ngFor="let key of meta.displayedColumns" [id]="key" [filterConfig]="meta.filteredColumns[key]"
-                       [ngClass]="'filter-cell-' + key"></filter-cell>
-        </div>
-
-
+        <filter-row [meta]="meta" (filterChange)="onFilterChanged($event)"></filter-row>
       </ng-container>
 
       <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
 
+
+      <ng-container matColumnDef="paginator-row">
+        <td mat-footer-cell *matFooterCellDef [colSpan]="meta.displayedColumns.length">
+          <mat-paginator
+            [length]="dataSource.getTotal()"
+            [pageSize]="meta.defaultPageSize">
+          </mat-paginator>
+        </td>
+      </ng-container>
+      <tr mat-footer-row *matFooterRowDef="['paginator-row'];"></tr>
+
     </mat-table>
 
-    <mat-paginator [length]="dataSource.getTotal()" [pageSize]="meta.defaultPageSize"></mat-paginator>
+
+
 
   </mat-card-content>
 </mat-card>

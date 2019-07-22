@@ -13,6 +13,8 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
 
   @Input() entityToLoad: T;
 
+  @Input() isManaged: boolean = false;
+
   entityForm: FormGroup;
 
   isVisible: boolean = true;
@@ -29,16 +31,16 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
 
     this.buildForm(formBuilder);
 
-    console.debug('Entity editor is ready');
   }
 
   ngOnInit() {
     console.debug('Initializing the EntityComponent');
 
-    let entityId = this.route.snapshot.paramMap.get('id');
+    let entityIdToLoad = parseInt(this.route.snapshot.paramMap.get('id'));
 
-    if (entityId) {
-      this.loadEntity(entityId);
+
+    if (entityIdToLoad) {
+      this.loadEntity(entityIdToLoad);
     } else {
       console.info('Editor for a new entity');
     }
@@ -54,9 +56,6 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
       console.debug(changes.entityToLoad.currentValue);
 
       this.loadNewEntity(changes.entityToLoad.currentValue);
-
-      // You can also use categoryId.previousValue and
-      // categoryId.firstChange for comparing old and new values
     }
 
   }
@@ -73,9 +72,7 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
 
   clearEditor() {
       this.entityForm.reset();
-      console.debug('TODO: Clear the form');
   }
-
 
   loadEntity(entityId) {
     this.service.get(entityId).pipe(
@@ -159,18 +156,16 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
     return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
   }
 
-  onValueChanged(fieldName: string, newValue: string) {
+  onValueChanged(fieldName: string, newValue: string): void {
     console.debug('Field ' + fieldName + ' changed to ' + newValue);
     this.entityForm.patchValue({[fieldName]: newValue});
   }
 
-  buildForm(formBuilder: FormBuilder) {
+  // TODO: Create a gemeric version based upon EntityMeta
+  // Override this method
+  buildForm(formBuilder: FormBuilder): void {
     this.entityForm = formBuilder.group({
       id: new FormControl()
-      // firstName: new FormControl('', [
-      //   Validators.required,
-      //   Validators.pattern(this.namePattern)
-      // ])
     });
   }
 
@@ -183,6 +178,11 @@ export abstract class EntityComponent<T extends Identifiable> implements OnInit,
       message: message
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+  }
+  
+  
+  goToList() {
+    this.router.navigate([this.meta.apiBase]);
   }
 
 

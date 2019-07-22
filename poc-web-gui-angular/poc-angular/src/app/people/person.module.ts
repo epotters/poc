@@ -12,6 +12,7 @@ import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {NGridModule} from "../core/n-grid/n-grid.module";
 import {PersonManagerComponent} from "./person-manager.component";
 import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
+import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 
 
 @NgModule({
@@ -27,12 +28,14 @@ import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-
     PersonManagerComponent,
     PersonListComponent,
     PersonComponent,
+    PersonListOfCardsComponent,
     PersonListNGridComponent
   ],
   entryComponents: [
     PersonManagerComponent,
     PersonListComponent,
     PersonComponent,
+    PersonListOfCardsComponent,
     PersonListNGridComponent
   ],
   providers: [

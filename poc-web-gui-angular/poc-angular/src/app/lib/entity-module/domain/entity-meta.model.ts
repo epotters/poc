@@ -1,4 +1,4 @@
-import {FilterConfig} from "../table-filter/components/filter-cell/filter-cell.component";
+
 
 export interface ColumnConfig {
   label: string;
@@ -17,6 +17,11 @@ export interface SelectOption {
   label: string
 }
 
+export class FilterConfig {
+  type: 'none' | 'text' | 'select' | 'date' = "none";
+  options?: SelectOption[];
+}
+
 export interface EntityMeta<T extends Identifiable> {
 
   // General
@@ -32,13 +37,18 @@ export interface EntityMeta<T extends Identifiable> {
   defaultPageSize: number;
   defaultSortField: string;
   defaultSortDirection: 'asc' | 'desc';
-  defaultFilterField: string;
 
   displayedColumns: string[];
   filteredColumns: Record<string, FilterConfig>;
 
   columnConfigs: Record<string, ColumnConfig>;
 
+  relatedEntities?: string[];
+
   // Form
   validationMessages?: any;
+
+
+  // relatedEntities: Record<string, Record<string, ColumnConfig>>;
+
 }

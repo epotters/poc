@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
-import {FilterCellComponent} from "./components/filter-cell/filter-cell.component";
-import {TableFilterDirective} from "./directives/table-filter.directive";
 import {EntityCommonModule} from "../entity-common.module";
+import {FilterRowComponent} from "./filter-row/filter-row.component";
 
 
 @NgModule({
@@ -9,16 +8,13 @@ import {EntityCommonModule} from "../entity-common.module";
     EntityCommonModule
   ],
   declarations: [
-    FilterCellComponent,
-    TableFilterDirective
+    FilterRowComponent
   ],
   entryComponents: [
-    FilterCellComponent
+    FilterRowComponent
   ],
   exports: [
-    FilterCellComponent,
-    TableFilterDirective
-  ]
+    FilterRowComponent]
 })
 export class TableFilterModule {
 }

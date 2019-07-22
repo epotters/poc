@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {Constants} from '../../constants';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -9,12 +8,10 @@ import {Constants} from '../../constants';
   styleUrls: ['./info.component.css']
 })
 export class InfoComponent {
-  Constants: any = Constants;
-  
+
   public pageTitle = 'General information';
 
-  constructor(private router: Router, ) {
+  constructor(private router: Router,) {
     console.debug('Constructing the InfoComponent');
   }
-
 }

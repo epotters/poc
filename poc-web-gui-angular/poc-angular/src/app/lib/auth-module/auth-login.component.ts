@@ -16,6 +16,5 @@ export class AuthLoginComponent implements OnInit {
   ngOnInit() {
     console.debug(this.message);
     this.authService.returnToUrl();
-
   }
 }

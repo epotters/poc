@@ -1,22 +1,22 @@
-export interface FilterSet {
-  // type: string;
-  filters: Filter[];
-}
-
-
-export interface Filter {
-  name: string;
-  value: string;
-}
-
 
 /* Filter for one field */
 export interface FieldFilter {
-  id: string;
-  filterData: string;
+  name: string;
+  rawValue: string;
 }
 
 
+
+// export interface FilterSet {
+//   // type: string;
+//   filters: Filter[];
+// }
+
+
+// export interface Filter {
+//   name: string;
+//   value: string;
+// }
 
 
 

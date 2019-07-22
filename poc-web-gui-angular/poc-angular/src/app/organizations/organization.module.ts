@@ -13,6 +13,10 @@ import {OrganizationListNGridComponent} from "./organization-list-n-grid.compone
 import {NGridModule} from "../core/n-grid/n-grid.module";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
 import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
+import {OrganizationEmployeeListComponent} from "./employees/organization-employees-list.component";
+import {OrganizationEmployeeService} from "./employees/organization-employee.service";
+import {OrganizationEmployeeComponent} from "./employees/organization-employee.component";
+import {OrganizationSelectorComponent} from "./organization-selector.component";
 
 
 @NgModule({
@@ -27,19 +31,26 @@ import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-
     OrganizationManagerComponent,
     OrganizationListComponent,
     OrganizationComponent,
+    OrganizationEmployeeListComponent,
+    OrganizationEmployeeComponent,
     OrganizationListNGridComponent,
-    OrganizationListOfCardsComponent
+    OrganizationListOfCardsComponent,
+    OrganizationSelectorComponent
   ],
   entryComponents: [
     OrganizationManagerComponent,
     OrganizationListComponent,
     OrganizationComponent,
+    OrganizationEmployeeListComponent,
+    OrganizationEmployeeComponent,
     OrganizationListNGridComponent,
-    OrganizationListOfCardsComponent
+    OrganizationListOfCardsComponent,
+    OrganizationSelectorComponent
   ],
   providers: [
     PocApiService,
-    OrganizationService
+    OrganizationService,
+    OrganizationEmployeeService
   ]
 })
 export class OrganizationModule {

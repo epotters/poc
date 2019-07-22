@@ -1,27 +1,13 @@
 <h1>{{meta.displayName}} manager</h1>
 
-
-<div class="manager-buttons">
-
-  <button (click)="showList()" mat-icon-button>
-    <mat-icon>dehaze</mat-icon>
-  </button>
-
-  <button (click)="showEditor()" mat-icon-button>
-    <mat-icon>crop_portrait</mat-icon>
-  </button>
-</div>
-
-
-<router-outlet></router-outlet>
-
-<!--*ngIf="list.isVisible"-->
-<organization-list-card (entitySelector)="onEntitySelected($event)"></organization-list-card>
+<organization-card
+  [isManaged]="true"
+  [entityToLoad]="selectedEntity">
+</organization-card>
 
 <hr />
 
-<organization-card [entityToLoad]="selectedEntity"></organization-card>
-
-
-
-<!--*ngIf="editor.isVisible"-->
+<organization-list-card
+  [isManaged]="true"
+  (entitySelector)="onEntitySelected($event)">
+</organization-list-card>

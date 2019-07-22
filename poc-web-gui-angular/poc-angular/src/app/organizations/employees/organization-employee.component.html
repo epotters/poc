@@ -1,9 +1,6 @@
 <mat-card class="form-card">
   <mat-card-header>
 
-<!--    <button mat-button routerLink="{{entityToLoad.id + '/' + meta.relatedEntities[0]}}" routerLinkActive="active">-->
-<!--      <span>Related entities</span>-->
-<!--    </button>-->
 
     <mat-card-title>{{meta.displayName}} Editor</mat-card-title>
   </mat-card-header>
@@ -19,11 +16,21 @@
         </mat-form-field>
       </div>
 
-      <!-- Name -->
+      <!-- Person -->
       <div>
         <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="name" name="name">
+          <mat-label>Person</mat-label>
+          <input matInput formControlName="person" name="person">
+        </mat-form-field>
+      </div>
+
+      <!-- Employer -->
+      <div>
+        <mat-form-field>
+          <mat-label>Employer</mat-label>
+          <input matInput formControlName="employer" name="employer" [matAutocomplete]="organizationSelector">
+
+          <organization-selector></organization-selector>
         </mat-form-field>
       </div>
 

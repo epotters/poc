@@ -18,7 +18,13 @@ export class AuthGuardService implements CanActivate {
 
     this.debugLog(route, state);
 
-    this.authService.setReturnUrl(route.url.toString());
+    console.debug('About to set the return url to ' + route.url.join('/'));
+
+    this.authService.setReturnUrl(route.url.join('/'));
+
+    console.debug('Return url was set to ' + this.authService.getReturnUrl());
+
+
     this.authService.startAuthentication();
 
     return false;
@@ -30,10 +36,10 @@ export class AuthGuardService implements CanActivate {
     console.debug(this.router);
     console.debug('this.router.url: ' + this.router.url);
 
-    // console.debug('Is route protected?: ' + this.isRouteProtected(this.router.url));
+    console.debug('Is route protected?: ' + this.isRouteProtected(route.url.join('/')));
 
     console.debug(route);
-    console.debug('route.url: ' + route.url.toString());
+    console.debug('route.url: ' + route.url.join('/'));
     console.debug('Is route protected?: ' + (route.routeConfig.canActivate != null));
 
     console.debug(state);

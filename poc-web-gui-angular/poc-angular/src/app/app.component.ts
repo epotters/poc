@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Title} from "@angular/platform-browser";
 import {Constants} from '../constants';
 import {AuthService} from "./lib/auth-module/";
 
@@ -14,9 +15,11 @@ export class AppComponent {
   messages: string[] = [];
 
   constructor(
+    private titleService: Title,
     public authService: AuthService
   ) {
     console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
+    this.titleService.setTitle(Constants.applicationDisplayName);
   }
 
 

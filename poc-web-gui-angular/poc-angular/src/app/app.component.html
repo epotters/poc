@@ -21,7 +21,6 @@
         <span>Organizations</span>
       </button>
 
-
       <span class="fill-remaining-space"></span>
 
 
@@ -57,6 +56,45 @@
       <mat-sidenav #sidenav mode="over" fixedInViewport="true">
         <mat-card>
           <h2>Developer info</h2>
+
+          <h3>Experimentele features</h3>
+
+
+          <div class="buttons-vertical">
+
+            <h4>People</h4>
+
+            <button routerLink="people-manager" mat-button>
+              <span>People Manager</span>
+            </button>
+            <button routerLink="people-list-of-cards" mat-button>
+              <span>People list of cards</span>
+            </button>
+            <button routerLink="people-n-grid" mat-button>
+              <span>People N-Grid</span>
+            </button>
+
+
+            <h4>Organizations</h4>
+
+            <button routerLink="organizations-manager" mat-button>
+              <span>Organizations Manager</span>
+            </button>
+            <button routerLink="organizations-list-of-cards" mat-button>
+              <span>Organization list of cards</span>
+            </button>
+            <button routerLink="organizations-n-grid" mat-button>
+              <span>Organizations N-Grid</span>
+            </button>
+
+            <button routerLink="organizations/employees" mat-button>
+              <span>Organizations Employees</span>
+            </button>
+
+          </div>
+
+
+
           <div>
             <h2>Messages</h2>
             <ul>

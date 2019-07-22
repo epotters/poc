@@ -1,10 +1,9 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component} from "@angular/core";
 import {Organization} from "../core/domain/";
 import {organizationMeta} from "./organization-meta";
 import {OrganizationService} from "./organization.service";
 import {EntityManagerComponent} from "../lib/entity-module";
-import {OrganizationListComponent} from "./organization-list.component";
-import {OrganizationComponent} from "./organization.component";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'organization-manager',
@@ -13,13 +12,11 @@ import {OrganizationComponent} from "./organization.component";
 })
 export class OrganizationManagerComponent extends EntityManagerComponent<Organization> {
 
-  // @ViewChild(OrganizationListComponent, {static: true}) list: OrganizationListComponent;
-  // @ViewChild(OrganizationComponent, {static: true}) editor: OrganizationComponent;
-
   constructor(
     public service: OrganizationService,
+    public route: ActivatedRoute
   ) {
-    super(organizationMeta, service);
+    super(organizationMeta, service, route);
   }
 
 }

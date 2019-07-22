@@ -1,13 +1,14 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {PersonListComponent} from "./person-list.component";
-import {PersonComponent} from "./person.component";
+
 import {AuthGuardService} from "../lib/auth-module";
 import {personMeta} from "./person-meta";
+import {PersonListComponent} from "./person-list.component";
+import {PersonComponent} from "./person.component";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
-import {OrganizationManagerComponent} from "../organizations/organization-manager.component";
 import {PersonManagerComponent} from "./person-manager.component";
+import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 
 const meta = personMeta;
 
@@ -30,6 +31,11 @@ const routes: Routes = [
   {
     path: meta.namePlural + '-manager',
     component: PersonManagerComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: meta.namePlural + '-list-of-cards',
+    component: PersonListOfCardsComponent,
     canActivate: [AuthGuardService]
   },
   {

@@ -1,9 +1,4 @@
-import {CollectionViewer} from "@angular/cdk/collections";
-
-import {BehaviorSubject, Observable, of} from "rxjs";
-import {catchError, finalize} from "rxjs/operators";
-
-import {FilterSet} from "./domain/filter.model";
+import {BehaviorSubject} from "rxjs";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {PblDataSource, PblDataSourceAdapter, PblDataSourceOptions} from "@pebula/ngrid";
@@ -23,7 +18,7 @@ export class EntityPblDataSource<T extends Identifiable> extends PblDataSource<T
     public options?: PblDataSourceOptions
   ) {
     super(adapter, options);
-    
+
 
     console.debug('Creating EntityPblDataSource for type ' + this.meta.displayName);
   }

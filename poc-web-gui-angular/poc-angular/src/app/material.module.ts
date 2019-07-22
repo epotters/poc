@@ -18,12 +18,12 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatGridList, MatGridListModule} from "@angular/material";
-import {Constants} from "../constants";
+import {MatAutocompleteModule, MatGridListModule} from "@angular/material";
 
 
 @NgModule({
   imports: [
+    MatAutocompleteModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
@@ -45,6 +45,7 @@ import {Constants} from "../constants";
     MatGridListModule
   ],
   exports: [
+    MatAutocompleteModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
@@ -67,7 +68,7 @@ import {Constants} from "../constants";
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}
-    ]
+  ]
 })
 export class MaterialModule {
 }
