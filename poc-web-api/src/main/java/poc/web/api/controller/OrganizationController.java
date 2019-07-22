@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import poc.core.domain.Employee;
 import poc.core.domain.Organization;
+import poc.core.repository.EmployeeRepository;
 import poc.core.repository.OrganizationRepository;
 
 
@@ -27,12 +28,21 @@ import poc.core.repository.OrganizationRepository;
 public class OrganizationController {
 
   private final OrganizationRepository organizationRepository;
+  private final EmployeeRepository employeeRepository;
+
 
   private QuerystringFilterTranslator<Organization> filterTanslator = new QuerystringFilterTranslator<>();
+  private QuerystringFilterTranslator<Employee> employeeFilterTanslator = new QuerystringFilterTranslator<>();
+
+
 
   @Autowired
-  OrganizationController(OrganizationRepository organizationRepository) {
+  OrganizationController(
+      OrganizationRepository organizationRepository,
+      EmployeeRepository employeeRepository
+      ) {
     this.organizationRepository = organizationRepository;
+    this.employeeRepository = employeeRepository;
   }
 
 
@@ -74,10 +84,25 @@ public class OrganizationController {
     organizationRepository.delete(organization);
   }
 
-  @GetMapping("/{id}/employees")
+    @GetMapping("/{id}/employees")
   public Iterable<Employee> findEmployees(@PathVariable final Long id) throws IOException {
     final Organization organization = organizationRepository.getOne(id);
     return organization.getEmployees();
+  }
+
+
+  @GetMapping("/employees")
+  public Iterable<Employee> findAllEmployees(final Pageable pageable,
+      @RequestParam(value = "filters", required = false) final String filters)  throws IOException {
+
+    if (filters != null & !"".equals(filters)) {
+      Specification<Employee> spec = employeeFilterTanslator.translate(filters);
+      return employeeRepository.findAll(spec, pageable);
+    } else {
+      log.debug("No filters provided");
+      return employeeRepository.findAll(pageable);
+    }
+//    return this.employeeRepository.findAll();
   }
 
   @GetMapping("/schema")

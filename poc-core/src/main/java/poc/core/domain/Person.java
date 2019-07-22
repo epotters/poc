@@ -53,7 +53,7 @@ public class Person implements Serializable {
       cascade = CascadeType.ALL,
       orphanRemoval = true
   )
-  private List<Organization> employers;
+  private List<Employee> employers;
 
 
   public Person() {

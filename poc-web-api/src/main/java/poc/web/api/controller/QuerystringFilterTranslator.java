@@ -29,12 +29,16 @@ class QuerystringFilterTranslator<T> {
     String[] labelValueParts = filterParam.split(SEPARATOR);
     Matcher matcher;
     String fieldName;
+    String operator;
+    Object value;
     for (String labelValue : labelValueParts) {
       if (!"".equals(labelValue)) {
         matcher = pattern.matcher(labelValue);
         if (matcher.find()) {
           fieldName = matcher.group(1);
-          builder.with(fieldName, matcher.group(2), matcher.group(3) + SearchOperation.WILDCARD);
+          operator = matcher.group(2);
+          value = matcher.group(3) + (("~".equals(operator)) ? SearchOperation.WILDCARD : "");
+          builder.with(fieldName, operator, value);
         }
       }
     }
@@ -53,7 +57,7 @@ class QuerystringFilterTranslator<T> {
   }
 
 
-  // Not prepared for multiple filtes yet
+  // Not prepared for multiple filters yet
   public List<String> fieldNames(String filterParam) {
     List<String> fieldNames = new ArrayList<>();
     String[] labelValueParts = filterParam.split(SEPARATOR);
