@@ -9,7 +9,7 @@ import {personMeta} from "./person-meta";
 import {PersonService} from "./person.service";
 
 @Component({
-  selector: 'person-card',
+  selector: 'person-editor-card',
   templateUrl: './person-editor.component.html'
 })
 export class PersonEditorComponent extends EntityEditorComponent<Person> {

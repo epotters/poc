@@ -11,16 +11,17 @@ export const employeeMeta: EntityMeta<Employee> = {
   displayNamePlural: 'Employees',
 
   // API
-  apiBase: '/organizations/employees',
+  apiBase: '/organizations/employees/',
 
   // List
   defaultPageSize: 150,
   defaultSortField: 'id',
   defaultSortDirection: 'asc',
 
-  displayedColumns: ['id', 'person.firstName', 'person.lastName'],
+  displayedColumns: ['id', 'employer.name', 'person.firstName', 'person.lastName'],
   filteredColumns: {
     id: {type: 'text'},
+    'employer.name': {type: 'none'},
     'person.firstName': {type: 'none'},
     'person.lastName': {type: 'none'}
   },
@@ -28,6 +29,9 @@ export const employeeMeta: EntityMeta<Employee> = {
   columnConfigs: {
     id: {
       label: 'ID',
+    },
+    'employer.name': {
+      label: 'Employer'
     },
     'person.firstName': {
       label: 'First Name'

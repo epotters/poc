@@ -2,23 +2,23 @@
 
   <mat-card-content>
 
-    <div *ngIf="dataSource.loading$ | async" class="spinner-container">
-      <mat-spinner [diameter]="30"></mat-spinner>
-    </div>
+<!--    <div *ngIf="dataSource.loading$ | async" class="spinner-container">-->
+<!--      <mat-spinner [diameter]="30"></mat-spinner>-->
+<!--    </div>-->
 
     <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
       <div fxLayout="row wrap">
-        <ng-container *ngFor="let organization of dataSource.getEntities()">
-          <mat-card class="example-card" (onclick)="selectEntity($event)">
-            <h4>{{organization.name}}</h4>
-          </mat-card>
+        <ng-container *ngFor="let organization of dataSource.awaitEntities() | async">
+          <organization-editor-card
+            [isManaged]="true"
+            [entityToLoad]="organization">
+          </organization-editor-card>
         </ng-container>
       </div>
     </div>
 
-
     <mat-paginator
-      [length]="dataSource.getTotal()"
+      [length]="dataSource.awaitTotal() | async"
       [pageSize]="pageSize"
       [hidePageSize]="true"
       class="list-of-cards-paginator">

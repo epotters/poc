@@ -14,6 +14,8 @@ import {EntityListOfCardsComponent} from "../lib/entity-module/entity-list-of-ca
 })
 export class OrganizationListOfCardsComponent extends EntityListOfCardsComponent<Organization> {
 
+  pageSize = 1;
+
   constructor(
     public service: OrganizationService,
     public router: Router,

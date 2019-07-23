@@ -1,14 +1,14 @@
 
 
 <mat-autocomplete #organizationSelector="matAutocomplete" [displayWith]="displayOption">
-  <mat-option *ngFor="let organization of dataSource.getEntities()" [value]="organization.id">
+  <mat-option *ngFor="let organization of dataSource.awaitEntities() | async" [value]="organization.id">
     {{organization.name}}
   </mat-option>
 </mat-autocomplete>
 
 <div style="display: none">
   <mat-paginator
-    [length]="dataSource.getTotal()"
+    [length]="dataSource.awaitTotal() | async"
     [pageSize]="pageSize"
     [hidePageSize]="true"
     class="list-of-cards-paginator">

@@ -16,39 +16,58 @@
         </mat-form-field>
       </div>
 
-      <!-- Person -->
-      <div>
-        <mat-form-field>
-          <mat-label>Person</mat-label>
-          <input matInput formControlName="person" name="person">
-        </mat-form-field>
-      </div>
+      <div class="form-row">
 
-      <!-- Employer -->
-      <div>
-        <mat-form-field>
+        <!-- Person -->
+        <mat-form-field style="flex: 2">
+
+          <mat-label>Person</mat-label>
+          <input matInput formControlName="person" name="person" [matAutocomplete]="personSelector">
+
+          <mat-autocomplete #personSelector="matAutocomplete" [displayWith]="displayOptionPerson">
+            <mat-option *ngFor="let person of peopleDataSource.awaitEntities() | async" [value]="person">
+              {{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}
+            </mat-option>
+          </mat-autocomplete>
+
+        </mat-form-field>
+
+
+        <!-- Employer -->
+        <mat-form-field style="flex: 2">
+
           <mat-label>Employer</mat-label>
           <input matInput formControlName="employer" name="employer" [matAutocomplete]="organizationSelector">
 
-          <organization-selector></organization-selector>
+          <mat-autocomplete #organizationSelector="matAutocomplete" [displayWith]="displayOptionOrganization">
+            <mat-option *ngFor="let organization of organizationsDataSource.awaitEntities() | async"
+                        [value]="organization">
+              {{organization.name}}
+            </mat-option>
+          </mat-autocomplete>
+
         </mat-form-field>
       </div>
+
 
     </form>
   </mat-card-content>
 
   <mat-card-actions align="end">
-
-    <button (click)="goToList()" [hidden]="isManaged" mat-icon-button>
+    <button (click)="goToList()" *ngIf="!isManaged" mat-icon-button>
       <mat-icon>menu</mat-icon>
     </button>
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>Delete</button>
-    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>Revert</button>
-    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary"
-            mat-button>Save
+    <button (click)="deleteEntity()" [disabled]="isNew()" mat-icon-button>
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-icon-button>
+      <mat-icon>keyboard_return</mat-icon>
+    </button>
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-icon-button>
+      <mat-icon>done</mat-icon>
     </button>
   </mat-card-actions>
 

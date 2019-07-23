@@ -20,7 +20,7 @@ html, body {
 }
 
 header mat-toolbar {
-  z-index: 100;
+  z-index: 1000;
   width: 100% !important;
 }
 
@@ -52,6 +52,7 @@ header .mat-toolbar-row, header .mat-toolbar-single-row {
 .form-card {
   position: fixed;
   max-width: 600px;
+  top: 15px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 30px;
@@ -67,10 +68,6 @@ header .mat-toolbar-row, header .mat-toolbar-single-row {
   vertical-align: bottom;
 }
 
-/* Messy radio group styling */
-mat-radio-button {
-  margin-right: 0.5em;
-}
 
 
 /* List */
@@ -101,17 +98,14 @@ mat-footer-row, mat-row {
   min-height: 30px !important;
 }
 
-.mat-elevation-z2 {
-  margin-bottom: 2px;
+tr.mat-footer-row {
+  width: 100%;
 }
 
-.mat-elevation-z4 {
-  margin-bottom: 4px;
+mat-footer-cell {
+  text-align: right;
 }
 
-.mat-elevation-z6 {
-  margin-bottom: 6px;
-}
 
 /* Filter row */
 
@@ -164,60 +158,20 @@ filter-row div[ng-reflect-ng-switch=none] .mat-form-field-underline .mat-form-fi
 }
 
 
+filter-row .mat-form-field-appearance-fill .mat-form-field-flex {
+  /*padding-top: 0.25em;*/
+}
+
+
+filter-row .mat-form-field-infix {
+  /*padding: .25em 0;*/
+  /*border-top: .75em solid transparent;*/
+}
+
+
 /* Filter row cells */
 .filter-header-row {
   display: flex;
-}
-
-.filter-header-row filter-cell {
-  flex: 1;
-}
-
-filter-cell:first-of-type {
-  padding-left: 24px;
-}
-
-filter-cell:last-of-type {
-  padding-right: 24px;
-}
-
-filter-cell:first-of-type .mat-form-field-wrapper {
-  margin-left: -24px;
-}
-
-filter-cell:last-of-type .mat-form-field-wrapper {
-  margin-right: -24px;
-}
-
-
-filter-cell .mat-form-field-appearance-fill .mat-form-field-flex {
-  padding-left: 0;
-}
-
-filter-cell:first-of-type .mat-form-field-flex {
-  padding-left: 24px;
-}
-
-filter-cell:last-of-type .mat-form-field-flex {
-  padding-right: 24px;
-}
-
-filter-cell .mat-form-field-underline {
-}
-
-filter-cell .mat-form-field-subscript-wrapper {
-}
-
-filter-cell .mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-underline::before {
-  background-color: rgba(0, 0, 0, .42);
-}
-
-
-/* Height was 2.5 originally but that did not align in the filter-row, width ajusted too to keep the button square */
-filter-cell .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-filter-cell .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
-  width: 2.3em;
-  height: 2.3em;
 }
 
 
@@ -225,9 +179,9 @@ filter-cell .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-fie
 
 .list-of-cards {
   background-color: #fafafa;
+  min-height: 300px;
   padding-top: 12px;
   padding-bottom: 12px;
-
   border-top: 1px rgba(0, 0, 0, .12);
   border-bottom: 1px rgba(0, 0, 0, .12);
 }
@@ -235,10 +189,8 @@ filter-cell .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-fie
 
 .list-of-cards mat-card {
   display: inline-block;
-
   min-width: 240px;
   min-height: 90px;
-
   margin: 6px;
 }
 
@@ -246,12 +198,17 @@ filter-cell .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-fie
   display: none;
 }
 
+
+
 /* Not for production */
 
 .buttons-vertical button {
   display: block;
   margin-bottom: 6px;
 }
+
+
+
 
 /* Dev only styles  */
 /*filter-row .filter-row .filter-cell .mat-form-field-flex,*/

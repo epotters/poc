@@ -117,17 +117,14 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>
+    <button (click)="deleteEntity()" [disabled]="isNew()" mat-icon-button>
       <mat-icon>delete_outline</mat-icon>
-<!--      Delete-->
     </button>
-    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>
+    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-icon-button>
       <mat-icon>keyboard_return</mat-icon>
-<!--      Revert-->
     </button>
-    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-button>
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-icon-button>
       <mat-icon>done</mat-icon>
-<!--      Save-->
     </button>
   </mat-card-actions>
 

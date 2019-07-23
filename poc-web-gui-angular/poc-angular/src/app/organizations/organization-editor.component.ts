@@ -9,7 +9,7 @@ import {organizationMeta} from "./organization-meta";
 import {OrganizationService} from "./organization.service";
 
 @Component({
-  selector: 'organization-card',
+  selector: 'organization-editor-card',
   templateUrl: './organization-editor.component.html',
   styleUrls: ['../lib/entity-module/entity-editor.component.css']
 })

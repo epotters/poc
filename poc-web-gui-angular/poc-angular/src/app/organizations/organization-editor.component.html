@@ -31,17 +31,20 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-
-    <button (click)="goToList()" [hidden]="isManaged" mat-icon-button>
+    <button (click)="goToList()" *ngIf="!isManaged" mat-icon-button>
       <mat-icon>menu</mat-icon>
     </button>
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>Delete</button>
-    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>Revert</button>
-    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary"
-            mat-button>Save
+    <button (click)="deleteEntity()" [disabled]="isNew()" mat-icon-button>
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-icon-button>
+      <mat-icon>keyboard_return</mat-icon>
+    </button>
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-icon-button>
+      <mat-icon>done</mat-icon>
     </button>
   </mat-card-actions>
 
