@@ -19,16 +19,10 @@ import {FilterRowComponent} from "./table-filter/filter-row/filter-row.component
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
-
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
-  isVisible: boolean = true;
-
-
   dataSource: EntityDataSource<T>;
-
   fieldFilters: FieldFilter[] = [];
-
   startPage: number = 0;
 
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
@@ -69,15 +63,15 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         delay(0), // Workarond for "Expression has changed" error
         switchMap(() => {
           this.loadEntitiesPage();
-          return this.dataSource.getEntities();
+          return this.dataSource.awaitEntities();
         }),
-        map(data => {
-          return this.dataSource.getEntities();
+        map(() => {
+          return this.dataSource.awaitEntities();
         }),
         catchError(() => {
           return observableOf([]);
         })
-      ).subscribe(data => {}
+      ).subscribe(() => {}
     );
   }
 
@@ -132,10 +126,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  public toggleFilterVisibility() {
-  }
-
-
   private filtersAsArray(entityFilter: object): FieldFilter[] {
     let filtersArray: FieldFilter[] = [];
     if (this.filterRow) {
@@ -162,12 +152,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if(this.isManaged) {
       this.selectEntity(null);
     } else {
-      this.router.navigate([this.meta.namePlural + '/new']);
+      this.router.navigate([this.meta.apiBase + '/new']);
     }
   }
-
-
-  /////
+  
 
   updateEntities() {
     const dialogRef = this.openConfirmationDialog('Confirm batch update',
@@ -211,15 +199,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       message: message
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-  }
-
-
-  public show(): void {
-    this.isVisible = true;
-  }
-
-  public hide(): void {
-    this.isVisible = false;
   }
 
 }

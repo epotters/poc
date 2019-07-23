@@ -12,7 +12,8 @@ export class EntityService<T extends Identifiable> {
 
   constructor(
     public meta: EntityMeta<T>,
-    public apiService: ApiService) {
+    public apiService: ApiService
+  ) {
     console.debug('Start constructing entity service for type ' + this.meta.displayName);
   }
 
@@ -86,12 +87,12 @@ export class EntityService<T extends Identifiable> {
 
     if (entity.id) {
       return this.apiService.post(this.meta.apiBase + entity.id, entity)
-        .pipe(map(data => data.entity));
+        .pipe(map(data => data));
 
       // Create new
     } else {
       return this.apiService.put(this.meta.apiBase, entity)
-        .pipe(map(data => data.entity));
+        .pipe(map(data => data));
     }
   }
 

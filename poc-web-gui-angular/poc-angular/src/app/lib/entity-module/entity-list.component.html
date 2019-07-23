@@ -52,20 +52,17 @@
 
       <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
 
-
-      <ng-container matColumnDef="paginator-row">
-        <td mat-footer-cell *matFooterCellDef [colSpan]="meta.displayedColumns.length">
+      <ng-container matColumnDef="paginator">
+        <mat-footer-cell *matFooterCellDef>
           <mat-paginator
-            [length]="dataSource.getTotal()"
+            [length]="dataSource.awaitTotal() | async"
             [pageSize]="meta.defaultPageSize">
           </mat-paginator>
-        </td>
+        </mat-footer-cell>
       </ng-container>
-      <tr mat-footer-row *matFooterRowDef="['paginator-row'];"></tr>
+      <mat-footer-row *matFooterRowDef="['paginator']"></mat-footer-row>
 
     </mat-table>
-
-
 
 
   </mat-card-content>

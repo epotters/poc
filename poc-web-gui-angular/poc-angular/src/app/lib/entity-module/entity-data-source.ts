@@ -62,12 +62,12 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
       });
   }
 
-
-  public getTotal(): number {
-    return this.totalSubject.getValue();
+  public awaitEntities(): Observable<T[]> {
+    return this.entitiesSubject.asObservable();
   }
 
-  public getEntities(): T[] {
-    return this.entitiesSubject.getValue();
+  public awaitTotal(): Observable<number> {
+    return this.totalSubject.asObservable();
   }
+
 }

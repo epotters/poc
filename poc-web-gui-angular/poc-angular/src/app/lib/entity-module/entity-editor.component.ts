@@ -71,7 +71,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
   clearEditor() {
-      this.entityForm.reset();
+    this.entityForm.reset();
   }
 
   loadEntity(entityId) {
@@ -91,10 +91,17 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
       let entity: T = this.entityForm.getRawValue();
 
       console.debug('Ready to save ' + this.meta.displayName + ': ' + JSON.stringify(entity));
-      this.service.save(entity).subscribe((response) => {
-        let msg = this.meta.displayName + ' with id ' + entity.id + ' is saved successfully';
+      this.service.save(entity).subscribe((savedEntity) => {
+        let msg: string;
+        if (entity.id) {
+          msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
+        } else {
+          msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
+        }
         console.info(msg);
-        console.log('repsonse ', response);
+        console.log('savedEntity: ', savedEntity);
+
+        this.entityForm.patchValue(savedEntity);
       });
     } else {
       console.info('Not a valid entity');
@@ -179,8 +186,8 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
-  
-  
+
+
   goToList() {
     this.router.navigate([this.meta.apiBase]);
   }
