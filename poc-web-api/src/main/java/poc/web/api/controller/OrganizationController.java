@@ -35,12 +35,11 @@ public class OrganizationController {
   private QuerystringFilterTranslator<Employee> employeeFilterTanslator = new QuerystringFilterTranslator<>();
 
 
-
   @Autowired
   OrganizationController(
       OrganizationRepository organizationRepository,
       EmployeeRepository employeeRepository
-      ) {
+  ) {
     this.organizationRepository = organizationRepository;
     this.employeeRepository = employeeRepository;
   }
@@ -84,16 +83,42 @@ public class OrganizationController {
     organizationRepository.delete(organization);
   }
 
-    @GetMapping("/{id}/employees")
+
+//  Employees
+
+  @GetMapping("/{id}/employees")
   public Iterable<Employee> findEmployees(@PathVariable final Long id) throws IOException {
-    final Organization organization = organizationRepository.getOne(id);
-    return organization.getEmployees();
+    return employeeRepository.findByEmployerId(id);
+  }
+
+  @GetMapping("/employees/{id}")
+  public Employee getEmployee(@PathVariable final Long id) {
+    log.info("About to return employee with id: " + id);
+    return employeeRepository.getOne(id);
+  }
+
+
+  @PutMapping("/employees")
+  public Employee createEmployee(@RequestBody final Employee employee) {
+    return employeeRepository.save(employee);
+  }
+
+
+  @PostMapping("/employees/{id}")
+  public Employee updateEmployee(@PathVariable final Long id, @RequestBody final Employee employee) {
+    return employeeRepository.save(employee);
+  }
+
+  @DeleteMapping("/employees/{id}")
+  public void deleteEmployee(@PathVariable final Long id) {
+    final Employee employee = employeeRepository.getOne(id);
+    employeeRepository.delete(employee);
   }
 
 
   @GetMapping("/employees")
   public Iterable<Employee> findAllEmployees(final Pageable pageable,
-      @RequestParam(value = "filters", required = false) final String filters)  throws IOException {
+      @RequestParam(value = "filters", required = false) final String filters) throws IOException {
 
     if (filters != null & !"".equals(filters)) {
       Specification<Employee> spec = employeeFilterTanslator.translate(filters);
@@ -102,8 +127,10 @@ public class OrganizationController {
       log.debug("No filters provided");
       return employeeRepository.findAll(pageable);
     }
-//    return this.employeeRepository.findAll();
   }
+
+
+//  Schema
 
   @GetMapping("/schema")
   public String schema() throws IOException {

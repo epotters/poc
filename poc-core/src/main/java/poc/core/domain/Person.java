@@ -47,13 +47,13 @@ public class Person implements Serializable {
   @JoinColumn(name = "household_id")
   private Household household;
 
-  @OneToMany(
-      mappedBy = "person",
-      fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
-  )
-  private List<Employee> employers;
+//  @OneToMany(
+//      mappedBy = "person",
+//      fetch = FetchType.LAZY,
+//      cascade = CascadeType.ALL,
+//      orphanRemoval = true
+//  )
+//  private List<Employee> employers;
 
 
   public Person() {
