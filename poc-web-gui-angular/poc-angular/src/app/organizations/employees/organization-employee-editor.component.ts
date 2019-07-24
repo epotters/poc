@@ -38,13 +38,36 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
 
     this.organizationsDataSource = new EntityDataSource<Organization>(organizationMeta, this.organizationService);
     this.peopleDataSource = new EntityDataSource<Person>(personMeta, this.personService);
-
   }
 
 
   ngOnInit() {
     super.ngOnInit();
 
+    if (this.isNew()) {
+      this.prefillFromParameters();
+    }
+
+    this.activatePersonControl();
+
+    this.activateEmployerControl();
+  }
+
+
+  buildForm(formBuilder: FormBuilder) {
+    this.entityForm = formBuilder.group({
+      id: new FormControl(),
+      person: new FormControl('', [
+        Validators.required
+      ]),
+      employer: new FormControl('', [
+        Validators.required
+      ])
+    });
+  }
+
+
+  activatePersonControl(): void {
     this.entityForm
       .get('person')
       .valueChanges
@@ -58,7 +81,10 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
           this.autoCompletePageSize
         );
       });
+  }
 
+
+  activateEmployerControl(): void {
     this.entityForm
       .get('employer')
       .valueChanges
@@ -74,18 +100,28 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
           this.autoCompletePageSize
         );
       });
-
   }
 
-  buildForm(formBuilder: FormBuilder) {
-    this.entityForm = formBuilder.group({
-      id: new FormControl(),
-      person: new FormControl('', [
-        Validators.required
-      ]),
-      employer: new FormControl('', [
-        Validators.required
-      ])
+
+  prefillFromParameters(): void {
+
+    this.route.queryParams.subscribe(params => {
+
+      if (params['person.id']) {
+        const personId = params['person.id'];
+        this.personService.get(personId)
+          .subscribe(person => {
+            this.entityForm.patchValue({person: person});
+          });
+      }
+
+      if (params['employer.id']) {
+        const employerId = params['employer.id'];
+        this.organizationService.get(employerId)
+          .subscribe(organization => {
+            this.entityForm.patchValue({employer: organization});
+          })
+      }
     });
   }
 
@@ -95,14 +131,11 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
   }
 
   displayOptionPerson(person?: Person): string | undefined {
-    // return person.lastName;
-
-    if(person) {
+    if (person) {
       return (person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName);
     } else {
       return undefined;
     }
-
   }
 
 }

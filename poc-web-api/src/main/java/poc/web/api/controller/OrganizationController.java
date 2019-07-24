@@ -91,6 +91,7 @@ public class OrganizationController {
     return employeeRepository.findByEmployerId(id);
   }
 
+
   @GetMapping("/employees/{id}")
   public Employee getEmployee(@PathVariable final Long id) {
     log.info("About to return employee with id: " + id);
@@ -108,6 +109,7 @@ public class OrganizationController {
   public Employee updateEmployee(@PathVariable final Long id, @RequestBody final Employee employee) {
     return employeeRepository.save(employee);
   }
+
 
   @DeleteMapping("/employees/{id}")
   public void deleteEmployee(@PathVariable final Long id) {

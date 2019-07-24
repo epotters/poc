@@ -199,6 +199,23 @@ filter-row .mat-form-field-infix {
 }
 
 
+.related-entity-control {
+}
+
+.related-entity-control h4 {
+  margin-bottom: 6px;
+}
+
+.related-entity {
+  border-bottom: 1px solid #efefef;
+  height: 30px;
+}
+
+.related-entity a {
+  text-underline: none;
+}
+
+
 
 /* Not for production */
 

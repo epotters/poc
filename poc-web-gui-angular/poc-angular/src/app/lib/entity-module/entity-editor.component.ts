@@ -7,17 +7,19 @@ import {tap} from "rxjs/operators";
 import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
+import {BehaviorSubject} from "rxjs";
 
 
 export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges {
 
-  @Input() entityToLoad: T;
-
+  @Input() entityToLoad?: T;
   @Input() isManaged: boolean = false;
 
   entityForm: FormGroup;
 
   isVisible: boolean = true;
+
+  entitySubject = new BehaviorSubject<T>(this.entityToLoad);
 
   constructor(
     public meta: EntityMeta<T>,
@@ -36,15 +38,14 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   ngOnInit() {
     console.debug('Initializing the EntityEditorComponent');
 
-    let entityIdToLoad = parseInt(this.route.snapshot.paramMap.get('id'));
-
-
+    const entityIdToLoad = this.getIdFromPath();
     if (entityIdToLoad) {
       this.loadEntity(entityIdToLoad);
     } else {
       console.info('Editor for a new entity');
     }
   }
+
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -60,8 +61,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   }
 
-  loadNewEntity(entity: T) {
+  getIdFromPath(): number | null {
+    return parseInt(this.route.snapshot.paramMap.get('id'));
+  }
 
+  loadNewEntity(entity: T) {
     if (entity !== null) {
       this.loadEntity(entity.id);
     } else {
@@ -80,6 +84,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         console.log('About to patch the entity loaded');
         console.debug(entity);
         this.entityForm.patchValue(entity);
+        this.entitySubject.next(entity);
         console.log(this.meta.displayName + ' loaded');
       })
     ).subscribe();
@@ -102,6 +107,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         console.log('savedEntity: ', savedEntity);
 
         this.entityForm.patchValue(savedEntity);
+        this.entitySubject.next(savedEntity);
       });
     } else {
       console.info('Not a valid entity');

@@ -19,9 +19,9 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
   @Input() sortDirection: 'asc' | 'desc' = 'asc';
   @Input() pageSize: number = 2;
   startPage: number = 0;
-  
+
   dataSource: EntityDataSource<T>;
-  
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -76,12 +76,4 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
     console.info(this.meta.displayName + ' selected: ', entity);
     this.entitySelector.emit(entity);
   }
-
-  // getData(obj) {
-  //
-  //   console.log('Page event: ', obj);
-  //
-  //
-  //   this.loadEntitiesPage();
-  // }
 }

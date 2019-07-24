@@ -90,5 +90,13 @@ public class SpecificationsBuilder<T> {
     return null;
   }
 
+  /*
+
+    Field field = ReflectionUtils.findField(Person.class, fieldName);
+  if (field != null) {
+    ReflectionUtils.setField(field, personToUpdate, fieldValue);
+  }
+   */
+
 
 }

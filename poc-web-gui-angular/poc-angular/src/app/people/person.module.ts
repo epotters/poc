@@ -13,6 +13,7 @@ import {NGridModule} from "../core/n-grid/n-grid.module";
 import {PersonManagerComponent} from "./person-manager.component";
 import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
+import {PersonEmployeesRelationComponent} from "./person-employees-relation.component";
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
     PersonManagerComponent,
     PersonListComponent,
     PersonEditorComponent,
+    PersonEmployeesRelationComponent,
     PersonListOfCardsComponent,
     PersonListNGridComponent
   ],
@@ -35,6 +37,7 @@ import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
     PersonManagerComponent,
     PersonListComponent,
     PersonEditorComponent,
+    PersonEmployeesRelationComponent,
     PersonListOfCardsComponent,
     PersonListNGridComponent
   ],

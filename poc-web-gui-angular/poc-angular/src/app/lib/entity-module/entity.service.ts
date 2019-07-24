@@ -47,7 +47,6 @@ export class EntityService<T extends Identifiable> {
 
   public listEntitiesOnly(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 5): Observable<any> {
 
-
     let params: HttpParams = new HttpParams()
       .set('filters', this.buildFilterParams(filters))
       .set('sort', sortField + ',' + sortDirection)
@@ -108,9 +107,9 @@ export class EntityService<T extends Identifiable> {
     if (filters) {
       for (let filter of filters) {
         let operator: string = '~';
-        if(this.meta.filteredColumns[filter.name].type == 'select') {
+        if (this.meta.filteredColumns[filter.name].type == 'select') {
           operator = exactMatchOperator;
-        } else  if(this.meta.filteredColumns[filter.name].type == 'date') {
+        } else if (this.meta.filteredColumns[filter.name].type == 'date') {
           operator = exactMatchOperator;
         } else if (filter.name === 'id') {
           operator = exactMatchOperator;
@@ -120,6 +119,11 @@ export class EntityService<T extends Identifiable> {
       filterParams = (filterParams.length > 0) ? filterParams.substr(0, filterParams.length - 1) : '';
     }
     return filterParams;
+  }
+
+
+  listRelationsByOwner(ownerNamePlural: string, ownerId: number): Observable<T[]> {
+    return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + this.meta.namePlural);
   }
 
 
