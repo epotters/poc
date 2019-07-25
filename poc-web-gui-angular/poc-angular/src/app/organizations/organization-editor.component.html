@@ -25,26 +25,7 @@
 
     </form>
 
-
-    <div class="related-entity-control">
-      <h4>Employees</h4>
-      <button mat-button
-              [routerLink]="['/organizations/', 'employees', 'new']"
-              [queryParams]="{'employer.id': getIdFromPath()}"
-              [routerLinkActive]="'active'"
-      >
-        <span>Add employee</span>
-      </button>
-
-      <ng-container *ngFor="let employee of employeesSubject.asObservable() | async">
-        <div class="related-entity">
-          <a [routerLink]="['/people/', employee.person.id]">
-            {{employee.person.firstName + ' ' + employee.person.lastName}}
-          </a>
-        </div>
-      </ng-container>
-    </div>
-
+    <organization-employees-relation-card [ownerSubject]="entitySubject"></organization-employees-relation-card>
 
   </mat-card-content>
 

@@ -3,22 +3,22 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material";
 
-import {EntityDataSource, EntityEditorComponent} from "../../lib/entity-module";
-import {OrganizationEmployeeService} from "./organization-employee.service";
-import {Employee} from "../../core/domain/employee.model";
-import {employeeMeta} from "./organization-employee-meta";
-import {Organization, Person} from "../../core/domain";
-import {organizationMeta} from "../organization-meta";
-import {personMeta} from "../../people/person-meta";
-import {PersonService} from "../../people/person.service";
-import {OrganizationService} from "../organization.service";
+import {EntityDataSource, EntityEditorComponent} from "../lib/entity-module";
+import {EmploymentService} from "./employment.service";
+import {Employment} from "../core/domain/employment.model";
+import {employmentMeta} from "./employment-meta";
+import {Organization, Person} from "../core/domain";
+import {organizationMeta} from "../organizations/organization-meta";
+import {personMeta} from "../people/person-meta";
+import {PersonService} from "../people/person.service";
+import {OrganizationService} from "../organizations/organization.service";
 
 @Component({
   selector: 'organization-employee-card',
-  templateUrl: './organization-employee-editor.component.html',
-  styleUrls: ['../../lib/entity-module/entity-editor.component.css']
+  templateUrl: './employement-editor.component.html',
+  styleUrls: ['../lib/entity-module/entity-editor.component.css']
 })
-export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<Employee> {
+export class EmploymentEditorComponent extends EntityEditorComponent<Employment> {
 
   organizationsDataSource: EntityDataSource<Organization>;
   peopleDataSource: EntityDataSource<Person>;
@@ -26,7 +26,7 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
   autoCompletePageSize: number = 25;
 
   constructor(
-    public service: OrganizationEmployeeService,
+    public service: EmploymentService,
     public router: Router,
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
@@ -34,7 +34,7 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
     public organizationService: OrganizationService,
     public personService: PersonService,
   ) {
-    super(employeeMeta, service, router, route, formBuilder, dialog);
+    super(employmentMeta, service, router, route, formBuilder, dialog);
 
     this.organizationsDataSource = new EntityDataSource<Organization>(organizationMeta, this.organizationService);
     this.peopleDataSource = new EntityDataSource<Person>(personMeta, this.personService);
@@ -57,7 +57,7 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
   buildForm(formBuilder: FormBuilder) {
     this.entityForm = formBuilder.group({
       id: new FormControl(),
-      person: new FormControl('', [
+      employee: new FormControl('', [
         Validators.required
       ]),
       employer: new FormControl('', [
@@ -69,7 +69,7 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
 
   activatePersonControl(): void {
     this.entityForm
-      .get('person')
+      .get('employee')
       .valueChanges
       .subscribe((value) => {
         console.debug('About to load new people for autocomplete. Filter ' + value);
@@ -107,11 +107,11 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
 
     this.route.queryParams.subscribe(params => {
 
-      if (params['person.id']) {
-        const personId = params['person.id'];
+      if (params['employee.id']) {
+        const personId = params['employee.id'];
         this.personService.get(personId)
           .subscribe(person => {
-            this.entityForm.patchValue({person: person});
+            this.entityForm.patchValue({employee: person});
           });
       }
 
@@ -129,6 +129,7 @@ export class OrganizationEmployeeEditorComponent extends EntityEditorComponent<E
   displayOptionOrganization(organization?: Organization): string | undefined {
     return organization.name;
   }
+
 
   displayOptionPerson(person?: Person): string | undefined {
     if (person) {

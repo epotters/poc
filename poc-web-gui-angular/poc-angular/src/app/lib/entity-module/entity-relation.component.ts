@@ -13,10 +13,12 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   
   // TODO: Move this to meta config
+  relationDisplayName: string;
   ownerFieldName: string;
   relatedFieldName: string;
   relatedDisplayField: string;
-  relationDisplayName: string;
+  relatedNamePlural: string;
+
 
   prefillQueryParams: any = {};
 
@@ -50,7 +52,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
           this.prefillQueryParams[this.ownerFieldName + '.id'] = owner.id;
           this.isVisible = true;
 
-          this.service.listRelationsByOwner(this.ownerMeta.namePlural, owner.id)
+          this.service.listRelationsByOwner(this.ownerMeta.namePlural, owner.id, this.relatedNamePlural)
             .subscribe(relations => {
               console.debug('Inside subscription to the relationService');
               console.debug(relations);

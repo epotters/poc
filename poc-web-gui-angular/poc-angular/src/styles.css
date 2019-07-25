@@ -199,20 +199,41 @@ filter-row .mat-form-field-infix {
 }
 
 
-.related-entity-control {
+
+
+/* Related entity control */
+
+.related-entities-control {
+  width: 360px;
 }
 
-.related-entity-control h4 {
-  margin-bottom: 6px;
+.related-entity-header {
+  display: flex;
+  line-height: 1.125;
+  background-color: rgba(0,0,0,.04);
+  padding: 0 0.75em 0 0.75em;
+  align-items: center;
+}
+
+
+.related-entity-header h4 {
+  margin-bottom: 0;
+  line-height: 1.12;
 }
 
 .related-entity {
   border-bottom: 1px solid #efefef;
   height: 30px;
+  padding: 0 0.75em 0 0.75em;
+  align-items: center;
 }
 
 .related-entity a {
-  text-underline: none;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgba(0,0,0,.87);
+  line-height: 30px;
+  display: block;
 }
 
 

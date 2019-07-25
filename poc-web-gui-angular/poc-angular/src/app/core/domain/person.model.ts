@@ -1,5 +1,4 @@
 
-
 export interface Person extends Identifiable {
   id: number;
   firstName: string;

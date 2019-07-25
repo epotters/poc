@@ -8,8 +8,8 @@ import {AuthGuardService} from "../lib/auth-module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
-import {OrganizationEmployeeListComponent} from "./employees/organization-employees-list.component";
-import {OrganizationEmployeeEditorComponent} from "./employees/organization-employee-editor.component";
+import {EmploymentListComponent} from "../employments/employments-list.component";
+import {EmploymentEditorComponent} from "../employments/employment-editor.component";
 
 const meta = organizationMeta;
 
@@ -25,18 +25,8 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/employees',
-    component: OrganizationEmployeeListComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: meta.namePlural + '/employees/:id',
-    component: OrganizationEmployeeEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
     path: meta.namePlural + '/:id/employees',
-    component: OrganizationEmployeeListComponent,
+    component: EmploymentListComponent,
     canActivate: [AuthGuardService]
   },
   {
@@ -54,13 +44,11 @@ const routes: Routes = [
     component: OrganizationManagerComponent,
     canActivate: [AuthGuardService]
   },
-  
   {
     path: meta.namePlural + '-n-grid',
     component: OrganizationListNGridComponent,
     canActivate: [AuthGuardService]
   },
-
   {
     path: meta.namePlural + '-list-of-cards',
     component: OrganizationListOfCardsComponent,

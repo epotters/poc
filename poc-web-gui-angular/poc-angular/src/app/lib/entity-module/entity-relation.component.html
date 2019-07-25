@@ -1,21 +1,23 @@
+<div class="related-entities-control" *ngIf="isVisible">
+  <div class="related-entity-header">
+    <h4>{{relationDisplayName}}</h4>
 
+    <span class="fill-remaining-space"></span>
 
-<div class="related-entity-control" *ngIf="isVisible">
-  <h4>{{relationDisplayName}}</h4>
-  <button mat-button
-          [routerLink]="['/' + ownerMeta.namePlural + '/', meta.namePlural, 'new']"
-          [queryParams]="prefillQueryParams"
-          [routerLinkActive]="'active'"
-  >
-    <span>Add {{this.meta.displayName.toLowerCase()}}</span>
-  </button>
+    <button
+      [routerLink]="['/' + meta.apiBase + '/', 'new']"
+      [queryParams]="prefillQueryParams"
+      [routerLinkActive]="'active'"
+      mat-icon-button>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 
   <ng-container *ngFor="let relation of relationsSubject.asObservable() | async">
     <div class="related-entity">
-      <a [routerLink]="['/' + relatedMeta.namePlural + '/', relation[relatedFieldName].id]">
+      <a [routerLink]="['/' + relatedMeta.apiBase + '/', relation[relatedFieldName].id]">
         {{relation[relatedFieldName][relatedDisplayField]}}
       </a>
     </div>
   </ng-container>
-
 </div>

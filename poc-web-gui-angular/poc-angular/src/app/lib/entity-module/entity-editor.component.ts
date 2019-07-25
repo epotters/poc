@@ -102,12 +102,16 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
           msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
         } else {
           msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
+          this.router.navigate([this.meta.apiBase + '/' + savedEntity.id]);
         }
         console.info(msg);
         console.log('savedEntity: ', savedEntity);
 
         this.entityForm.patchValue(savedEntity);
         this.entitySubject.next(savedEntity);
+        this.entityForm.markAsPristine();
+        this.entityForm.markAsUntouched();
+
       });
     } else {
       console.info('Not a valid entity');
@@ -135,7 +139,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
             console.info(msg);
 
             // Redirect to the list view
-            this.router.navigate([this.meta.namePlural]);
+            this.goToList();
 
           });
 

@@ -9,7 +9,7 @@ import {PersonEditorComponent} from "./person-editor.component";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {PersonManagerComponent} from "./person-manager.component";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
-import {OrganizationEmployeeEditorComponent} from "../organizations/employees/organization-employee-editor.component";
+import {EmploymentEditorComponent} from "../employments/employment-editor.component";
 
 const meta = personMeta;
 
@@ -27,12 +27,6 @@ const routes: Routes = [
   {
     path: meta.namePlural + '/:id',
     component: PersonEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-
-  {
-    path: meta.namePlural + '/employees/new',
-    component: OrganizationEmployeeEditorComponent,
     canActivate: [AuthGuardService]
   },
   {

@@ -1,8 +1,9 @@
 import {Organization} from "./organization.model";
 import {Person} from "./person.model";
 
-export class Employee implements Identifiable {
+
+export class Employment implements Identifiable {
   id: number;
-  person: Person;
+  employee: Person;
   employer: Organization;
 }

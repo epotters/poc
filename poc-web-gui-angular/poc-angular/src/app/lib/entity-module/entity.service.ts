@@ -122,8 +122,8 @@ export class EntityService<T extends Identifiable> {
   }
 
 
-  listRelationsByOwner(ownerNamePlural: string, ownerId: number): Observable<T[]> {
-    return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + this.meta.namePlural);
+  listRelationsByOwner(ownerNamePlural: string, ownerId: number, relatedNamePlural: string): Observable<T[]> {
+    return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + relatedNamePlural);
   }
 
 
