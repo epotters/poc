@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import poc.core.domain.Employee;
+import poc.core.domain.Employment;
 import poc.core.domain.Person;
-import poc.core.repository.EmployeeRepository;
+import poc.core.repository.EmploymentRepository;
 import poc.core.repository.PersonRepository;
 
 
@@ -36,7 +36,7 @@ public class PersonController {
 
   private final int batchPageSize = 100;
   private final PersonRepository personRepository;
-  private final EmployeeRepository employeeRepository;
+  private final EmploymentRepository employmentRepository;
 
   private QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>();
 
@@ -44,10 +44,10 @@ public class PersonController {
   @Autowired
   PersonController(
       PersonRepository personRepository,
-      EmployeeRepository employeeRepository
+      EmploymentRepository employmentRepository
   ) {
     this.personRepository = personRepository;
-    this.employeeRepository = employeeRepository;
+    this.employmentRepository = employmentRepository;
   }
 
   // page, size and sort parameters are supported by default
@@ -151,9 +151,9 @@ public class PersonController {
   }
 
 
-  @GetMapping("/{id}/employees")
-  public Iterable<Employee> findEmployees(@PathVariable final Long id) {
-    return employeeRepository.findByPersonId(id);
+  @GetMapping("/{id}/employers")
+  public Iterable<Employment> findEmployers(@PathVariable final Long id) {
+    return employmentRepository.findByEmployeeId(id);
   }
 
 

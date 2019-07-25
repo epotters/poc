@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Employee {
+public class Employment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Employee {
 
   @OneToOne
   @JoinColumn(name = "person_id")
-  private Person person;
+  private Person employee;
 
   @OneToOne
   @JoinColumn(name = "employer_id")

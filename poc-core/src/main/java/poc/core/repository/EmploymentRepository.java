@@ -7,16 +7,15 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import poc.core.domain.Employee;
+import poc.core.domain.Employment;
 
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long>, Serializable, JpaSpecificationExecutor<Employee> {
+public interface EmploymentRepository extends JpaRepository<Employment, Long>, Serializable, JpaSpecificationExecutor<Employment> {
 
 
-  List<Employee> findByEmployerId(Long employerId);
+  List<Employment> findByEmployerId(Long employerId);
 
-  List<Employee> findByPersonId(Long personId);
-
-
+  List<Employment> findByEmployeeId(Long employeeId);
+  
 }

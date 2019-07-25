@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import poc.core.domain.Employee;
+import poc.core.domain.Employment;
 import poc.core.domain.Organization;
-import poc.core.repository.EmployeeRepository;
+import poc.core.repository.EmploymentRepository;
 import poc.core.repository.OrganizationRepository;
 
 
@@ -28,20 +28,19 @@ import poc.core.repository.OrganizationRepository;
 public class OrganizationController {
 
   private final OrganizationRepository organizationRepository;
-  private final EmployeeRepository employeeRepository;
+  private final EmploymentRepository employmentRepository;
 
 
   private QuerystringFilterTranslator<Organization> filterTanslator = new QuerystringFilterTranslator<>();
-  private QuerystringFilterTranslator<Employee> employeeFilterTanslator = new QuerystringFilterTranslator<>();
 
 
   @Autowired
   OrganizationController(
       OrganizationRepository organizationRepository,
-      EmployeeRepository employeeRepository
+      EmploymentRepository employmentRepository
   ) {
     this.organizationRepository = organizationRepository;
-    this.employeeRepository = employeeRepository;
+    this.employmentRepository = employmentRepository;
   }
 
 
@@ -84,56 +83,14 @@ public class OrganizationController {
   }
 
 
-//  Employees
-
+  //  Employees
   @GetMapping("/{id}/employees")
-  public Iterable<Employee> findEmployees(@PathVariable final Long id) throws IOException {
-    return employeeRepository.findByEmployerId(id);
+  public Iterable<Employment> findEmployees(@PathVariable final Long id) {
+    return employmentRepository.findByEmployerId(id);
   }
 
 
-  @GetMapping("/employees/{id}")
-  public Employee getEmployee(@PathVariable final Long id) {
-    log.info("About to return employee with id: " + id);
-    return employeeRepository.getOne(id);
-  }
-
-
-  @PutMapping("/employees")
-  public Employee createEmployee(@RequestBody final Employee employee) {
-    return employeeRepository.save(employee);
-  }
-
-
-  @PostMapping("/employees/{id}")
-  public Employee updateEmployee(@PathVariable final Long id, @RequestBody final Employee employee) {
-    return employeeRepository.save(employee);
-  }
-
-
-  @DeleteMapping("/employees/{id}")
-  public void deleteEmployee(@PathVariable final Long id) {
-    final Employee employee = employeeRepository.getOne(id);
-    employeeRepository.delete(employee);
-  }
-
-
-  @GetMapping("/employees")
-  public Iterable<Employee> findAllEmployees(final Pageable pageable,
-      @RequestParam(value = "filters", required = false) final String filters) throws IOException {
-
-    if (filters != null & !"".equals(filters)) {
-      Specification<Employee> spec = employeeFilterTanslator.translate(filters);
-      return employeeRepository.findAll(spec, pageable);
-    } else {
-      log.debug("No filters provided");
-      return employeeRepository.findAll(pageable);
-    }
-  }
-
-
-//  Schema
-
+  //  Schema
   @GetMapping("/schema")
   public String schema() throws IOException {
     JsonSchemaGenerator generator = new JsonSchemaGenerator();
