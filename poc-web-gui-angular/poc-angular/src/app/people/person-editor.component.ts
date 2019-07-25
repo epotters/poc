@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatSnackBar} from "@angular/material";
 
 import {EntityEditorComponent} from "../lib/entity-module";
 import {Person} from "../core/domain/";
@@ -21,11 +21,11 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
     public router: Router,
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public snackbar: MatSnackBar
   ) {
-    super(personMeta, service, router, route, formBuilder, dialog);
+    super(personMeta, service, router, route, formBuilder, dialog, snackbar);
   }
-
 
   buildForm(formBuilder: FormBuilder) {
     this.entityForm = formBuilder.group({

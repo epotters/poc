@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {Title} from "@angular/platform-browser";
-import {Constants} from '../constants';
+import {MatSnackBar} from "@angular/material";
 import {AuthService} from "./lib/auth-module/";
+import {Constants} from '../constants';
+
 
 
 @Component({
@@ -12,29 +14,20 @@ import {AuthService} from "./lib/auth-module/";
 export class AppComponent {
 
   Constants: any = Constants;
-  messages: string[] = [];
 
   constructor(
     private titleService: Title,
-    public authService: AuthService
+    public authService: AuthService,
+    public snackBar: MatSnackBar
   ) {
     console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
     this.titleService.setTitle(Constants.applicationDisplayName);
   }
 
-
-  // Message service
-  private clearMessages() {
-    while (this.messages.length) {
-      this.messages.pop();
-    }
+  openSnackBar(message: string, action?: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
-  private addMessage(msg: string) {
-    this.messages.push(msg);
-  }
-
-  private addError(msg: string | any) {
-    this.messages.push('Error: ' + msg && msg.message);
-  }
 }

@@ -18,7 +18,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatAutocompleteModule, MatGridListModule} from "@angular/material";
+import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angular/material";
 
 
 @NgModule({
@@ -42,7 +42,8 @@ import {MatAutocompleteModule, MatGridListModule} from "@angular/material";
     MatSortModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSnackBarModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -64,7 +65,8 @@ import {MatAutocompleteModule, MatGridListModule} from "@angular/material";
     MatSortModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSnackBarModule
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}

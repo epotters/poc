@@ -10,7 +10,7 @@ const genderOptions: SelectOption[] = [
 export const personMeta: EntityMeta<Person> = {
 
   // General
-  name: 'employee',
+  name: 'person',
   namePlural: 'people',
   displayName: 'Person',
   displayNamePlural: 'People',

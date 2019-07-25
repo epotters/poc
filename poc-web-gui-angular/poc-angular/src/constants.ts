@@ -1,7 +1,7 @@
 import {UserManagerSettings} from "oidc-client";
 
 export class Constants {
-  
+
   public static timezone = 'Europe/Amsterdam';
   public static locale = 'NL-NL';
 
@@ -38,6 +38,9 @@ export class Constants {
 
   // API
   public static apiRoot = 'https://localhost:8002/poc/api';
+
+
+  public static defaultSnackbarDuration: number = 3000;
 
 }
 

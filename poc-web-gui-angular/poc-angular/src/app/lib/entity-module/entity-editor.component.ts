@@ -8,6 +8,7 @@ import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.componen
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
+import {MatSnackBar} from "@angular/material";
 
 
 export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges {
@@ -27,7 +28,8 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     public router: Router,
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public snackbar: MatSnackBar
   ) {
     console.debug('Constructing the EntityEditorComponent for type ' + this.meta.displayName);
 
@@ -105,6 +107,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
           this.router.navigate([this.meta.apiBase + '/' + savedEntity.id]);
         }
         console.info(msg);
+
+        this.snackbar.open(msg, null, {
+          duration: 3000
+        });
+
         console.log('savedEntity: ', savedEntity);
 
         this.entityForm.patchValue(savedEntity);
@@ -137,6 +144,10 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
             console.info('response ', response);
             let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
             console.info(msg);
+
+            this.snackbar.open(msg, null, {
+              duration: 2000
+            });
 
             // Redirect to the list view
             this.goToList();

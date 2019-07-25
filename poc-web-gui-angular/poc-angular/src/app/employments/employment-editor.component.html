@@ -18,21 +18,6 @@
 
       <div class="form-row">
 
-        <!-- Employee -->
-        <mat-form-field style="flex: 2">
-
-          <mat-label>Employee</mat-label>
-          <input matInput formControlName="employee" name="employee" [matAutocomplete]="personSelector">
-
-          <mat-autocomplete #personSelector="matAutocomplete" [displayWith]="displayOptionPerson">
-            <mat-option *ngFor="let person of peopleDataSource.awaitEntities() | async" [value]="person">
-              {{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}
-            </mat-option>
-          </mat-autocomplete>
-
-        </mat-form-field>
-
-
         <!-- Employer -->
         <mat-form-field style="flex: 2">
 
@@ -43,6 +28,20 @@
             <mat-option *ngFor="let organization of organizationsDataSource.awaitEntities() | async"
                         [value]="organization">
               {{organization.name}}
+            </mat-option>
+          </mat-autocomplete>
+
+        </mat-form-field>
+
+        <!-- Employee -->
+        <mat-form-field style="flex: 2">
+
+          <mat-label>Employee</mat-label>
+          <input matInput formControlName="employee" name="employee" [matAutocomplete]="personSelector">
+
+          <mat-autocomplete #personSelector="matAutocomplete" [displayWith]="displayOptionPerson">
+            <mat-option *ngFor="let person of peopleDataSource.awaitEntities() | async" [value]="person">
+              {{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}
             </mat-option>
           </mat-autocomplete>
 

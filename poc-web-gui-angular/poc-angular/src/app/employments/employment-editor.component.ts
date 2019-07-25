@@ -1,21 +1,21 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatSnackBar} from "@angular/material";
 
 import {EntityDataSource, EntityEditorComponent} from "../lib/entity-module";
 import {EmploymentService} from "./employment.service";
-import {Employment} from "../core/domain/employment.model";
-import {employmentMeta} from "./employment-meta";
-import {Organization, Person} from "../core/domain";
-import {organizationMeta} from "../organizations/organization-meta";
-import {personMeta} from "../people/person-meta";
 import {PersonService} from "../people/person.service";
 import {OrganizationService} from "../organizations/organization.service";
+import {Employment, Organization, Person} from "../core/domain";
+import {employmentMeta} from "./employment-meta";
+import {organizationMeta} from "../organizations/organization-meta";
+import {personMeta} from "../people/person-meta";
+
 
 @Component({
   selector: 'organization-employee-card',
-  templateUrl: './employement-editor.component.html',
+  templateUrl: './employment-editor.component.html',
   styleUrls: ['../lib/entity-module/entity-editor.component.css']
 })
 export class EmploymentEditorComponent extends EntityEditorComponent<Employment> {
@@ -33,8 +33,9 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     public dialog: MatDialog,
     public organizationService: OrganizationService,
     public personService: PersonService,
+    public snackbar: MatSnackBar
   ) {
-    super(employmentMeta, service, router, route, formBuilder, dialog);
+    super(employmentMeta, service, router, route, formBuilder, dialog, snackbar);
 
     this.organizationsDataSource = new EntityDataSource<Organization>(organizationMeta, this.organizationService);
     this.peopleDataSource = new EntityDataSource<Person>(personMeta, this.personService);
@@ -48,26 +49,26 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
       this.prefillFromParameters();
     }
 
-    this.activatePersonControl();
-
     this.activateEmployerControl();
+
+    this.activateEmployeeControl();
   }
 
 
   buildForm(formBuilder: FormBuilder) {
     this.entityForm = formBuilder.group({
       id: new FormControl(),
-      employee: new FormControl('', [
+      employer: new FormControl('', [
         Validators.required
       ]),
-      employer: new FormControl('', [
+      employee: new FormControl('', [
         Validators.required
       ])
     });
   }
 
 
-  activatePersonControl(): void {
+  private activateEmployeeControl(): void {
     this.entityForm
       .get('employee')
       .valueChanges
@@ -84,7 +85,7 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
   }
 
 
-  activateEmployerControl(): void {
+  private activateEmployerControl(): void {
     this.entityForm
       .get('employer')
       .valueChanges

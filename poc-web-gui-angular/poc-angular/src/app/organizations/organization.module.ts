@@ -14,7 +14,6 @@ import {OrganizationRoutingModule} from "./organization-routing.module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
-import {OrganizationSelectorComponent} from "./organization-selector.component";
 import {OrganizationEmployeesRelationComponent} from "./organization-employees-relation.component";
 
 import {EmploymentModule} from "../employments/employment.module";
@@ -35,8 +34,7 @@ import {EmploymentModule} from "../employments/employment.module";
     OrganizationEditorComponent,
     OrganizationEmployeesRelationComponent,
     OrganizationListNGridComponent,
-    OrganizationListOfCardsComponent,
-    OrganizationSelectorComponent
+    OrganizationListOfCardsComponent
   ],
   entryComponents: [
     OrganizationManagerComponent,
@@ -44,8 +42,7 @@ import {EmploymentModule} from "../employments/employment.module";
     OrganizationEditorComponent,
     OrganizationEmployeesRelationComponent,
     OrganizationListNGridComponent,
-    OrganizationListOfCardsComponent,
-    OrganizationSelectorComponent
+    OrganizationListOfCardsComponent
   ],
   providers: [
     PocApiService,
