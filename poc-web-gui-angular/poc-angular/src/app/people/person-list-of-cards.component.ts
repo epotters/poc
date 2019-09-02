@@ -5,7 +5,6 @@ import {MatDialog} from "@angular/material";
 import {EntityListOfCardsComponent} from "../lib/entity-module/entity-list-of-cards.component";
 import {PersonService} from "./person.service";
 import {personMeta} from "./person-meta";
-import {FormBuilder, FormControl} from "@angular/forms";
 
 @Component({
   selector: 'person-list-of-cards',
@@ -13,6 +12,8 @@ import {FormBuilder, FormControl} from "@angular/forms";
   styleUrls: ['../lib/entity-module/entity-list.component.css']
 })
 export class PersonListOfCardsComponent extends EntityListOfCardsComponent<Person> {
+
+  pageSize = 1;
 
   constructor(
     public service: PersonService,
@@ -23,6 +24,6 @@ export class PersonListOfCardsComponent extends EntityListOfCardsComponent<Perso
 
     super(personMeta, service, router, route, dialog);
   }
-  
+
 
 }

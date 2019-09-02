@@ -10,14 +10,9 @@ import {PersonService} from "./person.service";
 
 
 const COLUMNS = columnFactory()
-// .default({width: '100px', reorder: true, resize: true})
-
-  .default({width: '150px'})
+  .default({width: '180px'})
   .table(
-    // { prop: 'drag_and_drop_handle', type: 'drag_and_drop_handle', minWidth: 24, width: '', maxWidth: 24, wontBudge: true, resize: false, },
-    // { prop: 'selection',  minWidth: 48, width: '', maxWidth: 48, wontBudge: true, resize: false, },
-
-    {prop: 'id', sort: true, width: '60px'},
+    {prop: 'id', sort: true, pIndex: true, width: '60px'},
     {prop: 'firstName', sort: true},
     {prop: 'prefix', sort: true, width: '90px'},
     {prop: 'lastName', sort: true}
@@ -46,7 +41,7 @@ const COLUMNS = columnFactory()
 export class PersonListNGridComponent extends EntityListNGridComponent<Person> {
 
   constructor(
-    public service:PersonService
+    public service: PersonService
   ) {
     super(personMeta, service, COLUMNS.build());
   }

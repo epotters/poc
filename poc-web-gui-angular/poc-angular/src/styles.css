@@ -158,22 +158,23 @@ filter-row div[ng-reflect-ng-switch=none] .mat-form-field-underline .mat-form-fi
 }
 
 
-filter-row .mat-form-field-appearance-fill .mat-form-field-flex {
-  /*padding-top: 0.25em;*/
-}
 
-
-filter-row .mat-form-field-infix {
-  /*padding: .25em 0;*/
-  /*border-top: .75em solid transparent;*/
-}
-
-
-/* Filter row cells */
 .filter-header-row {
   display: flex;
 }
 
+
+/* Filter row without label space */
+.no-label-space .mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0;
+}
+
+
+.no-label-space .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
+.no-label-space .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+  width: 1.6em;
+  height: 1.6em;
+}
 
 /* List of cards */
 
@@ -244,47 +245,6 @@ filter-row .mat-form-field-infix {
   display: block;
   margin-bottom: 6px;
 }
-
-
-
-
-/* Dev only styles  */
-/*filter-row .filter-row .filter-cell .mat-form-field-flex,*/
-/*filter-cell .mat-form-field-flex {*/
-/*  border-bottom: 1px solid aqua;*/
-/*}*/
-
-/*filter-row .filter-row .filter-cell .mat-form-field-wrapper,*/
-/*filter-cell .mat-form-field-wrapper {*/
-/*  border-bottom: 1px solid orange;*/
-/*}*/
-
-/*mat-header-cell,*/
-/*filter-row .filter-row .filter-cell,*/
-/*filter-cell,*/
-/*mat-cell, mat-footer-cell {*/
-/*  border-left: 1px solid red;*/
-/*  border-right: 1px solid red;*/
-/*}*/
-
-/*mat-header-cell:first-of-type,*/
-/*filter-row .filter-row .filter-cell:first-of-type,*/
-/*filter-cell:first-of-type,*/
-/*mat-cell:first-of-type,*/
-/*mat-footer-cell:first-of-type{*/
-/*  border-left: 2px solid red;*/
-/*}*/
-
-/*mat-header-cell:last-of-type,*/
-/*filter-row .filter-row .filter-cell:last-of-type,*/
-/*filter-cell:last-of-type,*/
-/*mat-cell:last-of-type,*/
-/*mat-footer-cell:last-of-type{*/
-/*  border-right: 2px solid red;*/
-/*}*/
-
-
-
 
 
 

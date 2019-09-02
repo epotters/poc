@@ -34,7 +34,6 @@ export class EntityService<T extends Identifiable> {
         return response;
       })).pipe(
         map(res => {
-
           let result: EntityResult<T> = {
             entities: res["content"],
             total: res['totalElements']
@@ -45,7 +44,7 @@ export class EntityService<T extends Identifiable> {
   }
 
 
-  public listEntitiesOnly(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 5): Observable<any> {
+  public listEntitiesOnly(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 5): Observable<T[]> {
 
     let params: HttpParams = new HttpParams()
       .set('filters', this.buildFilterParams(filters))

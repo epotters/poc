@@ -144,16 +144,12 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
             console.info('response ', response);
             let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
             console.info(msg);
-
             this.snackbar.open(msg, null, {
               duration: 2000
             });
-
             // Redirect to the list view
             this.goToList();
-
           });
-
         } else {
           console.info('User canceled delete action');
         }

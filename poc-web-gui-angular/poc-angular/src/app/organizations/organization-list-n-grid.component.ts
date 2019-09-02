@@ -1,35 +1,22 @@
-
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from "@angular/core";
-import {MatDialog} from "@angular/material";
-
+import {animate, state, style, transition, trigger} from "@angular/animations";
 import {columnFactory} from "@pebula/ngrid";
-
 import {EntityListNGridComponent} from "../lib/entity-module/";
-
-
 import {Organization} from "../core/domain/";
 import {organizationMeta} from "./organization-meta";
 import {OrganizationService} from "./organization.service";
-import {animate, state, style, transition, trigger} from "@angular/animations";
-
 
 
 const COLUMNS = columnFactory()
-  // .default({width: '100px', reorder: true, resize: true})
-
-  .default({width: '150px'})
+  .default({width: '180px'})
   .table(
-    // { prop: 'drag_and_drop_handle', type: 'drag_and_drop_handle', minWidth: 24, width: '', maxWidth: 24, wontBudge: true, resize: false, },
-    // { prop: 'selection',  minWidth: 48, width: '', maxWidth: 48, wontBudge: true, resize: false, },
-
-    {prop: 'id', sort: true, width: '40px'}, // wontBudge: true
+    {prop: 'id', sort: true, pIndex: true, width: '60px'},
     {prop: 'name', sort: true}
   )
   .header(
     {rowClassName: 'pbl-groupby-row'},
     {id: 'pbl-groupby-row', type: 'pbl-groupby-row', label: ' '},
   );
-
 
 
 @Component({

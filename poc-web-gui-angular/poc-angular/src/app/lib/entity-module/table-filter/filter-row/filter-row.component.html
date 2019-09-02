@@ -1,4 +1,4 @@
-<div class="filter-row" [formGroup]="rowFilterForm">
+<div class="filter-row no-label-space" [formGroup]="rowFilterForm">
   <div *ngFor="let key of meta.displayedColumns" class="filter-cell">
     <div [ngSwitch]="meta.filteredColumns[key].type">
       <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">

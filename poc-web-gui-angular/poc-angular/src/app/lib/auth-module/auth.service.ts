@@ -16,9 +16,7 @@ export class AuthService {
 
 
   constructor(private router: Router, private route: ActivatedRoute) {
-
     this.userManager = new UserManager(Constants.userManagerSettings);
-
     this.userManager.getUser().then(user => {
       this.user = user;
     });

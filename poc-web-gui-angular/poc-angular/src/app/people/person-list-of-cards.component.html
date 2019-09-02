@@ -1,23 +1,5 @@
 <mat-card class="list-of-cards-card">
 
-  <mat-card-content>
-
-<!--    <div *ngIf="dataSource.loading$ | async" class="spinner-container">-->
-<!--      <mat-spinner [diameter]="30"></mat-spinner>-->
-<!--    </div>-->
-
-    <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
-      <div fxLayout="row wrap">
-        <ng-container *ngFor="let person of dataSource.awaitEntities() | async">
-          <mat-card class="example-card" (onclick)="selectEntity($event)">
-            <h4>{{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}</h4>
-          </mat-card>
-        </ng-container>
-      </div>
-    </div>
-
-  </mat-card-content>
-
   <mat-card-actions>
     <mat-paginator
       [length]="dataSource.awaitTotal() | async"
@@ -26,6 +8,23 @@
       class="list-of-cards-paginator">
     </mat-paginator>
   </mat-card-actions>
+
+
+  <mat-card-content>
+
+    <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
+      <div fxLayout="row wrap">
+        <ng-container *ngFor="let person of dataSource.awaitEntities() | async">
+          <person-editor-card
+            [isManaged]="true"
+            [entityToLoad]="person">
+          </person-editor-card>
+        </ng-container>
+      </div>
+    </div>
+
+  </mat-card-content>
+
 
 </mat-card>
 

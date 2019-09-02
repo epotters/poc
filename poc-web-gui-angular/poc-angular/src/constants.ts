@@ -12,18 +12,15 @@ export class Constants {
 
 
   // OIDC
-  public static clientRoot = 'http://localhost:4200';
+  public static clientRoot = 'http://localhost:4200/poc';
 
   public static oidcProviderRoot = 'http://keycloak.localhost/auth/';
   public static realm = 'epo';
 
-
-  // https://technology.first8.nl/add-manage-account-link-keycloak-redhat-sso/
   public static accountUrl = Constants.oidcProviderRoot + 'realms/' + Constants.realm + '/account';
 
-
   public static userManagerSettings: UserManagerSettings = {
-    authority: Constants.oidcProviderRoot + 'realms/' + Constants.realm,
+    authority: 'http://keycloak.localhost/auth/realms/' + Constants.realm,
     client_id: 'poc-gui',
     response_type: "code",
     scope: 'openid profile email',
