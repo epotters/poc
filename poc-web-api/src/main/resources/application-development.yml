@@ -17,7 +17,6 @@ spring:
 #    oauth2:
 #      client:
 #        registration:
-#
 #          # @see https://console.developers.google.com/apis/ to create your client credentials
 #          google:
 #            provider: google
