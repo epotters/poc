@@ -14,6 +14,7 @@ import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.componen
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
 import {FilterRowComponent} from "./table-filter/filter-row/filter-row.component";
+import {MatMenuTrigger} from "@angular/material/menu";
 
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
@@ -25,11 +26,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   fieldFilters: FieldFilter[] = [];
   startPage: number = 0;
 
+  contextMenuPosition = {x: '0px', y: '0px'};
+
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild('contextMenuTrigger', {static: true}) contextMenuTrigger: MatMenuTrigger;
 
-  constructor(
+  protected constructor(
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
     public router: Router,
@@ -51,11 +55,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   ngAfterViewInit(): void {
 
+    console.debug('this.contextMenuTrigger: ');
+    console.debug(this.contextMenuTrigger);
+
     // Reset the paginator after sorting
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
     });
-
 
     merge(this.sort.sortChange, this.paginator.page, this.filterRow.filterChange)
       .pipe(
@@ -71,7 +77,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         catchError(() => {
           return observableOf([]);
         })
-      ).subscribe(() => {}
+      ).subscribe(() => {
+      }
     );
   }
 
@@ -87,6 +94,21 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+  onContextMenu(event: MouseEvent, entity: T) {
+
+    console.debug('Context menu');
+    console.debug(entity);
+
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+
+    this.contextMenuTrigger.menuData = {'entity': entity};
+    this.contextMenuTrigger.openMenu();
+
+  }
+
+
   selectEntity(entity): void {
     console.info(this.meta.displayName + ' selected: ', entity);
     if (this.isManaged) {
@@ -97,13 +119,18 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+  deleteEntity(entity): void {
+    console.debug('Delete entity', entity);
+  }
+
+
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     let value = entity[fieldName];
-    if(fieldName.indexOf('.')) {
+    if (fieldName.indexOf('.')) {
       let fieldNameParts = fieldName.split('.');
       value = entity[fieldNameParts.shift()];
-      for(let fieldNamePart of fieldNameParts) {
+      for (let fieldNamePart of fieldNameParts) {
         value = value[fieldNamePart];
       }
     }
@@ -149,13 +176,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   public newEntity() {
-    if(this.isManaged) {
+    if (this.isManaged) {
       this.selectEntity(null);
     } else {
       this.router.navigate([this.meta.apiBase + '/new']);
     }
   }
-  
+
 
   updateEntities() {
     const dialogRef = this.openConfirmationDialog('Confirm batch update',

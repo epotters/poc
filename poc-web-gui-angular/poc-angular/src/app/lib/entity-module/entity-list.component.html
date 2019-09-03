@@ -11,7 +11,7 @@
     </button>
 
 
-    <button mat-button [matMenuTriggerFor]="batchActionsMenu">
+    <button mat-button [matMenuTriggerFor]="batchActionsMenu" #batchActionsMenuTrigger>
       <mat-icon>more_vert</mat-icon>
     </button>
 
@@ -50,7 +50,9 @@
         <filter-row [meta]="meta" (filterChange)="onFilterChanged($event)"></filter-row>
       </ng-container>
 
-      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
+      <!--      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>-->
+      <mat-row (contextmenu)="onContextMenu($event, row)"
+               *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
 
       <ng-container matColumnDef="paginator">
         <mat-footer-cell *matFooterCellDef>
@@ -64,6 +66,20 @@
 
     </mat-table>
 
-
   </mat-card-content>
 </mat-card>
+
+
+<div style="visibility: hidden; position: fixed"
+     [style.left]="contextMenuPosition.x"
+     [style.top]="contextMenuPosition.y"
+     [matMenuTriggerFor]="contextMenu"
+     #contextMenuTrigger="matMenuTrigger">
+
+</div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-entity="entity">
+    <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
+    <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>
+  </ng-template>
+</mat-menu>
