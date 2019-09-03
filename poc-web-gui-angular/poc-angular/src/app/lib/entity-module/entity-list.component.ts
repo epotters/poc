@@ -3,18 +3,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {MatMenuTrigger} from "@angular/material/menu";
 
 import {merge, of as observableOf} from "rxjs";
 import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
 
 import {FieldFilter} from "./domain/filter.model";
 import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
-
 import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
+import {FilterRowComponent} from "./table-filter/filter-row/filter-row.component";
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
-import {FilterRowComponent} from "./table-filter/filter-row/filter-row.component";
-import {MatMenuTrigger} from "@angular/material/menu";
 
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
@@ -55,9 +54,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   ngAfterViewInit(): void {
 
-    console.debug('this.contextMenuTrigger: ');
-    console.debug(this.contextMenuTrigger);
-
     // Reset the paginator after sorting
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
@@ -94,53 +90,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  onContextMenu(event: MouseEvent, entity: T) {
-
-    console.debug('Context menu');
-    console.debug(entity);
-
-    event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
-
-    this.contextMenuTrigger.menuData = {'entity': entity};
-    this.contextMenuTrigger.openMenu();
-
-  }
-
-
-  selectEntity(entity): void {
-    console.info(this.meta.displayName + ' selected: ', entity);
-    if (this.isManaged) {
-      this.entitySelector.emit(entity);
-    } else {
-      this.router.navigate([this.meta.apiBase + '/' + entity.id]);
-    }
-  }
-
-
-  deleteEntity(entity): void {
-    console.debug('Delete entity', entity);
-  }
-
-
-  getCellDisplayValue(entity: T, fieldName: string): string {
-    let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
-    let value = entity[fieldName];
-    if (fieldName.indexOf('.')) {
-      let fieldNameParts = fieldName.split('.');
-      value = entity[fieldNameParts.shift()];
-      for (let fieldNamePart of fieldNameParts) {
-        value = value[fieldNamePart];
-      }
-    }
-    if (columnConfig.renderer) {
-      return columnConfig.renderer(value);
-    }
-    return value;
-  }
-
-
   public onFilterChanged($event) {
     console.debug('onFilterChanged: Event received');
     console.debug($event);
@@ -174,6 +123,20 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     return filtersArray;
   }
 
+  selectEntity(entity): void {
+    console.info(this.meta.displayName + ' selected: ', entity);
+    if (this.isManaged) {
+      this.entitySelector.emit(entity);
+    } else {
+      this.router.navigate([this.meta.apiBase + '/' + entity.id]);
+    }
+  }
+
+
+  deleteEntity(entity): void {
+    console.debug('Delete ' + this.meta.displayName);
+  }
+
 
   public newEntity() {
     if (this.isManaged) {
@@ -189,7 +152,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       'Are you sure you want to update all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
     dialogRef.afterClosed().subscribe(
       data => {
-        console.debug("Dialog output:", data);
         if (data.confirmed) {
           console.info('User confirmed batch update action, so ik will be executed');
         } else {
@@ -205,7 +167,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       'Are you sure you want to delete all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
     dialogRef.afterClosed().subscribe(
       data => {
-        console.debug("Dialog output:", data);
         if (data.confirmed) {
           console.info('User confirmed batch delete action, so it will be executed');
         } else {
@@ -216,16 +177,44 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+  onContextMenu(event: MouseEvent, entity: T) {
+
+    console.debug('Context menu for entity ', entity);
+
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenuTrigger.menuData = {'entity': entity};
+    this.contextMenuTrigger.openMenu();
+  }
+
+
   openConfirmationDialog(title: string, message: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-
     dialogConfig.data = {
       title: title,
       message: message
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+  }
+
+
+  getCellDisplayValue(entity: T, fieldName: string): string {
+    let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
+    let value = entity[fieldName];
+    if (fieldName.indexOf('.')) {
+      let fieldNameParts = fieldName.split('.');
+      value = entity[fieldNameParts.shift()];
+      for (let fieldNamePart of fieldNameParts) {
+        value = value[fieldNamePart];
+      }
+    }
+    if (columnConfig.renderer) {
+      return columnConfig.renderer(value);
+    }
+    return value;
   }
 
 }
