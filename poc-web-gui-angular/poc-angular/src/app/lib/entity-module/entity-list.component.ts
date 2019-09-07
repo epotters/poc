@@ -123,7 +123,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     return filtersArray;
   }
 
-  selectEntity(entity): void {
+  selectEntity(entity: T): void {
     console.info(this.meta.displayName + ' selected: ', entity);
     if (this.isManaged) {
       this.entitySelector.emit(entity);
@@ -133,17 +133,16 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  deleteEntity(entity): void {
-    console.debug('Delete ' + this.meta.displayName);
-  }
-
-
   public newEntity() {
     if (this.isManaged) {
       this.selectEntity(null);
     } else {
       this.router.navigate([this.meta.apiBase + '/new']);
     }
+  }
+
+  deleteEntity(entity: T): void {
+    console.debug('Delete ' + this.meta.displayName);
   }
 
 
@@ -176,9 +175,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     );
   }
 
+  onShiftClick(event: MouseEvent, entity: T) {
+    if (event.shiftKey) {
+      this.selectEntity(entity);
+    }
+  }
+
 
   onContextMenu(event: MouseEvent, entity: T) {
-
     console.debug('Context menu for entity ', entity);
 
     event.preventDefault();

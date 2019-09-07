@@ -121,8 +121,14 @@ export class EntityService<T extends Identifiable> {
   }
 
 
-  listRelationsByOwner(ownerNamePlural: string, ownerId: number, relatedNamePlural: string): Observable<T[]> {
-    return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + relatedNamePlural);
+  listRelationsByOwner(ownerNamePlural: string, ownerId: number, relatedNamePlural: string, sortFieldName: string): Observable<T[]> {
+
+    let params: HttpParams = new HttpParams()
+      .set('sort', sortFieldName + ',' + 'asc')
+      .set('page', '0')
+      .set('size', '25');
+
+    return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + relatedNamePlural, params);
   }
 
 

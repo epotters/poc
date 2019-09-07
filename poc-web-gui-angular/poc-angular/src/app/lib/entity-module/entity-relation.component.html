@@ -4,18 +4,49 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button
-      [routerLink]="['/' + meta.apiBase + '/', 'new']"
-      [queryParams]="prefillQueryParams"
-      [routerLinkActive]="'active'"
-      mat-icon-button>
+<!--    <button-->
+<!--      [routerLink]="['/' + meta.apiBase + '/', 'new']"-->
+<!--      [queryParams]="prefillQueryParams"-->
+<!--      [routerLinkActive]="'active'"-->
+<!--      mat-icon-button>-->
+<!--      <mat-icon>add</mat-icon>-->
+<!--    </button>-->
+
+    <button *ngIf="formVisible" (click) = "hideForm()" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+    <button *ngIf="!formVisible" (click) = "showForm()" mat-icon-button>
       <mat-icon>add</mat-icon>
     </button>
+
   </div>
+
+
+  <form [formGroup]="relatedEntityForm" [hidden]="!formVisible">
+    <mat-form-field>
+      <mat-label>{{relatedMeta.displayName}}</mat-label>
+
+      <input matInput formControlName="{{relatedFieldName}}" name="{{relatedFieldName}}"
+             [matAutocomplete]="relatedSelector">
+
+      <mat-autocomplete #relatedSelector="matAutocomplete" (optionSelected)="relatedEntitySelected($event.option.value)"
+                        [displayWith]="displayOptionRelatedEntity">
+        <mat-option *ngFor="let relatedEntity of relatedDataSource.awaitEntities() | async" [value]="relatedEntity">
+          {{relatedEntity[relatedDisplayField]}}
+        </mat-option>
+      </mat-autocomplete>
+
+
+      <button *ngIf="showAddButton && !!relatedEntityForm.get(relatedFieldName).value" matSuffix mat-button mat-icon-button (click)="addOption()">
+        <mat-icon>add</mat-icon>
+      </button>
+
+    </mat-form-field>
+  </form>
 
   <ng-container *ngFor="let relation of relationsSubject.asObservable() | async">
     <div class="related-entity">
-      <a [routerLink]="['/' + relatedMeta.apiBase + '/', relation[relatedFieldName].id]">
+      <a (click)="onClick" [routerLink]="['/' + relatedMeta.apiBase + '/', relation[relatedFieldName].id]">
         {{relation[relatedFieldName][relatedDisplayField]}}
       </a>
     </div>

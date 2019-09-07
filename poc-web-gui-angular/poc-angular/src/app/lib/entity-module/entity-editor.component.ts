@@ -34,8 +34,8 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     console.debug('Constructing the EntityEditorComponent for type ' + this.meta.displayName);
 
     this.buildForm(formBuilder);
-
   }
+
 
   ngOnInit() {
     console.debug('Initializing the EntityEditorComponent');
@@ -45,7 +45,18 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
       this.loadEntity(entityIdToLoad);
     } else {
       console.info('Editor for a new entity');
+      this.prefillFromQueryString();
     }
+  }
+
+  prefillFromQueryString() {
+    this.route.queryParams.subscribe(params => {
+      for (let key in params) {
+        if(this.entityForm.get(key)) {
+          this.entityForm.get(key).setValue(params[key]);
+        }
+      }
+    });
   }
 
 

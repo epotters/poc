@@ -51,7 +51,7 @@
       </ng-container>
 
       <!--      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>-->
-      <mat-row (contextmenu)="onContextMenu($event, row)"
+      <mat-row (contextmenu)="onContextMenu($event, row)" (click)="onShiftClick($event, row)"
                *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
 
       <ng-container matColumnDef="paginator">

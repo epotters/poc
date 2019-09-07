@@ -1,10 +1,16 @@
 <mat-card class="list-of-cards-card">
 
-  <mat-card-content>
+  <mat-card-actions>
+    <mat-paginator
+      [length]="dataSource.awaitTotal() | async"
+      [pageSize]="pageSize"
+      [hidePageSize]="true"
+      (page)="showEvent($event)"
+      class="list-of-cards-paginator">
+    </mat-paginator>
+  </mat-card-actions>
 
-<!--    <div *ngIf="dataSource.loading$ | async" class="spinner-container">-->
-<!--      <mat-spinner [diameter]="30"></mat-spinner>-->
-<!--    </div>-->
+  <mat-card-content>
 
     <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
       <div fxLayout="row wrap">
@@ -16,13 +22,6 @@
         </ng-container>
       </div>
     </div>
-
-    <mat-paginator
-      [length]="dataSource.awaitTotal() | async"
-      [pageSize]="pageSize"
-      [hidePageSize]="true"
-      class="list-of-cards-paginator">
-    </mat-paginator>
 
   </mat-card-content>
 </mat-card>

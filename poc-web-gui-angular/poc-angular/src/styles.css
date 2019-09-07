@@ -208,6 +208,10 @@ filter-row div[ng-reflect-ng-switch=none] .mat-form-field-underline .mat-form-fi
   width: 360px;
 }
 
+.related-entities-control mat-form-field {
+  display: block;
+}
+
 .related-entity-header {
   display: flex;
   line-height: 1.125;

@@ -35,5 +35,4 @@ export const organizationMeta: EntityMeta<Organization> = {
 
   relatedEntities: ['employees']
 
-
 };

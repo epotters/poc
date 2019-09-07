@@ -1,14 +1,16 @@
 import {Component} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
 
-import {Organization, Person, Employment} from "../core/domain/";
+import {Employment, Organization, Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {organizationMeta} from "../organizations/organization-meta";
 import {employmentMeta} from "../employments/employment-meta";
 
 import {EmploymentService} from "../employments/employment.service";
+import {FormBuilder} from "@angular/forms";
+import {OrganizationService} from "../organizations/organization.service";
 
 @Component({
   selector: 'person-employers-relation-card',
@@ -18,9 +20,13 @@ export class PersonEmployersRelationComponent extends EntityRelationComponent<Em
 
   constructor(
     public service: EmploymentService,
-    public route: ActivatedRoute,
+    public relatedService: OrganizationService,
+    public formBuilder: FormBuilder,
+    public router: Router,
+    public route: ActivatedRoute
   ) {
-    super(employmentMeta, personMeta, organizationMeta, service, route);
+
+    super(employmentMeta, personMeta, organizationMeta, service, relatedService, formBuilder, router, route);
 
     this.relationDisplayName = 'Employers';
     this.ownerFieldName = 'employee';
@@ -28,6 +34,9 @@ export class PersonEmployersRelationComponent extends EntityRelationComponent<Em
     this.relatedDisplayField = 'name';
     this.relatedNamePlural = 'employers';
 
+    this.filterFieldName = 'name';
+    this.sortFieldName = 'name';
+    this.sortDirection = 'asc';
 
   }
 
