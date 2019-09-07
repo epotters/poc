@@ -30,8 +30,7 @@ public class Organization implements Serializable {
   @OneToMany(
       mappedBy = "organization",
       fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
+      cascade = CascadeType.ALL
   )
   private List<Establishment> establishments;
 

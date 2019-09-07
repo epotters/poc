@@ -152,8 +152,8 @@ public class PersonController {
 
 
   @GetMapping("/{id}/employers")
-  public Iterable<Employment> findEmployers(@PathVariable final Long id) {
-    return employmentRepository.findByEmployeeId(id);
+  public Iterable<Employment> findEmployers(@PathVariable final Long id, final Pageable pageable) {
+    return employmentRepository.findByEmployeeId(id, pageable);
   }
 
 
