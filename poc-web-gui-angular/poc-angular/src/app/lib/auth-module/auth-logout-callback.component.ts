@@ -15,7 +15,8 @@ export class AuthLogoutCallbackComponent implements OnInit {
 
   ngOnInit() {
     console.debug(this.message);
-    this.authService.completeLogout();
+    this.authService.completeLogout()
+      .then(() => console.info('Logout completed successfully'));
   }
 
 }

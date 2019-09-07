@@ -15,7 +15,8 @@ export class AuthSilentCallbackComponent implements OnInit {
 
   ngOnInit() {
     console.debug(this.message);
-    this.authService.completeSilentAuthentication();
+    this.authService.completeSilentAuthentication()
+      .then(() => console.info('Silent refresh completed successfully'));
   }
 
 }
