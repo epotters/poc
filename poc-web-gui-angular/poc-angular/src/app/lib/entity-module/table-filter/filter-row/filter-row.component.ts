@@ -22,8 +22,9 @@ export class FilterRowComponent<T extends Identifiable> implements OnInit, After
   @Output() readonly filterChange: EventEmitter<any> = new EventEmitter<any>();
 
   debounceTime: number = 300;
-  debouncer: Subject<string> = new Subject<string>();
+  keySuffix: string = 'Filter';
 
+  debouncer: Subject<string> = new Subject<string>();
   rowFilterForm: FormGroup;
 
   constructor(
@@ -60,11 +61,12 @@ export class FilterRowComponent<T extends Identifiable> implements OnInit, After
   }
 
 
+
   private buildFormGroup(): FormGroup {
     let group = {};
     for (let key in this.meta.filteredColumns) {
       let filterConfig = this.meta.filteredColumns[key];
-      group[key + 'Filter'] = new FormControl('');
+      group[key + this.keySuffix] = new FormControl('');
     }
     return this.formBuilder.group(group);
   }
