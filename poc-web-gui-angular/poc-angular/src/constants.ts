@@ -28,8 +28,8 @@ export class Constants {
     silent_redirect_uri: Constants.clientRoot + '/auth-silent-callback',
     post_logout_redirect_uri: Constants.clientRoot + '/auth-logout-callback',
     filterProtocolClaims: true,
-    loadUserInfo: true,
-    automaticSilentRenew: true
+    loadUserInfo: true
+    //, automaticSilentRenew: true
   };
 
 
