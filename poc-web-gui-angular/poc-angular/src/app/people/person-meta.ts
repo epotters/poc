@@ -67,7 +67,10 @@ export const personMeta: EntityMeta<Person> = {
       }
     },
     birthDate: {
-      label: 'Date of birth'
+      label: 'Date of birth',
+      editor: {
+        type: 'date'
+      }
     },
     birthPlace: {
       label: 'Birth place'

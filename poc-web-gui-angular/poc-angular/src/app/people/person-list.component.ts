@@ -1,6 +1,6 @@
 import {EntityListComponent} from "../lib/entity-module";
 import {Person} from "../core/domain/";
-import {Component} from "@angular/core";
+import {ChangeDetectionStrategy, Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {PersonService} from "./person.service";
@@ -8,7 +8,8 @@ import {personMeta as meta} from "./person-meta";
 
 @Component({
   selector: 'person-list-card',
-  templateUrl: '../lib/entity-module/entity-list.component.html'
+  templateUrl: '../lib/entity-module/entity-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent extends EntityListComponent<Person> {
 

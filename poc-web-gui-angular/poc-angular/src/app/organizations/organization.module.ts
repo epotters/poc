@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 
 import {EntityCommonModule} from "../lib/entity-module/entity-common.module";
 import {DialogModule} from "../lib/entity-module/dialog/dialog.module";
-import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
+import {TableRowEditorModule} from "../lib/entity-module/table-row-editor/table-row-editor-module";
 
 import {PocApiService} from "../core/service";
 import {NGridModule} from "../core/n-grid/n-grid.module";
@@ -24,7 +24,7 @@ import {EmploymentModule} from "../employments/employment.module";
     EntityCommonModule,
     NGridModule,
     DialogModule,
-    TableFilterModule,
+    TableRowEditorModule,
     OrganizationRoutingModule,
     EmploymentModule
   ],

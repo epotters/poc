@@ -8,7 +8,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material"
 import {MomentDateAdapter} from "@angular/material-moment-adapter";
 
 import {EntityCommonModule} from "./lib/entity-module/entity-common.module";
-import {TableFilterModule} from "./lib/entity-module/table-filter/table-filter-module";
+import {TableRowEditorModule} from "./lib/entity-module/table-row-editor/table-row-editor-module";
 import {AuthGuardService, AuthModule, AuthService} from "./lib/auth-module/";
 
 import {AppComponent} from './app.component';
@@ -33,7 +33,7 @@ import {PersonModule} from "./people/person.module";
     BrowserAnimationsModule,
 
     EntityCommonModule,
-    TableFilterModule,
+    TableRowEditorModule,
 
     AuthModule,
 

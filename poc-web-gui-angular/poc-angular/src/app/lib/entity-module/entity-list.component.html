@@ -64,13 +64,9 @@
 
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
-        <filter-row [meta]="meta" (editorChange)="onFilterChanged($event)" [hidden]="!filterVisible"></filter-row>
-        <editor-row [meta]="meta" (editorChange)="onEditorChanged($event)" [hidden]="!editorVisible"></editor-row>
+        <filter-row [meta]="meta" (editorChange)="onFilterChanged($event)" [hidden]="!isFilterVisible()"></filter-row>
+        <editor-row [meta]="meta" (editorChange)="onEditorChanged($event)" [hidden]="!isEditorVisible()"></editor-row>
       </ng-container>
-
-<!--      <ng-container *matHeaderRowDef="meta.displayedColumns">-->
-<!--        <mat-header-row></mat-header-row>-->
-<!--      </ng-container>-->
 
       <!--      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>-->
       <mat-row (contextmenu)="onContextMenu($event, row)" (click)="onShiftClick($event, row)"

@@ -1,8 +1,0 @@
-.text-filter-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.text-filter-container > * {
-  width: 100%;
-}

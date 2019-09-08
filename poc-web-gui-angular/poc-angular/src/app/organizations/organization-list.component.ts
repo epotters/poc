@@ -1,6 +1,6 @@
 import {EntityListComponent} from "../lib/entity-module";
 import {Organization} from "../core/domain/";
-import {Component} from "@angular/core";
+import {ChangeDetectionStrategy, Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {OrganizationService} from "./organization.service";
@@ -10,7 +10,8 @@ import {organizationMeta as meta} from "./organization-meta";
 @Component({
   selector: 'organization-list-card',
   templateUrl: '../lib/entity-module/entity-list.component.html',
-  styleUrls: ['../lib/entity-module/entity-list.component.css']
+  styleUrls: ['../lib/entity-module/entity-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationListComponent extends EntityListComponent<Organization> {
 

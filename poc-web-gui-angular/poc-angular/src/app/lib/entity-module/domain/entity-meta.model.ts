@@ -1,25 +1,23 @@
-
-
 export interface ColumnConfig {
   label: string;
   helpText?: string;
   renderer?: (value: string) => string;
-  editor?: FieldEditor;
+  editor?: FieldEditorConfig;
 }
 
-export interface FieldEditor {
-  type: 'text' | 'select' | 'date';
-  options?: SelectOption[]
-}
-
-export interface SelectOption {
-  value: string,
-  label: string
+export interface FieldEditorConfig {
+  type: 'none' | 'text' | 'select' | 'date';
+  options?: SelectOption[];
 }
 
 export class FilterConfig {
   type: 'none' | 'text' | 'select' | 'date' = "none";
   options?: SelectOption[];
+}
+
+export interface SelectOption {
+  label: string,
+  value: string
 }
 
 export interface EntityMeta<T extends Identifiable> {
@@ -48,7 +46,5 @@ export interface EntityMeta<T extends Identifiable> {
   // Form
   validationMessages?: any;
 
-
-  // relatedEntities: Record<string, Record<string, ColumnConfig>>;
 
 }

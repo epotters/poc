@@ -1,29 +1,22 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Subject} from "rxjs";
 import {debounceTime} from "rxjs/operators";
-import {EntityMeta, SelectOption} from "..";
+import {EntityMeta, FieldEditorConfig} from "..";
 
 
-export class EditorConfig {
-  type: 'none' | 'text' | 'select' | 'date' = "none";
-  options?: SelectOption[];
-}
+// AfterViewChecked
 
-
-@Component({
-  selector: 'editor-row',
-  templateUrl: './editor-row.component.html',
-  styleUrls: ['./editor-row.component.css']
-})
-export class EditorRowComponent<T extends Identifiable> implements OnInit, AfterViewInit {
+export abstract class BaseEditorRowComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() meta: EntityMeta<T>;
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
-  editorColumns: Record<string, EditorConfig>;
-  keySuffix: string = 'Editor';
+  editorColumns: Record<string, FieldEditorConfig>;
+  keySuffix: string;
   debounceTime: number = 300;
+
+  defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
 
   debouncer: Subject<string> = new Subject<string>();
   rowEditorForm: FormGroup;
@@ -31,15 +24,21 @@ export class EditorRowComponent<T extends Identifiable> implements OnInit, After
   visible: boolean = true;
 
   constructor(
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    public changeDetector: ChangeDetectorRef
   ) {
-    console.debug('Constructing FilterRowComponent');
+    console.debug('Constructing BaseEditorRowComponent');
+  }
+
+  abstract getColumns(): Record<string, FieldEditorConfig>;
+
+  getEditor(key: string): FieldEditorConfig {
+    return (this.editorColumns[key]) ? this.editorColumns[key] : this.defaultFieldEditorConfig;
   }
 
 
   ngOnInit() {
-    this.editorColumns = this.meta.filteredColumns;
-
+    this.editorColumns = this.getColumns();
     this.rowEditorForm = this.buildFormGroup();
     this.debouncer.pipe(debounceTime(this.debounceTime))
       .subscribe((val) => this.editorChange.emit(this.rowEditorForm.getRawValue()));
@@ -50,7 +49,6 @@ export class EditorRowComponent<T extends Identifiable> implements OnInit, After
   ngAfterViewInit(): void {
     console.debug('AfterViewInit EditorRowComponent');
   }
-
 
   public show(): void {
     this.visible = true;
@@ -76,7 +74,6 @@ export class EditorRowComponent<T extends Identifiable> implements OnInit, After
   private buildFormGroup(): FormGroup {
     let group = {};
     for (let key in this.editorColumns) {
-      let editorConfig = this.editorColumns[key];
       group[key + this.keySuffix] = new FormControl('');
     }
     return this.formBuilder.group(group);

@@ -11,7 +11,7 @@ import {PersonRoutingModule} from "./person-routing.module";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {NGridModule} from "../core/n-grid/n-grid.module";
 import {PersonManagerComponent} from "./person-manager.component";
-import {TableFilterModule} from "../lib/entity-module/table-filter/table-filter-module";
+import {TableRowEditorModule} from "../lib/entity-module/table-row-editor/table-row-editor-module";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 import {PersonEmployersRelationComponent} from "./person-employers-relation.component";
 
@@ -20,7 +20,7 @@ import {PersonEmployersRelationComponent} from "./person-employers-relation.comp
   imports: [
     EntityCommonModule,
     DialogModule,
-    TableFilterModule,
+    TableRowEditorModule,
 
     NGridModule,
     PersonRoutingModule

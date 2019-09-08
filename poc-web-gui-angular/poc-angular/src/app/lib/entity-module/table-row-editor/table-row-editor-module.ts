@@ -4,7 +4,6 @@ import {EditorRowComponent} from "./editor-row.component";
 import {FilterRowComponent} from "./filter-row.component";
 
 
-
 @NgModule({
   imports: [
     EntityCommonModule
@@ -21,5 +20,5 @@ import {FilterRowComponent} from "./filter-row.component";
     EditorRowComponent,
     FilterRowComponent]
 })
-export class TableFilterModule {
+export class TableRowEditorModule {
 }
