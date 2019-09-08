@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {EntityCommonModule} from "../entity-common.module";
-import {FilterRowComponent} from "./filter-row/filter-row.component";
+import {EditorRowComponent} from "./editor-row.component";
+import {FilterRowComponent} from "./filter-row.component";
+
 
 
 @NgModule({
@@ -8,12 +10,15 @@ import {FilterRowComponent} from "./filter-row/filter-row.component";
     EntityCommonModule
   ],
   declarations: [
+    EditorRowComponent,
     FilterRowComponent
   ],
   entryComponents: [
+    EditorRowComponent,
     FilterRowComponent
   ],
   exports: [
+    EditorRowComponent,
     FilterRowComponent]
 })
 export class TableFilterModule {

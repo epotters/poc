@@ -1,6 +1,9 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
+@import url('app/lib/entity-module/table-filter/editor-row.component.css');
+
+
 /* You can add global styles to this file, and also import other style files */
 html, body {
   height: 100%;
@@ -72,7 +75,7 @@ header .mat-toolbar-row, header .mat-toolbar-single-row {
 
 /* List */
 
-.mat-cell, .mat-footer-cell, .filter-cell,
+.mat-cell, .mat-footer-cell, .editor-cell,
 input.mat-input-element, .mat-radio-label-content {
   font-size: 15px;
 }
@@ -85,7 +88,7 @@ input.mat-input-element, .mat-radio-label-content {
 
 /* Set to 180px somewhere for some reason */
 mat-card-content .mat-form-field-infix,
-.filter-field-container .mat-form-field-infix {
+.editor-field-container .mat-form-field-infix {
   width: auto;
 }
 
@@ -104,69 +107,6 @@ tr.mat-footer-row {
 
 mat-footer-cell {
   text-align: right;
-}
-
-
-/* Filter row */
-
-filter-row .filter-row {
-  display: flex;
-}
-
-filter-row .mat-form-field-infix {
-  width: auto;
-}
-
-filter-row .filter-row .filter-cell {
-  flex: 1;
-}
-
-filter-row .filter-row .filter-cell:first-of-type {
-  padding-left: 24px;
-}
-
-filter-row .filter-row .filter-cell:last-of-type {
-  padding-right: 24px;
-}
-
-filter-row .filter-row .filter-cell:first-of-type .mat-form-field-wrapper {
-  margin-left: -24px;
-}
-
-filter-row .filter-row .filter-cell:last-of-type .mat-form-field-wrapper {
-  margin-right: -24px;
-}
-
-filter-row .filter-row .filter-cell .mat-form-field-appearance-fill .mat-form-field-flex {
-  padding-left: 0;
-}
-
-filter-row .filter-row .filter-cell:first-of-type .mat-form-field-flex {
-  padding-left: 24px;
-}
-
-filter-row .filter-row .filter-cell:last-of-type .mat-form-field-flex {
-  padding-right: 24px;
-}
-
-filter-row mat-form-field {
-  width: 100%;
-}
-
-filter-row div[ng-reflect-ng-switch=none] .mat-form-field-underline .mat-form-field-ripple {
-  display: none;
-}
-
-
-
-.filter-header-row {
-  display: flex;
-}
-
-
-/* Filter row without label space */
-.no-label-space .mat-form-field-appearance-fill .mat-form-field-flex {
-  padding: 0;
 }
 
 

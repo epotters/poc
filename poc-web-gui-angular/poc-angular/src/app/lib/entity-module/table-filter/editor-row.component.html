@@ -1,0 +1,25 @@
+<div class="editor-row no-label-space" [formGroup]="rowEditorForm">
+  <div *ngFor="let key of meta.displayedColumns" class="editor-cell">
+    <div [ngSwitch]="editorColumns[key].type">
+      <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
+        <mat-label></mat-label>
+        <input matInput formControlName="{{key + keySuffix}}" readonly>
+      </mat-form-field>
+      <mat-form-field *ngSwitchCase="'text'" [floatLabel]="'never'">
+        <input matInput formControlName="{{key + keySuffix}}">
+      </mat-form-field>
+      <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">
+        <mat-select formControlName="{{key + keySuffix}}">
+          <mat-option [value]="">-</mat-option>
+          <mat-option [value]="option.value"
+                      *ngFor="let option of editorColumns[key].options">{{option.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngSwitchCase="'date'" [floatLabel]="'never'">
+        <input matInput formControlName="{{key + keySuffix}}" [matDatepicker]="datePicker">
+        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

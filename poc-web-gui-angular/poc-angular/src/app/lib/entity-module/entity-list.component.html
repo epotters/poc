@@ -2,14 +2,31 @@
 
   <mat-card-actions align="end">
 
-    <button (click)="clearFilter()" mat-button>
+    <button [disabled]="fieldFilters.length == 0" (click)="filterRow.clear()" mat-button>
       <span>Clear filter</span>
     </button>
+    <button *ngIf="!!filterRow && filterRow.visible" (click)="filterRow.hide()" mat-button>
+      <span>Hide filter</span>
+    </button>
+    <button *ngIf="!filterRow || !filterRow.visible" (click)="filterRow.show()" mat-button>
+      <span>Show filter</span>
+    </button>
+
+
+    <button [disabled]="false" (click)="editorRow.clear()" mat-button>
+      <span>Clear editor</span>
+    </button>
+    <button *ngIf="!!editorRow && editorRow.visible" (click)="editorRow.hide()" mat-button>
+      <span>Hide editor</span>
+    </button>
+    <button *ngIf="!editorRow || !editorRow.visible" (click)="editorRow.show()" mat-button>
+      <span>Show editor</span>
+    </button>
+
 
     <button (click)="newEntity()" mat-button>
       <span>New {{meta.name}}</span>
     </button>
-
 
     <button mat-button [matMenuTriggerFor]="batchActionsMenu" #batchActionsMenuTrigger>
       <mat-icon>more_vert</mat-icon>
@@ -47,8 +64,13 @@
 
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
-        <filter-row [meta]="meta" (filterChange)="onFilterChanged($event)"></filter-row>
+        <filter-row [meta]="meta" (editorChange)="onFilterChanged($event)" [hidden]="!filterVisible"></filter-row>
+        <editor-row [meta]="meta" (editorChange)="onEditorChanged($event)" [hidden]="!editorVisible"></editor-row>
       </ng-container>
+
+<!--      <ng-container *matHeaderRowDef="meta.displayedColumns">-->
+<!--        <mat-header-row></mat-header-row>-->
+<!--      </ng-container>-->
 
       <!--      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>-->
       <mat-row (contextmenu)="onContextMenu($event, row)" (click)="onShiftClick($event, row)"

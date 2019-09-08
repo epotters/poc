@@ -11,9 +11,10 @@ import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
 import {FieldFilter} from "./domain/filter.model";
 import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
-import {FilterRowComponent} from "./table-filter/filter-row/filter-row.component";
+import {FilterRowComponent} from "./table-filter/filter-row.component";
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
+import {EditorRowComponent} from "./table-filter/editor-row.component";
 
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
@@ -21,16 +22,23 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   @Input() isManaged: boolean = false;
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
+
+
   dataSource: EntityDataSource<T>;
   fieldFilters: FieldFilter[] = [];
+  filterVisible: boolean = true;
+  editorVisible: boolean = true;
   startPage: number = 0;
 
   contextMenuPosition = {x: '0px', y: '0px'};
+
+  @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
 
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild('contextMenuTrigger', {static: true}) contextMenuTrigger: MatMenuTrigger;
+
 
   protected constructor(
     public meta: EntityMeta<T>,
@@ -59,7 +67,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.paginator.pageIndex = 0;
     });
 
-    merge(this.sort.sortChange, this.paginator.page, this.filterRow.filterChange)
+    merge(this.sort.sortChange, this.paginator.page, this.filterRow.editorChange)
       .pipe(
         startWith({}),
         delay(0), // Workarond for "Expression has changed" error
@@ -90,39 +98,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  public onFilterChanged($event) {
-    console.debug('onFilterChanged: Event received');
-    console.debug($event);
-    this.fieldFilters = this.filtersAsArray($event);
-  }
-
-
-  public clearFilter() {
-    this.filterRow.clearFilter();
-  }
-
-
-  private filtersAsArray(entityFilter: object): FieldFilter[] {
-    let filtersArray: FieldFilter[] = [];
-    if (this.filterRow) {
-      Object.entries(entityFilter).forEach(
-        ([key, value]) => {
-          // console.log(key, value);
-          if (value && value !== "") {
-            let name: string = key.substring(0, (key.length - 'Filter'.length));
-            filtersArray.push({
-              name: name,
-              rawValue: value
-            })
-          }
-        }
-      );
-    } else {
-      console.debug('No tableFilter yet');
-    }
-    return filtersArray;
-  }
-
   selectEntity(entity: T): void {
     console.info(this.meta.displayName + ' selected: ', entity);
     if (this.isManaged) {
@@ -140,6 +115,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.router.navigate([this.meta.apiBase + '/new']);
     }
   }
+
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
@@ -175,6 +151,48 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     );
   }
 
+
+  // Editor
+
+  public onEditorChanged($event): void {
+    console.debug('onEditorChanged: Event received');
+    console.debug($event);
+    // Save the entity
+  }
+
+
+
+  // Filters
+
+  public onFilterChanged($event): void {
+    console.debug('onFilterChanged: Event received');
+    console.debug($event);
+    this.fieldFilters = this.filtersAsArray($event);
+  }
+
+
+  private filtersAsArray(entityFilter: object): FieldFilter[] {
+    let filtersArray: FieldFilter[] = [];
+    if (this.filterRow) {
+      Object.entries(entityFilter).forEach(
+        ([key, value]) => {
+          // console.log(key, value);
+          if (value && value !== "") {
+            let name: string = key.substring(0, (key.length - 'Filter'.length));
+            filtersArray.push({
+              name: name,
+              rawValue: value
+            })
+          }
+        }
+      );
+    } else {
+      console.debug('No tableFilter yet');
+    }
+    return filtersArray;
+  }
+
+
   onShiftClick(event: MouseEvent, entity: T) {
     if (event.shiftKey) {
       this.selectEntity(entity);
@@ -203,7 +221,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
-
 
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
