@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-
 import {AuthGuardService} from "../lib/auth-module";
 import {personMeta} from "./person-meta";
 import {PersonListComponent} from "./person-list.component";
@@ -9,7 +8,6 @@ import {PersonEditorComponent} from "./person-editor.component";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {PersonManagerComponent} from "./person-manager.component";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
-import {EmploymentEditorComponent} from "../employments/employment-editor.component";
 
 const meta = personMeta;
 

@@ -1,13 +1,11 @@
-import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Subject} from "rxjs";
 import {debounceTime} from "rxjs/operators";
 import {EntityMeta, FieldEditorConfig} from "..";
 
 
-// AfterViewChecked
-
-export abstract class BaseEditorRowComponent<T extends Identifiable> implements OnInit, AfterViewInit {
+export abstract class BaseEditorRowComponent<T extends Identifiable> implements OnInit {
 
   @Input() meta: EntityMeta<T>;
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
@@ -24,8 +22,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   visible: boolean = true;
 
   constructor(
-    public formBuilder: FormBuilder,
-    public changeDetector: ChangeDetectorRef
+    public formBuilder: FormBuilder
   ) {
     console.debug('Constructing BaseEditorRowComponent');
   }
@@ -43,11 +40,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.debouncer.pipe(debounceTime(this.debounceTime))
       .subscribe((val) => this.editorChange.emit(this.rowEditorForm.getRawValue()));
     this.onChanges();
-  }
-
-
-  ngAfterViewInit(): void {
-    console.debug('AfterViewInit EditorRowComponent');
   }
 
   public show(): void {

@@ -16,7 +16,7 @@ enterTransition = transition(':enter', [
   }))
 ]);
 
-const leaveTrans = transition(':leave', [
+const leaveTransition = transition(':leave', [
   style({
     opacity: 1
   }),
@@ -30,8 +30,9 @@ const fadeIn = trigger('fadeIn', [
 ]);
 
 const fadeOut = trigger('fadeOut', [
-  leaveTrans
+  leaveTransition
 ]);
+
 
 
 @Component({

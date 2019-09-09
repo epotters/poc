@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {EntityMeta, FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
@@ -8,27 +8,23 @@ import {BaseEditorRowComponent} from "./base-editor-row.component";
   selector: 'editor-row',
   templateUrl: './editor-row.component.html',
   styleUrls: ['./editor-row.component.css']
-  // , changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
 
   @Input() meta: EntityMeta<T>;
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
-  keySuffix: string = 'Editor';
+  keySuffix = 'Editor';
+  visible = false;
 
   constructor(
-    public formBuilder: FormBuilder,
-    public changeDetector: ChangeDetectorRef
-  ) {
-    super(formBuilder, changeDetector);
+    public formBuilder: FormBuilder) {
+    super(formBuilder);
     console.debug('Constructing EditorRowComponent');
   }
 
 
   getColumns(): Record<string, FieldEditorConfig> {
-    console.debug('Set columns for EditorRowComponent');
-    console.debug(this.meta);
     let editorColumns: Record<string, FieldEditorConfig> = {};
     for (let idx in this.meta.displayedColumns) {
       let key: string = this.meta.displayedColumns[idx];

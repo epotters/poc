@@ -11,11 +11,11 @@ import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
 import {FieldFilter} from "./domain/filter.model";
 import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
-import {FilterRowComponent} from "./table-row-editor/filter-row.component";
+
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
 import {EditorRowComponent} from "./table-row-editor/editor-row.component";
-
+import {FilterRowComponent} from "./table-row-editor/filter-row.component";
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
@@ -29,7 +29,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   contextMenuPosition = {x: '0px', y: '0px'};
 
   @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
-
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -150,14 +149,24 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   // Editor
 
+  isEditorVisible(): boolean {
+    return (!!this.editorRow && this.editorRow.visible)
+  }
+
   public onEditorChanged($event): void {
     console.debug('onEditorChanged: Event received');
     console.debug($event);
+    // Validate the entity
     // Save the entity
   }
 
 
   // Filters
+
+  isFilterVisible(): boolean {
+    return (!!this.filterRow && this.filterRow.visible)
+  }
+
 
   public onFilterChanged($event): void {
     console.debug('onFilterChanged: Event received');
@@ -231,14 +240,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       return columnConfig.renderer(value);
     }
     return value;
-  }
-
-  isFilterVisible(): boolean {
-    return (!!this.filterRow && this.filterRow.visible)
-  }
-
-  isEditorVisible(): boolean {
-    return (!!this.editorRow && this.editorRow.visible)
   }
 
 }
