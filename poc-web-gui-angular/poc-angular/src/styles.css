@@ -1,16 +1,84 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-
 @import url('app/lib/entity-module/table-row-editor/editor-row.component.css');
 
 
-/* You can add global styles to this file, and also import other style files */
+/*
+* You can add global styles to this file, and also import other style files
+*/
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   border: 0;
 }
+
+
+/*
+ * Sidenav with sticky footer
+ * Source: https://www.thecodecampus.de/blog/material-2-sticky-footer-mat-sidenav/
+ */
+
+mat-sidenav-container {
+  /* same height as browser window height */
+  min-height: 100vh;
+}
+
+mat-sidenav-content {
+  display: flex !important;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header,
+footer {
+  flex: 0 1 auto;
+}
+
+
+
+/* Make the component injected by <router-outlet> full height: */
+main {
+  display: flex;
+  flex-direction: column;
+  /* child will set to an equal size inside the container */
+  flex: 1;
+}
+
+main > *:not(router-outlet) {
+  flex: 1;
+  display: block;
+}
+
+
+/* Header with toolbar */
+
+header mat-toolbar {
+  z-index: 1000;
+  width: 100% !important;
+}
+
+header .mat-toolbar-row, header .mat-toolbar-single-row {
+  height: 45px;
+}
+
+
+/* Footer */
+
+footer {
+  display: flex;
+  flex-direction: row;
+
+  color: darkgray;
+  padding: 9px 18px;
+}
+
+footer .right {
+  text-align: right;
+}
+
+
+/* General */
 
 .nav-link {
   cursor: pointer;
@@ -20,15 +88,6 @@ html, body {
   /* This fills the remaining space, by using flexbox.
      Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
-}
-
-header mat-toolbar {
-  z-index: 1000;
-  width: 100% !important;
-}
-
-header .mat-toolbar-row, header .mat-toolbar-single-row {
-  height: 45px;
 }
 
 .mat-typography h1 {
@@ -44,13 +103,16 @@ header .mat-toolbar-row, header .mat-toolbar-single-row {
   margin: 0 15px 30px 15px;
 }
 
-
 .mat-menu-panel {
   min-width: 90px;
   max-width: 180px;
 }
 
-/* Forms */
+
+/*
+Editor Forms
+TODO: Move to entity-editor.component.css
+*/
 
 .form-card {
   position: fixed;
@@ -67,13 +129,10 @@ header .mat-toolbar-row, header .mat-toolbar-single-row {
 }
 
 
-.radio-group-wrapper {
-  vertical-align: bottom;
-}
-
-
-
-/* List */
+/*
+List Table and Editor rows
+TODO: Move to entity-list.component.css
+*/
 
 .mat-cell, .mat-footer-cell, .editor-cell,
 input.mat-input-element, .mat-radio-label-content {
@@ -116,7 +175,29 @@ mat-footer-cell {
   height: 1.6em;
 }
 
-/* List of cards */
+.no-bottom-space .mat-form-field-wrapper {
+
+padding-bottom: 0;
+}
+
+.no-bottom-space  .mat-form-field-underline {
+  bottom: 0;
+}
+
+/* lower height */
+.no-bottom-space {
+height: 30px;
+}
+.no-bottom-space .mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: 0 0 0 0;
+  border-top: 0.5em;
+}
+
+
+
+/* List of cards
+TODO: Move to entity-list-of-cards.component.css
+*/
 
 .list-of-cards {
   background-color: #fafafa;
@@ -140,9 +221,10 @@ mat-footer-cell {
 }
 
 
-
-
-/* Related entity control */
+/*
+Related entity control
+TODO: Move to entity-relation.component.css
+*/
 
 .related-entities-control {
   width: 360px;
@@ -155,11 +237,10 @@ mat-footer-cell {
 .related-entity-header {
   display: flex;
   line-height: 1.125;
-  background-color: rgba(0,0,0,.04);
+  background-color: rgba(0, 0, 0, .04);
   padding: 0 0.75em 0 0.75em;
   align-items: center;
 }
-
 
 .related-entity-header h4 {
   margin-bottom: 0;
@@ -176,11 +257,10 @@ mat-footer-cell {
 .related-entity a {
   text-decoration: none;
   font-size: 15px;
-  color: rgba(0,0,0,.87);
+  color: rgba(0, 0, 0, .87);
   line-height: 30px;
   display: block;
 }
-
 
 
 /* Not for production */

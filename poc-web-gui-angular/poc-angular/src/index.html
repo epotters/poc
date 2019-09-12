@@ -14,6 +14,7 @@
     }
 
     app-root {
+      height: 100vh;
       opacity: 1;
       transition-timing-function: ease-in-out;
     }
@@ -25,6 +26,8 @@
     /* .loading screen is visible when app is not bootstrapped yet, my-app is empty */
     .loading-container {
       opacity: 0;
+      height: 0;
+      overflow: hidden;
       background-color: lightslategray;
     }
 
