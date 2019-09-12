@@ -23,12 +23,12 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   }
 
   public connect(collectionViewer: CollectionViewer): Observable<T[]> {
-    console.debug('Connecting datasource...');
+    console.debug('Connecting the ' + this.meta.displayNamePlural.toLowerCase() + ' datasource...');
     return this.entitiesSubject.asObservable();
   }
 
   public disconnect(collectionViewer: CollectionViewer): void {
-    console.debug('Disconnecting datasource...');
+    console.debug('Disconnecting the ' + this.meta.displayNamePlural.toLowerCase() + ' datasource...');
     this.entitiesSubject.complete();
     this.totalSubject.complete();
     this.loadingSubject.complete();

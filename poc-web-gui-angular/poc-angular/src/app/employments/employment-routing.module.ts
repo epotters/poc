@@ -6,20 +6,21 @@ import {AuthGuardService} from "../lib/auth-module";
 import {EmploymentListComponent} from "./employments-list.component";
 import {EmploymentEditorComponent} from "./employment-editor.component";
 
+const base = '';
 
 const routes: Routes = [
   {
-    path: meta.namePlural,
+    path: base,
     component: EmploymentListComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/new',
+    path: base + '/new',
     component: EmploymentEditorComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/:id',
+    path: base + '/:id',
     component: EmploymentEditorComponent,
     canActivate: [AuthGuardService]
   }

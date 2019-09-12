@@ -1,112 +1,118 @@
-<div *ngIf="visible" @fadeIn @fadeOut>
+<mat-sidenav-container class="example-container" *ngIf="visible" @fadeIn @fadeOut>
 
-  <header>
-    <mat-toolbar color="primary" class="mat-elevation-z6">
 
-      <button (click)="sidenav.toggle()" mat-icon-button>
-        <mat-icon>menu</mat-icon>
-      </button>
+  <mat-sidenav #sidenav mode="over" fixedInViewport="true">
+    <mat-card>
+      <h2>Developer info</h2>
 
-      <span>{{ Constants.applicationDisplayName }}</span>
+      <h3>Experimentele features</h3>
 
-      <button mat-icon-button routerLink="home" routerLinkActive="active">
-        <mat-icon>home</mat-icon>
-      </button>
+      <div class="buttons-vertical">
 
-      <button mat-button routerLink="people" routerLinkActive="active">
-        <span>People</span>
-      </button>
+        <h4>People</h4>
 
-      <button mat-button routerLink="organizations" routerLinkActive="active">
-        <span>Organizations</span>
-      </button>
+        <button routerLink="people-manager" mat-button>
+          <span>People Manager</span>
+        </button>
+        <button routerLink="people-list-of-cards" mat-button>
+          <span>People list of cards</span>
+        </button>
+        <button routerLink="people-n-grid" mat-button>
+          <span>People N-Grid</span>
+        </button>
+
+
+        <h4>Organizations</h4>
+
+        <button routerLink="organizations-manager" mat-button>
+          <span>Organizations Manager</span>
+        </button>
+        <button routerLink="organizations-list-of-cards" mat-button>
+          <span>Organization list of cards</span>
+        </button>
+        <button routerLink="organizations-n-grid" mat-button>
+          <span>Organizations N-Grid</span>
+        </button>
+
+
+        <h4>Relations</h4>
+
+        <button routerLink="employments" mat-button>
+          <span>Employments</span>
+        </button>
+
+      </div>
+
+    </mat-card>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="page">
+
+
+    <header>
+      <mat-toolbar color="primary" class="mat-elevation-z6">
+
+        <button (click)="sidenav.toggle()" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span>{{ Constants.applicationDisplayName }}</span>
+
+        <button mat-icon-button routerLink="home" routerLinkActive="active">
+          <mat-icon>adjust</mat-icon>
+        </button>
+
+        <button mat-button routerLink="people" routerLinkActive="active">
+          <span>People</span>
+        </button>
+
+        <button mat-button routerLink="organizations" routerLinkActive="active">
+          <span>Organizations</span>
+        </button>
+
+        <span class="fill-remaining-space"></span>
+
+
+        <button mat-button routerLink="info" routerLinkActive="active">
+          <span>Info</span>
+        </button>
+
+        <button mat-button [matMenuTriggerFor]="userMenu">
+          <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>
+          <mat-icon *ngIf="authService.isLoggedIn()">account_circle</mat-icon>
+          <span
+            class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : 'Unknown'}}</span>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="auth-login" [disabled]="authService.isLoggedIn()">
+            <span>Login</span>
+          </button>
+          <button mat-menu-item routerLink="auth-logout" [disabled]="!authService.isLoggedIn()">
+            <span>Logout</span></button>
+          <button mat-menu-item routerLink="account" [disabled]="!authService.isLoggedIn()">
+            <span>Account</span>
+          </button>
+        </mat-menu>
+
+      </mat-toolbar>
+    </header>
+
+    <main class="mat-typography">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="mat-typography mat-small">
+      <span class="left">&copy; 2019, Eelko Potters</span>
 
       <span class="fill-remaining-space"></span>
 
+      <span class="right">MIT License</span>
 
-      <button mat-button routerLink="info" routerLinkActive="active">
-        <span>Info</span>
-      </button>
+    </footer>
 
-      <button mat-button [matMenuTriggerFor]="userMenu">
-        <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>
-        <mat-icon *ngIf="authService.isLoggedIn()">account_circle</mat-icon>
-        <span
-          class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : 'Unknown'}}</span>
-      </button>
-
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="auth-login" [disabled]="authService.isLoggedIn()">
-          <span>Login</span>
-        </button>
-        <button mat-menu-item routerLink="auth-logout" [disabled]="!authService.isLoggedIn()">
-          <span>Logout</span></button>
-        <button mat-menu-item routerLink="account" [disabled]="!authService.isLoggedIn()">
-          <span>Account</span>
-        </button>
-      </mat-menu>
-
-    </mat-toolbar>
-  </header>
-
-
-  <main class="mat-typography">
-
-    <mat-sidenav-container class="example-container">
-      <mat-sidenav #sidenav mode="over" fixedInViewport="true">
-        <mat-card>
-          <h2>Developer info</h2>
-
-          <h3>Experimentele features</h3>
-
-          <div class="buttons-vertical">
-
-            <h4>People</h4>
-
-            <button routerLink="people-manager" mat-button>
-              <span>People Manager</span>
-            </button>
-            <button routerLink="people-list-of-cards" mat-button>
-              <span>People list of cards</span>
-            </button>
-            <button routerLink="people-n-grid" mat-button>
-              <span>People N-Grid</span>
-            </button>
-
-
-            <h4>Organizations</h4>
-
-            <button routerLink="organizations-manager" mat-button>
-              <span>Organizations Manager</span>
-            </button>
-            <button routerLink="organizations-list-of-cards" mat-button>
-              <span>Organization list of cards</span>
-            </button>
-            <button routerLink="organizations-n-grid" mat-button>
-              <span>Organizations N-Grid</span>
-            </button>
-
-
-            <h4>Relations</h4>
-
-            <button routerLink="employments" mat-button>
-              <span>Employments</span>
-            </button>
-
-          </div>
-
-        </mat-card>
-      </mat-sidenav>
-
-
-      <router-outlet></router-outlet>
-
-    </mat-sidenav-container>
-
-  </main>
-  <footer></footer>
-
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
 
 

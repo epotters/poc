@@ -18,10 +18,10 @@ export const employmentMeta: EntityMeta<Employment> = {
   defaultSortField: 'id',
   defaultSortDirection: 'asc',
 
-  displayedColumns: ['id', 'employer.name', 'employee.firstName', 'employee.lastName'],
+  displayedColumns: ['id', 'employer', 'employee.firstName', 'employee.lastName'],
   filteredColumns: {
     id: {type: 'text'},
-    'employer.name': {type: 'none'},
+    'employer': {type: 'none'},
     'employee.firstName': {type: 'none'},
     'employee.lastName': {type: 'none'}
   },
@@ -30,8 +30,20 @@ export const employmentMeta: EntityMeta<Employment> = {
     id: {
       label: 'ID',
     },
-    'employer.name': {
-      label: 'Employer'
+    employer: {
+      label: 'Employer',
+      renderer: (entity, value) => {
+        return entity.employer.name;
+      },
+      editor: {
+        type: "autocomplete",
+        relatedEntity: {
+          name: 'organization',
+          serviceName: 'OrganizationService',
+          displayField: 'name',
+          displayOption: (entity) => {return entity['name']}
+        }
+      }
     },
     'employee.firstName': {
       label: 'First Name'

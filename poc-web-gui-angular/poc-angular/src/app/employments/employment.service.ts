@@ -1,10 +1,16 @@
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 import {EntityService} from "../lib/entity-module";
 import {PocApiService} from "../core/service";
-import {Employment} from "../core/domain/employment.model";
+import {Employment} from "../core/domain";
 import {employmentMeta} from "./employment-meta";
-import {map} from "rxjs/operators";
-import {Observable} from "rxjs";
 
+
+
+@Injectable({
+  providedIn: 'root'
+})
 export class EmploymentService extends EntityService<Employment> {
 
   constructor(
@@ -25,4 +31,5 @@ export class EmploymentService extends EntityService<Employment> {
         return response["content"];
       }));
   }
+
 }

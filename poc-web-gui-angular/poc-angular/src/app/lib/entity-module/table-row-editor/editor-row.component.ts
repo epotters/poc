@@ -1,7 +1,8 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Injector, Output} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {EntityMeta, FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
+import {META} from "../entity-tokens";
 
 
 @Component({
@@ -11,16 +12,17 @@ import {BaseEditorRowComponent} from "./base-editor-row.component";
 })
 export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
 
-  @Input() meta: EntityMeta<T>;
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
   keySuffix = 'Editor';
   visible = false;
 
   constructor(
-    public formBuilder: FormBuilder) {
-    super(formBuilder);
-    console.debug('Constructing EditorRowComponent');
+    @Inject(META) public meta: EntityMeta<any>,
+    public formBuilder: FormBuilder,
+    injector: Injector) {
+    super(meta, formBuilder, injector);
+    console.debug('Constructing EditorRowComponent for type ' + meta.displayName);
   }
 
 

@@ -64,8 +64,8 @@
 
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
-        <filter-row [meta]="meta" (editorChange)="onFilterChanged($event)" [hidden]="!isFilterVisible()"></filter-row>
-        <editor-row [meta]="meta" (editorChange)="onEditorChanged($event)" [hidden]="!isEditorVisible()"></editor-row>
+        <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!isFilterVisible()"></filter-row>
+        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!isEditorVisible()"></editor-row>
       </ng-container>
 
       <!--      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>-->
@@ -93,7 +93,6 @@
      [style.top]="contextMenuPosition.y"
      [matMenuTriggerFor]="contextMenu"
      #contextMenuTrigger="matMenuTrigger">
-
 </div>
 <mat-menu #contextMenu="matMenu">
   <ng-template matMenuContent let-entity="entity">

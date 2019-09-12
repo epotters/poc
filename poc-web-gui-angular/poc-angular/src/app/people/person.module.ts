@@ -1,28 +1,22 @@
 import {NgModule} from '@angular/core';
 
-import {EntityCommonModule} from "../lib/entity-module/entity-common.module";
-import {DialogModule} from "../lib/entity-module/dialog/dialog.module";
+import {EntityModule} from "../lib/entity-module/entity.module";
 
-import {PocApiService} from "../core/service";
+import {PersonService} from "./person.service";
 import {PersonEditorComponent} from "./person-editor.component";
 import {PersonListComponent} from "./person-list.component";
-import {PersonService} from "./person.service";
 import {PersonRoutingModule} from "./person-routing.module";
 import {PersonListNGridComponent} from "./person-list-n-grid.component";
-import {NGridModule} from "../core/n-grid/n-grid.module";
 import {PersonManagerComponent} from "./person-manager.component";
-import {TableRowEditorModule} from "../lib/entity-module/table-row-editor/table-row-editor-module";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 import {PersonEmployersRelationComponent} from "./person-employers-relation.component";
+import {personMeta} from "./person-meta";
+import {META, SERVICE} from "../lib/entity-module/entity-tokens";
 
 
 @NgModule({
   imports: [
-    EntityCommonModule,
-    DialogModule,
-    TableRowEditorModule,
-
-    NGridModule,
+    EntityModule,
     PersonRoutingModule
   ],
   declarations: [
@@ -42,8 +36,8 @@ import {PersonEmployersRelationComponent} from "./person-employers-relation.comp
     PersonListNGridComponent
   ],
   providers: [
-    PocApiService,
-    PersonService
+    {provide: META, useValue: personMeta},
+    {provide: SERVICE, useExisting: PersonService}
   ]
 })
 export class PersonModule {

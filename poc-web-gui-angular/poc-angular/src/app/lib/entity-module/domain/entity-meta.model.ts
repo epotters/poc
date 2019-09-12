@@ -1,13 +1,22 @@
 export interface ColumnConfig {
   label: string;
   helpText?: string;
-  renderer?: (value: string) => string;
+  renderer?: (entity: any, value: string) => string;
   editor?: FieldEditorConfig;
 }
 
 export interface FieldEditorConfig {
-  type: 'none' | 'text' | 'select' | 'date';
+  type: 'none' | 'text' | 'select' | 'date' | 'autocomplete';
   options?: SelectOption[];
+  relatedEntity?: RelatedEntity;
+}
+
+export interface RelatedEntity {
+  name: string;
+  serviceName: string;
+  displayField: string;
+
+  displayOption?(entity?: any): string | undefined;
 }
 
 export class FilterConfig {
@@ -45,6 +54,5 @@ export interface EntityMeta<T extends Identifiable> {
 
   // Form
   validationMessages?: any;
-
 
 }

@@ -9,7 +9,7 @@ import {EmploymentService} from "./employment.service";
 
 
 @Component({
-  selector: 'organization-employee-list-card',
+  selector: 'employment-list-card',
   templateUrl: '../lib/entity-module/entity-list.component.html',
   styleUrls: ['../lib/entity-module/entity-list.component.css']
 })

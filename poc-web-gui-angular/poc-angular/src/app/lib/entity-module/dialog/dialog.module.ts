@@ -1,11 +1,13 @@
 import {NgModule} from '@angular/core';
 import {ConfirmationDialogComponent} from "./confirmation-dialog.component";
-import {EntityCommonModule} from "../entity-common.module";
+import {EntityCommonModule} from "../common/entity-common.module";
+import {EntityMaterialModule} from "../common/entity-material.module";
 
 
 @NgModule({
   imports: [
-    EntityCommonModule
+    EntityCommonModule,
+    EntityMaterialModule
   ],
   declarations: [
     ConfirmationDialogComponent

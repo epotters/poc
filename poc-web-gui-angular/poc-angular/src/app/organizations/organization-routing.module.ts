@@ -9,48 +9,48 @@ import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
 import {EmploymentListComponent} from "../employments/employments-list.component";
-import {EmploymentEditorComponent} from "../employments/employment-editor.component";
 
 const meta = organizationMeta;
+const base = '';  // meta.namePlural;
 
 const routes: Routes = [
   {
-    path: meta.namePlural,
+    path: base,
     component: OrganizationListComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/new',
+    path: base + 'new',
+    component: OrganizationEditorComponent,
+    canActivate: [AuthGuardService]
+  },
+  // {
+  //   path: base + '/:id/employees',
+  //   component: EmploymentListComponent,
+  //   canActivate: [AuthGuardService]
+  // },
+  {
+    path: base + ':id',
     component: OrganizationEditorComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/:id/employees',
-    component: EmploymentListComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: meta.namePlural + '/:id',
-    component: OrganizationEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: meta.namePlural + '-manager',
+    path: base + 'manager',
     component: OrganizationManagerComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '-manager/:id',
+    path: base + 'manager/:id',
     component: OrganizationManagerComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '-n-grid',
+    path: base + 'n-grid',
     component: OrganizationListNGridComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '-list-of-cards',
+    path: base + 'list-of-cards',
     component: OrganizationListOfCardsComponent,
     canActivate: [AuthGuardService]
   }

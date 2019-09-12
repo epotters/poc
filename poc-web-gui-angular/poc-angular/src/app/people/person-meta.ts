@@ -1,6 +1,5 @@
 import {EntityMeta, SelectOption} from "../lib/entity-module";
 import {Person} from "../core/domain";
-import {of as observableOf} from "rxjs";
 
 const genderOptions: SelectOption[] = [
   {value: 'MALE', label: 'Male'},
@@ -53,7 +52,7 @@ export const personMeta: EntityMeta<Person> = {
     },
     gender: {
       label: 'M/F',
-      renderer: (value) => {
+      renderer: (entity, value) => {
         for (let option of genderOptions) {
           if (option.value === value) {
             return option.label;

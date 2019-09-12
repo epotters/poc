@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
+import {FormBuilder} from "@angular/forms";
 
 import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
 
@@ -9,7 +10,6 @@ import {organizationMeta} from "../organizations/organization-meta";
 import {employmentMeta} from "../employments/employment-meta";
 
 import {EmploymentService} from "../employments/employment.service";
-import {FormBuilder} from "@angular/forms";
 import {OrganizationService} from "../organizations/organization.service";
 
 @Component({

@@ -68,8 +68,6 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   private activateRelatedEntityList(): void {
     this.ownerSubject.asObservable().subscribe(owner => {
-        console.debug('Inside subscription to the ownerSubject');
-        console.debug(owner);
 
         if (owner) {
 
@@ -98,7 +96,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   private activateRelatedEntityControl(): void {
 
     console.debug('About to activateRelatedEntityControl');
-    console.debug('  this.filterFieldName: ' + this.filterFieldName);
+    console.debug('this.filterFieldName: ' + this.filterFieldName);
 
     this.relatedEntityForm
       .get(this.relatedFieldName)

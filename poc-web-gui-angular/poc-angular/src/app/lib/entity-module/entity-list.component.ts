@@ -22,6 +22,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   @Input() isManaged: boolean = false;
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
+  entityType: string;
+
   dataSource: EntityDataSource<T>;
   fieldFilters: FieldFilter[] = [];
   startPage: number = 0;
@@ -43,6 +45,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
+    this.entityType = this.capitalizeFirst(this.meta.name);
   }
 
 
@@ -98,7 +101,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (this.isManaged) {
       this.entitySelector.emit(entity);
     } else {
-      this.router.navigate([this.meta.apiBase + '/' + entity.id]);
+      // this.router.navigate([this.meta.apiBase + '/' + entity.id]);
+      this.router.navigate([this.meta.namePlural + '/' + entity.id]);
     }
   }
 
@@ -237,9 +241,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       }
     }
     if (columnConfig.renderer) {
-      return columnConfig.renderer(value);
+      return columnConfig.renderer(entity, value);
     }
     return value;
+  }
+
+  private capitalizeFirst(text: string): string {
+    return text.substring(0, 1).toUpperCase() + text.substring(1);
   }
 
 }

@@ -1,16 +1,18 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
+import 'rxjs/Rx';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import 'rxjs/Rx';
 
 import {environment} from '../../../environments/environment';
 import {AuthService} from "../../lib/auth-module";
 import {ApiService} from "../../lib/entity-module";
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PocApiService implements ApiService {
 
 

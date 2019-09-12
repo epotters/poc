@@ -1,11 +1,6 @@
 import {NgModule} from '@angular/core';
 
-import {EntityCommonModule} from "../lib/entity-module/entity-common.module";
-import {DialogModule} from "../lib/entity-module/dialog/dialog.module";
-import {TableRowEditorModule} from "../lib/entity-module/table-row-editor/table-row-editor-module";
-
-import {PocApiService} from "../core/service";
-import {NGridModule} from "../core/n-grid/n-grid.module";
+import {EntityModule} from "../lib/entity-module/entity.module";
 
 import {OrganizationEditorComponent} from "./organization-editor.component";
 import {OrganizationListComponent} from "./organization-list.component";
@@ -15,18 +10,14 @@ import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
 import {OrganizationEmployeesRelationComponent} from "./organization-employees-relation.component";
-
-import {EmploymentModule} from "../employments/employment.module";
+import {organizationMeta} from "./organization-meta";
+import {META, SERVICE} from "../lib/entity-module/entity-tokens";
 
 
 @NgModule({
   imports: [
-    EntityCommonModule,
-    NGridModule,
-    DialogModule,
-    TableRowEditorModule,
-    OrganizationRoutingModule,
-    EmploymentModule
+    EntityModule,
+    OrganizationRoutingModule
   ],
   declarations: [
     OrganizationManagerComponent,
@@ -45,8 +36,9 @@ import {EmploymentModule} from "../employments/employment.module";
     OrganizationListOfCardsComponent
   ],
   providers: [
-    PocApiService,
-    OrganizationService]
+    {provide: META, useValue: organizationMeta},
+    {provide: SERVICE, useExisting: OrganizationService}
+  ]
 })
 export class OrganizationModule {
 }

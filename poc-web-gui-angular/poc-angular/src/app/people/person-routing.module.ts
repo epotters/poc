@@ -9,36 +9,36 @@ import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {PersonManagerComponent} from "./person-manager.component";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 
-const meta = personMeta;
+const base = '';
 
 const routes: Routes = [
   {
-    path: meta.namePlural,
+    path: base,
     component: PersonListComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/new',
+    path: base + 'new',
     component: PersonEditorComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '/:id',
+    path: base + ':id',
     component: PersonEditorComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '-manager',
+    path: base + 'manager',
     component: PersonManagerComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '-list-of-cards',
+    path: base + 'list-of-cards',
     component: PersonListOfCardsComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: meta.namePlural + '-n-grid',
+    path: base + 'n-grid',
     component: PersonListNGridComponent,
     canActivate: [AuthGuardService]
   }
