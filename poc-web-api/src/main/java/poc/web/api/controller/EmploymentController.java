@@ -30,7 +30,7 @@ public class EmploymentController {
   private final EmploymentRepository employmentRepository;
 
 
-  private QuerystringFilterTranslator<Employment> employmentFilterTanslator = new QuerystringFilterTranslator<>();
+  private QuerystringFilterTranslator<Employment> employmentFilterTanslator = new QuerystringFilterTranslator<>(Employment.class);
 
 
   @Autowired

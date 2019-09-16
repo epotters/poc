@@ -31,7 +31,7 @@ public class OrganizationController {
   private final EmploymentRepository employmentRepository;
 
 
-  private QuerystringFilterTranslator<Organization> filterTanslator = new QuerystringFilterTranslator<>();
+  private QuerystringFilterTranslator<Organization> filterTanslator = new QuerystringFilterTranslator<>(Organization.class);
 
 
   @Autowired

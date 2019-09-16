@@ -1,7 +1,6 @@
 package poc.core.repository.specification;
 
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +11,12 @@ public class SpecificationsBuilder<T> {
 
   private final List<SearchCriteria> params;
 
-
   public SpecificationsBuilder() {
     params = new ArrayList<>();
   }
 
 
   public SpecificationsBuilder with(String key, String operation, Object value) {
-
-    String fieldType = this.getFieldTypeForGeneric(key);
 
     // TODO: Support nested properties
     if (key.contains(".")) {
@@ -71,32 +67,6 @@ public class SpecificationsBuilder<T> {
     }
     return result;
   }
-
-
-  private String getFieldTypeForGeneric(String fieldName) {
-
-    for (Field field : this.getClass().getDeclaredFields()) {
-      System.out.format("Type: %s%n", field.getType());
-      System.out.format("GenericType: %s%n", field.getGenericType());
-      for (Field genericField : field.getGenericType().getClass().getDeclaredFields()) {
-        if (genericField.getName().equals(fieldName)) {
-
-          System.out.format("Generic type: %s%n", genericField.getType());
-
-          return genericField.getType().getSimpleName();
-        }
-      }
-    }
-    return null;
-  }
-
-  /*
-
-    Field field = ReflectionUtils.findField(Person.class, fieldName);
-  if (field != null) {
-    ReflectionUtils.setField(field, personToUpdate, fieldValue);
-  }
-   */
 
 
 }
