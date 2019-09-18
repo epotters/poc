@@ -45,24 +45,19 @@ public class QuerystringFilterTranslatorTest {
 
     QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>(Person.class);
 
-    try {
-      Object typedValue = filterTanslator.mapStringValueToObject("gender", "MALE");
+    this.conversionTest(filterTanslator, "id", "105", Long.class);
+    this.conversionTest(filterTanslator, "firstName", "Piet", String.class);
+    this.conversionTest(filterTanslator, "gender", "FEMALE", Gender.class);
+    this.conversionTest(filterTanslator, "birthDate", "1988-12-16", LocalDate.class);
+  }
 
+
+  private void conversionTest(QuerystringFilterTranslator<Person> filterTanslator, String fieldName, String rawValue, Class expectedClass) {
+    try {
+      Object typedValue = filterTanslator.mapStringValueToObject(fieldName, rawValue);
       System.out.println(typedValue.getClass());
       System.out.println(typedValue);
-
-      assert (typedValue instanceof Gender);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    try {
-      Object typedValue = filterTanslator.mapStringValueToObject("birthDate", "1988-12-16");
-
-      System.out.println(typedValue.getClass());
-      System.out.println(typedValue);
-
-      assert (typedValue instanceof LocalDate);
+      assert (expectedClass.isInstance(typedValue));
     } catch (Exception e) {
       e.printStackTrace();
     }
