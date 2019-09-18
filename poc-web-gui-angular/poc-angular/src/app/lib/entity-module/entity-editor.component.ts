@@ -16,6 +16,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   @Input() entityToLoad?: T;
   @Input() isManaged: boolean = false;
 
+
   title: string;
   entityForm: FormGroup;
 
@@ -134,7 +135,9 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
   deleteEntity() {
+
     if (this.isNew()) {
+      console.info('This entity is not yet created and therfor cannot be deleted');
       return;
     }
 

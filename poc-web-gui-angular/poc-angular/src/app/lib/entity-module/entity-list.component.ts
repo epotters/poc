@@ -17,14 +17,14 @@ import {EntityDataSource} from "./entity-data-source";
 import {EditorRowComponent} from "./table-row-editor/editor-row.component";
 import {FilterRowComponent} from "./table-row-editor/filter-row.component";
 
+
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
-  entityType: string;
-
   dataSource: EntityDataSource<T>;
+
   fieldFilters: FieldFilter[] = [];
   startPage: number = 0;
 
@@ -49,7 +49,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
-    this.entityType = this.capitalizeFirst(this.meta.name);
   }
 
 
@@ -59,6 +58,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
     this.dataSource.loadEntities(this.fieldFilters, this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.meta.defaultPageSize);
+
   }
 
 
@@ -86,7 +86,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       ).subscribe(() => {
       }
     );
-
   }
 
 
@@ -213,6 +212,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
   // goToManager
 
+
   onContextMenu(event: MouseEvent, entity: T) {
     console.debug('Context menu for entity ', entity);
 
@@ -254,10 +254,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       return columnConfig.renderer(entity, value);
     }
     return value;
-  }
-
-  private capitalizeFirst(text: string): string {
-    return text.substring(0, 1).toUpperCase() + text.substring(1);
   }
 
 }
