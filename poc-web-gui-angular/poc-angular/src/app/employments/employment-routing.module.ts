@@ -15,12 +15,12 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: base + '/new',
+    path: base + 'new',
     component: EmploymentEditorComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: base + '/:id',
+    path: base + ':id',
     component: EmploymentEditorComponent,
     canActivate: [AuthGuardService]
   }

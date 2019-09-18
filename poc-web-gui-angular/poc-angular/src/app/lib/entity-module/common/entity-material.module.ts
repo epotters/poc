@@ -5,7 +5,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
@@ -18,6 +18,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angular/material";
+import {MatListModule} from "@angular/material/list";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 
 @NgModule({
@@ -40,8 +42,10 @@ import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angu
     MatSortModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatListModule,
     MatGridListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -62,11 +66,10 @@ import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angu
     MatSortModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatListModule,
     MatGridListModule,
-    MatSnackBarModule
-  ],
-  providers: [
-    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}
+    MatSnackBarModule,
+    MatProgressBarModule
   ]
 })
 export class EntityMaterialModule {

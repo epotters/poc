@@ -10,14 +10,17 @@ export class ConfirmationDialogComponent implements OnInit {
   title: string;
   message: string;
 
-  constructor(private dialog: MatDialog, private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) data) {
+  constructor(
+      // private dialog: MatDialog,
+      private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) data) {
+
     this.title = data.title;
     this.message = data.message;
   }
 
   ngOnInit() {
-    console.debug('Init ConfirmationDialogComponent')
+    console.debug('Initialize ConfirmationDialogComponent')
   }
 
 

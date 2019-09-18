@@ -1,0 +1,8 @@
+<mat-dialog-content class="mat-typography">
+  <ng-template entity-component-entrypoint></ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions align='end'>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="dialogData.entity">Ok</button>
+</mat-dialog-actions>

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 import 'rxjs/Rx';
-import {Observable, throwError} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../environments/environment';
@@ -14,6 +14,8 @@ import {ApiService} from "../../lib/entity-module";
   providedIn: 'root'
 })
 export class PocApiService implements ApiService {
+
+  private errorsSubject: Subject<any> = new Subject();
 
 
   constructor(
@@ -77,8 +79,15 @@ export class PocApiService implements ApiService {
   }
 
 
+  public awaitErrors(): Observable<any> {
+    return this.errorsSubject;
+  }
+
+
   private handleError(error: any): Observable<never> {
     console.error('An error occurred: ' + error.status + ' ' + error.message);
+
+    this.errorsSubject.next(error);
 
     if(error.status === 401) {
       console.info('Unauthorized, token probably expired');

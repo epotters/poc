@@ -20,6 +20,11 @@ import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angular/material";
 
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material";
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
+import {POC_DATE_FORMATS} from "../constants";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+
 
 @NgModule({
   imports: [
@@ -43,7 +48,8 @@ import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angu
     MatProgressSpinnerModule,
     MatDialogModule,
     MatGridListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -66,10 +72,13 @@ import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angu
     MatProgressSpinnerModule,
     MatDialogModule,
     MatGridListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   providers: [
-    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: POC_DATE_FORMATS}
   ]
 })
 export class MaterialModule {

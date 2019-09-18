@@ -16,7 +16,6 @@ export class Constants {
 
   public static oidcProviderRoot = 'http://keycloak.localhost/auth/';
   public static realm = 'epo';
-
   public static accountUrl = Constants.oidcProviderRoot + 'realms/' + Constants.realm + '/account';
 
   public static userManagerSettings: UserManagerSettings = {
@@ -29,7 +28,6 @@ export class Constants {
     post_logout_redirect_uri: Constants.clientRoot + '/auth-logout-callback',
     filterProtocolClaims: true,
     loadUserInfo: true
-    //, automaticSilentRenew: true
   };
 
 
@@ -44,12 +42,12 @@ export class Constants {
 
 export const POC_DATE_FORMATS = {
   parse: {
-    dateInput: 'LL',
+    dateInput: 'YYYY-MM-DD',
   },
   display: {
     dateInput: 'YYYY-MM-DD',
     monthYearLabel: 'YYYY',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY',
+    monthYearA11yLabel: 'YYYY'
   },
 };

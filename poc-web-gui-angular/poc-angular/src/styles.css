@@ -36,7 +36,6 @@ footer {
 }
 
 
-
 /* Make the component injected by <router-outlet> full height: */
 main {
   display: flex;
@@ -52,9 +51,11 @@ main > *:not(router-outlet) {
 
 
 /* Header with toolbar */
+header {
+  z-index: 1000;
+}
 
 header mat-toolbar {
-  z-index: 1000;
   width: 100% !important;
 }
 
@@ -134,7 +135,40 @@ List Table and Editor rows
 TODO: Move to entity-list.component.css
 */
 
-.mat-cell, .mat-footer-cell, .editor-cell,
+.list-card {
+  max-width: 1200px;
+}
+
+.list-card mat-card-header {
+  padding-bottom: 16px;
+  align-items: center;
+}
+
+.list-card .mat-card-header .mat-card-title {
+  margin-bottom: 0;
+}
+
+
+.list-card mat-card-actions {
+  padding-left: 24px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* debug for alignment */
+.mat-cell,
+.mat-header-cell,
+.mat-footer-cell,
+.editor-cell,
+.filter-cell {
+  border-right: 1px solid silver;
+  flex: 3;
+}
+
+.mat-cell, .mat-footer-cell, .editor-cell, .filter-cell,
 input.mat-input-element, .mat-radio-label-content {
   font-size: 15px;
 }
@@ -176,24 +210,68 @@ mat-footer-cell {
 }
 
 .no-bottom-space .mat-form-field-wrapper {
-
-padding-bottom: 0;
+  padding-bottom: 0;
 }
 
-.no-bottom-space  .mat-form-field-underline {
+.no-bottom-space .mat-form-field-underline {
   bottom: 0;
 }
 
 /* lower height */
 .no-bottom-space {
-height: 30px;
+  height: 30px;
 }
+
 .no-bottom-space .mat-form-field-appearance-fill .mat-form-field-infix {
   padding: 0 0 0 0;
   border-top: 0.5em;
 }
 
 
+/* Columns */
+
+.mat-column-id {
+  width: 72px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+mat-header-cell.mat-column-id,
+.editor-cell.mat-column-id {
+  padding-right: 24px;
+}
+
+.editor-cell.mat-column-id div[ng-reflect-ng-switch=text] {
+  margin-right: -24px;
+}
+
+mat-cell.mat-column-id {
+  padding-right: 24px;
+  color: silver;
+}
+
+.editor-cell.mat-column-id input{
+  text-align: right;
+  padding-right: 24px;
+  display: block;
+  box-sizing: border-box;
+}
+
+.mat-column-firstName {
+  flex: 2;
+}
+
+.mat-column-prefix {
+  flex: 2;
+}
+
+.mat-column-gender {
+  flex: 2;
+}
+
+.mat-column-birthDate {
+  flex: 2;
+}
 
 /* List of cards
 TODO: Move to entity-list-of-cards.component.css
@@ -268,4 +346,9 @@ TODO: Move to entity-relation.component.css
 .buttons-vertical button {
   display: block;
   margin-bottom: 6px;
+}
+
+filter-row {
+  overflow: hidden;
+  transition: all .3s;
 }

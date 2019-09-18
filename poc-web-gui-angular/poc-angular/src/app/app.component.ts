@@ -5,6 +5,7 @@ import {animate, AnimationTransitionMetadata, style, transition, trigger} from "
 
 import {AuthService} from "./lib/auth-module/";
 import {Constants} from '../constants';
+import {PocApiService} from "./core/service";
 
 let enterTransition: AnimationTransitionMetadata;
 enterTransition = transition(':enter', [
@@ -34,7 +35,6 @@ const fadeOut = trigger('fadeOut', [
 ]);
 
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -52,13 +52,21 @@ export class AppComponent implements AfterContentInit {
   constructor(
     private titleService: Title,
     public authService: AuthService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public apiService: PocApiService
   ) {
     console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
     this.titleService.setTitle(Constants.applicationDisplayName);
   }
 
   ngAfterContentInit() {
+
+    this.apiService.awaitErrors().subscribe((error) => {
+        console.log('Received error with status ' + error.status);
+        this.openSnackBar(error, 'Close');
+      }
+    );
+
     this.visible = true;
   }
 

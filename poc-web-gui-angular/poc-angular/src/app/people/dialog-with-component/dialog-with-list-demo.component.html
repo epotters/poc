@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{title}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-toolbar>
+      <button mat-raised-button (click)="openDialogWithList()">List</button>
+      <button mat-raised-button (click)="openDialogWithEditor()">Editor</button>
+    </mat-toolbar>
+    <div *ngIf="entity">
+      Selected entity: <i>{{entity}}</i>
+    </div>
+  </mat-card-content>
+</mat-card>
