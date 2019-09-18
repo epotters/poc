@@ -1,6 +1,6 @@
 <mat-card class="form-card">
   <mat-card-header>
-    <mat-card-title>{{meta.displayName}} Editor</mat-card-title>
+    <mat-card-title>{{title}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
 
@@ -56,8 +56,7 @@
       <div class="form-row">
 
         <!-- Gender-->
-
-        <mat-form-field style="flex: 2" >
+        <mat-form-field style="flex: 2">
           <mat-label>Gender</mat-label>
           <mat-select formControlName="gender" name="gender" required>
             <mat-option [value]="">-</mat-option>
@@ -123,3 +122,4 @@
   </mat-card-actions>
 
 </mat-card>
+

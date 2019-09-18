@@ -16,6 +16,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   @Input() entityToLoad?: T;
   @Input() isManaged: boolean = false;
 
+  title: string;
   entityForm: FormGroup;
 
   isVisible: boolean = true;
@@ -32,7 +33,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     public snackbar: MatSnackBar
   ) {
     console.debug('Constructing the EntityEditorComponent for type ' + this.meta.displayName);
-
     this.buildForm(formBuilder);
   }
 
@@ -42,17 +42,20 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
     const entityIdToLoad = this.getIdFromPath();
     if (entityIdToLoad) {
+      this.title = this.meta.displayName + ' Editor';
       this.loadEntity(entityIdToLoad);
     } else {
       console.info('Editor for a new entity');
+      this.title = 'New ' + this.meta.displayName;
       this.prefillFromQueryString();
     }
   }
 
+
   prefillFromQueryString() {
     this.route.queryParams.subscribe(params => {
       for (let key in params) {
-        if(this.entityForm.get(key)) {
+        if (this.entityForm.get(key)) {
           this.entityForm.get(key).setValue(params[key]);
         }
       }
@@ -61,17 +64,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
 
   ngOnChanges(changes: SimpleChanges) {
-
     if (changes.entityToLoad.currentValue &&
       changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue) {
-
-      console.debug('EntityToLoad has changed:');
-      console.debug(changes.entityToLoad.previousValue);
-      console.debug(changes.entityToLoad.currentValue);
-
+      console.debug('EntityToLoad has changed. Loading...');
       this.loadNewEntity(changes.entityToLoad.currentValue);
     }
-
   }
 
   getIdFromPath(): number | null {
@@ -219,7 +216,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   goToList() {
     this.router.navigate([this.meta.apiBase]);
   }
-
 
   public show(): void {
     this.isVisible = true;

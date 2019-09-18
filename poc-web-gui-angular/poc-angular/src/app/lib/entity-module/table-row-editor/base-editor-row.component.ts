@@ -10,7 +10,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
-
   editorColumns: Record<string, FieldEditorConfig>;
   dataSources: Record<string, any> = {};
   keySuffix: string;
@@ -40,7 +39,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   ngOnInit() {
     console.debug('ngOnInit called for BaseEditorRowComponent');
-
   }
 
   ngAfterContentInit() {
@@ -51,7 +49,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.debouncer.pipe(debounceTime(this.debounceTime))
       .subscribe((val) => this.editorChange.emit(this.rowEditorForm.getRawValue()));
     this.onChanges();
-
   }
 
 

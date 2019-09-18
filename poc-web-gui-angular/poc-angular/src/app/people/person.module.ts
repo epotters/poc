@@ -14,6 +14,9 @@ import {personMeta} from "./person-meta";
 import {META, SERVICE} from "../lib/entity-module/entity-tokens";
 
 
+import {DialogWithListDemoComponent} from "./dialog-with-component/dialog-with-list-demo.component";
+
+
 @NgModule({
   imports: [
     EntityModule,
@@ -25,7 +28,8 @@ import {META, SERVICE} from "../lib/entity-module/entity-tokens";
     PersonEditorComponent,
     PersonEmployersRelationComponent,
     PersonListOfCardsComponent,
-    PersonListNGridComponent
+    PersonListNGridComponent,
+    DialogWithListDemoComponent
   ],
   entryComponents: [
     PersonManagerComponent,
@@ -33,7 +37,8 @@ import {META, SERVICE} from "../lib/entity-module/entity-tokens";
     PersonEditorComponent,
     PersonEmployersRelationComponent,
     PersonListOfCardsComponent,
-    PersonListNGridComponent
+    PersonListNGridComponent,
+    DialogWithListDemoComponent
   ],
   providers: [
     {provide: META, useValue: personMeta},

@@ -28,13 +28,17 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   fieldFilters: FieldFilter[] = [];
   startPage: number = 0;
 
+  filterRowVisible: boolean = true;
+  editorRowVisible: boolean = false;
+
+  fieldSuffix: string = 'Filter';
   contextMenuPosition = {x: '0px', y: '0px'};
 
   @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild('contextMenuTrigger', {static: true}) contextMenuTrigger: MatMenuTrigger;
+  @ViewChild('contextMenuTrigger', {static: false}) contextMenuTrigger: MatMenuTrigger;
 
 
   protected constructor(
@@ -82,6 +86,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       ).subscribe(() => {
       }
     );
+
   }
 
 
@@ -153,8 +158,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   // Editor
 
-  isEditorVisible(): boolean {
-    return (!!this.editorRow && this.editorRow.visible)
+  toggleEditor(): void {
+    this.editorRowVisible = !this.editorRowVisible;
   }
 
   public onEditorChanged($event): void {
@@ -167,10 +172,9 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   // Filters
 
-  isFilterVisible(): boolean {
-    return (!!this.filterRow && this.filterRow.visible)
+  toggleFilter(): void {
+    this.filterRowVisible = !this.filterRowVisible;
   }
-
 
   public onFilterChanged($event): void {
     console.debug('onFilterChanged: Event received');
@@ -179,14 +183,15 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+
   private filtersAsArray(entityFilter: object): FieldFilter[] {
     let filtersArray: FieldFilter[] = [];
     if (this.filterRow) {
       Object.entries(entityFilter).forEach(
         ([key, value]) => {
-          // console.log(key, value);
+          console.log('Filter value: ', key, value);
           if (value && value !== "") {
-            let name: string = key.substring(0, (key.length - 'Filter'.length));
+            let name: string = key.substring(0, (key.length - this.fieldSuffix.length));
             filtersArray.push({
               name: name,
               rawValue: value
@@ -206,7 +211,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.selectEntity(entity);
     }
   }
-
+  // goToManager
 
   onContextMenu(event: MouseEvent, entity: T) {
     console.debug('Context menu for entity ', entity);
@@ -229,6 +234,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
+
+  goToManager() {
+    this.router.navigate([this.meta.namePlural, 'manager']);
+  }
+
 
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];

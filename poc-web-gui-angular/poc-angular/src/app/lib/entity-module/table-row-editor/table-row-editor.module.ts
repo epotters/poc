@@ -20,7 +20,8 @@ import {EntityMaterialModule} from "../common/entity-material.module";
   ],
   exports: [
     EditorRowComponent,
-    FilterRowComponent]
+    FilterRowComponent
+  ]
 })
 export class TableRowEditorModule {
 }

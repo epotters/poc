@@ -8,10 +8,9 @@ import {AuthGuardService} from "../lib/auth-module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
 import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
-import {EmploymentListComponent} from "../employments/employments-list.component";
 
-const meta = organizationMeta;
-const base = '';  // meta.namePlural;
+
+const base = '';  // For eager loading use: organizationMeta.namePlural;
 
 const routes: Routes = [
   {
@@ -24,11 +23,6 @@ const routes: Routes = [
     component: OrganizationEditorComponent,
     canActivate: [AuthGuardService]
   },
-  // {
-  //   path: base + '/:id/employees',
-  //   component: EmploymentListComponent,
-  //   canActivate: [AuthGuardService]
-  // },
   {
     path: base + ':id',
     component: OrganizationEditorComponent,

@@ -1,32 +1,30 @@
 <mat-card class="list-card">
 
-  <mat-card-actions align="end">
+  <mat-card-header>
 
+
+    <mat-card-title>{{meta.displayNamePlural}}</mat-card-title>
+
+    <span class="fill-remaining-space"></span>
+
+
+    <button (click)="toggleFilter()" mat-button>
+      <mat-icon>search</mat-icon>
+      <span>{{this.filterRowVisible ? 'Hide' : 'Show'}} filter</span>
+    </button>
     <button [disabled]="fieldFilters.length == 0" (click)="filterRow.clear()" mat-button>
       <span>Clear filter</span>
     </button>
-    <button *ngIf="!!filterRow && filterRow.visible" (click)="filterRow.hide()" mat-button>
-      <span>Hide filter</span>
-    </button>
-    <button *ngIf="!filterRow || !filterRow.visible" (click)="filterRow.show()" mat-button>
-      <span>Show filter</span>
-    </button>
 
 
-    <button [disabled]="false" (click)="editorRow.clear()" mat-button>
+    <button (click)="toggleEditor()" mat-button>
+      <mat-icon>add</mat-icon>
+      <span>{{this.editorRowVisible ? 'Hide' : 'New entity'}}</span>
+    </button>
+    <button (click)="editorRow.clear()" mat-button>
       <span>Clear editor</span>
     </button>
-    <button *ngIf="!!editorRow && editorRow.visible" (click)="editorRow.hide()" mat-button>
-      <span>Hide editor</span>
-    </button>
-    <button *ngIf="!editorRow || !editorRow.visible" (click)="editorRow.show()" mat-button>
-      <span>Show editor</span>
-    </button>
 
-
-    <button (click)="newEntity()" mat-button>
-      <span>New {{meta.name}}</span>
-    </button>
 
     <button mat-button [matMenuTriggerFor]="batchActionsMenu" #batchActionsMenuTrigger>
       <mat-icon>more_vert</mat-icon>
@@ -34,23 +32,25 @@
 
 
     <mat-menu #batchActionsMenu="matMenu">
-      <button (click)="deleteEntities()" mat-button>
+      <button mat-menu-item (click)="newEntity()">
+        <span>New {{meta.name}}</span>
+      </button>
+      <button mat-menu-item (click)="goToManager()">
+        <span>{{meta.displayName}} Manager</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="deleteEntities()">
         <span>Delete {{meta.namePlural}}</span>
       </button>
-
-      <button (click)="updateEntities()" mat-button>
+      <button mat-menu-item (click)="updateEntities()">
         <span>Update {{meta.namePlural}}</span>
       </button>
     </mat-menu>
 
-  </mat-card-actions>
+  </mat-card-header>
 
 
   <mat-card-content>
-
-    <div *ngIf="false && dataSource.loading$ | async" class="spinner-container">
-      <mat-spinner [diameter]="30"></mat-spinner>
-    </div>
 
     <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultSortField}}"
                matSortDirection="asc" class="mat-elevation-z2" matSortDisableClear>
@@ -64,11 +64,10 @@
 
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
-        <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!isFilterVisible()"></filter-row>
-        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!isEditorVisible()"></editor-row>
+        <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!filterRowVisible"></filter-row>
+        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!editorRowVisible"></editor-row>
       </ng-container>
 
-      <!--      <mat-row (click)="selectEntity(row)" *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>-->
       <mat-row (contextmenu)="onContextMenu($event, row)" (click)="onShiftClick($event, row)"
                *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
 
@@ -88,6 +87,11 @@
 </mat-card>
 
 
+<div *ngIf="dataSource.loading$ | async" class="progress">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<!-- Context menu-->
 <div style="visibility: hidden; position: fixed"
      [style.left]="contextMenuPosition.x"
      [style.top]="contextMenuPosition.y"

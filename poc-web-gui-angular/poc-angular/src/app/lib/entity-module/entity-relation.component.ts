@@ -68,15 +68,12 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   private activateRelatedEntityList(): void {
     this.ownerSubject.asObservable().subscribe(owner => {
-
         if (owner) {
-
           this.prefillQueryParams[this.ownerFieldName + '.id'] = owner.id;
           this.isVisible = true;
-
           this.loadRelatedEntities(owner);
         } else {
-          console.debug('No entity yet');
+          console.debug('No owner entity yet');
         }
       }
     );
