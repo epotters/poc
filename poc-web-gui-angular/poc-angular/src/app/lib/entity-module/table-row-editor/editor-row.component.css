@@ -8,10 +8,6 @@
   width: auto;
 }
 
-.editor-row .editor-cell {
-  flex: 3;
-}
-
 .editor-row .editor-cell:first-of-type {
   padding-left: 24px;
 }
@@ -56,25 +52,3 @@ filter-row .mat-form-field-appearance-fill .mat-form-field-flex {
   background-color: white;
 }
 
-
-/* ID column */
-.editor-row .editor-cell.mat-column-id {
-  flex: 1;
-}
-
-.editor-row .editor-cell.mat-column-firstName {
-  flex: 2;
-}
-
-
-.editor-row .editor-cell.mat-column-prefix {
-  flex: 2;
-}
-
-.editor-row .editor-cell.mat-column-gender {
-  flex: 2;
-}
-
-.editor-row .editor-cell.mat-column-birthDate {
-  flex: 2;
-}

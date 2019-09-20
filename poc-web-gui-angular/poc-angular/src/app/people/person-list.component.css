@@ -1,0 +1,46 @@
+@import url('../lib/entity-module/table-row-editor/editor-row.component.css');
+
+/* Styles for the person-list-component */
+
+[component-style='entity-list'] .mat-column-id,
+[component-style='entity-list'] .editor-cell.mat-column-id {
+  width: 72px;
+  flex: 1;
+  justify-content: flex-end;
+  padding-right: 24px;
+}
+
+[component-style='entity-list'] .editor-cell.mat-column-id div[ng-reflect-ng-switch=text] {
+  margin-right: -24px;
+}
+
+mat-cell.mat-column-id {
+  color: silver;
+}
+
+[component-style='entity-list'] .editor-cell.mat-column-id input {
+  text-align: right;
+  padding-right: 24px;
+}
+
+[component-style='entity-list'] .mat-column-firstName,
+[component-style='entity-list'] .editor-cell.mat-column-firstName {
+  flex: 2;
+}
+
+[component-style='entity-list'] .mat-column-prefix,
+[component-style='entity-list'] .editor-cell.mat-column-prefix {
+  flex: 2;
+}
+
+[component-style='entity-list'] .mat-column-gender,
+[component-style='entity-list'] .editor-cell.mat-column-gender {
+  flex: 2;
+}
+
+[component-style='entity-list'] .mat-column-birthDate,
+[component-style='entity-list'] .editor-cell.mat-column-birthDate {
+  flex: 2;
+}
+
+
