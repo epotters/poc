@@ -25,13 +25,19 @@ export class DialogWithListDemoComponent {
     public componentFactoryResolver: ComponentFactoryResolver,
     public dialog: MatDialog
   ) {
+
+    let columnsToShow: string[] = [];
   }
+
+
 
 
   openDialogWithList() {
     const entityListComponent = new EntityComponent(PersonListComponent, {});
     this.openDialogWithEntityComponent(entityListComponent);
   }
+
+
 
   openDialogWithEditor() {
     const entityEditorComponent = new EntityComponent(PersonEditorComponent, {});

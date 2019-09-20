@@ -89,6 +89,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+  // CRUD
   loadEntitiesPage() {
     this.dataSource.loadEntities(
       this.fieldFilters,
@@ -182,13 +183,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-
   private filtersAsArray(entityFilter: object): FieldFilter[] {
+    console.debug('entityFilter as JSON: ' + JSON.stringify(entityFilter));
     let filtersArray: FieldFilter[] = [];
     if (this.filterRow) {
       Object.entries(entityFilter).forEach(
         ([key, value]) => {
-          console.log('Filter value: ', key, value);
           if (value && value !== "") {
             let name: string = key.substring(0, (key.length - this.fieldSuffix.length));
             filtersArray.push({
@@ -201,6 +201,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     } else {
       console.debug('No tableFilter yet');
     }
+    console.debug('filtersArray as JSON: ' + JSON.stringify(filtersArray));
     return filtersArray;
   }
 
@@ -210,6 +211,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.selectEntity(entity);
     }
   }
+
   // goToManager
 
 
@@ -234,6 +236,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
   }
+
 
   goToManager() {
     this.router.navigate([this.meta.namePlural, 'manager']);

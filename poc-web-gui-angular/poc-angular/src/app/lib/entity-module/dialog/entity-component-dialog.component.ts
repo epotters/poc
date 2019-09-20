@@ -14,8 +14,10 @@ export interface DialogData {
   entity: any;
 }
 
+// Source for component loader: https://angular.io/guide/dynamic-component-loader
+
 @Component({
-  selector: 'dialog-with-person-list',
+  selector: 'entity-component-dialog',
   templateUrl: 'entity-component-dialog.component.html'
 })
 export class EntityComponentDialogComponent<T extends Identifiable> {
@@ -31,7 +33,7 @@ export class EntityComponentDialogComponent<T extends Identifiable> {
     this.loadComponent(this.dialogData.component);
   }
 
-  onNoClick(): void {
+  onCancel(): void {
     this.dialogRef.close();
   }
 
