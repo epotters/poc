@@ -80,7 +80,7 @@ export class PocApiService implements ApiService {
 
 
   public awaitErrors(): Observable<any> {
-    return this.errorsSubject;
+    return this.errorsSubject.asObservable();
   }
 
 
