@@ -49,5 +49,5 @@ export const POC_DATE_FORMATS = {
     monthYearLabel: 'YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'YYYY'
-  },
+  }
 };
