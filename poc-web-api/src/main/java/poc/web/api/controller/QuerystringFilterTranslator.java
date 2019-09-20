@@ -3,6 +3,8 @@ package poc.web.api.controller;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -32,6 +34,9 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   private static final SearchCriteria ALWAYS_TRUE_CRITERIA = new SearchCriteria("1", SearchOperation.EQUALITY, "1");
 
+  private static final Pattern YEAR_PATTERN = Pattern.compile("^((19|2[0-9])[0-9]{2})$");
+  private static final Pattern YEAR_MONTH_PATTERN = Pattern.compile("^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])$");
+
 
   public QuerystringFilterTranslator(Class<T> genericType) {
     this.genericType = genericType;
@@ -58,7 +63,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
           operator = matcher.group(2);
           rawValue = matcher.group(3);
 
-         log.debug("Matched filter: " + fieldName + operator + rawValue);
+          log.debug("Matched filter: " + fieldName + operator + rawValue);
 
           Class<?> fieldType = null;
           try {
@@ -74,9 +79,27 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
             try {
               value = this.mapStringValueToObject(fieldType, rawValue);
             } catch (Exception e) {
-              log.warn("Unable to translate value \"" + rawValue + "\" to " + fieldType.getSimpleName() + " Skipping.");
+              log.warn("Unable to translate value \"" + rawValue + "\" to " + fieldType.getSimpleName() + ". Skipping.");
+            }
+
+
+            if (value == null & fieldType.getSimpleName().equals("LocalDate")) {
+              if (YEAR_PATTERN.matcher(rawValue).matches()) {
+                int year = Integer.parseInt(rawValue);
+                builder.with(fieldName, ">", LocalDate.of(year, 1, 1).minusDays(1));
+                builder.with(fieldName, "<", LocalDate.of(year, 12, 31).plusDays(1));
+              }
+
+              if (YEAR_MONTH_PATTERN.matcher(rawValue).matches()) {
+                int year = Integer.parseInt(rawValue.substring(0, 4));
+                int month = Integer.parseInt(rawValue.substring(5, 2));
+                YearMonth ym = YearMonth.of(year, month);
+                builder.with(fieldName, ">", ym.atDay(1).minusDays(1));
+                builder.with(fieldName, "<", ym.atEndOfMonth().plusDays(1));
+              }
             }
           }
+
 
           if (value != null) {
             builder.with(fieldName, operator, value);
