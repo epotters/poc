@@ -84,6 +84,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   abstract getColumns(): Record<string, FieldEditorConfig>;
 
+
   getEditor(key: string): FieldEditorConfig {
     return (this.editorColumns[key]) ? this.editorColumns[key] : this.defaultFieldEditorConfig;
   }

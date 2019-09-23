@@ -41,7 +41,10 @@ export const employmentMeta: EntityMeta<Employment> = {
           name: 'organization',
           serviceName: 'OrganizationService',
           displayField: 'name',
-          displayOption: (entity) => {return entity['name']}
+          displayOption: (entity) => {
+            console.debug('Displayning organization');
+            return entity['name']
+          }
         }
       }
     },
@@ -52,5 +55,4 @@ export const employmentMeta: EntityMeta<Employment> = {
       label: 'Last Name'
     }
   }
-
 };

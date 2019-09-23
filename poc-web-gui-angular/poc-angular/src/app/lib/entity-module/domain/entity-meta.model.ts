@@ -46,6 +46,7 @@ export interface EntityMeta<T extends Identifiable> {
   defaultSortDirection: 'asc' | 'desc';
 
   displayedColumns: string[];
+  displayedColumnsDialog?: string[];
   filteredColumns: Record<string, FilterConfig>;
 
   columnConfigs: Record<string, ColumnConfig>;

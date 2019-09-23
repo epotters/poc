@@ -16,12 +16,8 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   @Input() entityToLoad?: T;
   @Input() isManaged: boolean = false;
 
-
   title: string;
   entityForm: FormGroup;
-
-  isVisible: boolean = true;
-
   entitySubject = new BehaviorSubject<T>(this.entityToLoad);
 
   constructor(
@@ -56,7 +52,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   prefillFromQueryString() {
     this.route.queryParams.subscribe(params => {
       for (let key in params) {
-        if (this.entityForm.get(key)) {
+        if (params.hasOwnProperty(key) && this.entityForm.get(key)) {
           this.entityForm.get(key).setValue(params[key]);
         }
       }
@@ -72,9 +68,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     }
   }
 
-  getIdFromPath(): number | null {
-    return parseInt(this.route.snapshot.paramMap.get('id'));
-  }
 
   loadNewEntity(entity: T) {
     if (entity !== null) {
@@ -85,9 +78,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     }
   }
 
-  clearEditor() {
-    this.entityForm.reset();
-  }
 
   loadEntity(entityId) {
     this.service.get(entityId).pipe(
@@ -134,15 +124,14 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     }
   }
 
-  deleteEntity() {
 
+  deleteEntity() {
     if (this.isNew()) {
       console.info('This entity is not yet created and therfor cannot be deleted');
       return;
     }
 
     let entity = this.entityForm.getRawValue();
-
     const dialogRef = this.openConfirmationDialog('Confirm delete',
       'Are you sure you want to delete this ' + this.meta.displayName + '?');
 
@@ -168,6 +157,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     );
   }
 
+
   revert() {
     let entityId = this.entityForm.getRawValue().id;
     if (entityId) {
@@ -177,24 +167,22 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     }
   }
 
+
+  clearEditor() {
+    this.entityForm.reset();
+  }
+
   isNew(): boolean {
     let entity = this.entityForm.getRawValue();
     return (!entity || !entity.id);
   }
 
-  hasValidChanges(): boolean {
-    return this.entityForm.dirty && this.entityForm.valid;
-  }
 
   hasErrorOfType(fieldName: string, validationType: string): boolean {
     const formControl = this.entityForm.get(fieldName);
     return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
   }
 
-  onValueChanged(fieldName: string, newValue: string): void {
-    console.debug('Field ' + fieldName + ' changed to ' + newValue);
-    this.entityForm.patchValue({[fieldName]: newValue});
-  }
 
   // TODO: Create a gemeric version based upon EntityMeta
   // Override this method
@@ -216,16 +204,13 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
 
+  getIdFromPath(): number | null {
+    return parseInt(this.route.snapshot.paramMap.get('id'));
+  }
+
   goToList() {
-    this.router.navigate([this.meta.apiBase]);
+    this.router.navigate([this.meta.apiBase]).then(() => {
+      console.info('Navigated to list view');
+    });
   }
-
-  public show(): void {
-    this.isVisible = true;
-  }
-
-  public hide(): void {
-    this.isVisible = false;
-  }
-
 }

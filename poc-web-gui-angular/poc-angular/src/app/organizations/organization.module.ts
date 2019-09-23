@@ -35,6 +35,9 @@ import {META, SERVICE} from "../lib/entity-module/entity-tokens";
     OrganizationListNGridComponent,
     OrganizationListOfCardsComponent
   ],
+  exports: [
+    OrganizationListComponent
+  ],
   providers: [
     {provide: META, useValue: organizationMeta},
     {provide: SERVICE, useExisting: OrganizationService}

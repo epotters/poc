@@ -13,13 +13,14 @@ const base = '';
 
 const routes: Routes = [
   {
+    path: base + 'manager',
+    component: PersonManagerComponent
+    // canActivate: [AuthGuardService]
+  },
+  {
     path: base,
     component: PersonListComponent,
     canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'dialog-with-component',
-    component: DialogWithListDemoComponent
   },
   {
     path: base + 'new',
@@ -29,11 +30,6 @@ const routes: Routes = [
   {
     path: base + ':id',
     component: PersonEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'manager',
-    component: PersonManagerComponent,
     canActivate: [AuthGuardService]
   },
   {

@@ -152,13 +152,12 @@ TODO: Move to entity-list.component.css
   white-space: nowrap;
 }
 
-/* debug for alignment */
+
 .mat-cell,
 .mat-header-cell,
 .mat-footer-cell,
 .editor-cell,
 .filter-cell {
-  /*border-right: 1px solid red;*/
   flex: 3;
 }
 

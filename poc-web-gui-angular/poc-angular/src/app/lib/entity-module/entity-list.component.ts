@@ -31,8 +31,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   filterRowVisible: boolean = true;
   editorRowVisible: boolean = false;
 
+  displayedColumns: string[];
+
   fieldSuffix: string = 'Filter';
   contextMenuPosition = {x: '0px', y: '0px'};
+
+  editorRowPosition = {x: 'auto', y: 'auto'};
+
+  hiddenRow: HTMLElement;
 
   @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
@@ -49,6 +55,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
+    this.displayedColumns = meta.displayedColumns;
   }
 
 
@@ -120,6 +127,22 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
+  saveEntity(): void {
+    console.debug('Save this ' + this.meta.displayName);
+    // Validate
+    // Save
+
+    // Hide the editor
+    this.toggleEditor();
+
+    // Show the row
+    if (this.hiddenRow) {
+      // this.hiddenRow.style.display = 'flex';
+      this.hiddenRow.style.opacity = '1';
+
+      this.hiddenRow = null;
+    }
+  }
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
@@ -170,6 +193,27 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
+  public loadEntityInEditor(entity: T, targetElement: Element) {
+    if (!this.editorRowVisible) {
+      this.toggleEditor();
+    }
+
+    this.hiddenRow = (targetElement.parentElement as HTMLElement);
+    // this.hiddenRow.style.display = 'none';
+
+    this.hiddenRow.style.opacity = '0.5';
+
+    // console.debug(targetElement.parentElement);
+    //
+    // this.editorRowPosition.x =  targetElement.parentElement.clientLeft + 'px';
+    // this.editorRowPosition.y =  targetElement.parentElement.clientTop + 'px';
+    // console.debug(this.editorRowPosition);
+
+
+    this.editorRow.loadEntity(entity);
+  }
+
+
   // Filters
 
   toggleFilter(): void {
@@ -212,16 +256,20 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
-  // goToManager
-
 
   onContextMenu(event: MouseEvent, entity: T) {
     console.debug('Context menu for entity ', entity);
-
     event.preventDefault();
+    const target: EventTarget = event.target || event.srcElement || event.currentTarget;
+    const targetElement: Element = (target as Element);
+    console.debug(targetElement);
+
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
-    this.contextMenuTrigger.menuData = {'entity': entity};
+    this.contextMenuTrigger.menuData = {
+      entity: entity,
+      targetElement: targetElement
+    };
     this.contextMenuTrigger.openMenu();
   }
 

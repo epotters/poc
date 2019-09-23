@@ -3,14 +3,14 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {EntityComponentEntryPointDirective} from "./entity-component-entrypoint.directive";
 
 
-export class EntityComponent {
+export class EntityComponentDescriptor {
   constructor(public component: Type<any>, public data: any) {
   }
 }
 
 export interface DialogData {
   componentFactoryResolver: ComponentFactoryResolver;
-  component: EntityComponent;
+  componentDescriptor: EntityComponentDescriptor;
   entity: any;
 }
 
@@ -27,21 +27,23 @@ export class EntityComponentDialogComponent<T extends Identifiable> {
   constructor(
     public dialogRef: MatDialogRef<EntityComponentDialogComponent<T>>,
     @Inject(MAT_DIALOG_DATA) public dialogData: DialogData) {
+
+    console.debug(dialogData);
   }
 
   ngOnInit() {
-    this.loadComponent(this.dialogData.component);
+    this.loadComponent(this.dialogData.componentDescriptor);
   }
 
   onCancel(): void {
     this.dialogRef.close();
   }
 
-  loadComponent(entityComponent: EntityComponent) {
-    const componentFactory = this.dialogData.componentFactoryResolver.resolveComponentFactory(entityComponent.component);
+  loadComponent(componentDescriptor: EntityComponentDescriptor) {
+    const componentFactory = this.dialogData.componentFactoryResolver.resolveComponentFactory(componentDescriptor.component);
     this.componentEntrypoint.viewContainerRef.clear();
     const componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
-    (<EntityComponent>componentRef.instance).data = entityComponent.data;
+    (<EntityComponentDescriptor>componentRef.instance).data = componentDescriptor.data;
   }
 
 }

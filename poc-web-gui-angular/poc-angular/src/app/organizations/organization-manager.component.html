@@ -1,11 +1,14 @@
-<h1>{{meta.displayName}} manager</h1>
+<h1>{{title}}</h1>
+
+<mat-toolbar>
+  <button (click)="openDialogWithList()" mat-button>List</button>
+  <button (click)="openDialogWithEditor()" mat-button>Editor</button>
+</mat-toolbar>
 
 <organization-editor-card
   [isManaged]="true"
   [entityToLoad]="selectedEntity">
 </organization-editor-card>
-
-<hr />
 
 <organization-list-card
   [isManaged]="true"

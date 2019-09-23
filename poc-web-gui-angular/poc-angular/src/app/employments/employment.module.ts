@@ -17,7 +17,7 @@ import {employmentMeta} from "./employment-meta";
   ],
   declarations: [
     EmploymentListComponent,
-    EmploymentEditorComponent
+    EmploymentEditorComponent,
   ],
   entryComponents: [
     EmploymentListComponent,

@@ -23,6 +23,7 @@ export const personMeta: EntityMeta<Person> = {
   defaultSortDirection: 'asc',
 
   displayedColumns: ['id', 'firstName', 'prefix', 'lastName', 'gender', 'birthDate', 'birthPlace'],
+  displayedColumnsDialog: ['id', 'firstName', 'prefix', 'lastName', 'gender'],
 
   filteredColumns: {
     id: {type: "text"},
@@ -90,4 +91,5 @@ export const personMeta: EntityMeta<Person> = {
     ]
   }
 };
+
 

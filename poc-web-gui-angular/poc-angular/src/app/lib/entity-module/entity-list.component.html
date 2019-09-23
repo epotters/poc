@@ -1,3 +1,7 @@
+<div *ngIf="dataSource.loading$ | async" class="progress">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
 <mat-card class="list-card" component-style="entity-list">
 
   <mat-card-header>
@@ -65,11 +69,12 @@
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
         <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!filterRowVisible"></filter-row>
-        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!editorRowVisible"></editor-row>
+        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!editorRowVisible" (keydown.enter)="saveEntity()"></editor-row>
       </ng-container>
 
       <mat-row (contextmenu)="onContextMenu($event, row)" (click)="onShiftClick($event, row)"
                *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
+
 
       <ng-container matColumnDef="paginator">
         <mat-footer-cell *matFooterCellDef>
@@ -79,6 +84,7 @@
           </mat-paginator>
         </mat-footer-cell>
       </ng-container>
+
       <mat-footer-row *matFooterRowDef="['paginator']"></mat-footer-row>
 
     </mat-table>
@@ -86,10 +92,6 @@
   </mat-card-content>
 </mat-card>
 
-
-<div *ngIf="dataSource.loading$ | async" class="progress">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-</div>
 
 <!-- Context menu-->
 <div style="visibility: hidden; position: fixed"
@@ -99,7 +101,8 @@
      #contextMenuTrigger="matMenuTrigger">
 </div>
 <mat-menu #contextMenu="matMenu">
-  <ng-template matMenuContent let-entity="entity">
+  <ng-template matMenuContent let-entity="entity" let-target="targetElement">
+    <button mat-menu-item (click)="loadEntityInEditor(entity, target)">Edit here</button>
     <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
     <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>
   </ng-template>

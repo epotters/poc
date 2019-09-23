@@ -5,9 +5,7 @@ export class Constants {
   public static timezone = 'Europe/Amsterdam';
   public static locale = 'NL-NL';
 
-
   public static applicationDisplayName = 'Proof of concept in Angular';
-
   public static applicationBasePath = '/poc/';
 
 

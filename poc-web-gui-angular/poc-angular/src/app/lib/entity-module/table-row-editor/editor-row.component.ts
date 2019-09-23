@@ -40,11 +40,27 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
   }
 
 
+  public loadEntity(entity: T) {
+
+    let editorEntity: any = {};
+    Object.entries(entity).forEach(
+      ([key, value]) => {
+        if (this.rowEditorForm.contains(key + this.keySuffix)) {
+          editorEntity[key + this.keySuffix] = entity[key];
+        } else {
+          console.debug('Skipping property "' + key + '" because there is no control for it');
+        }
+      }
+    );
+    this.rowEditorForm.setValue(editorEntity);
+  }
+
+
   onChanges(): void {
-    this.rowEditorForm.valueChanges.subscribe(entityFilter => {
+    this.rowEditorForm.valueChanges.subscribe(entity => {
       console.debug('Editor form changed');
-      console.debug(entityFilter);
-      this.debouncer.next(entityFilter);
+      console.debug(entity);
+      this.debouncer.next(entity);
     });
   }
 }

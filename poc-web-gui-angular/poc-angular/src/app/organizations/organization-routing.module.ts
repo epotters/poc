@@ -14,6 +14,16 @@ const base = '';  // For eager loading use: organizationMeta.namePlural;
 
 const routes: Routes = [
   {
+    path: base + 'manager',
+    component: OrganizationManagerComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: base + 'manager/:id',
+    component: OrganizationManagerComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
     path: base,
     component: OrganizationListComponent,
     canActivate: [AuthGuardService]
@@ -26,16 +36,6 @@ const routes: Routes = [
   {
     path: base + ':id',
     component: OrganizationEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'manager',
-    component: OrganizationManagerComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'manager/:id',
-    component: OrganizationManagerComponent,
     canActivate: [AuthGuardService]
   },
   {

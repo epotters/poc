@@ -52,3 +52,18 @@ filter-row .mat-form-field-appearance-fill .mat-form-field-flex {
   background-color: white;
 }
 
+.editor-row .mat-form-field-flex {
+  align-items: center;
+}
+
+.editor-row .mat-form-field-suffix {
+  margin-right: 6px;
+  padding-top: 9px;
+}
+
+
+.editor-row .mat-select-arrow-wrapper {
+  margin-right: 6px;
+  padding-top: 9px;
+}
+

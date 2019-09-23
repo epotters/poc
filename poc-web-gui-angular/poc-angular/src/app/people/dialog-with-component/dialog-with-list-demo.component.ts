@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {
-  EntityComponent,
+  EntityComponentDescriptor,
   EntityComponentDialogComponent
 } from "../../lib/entity-module/dialog/entity-component-dialog.component";
 import {PersonListComponent} from "../person-list.component";
@@ -25,32 +25,28 @@ export class DialogWithListDemoComponent {
     public componentFactoryResolver: ComponentFactoryResolver,
     public dialog: MatDialog
   ) {
-
-    let columnsToShow: string[] = [];
+    console.debug('Creating "' + this.title + '"');
   }
-
-
 
 
   openDialogWithList() {
-    const entityListComponent = new EntityComponent(PersonListComponent, {});
-    this.openDialogWithEntityComponent(entityListComponent);
+    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent, {});
+    this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }
-
 
 
   openDialogWithEditor() {
-    const entityEditorComponent = new EntityComponent(PersonEditorComponent, {});
-    this.openDialogWithEntityComponent(entityEditorComponent);
+    const entityEditorComponentDescriptor = new EntityComponentDescriptor(PersonEditorComponent, {});
+    this.openDialogWithEntityComponent(entityEditorComponentDescriptor);
   }
 
 
-  openDialogWithEntityComponent(componentToShow: EntityComponent): void {
+  openDialogWithEntityComponent(componentToShow: EntityComponentDescriptor): void {
     const dialogRef = this.dialog.open(EntityComponentDialogComponent, {
       width: '600px',
       data: {
         componentFactoryResolver: this.componentFactoryResolver,
-        component: componentToShow,
+        componentDescriptor: componentToShow,
         entity: this.entity
       }
     });
