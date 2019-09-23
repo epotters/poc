@@ -37,7 +37,6 @@ public class Person implements Serializable {
   @Column(columnDefinition = "DATE")
   private LocalDate birthDate;
   private String birthPlace;
-
   private String birthCountry;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -61,5 +60,13 @@ public class Person implements Serializable {
     setGender(gender);
     setBirthDate(birthDate);
   }
+
+
+//  @OneToMany(
+//      mappedBy = "employee",
+//      fetch = FetchType.LAZY,
+//      cascade = CascadeType.ALL
+//  )
+//  private List<Employment> employers;
 
 }

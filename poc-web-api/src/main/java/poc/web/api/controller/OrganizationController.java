@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +27,13 @@ import poc.core.repository.OrganizationRepository;
 @Slf4j
 @RestController
 @RequestMapping("/api/organizations")
+@Transactional(propagation = Propagation.REQUIRED)
 public class OrganizationController {
 
   private final OrganizationRepository organizationRepository;
   private final EmploymentRepository employmentRepository;
 
-
   private QuerystringFilterTranslator<Organization> filterTanslator = new QuerystringFilterTranslator<>(Organization.class);
-
 
   @Autowired
   OrganizationController(
@@ -79,6 +80,7 @@ public class OrganizationController {
   @DeleteMapping("/{id}")
   public void deleteOrganization(@PathVariable final Long id) {
     final Organization organization = organizationRepository.getOne(id);
+    employmentRepository.deleteByEmployerId(organization.getId());
     organizationRepository.delete(organization);
   }
 

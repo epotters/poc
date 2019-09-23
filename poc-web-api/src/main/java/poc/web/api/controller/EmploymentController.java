@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,25 +19,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import poc.core.domain.Employment;
-import poc.core.domain.Organization;
 import poc.core.repository.EmploymentRepository;
-import poc.core.repository.OrganizationRepository;
 
 
 @Slf4j
 @RestController
 @RequestMapping("/api/employments")
+@Transactional(propagation = Propagation.REQUIRED)
 public class EmploymentController {
 
   private final EmploymentRepository employmentRepository;
-
-
   private QuerystringFilterTranslator<Employment> employmentFilterTanslator = new QuerystringFilterTranslator<>(Employment.class);
-
 
   @Autowired
   EmploymentController(
-      OrganizationRepository organizationRepository,
       EmploymentRepository employmentRepository
   ) {
     this.employmentRepository = employmentRepository;

@@ -34,4 +34,11 @@ public class Organization implements Serializable {
   )
   private List<Establishment> establishments;
 
+//  @OneToMany(
+//      mappedBy = "employer",
+//      fetch = FetchType.LAZY,
+//      cascade = CascadeType.ALL
+//  )
+//  private List<Employment> employees;
+
 }

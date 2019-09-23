@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,7 @@ import poc.core.repository.PersonRepository;
 @Slf4j
 @RestController
 @RequestMapping("/api/people")
+@Transactional(propagation = Propagation.REQUIRED)
 public class PersonController {
 
   private final int batchPageSize = 100;
@@ -131,6 +134,7 @@ public class PersonController {
   @DeleteMapping("/{id}")
   public void deletePerson(@PathVariable final Long id) {
     final Person person = personRepository.getOne(id);
+    employmentRepository.deleteByEmployeeId(person.getId());
     personRepository.delete(person);
   }
 

@@ -14,9 +14,12 @@ import poc.core.domain.Employment;
 @Repository
 public interface EmploymentRepository extends JpaRepository<Employment, Long>, Serializable, JpaSpecificationExecutor<Employment> {
 
-
   List<Employment> findByEmployerId(Long employerId, Pageable pageable);
 
   List<Employment> findByEmployeeId(Long employeeId, Pageable pageable);
+
+  void deleteByEmployerId(Long employerId);
+
+  void deleteByEmployeeId(Long employeeId);
 
 }
