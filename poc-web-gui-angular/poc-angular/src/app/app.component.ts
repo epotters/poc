@@ -1,4 +1,4 @@
-import {AfterContentInit, Component} from '@angular/core';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {MatSnackBar} from "@angular/material";
 
@@ -17,7 +17,7 @@ import {Animations} from "./app-animations";
     Animations.fadeOut
   ]
 })
-export class AppComponent implements AfterContentInit {
+export class AppComponent implements OnInit, AfterContentInit {
 
   Constants: any = Constants;
   visible: boolean = false;
@@ -32,20 +32,23 @@ export class AppComponent implements AfterContentInit {
     this.titleService.setTitle(Constants.applicationDisplayName);
   }
 
-  ngAfterContentInit() {
-
+  ngOnInit() {
     this.apiService.awaitErrors().subscribe((error) => {
-        console.log('Received error with status ' + error.status);
-        this.openSnackBar(error, 'Close');
+        if (error != null) {
+          console.log('Received error with status ' + error.status);
+          this.openSnackBar(error, 'Close');
+        }
       }
     );
+  }
 
+  ngAfterContentInit() {
     this.visible = true;
   }
 
   openSnackBar(message: string, action?: string) {
     this.snackBar.open(message, action, {
-      duration: 2000,
+      duration: 2000
     });
   }
 
