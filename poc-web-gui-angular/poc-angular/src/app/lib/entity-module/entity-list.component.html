@@ -6,11 +6,9 @@
 
   <mat-card-header>
 
-
     <mat-card-title>{{meta.displayNamePlural}}</mat-card-title>
 
     <span class="fill-remaining-space"></span>
-
 
     <button (click)="toggleFilter()" mat-button>
       <mat-icon>search</mat-icon>
@@ -68,12 +66,25 @@
 
       <ng-container *matHeaderRowDef="meta.displayedColumns">
         <mat-header-row></mat-header-row>
-        <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!filterRowVisible"></filter-row>
-        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!editorRowVisible" (keydown.enter)="saveEntity()"></editor-row>
+
+        <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!filterRowVisible"
+                    [class.editor-inline]="true"></filter-row>
+
+        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!editorRowVisible"
+                    (keydown.enter)="saveEntity()"
+                    (keydown.escape)="stopEditing()"
+                    [class.editor-inline]="true"
+                    [class.editor-moved]="editorViewState.rowElement"
+                    [style.transform]="editorViewState.transform"
+        >
+        </editor-row>
+
+        <!--                    [style.transform]="editorViewState.transform"-->
+
       </ng-container>
 
-      <mat-row (contextmenu)="onContextMenu($event, row)" (click)="onShiftClick($event, row)"
-               *matRowDef="let row; columns: meta.displayedColumns;"></mat-row>
+      <mat-row (contextmenu)="onContextMenu($event, row, idx)" (click)="onShiftClick($event, row)"
+               *matRowDef="let row; columns: meta.displayedColumns; let idx = index;"></mat-row>
 
 
       <ng-container matColumnDef="paginator">
@@ -101,8 +112,9 @@
      #contextMenuTrigger="matMenuTrigger">
 </div>
 <mat-menu #contextMenu="matMenu">
-  <ng-template matMenuContent let-entity="entity" let-target="targetElement">
-    <button mat-menu-item (click)="loadEntityInEditor(entity, target)">Edit here</button>
+  <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex">
+    <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Start editing here</button>
+    <button mat-menu-item (click)="stopEditing()" *ngIf="isEditing()">Stop editing</button>
     <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
     <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>
   </ng-template>

@@ -71,4 +71,16 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
     return this.totalSubject.asObservable();
   }
 
+  public updateEntity(updatedEntity: T, idx: number): void {
+    if (updatedEntity.id) {
+      let entities: T[] = this.entitiesSubject.getValue();
+      Object.entries(updatedEntity).forEach(
+        ([key, value]) => {
+          entities[idx][key] = value;
+        }
+      );
+      this.entitiesSubject.next(entities);
+    }
+  }
+
 }

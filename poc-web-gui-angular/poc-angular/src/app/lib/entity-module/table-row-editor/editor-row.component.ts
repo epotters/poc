@@ -41,18 +41,21 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
 
   public loadEntity(entity: T) {
-
-    let editorEntity: any = {};
-    Object.entries(entity).forEach(
-      ([key, value]) => {
-        if (this.rowEditorForm.contains(key + this.keySuffix)) {
-          editorEntity[key + this.keySuffix] = entity[key];
-        } else {
-          console.debug('Skipping property "' + key + '" because there is no control for it');
+    if (entity) {
+      let editorEntity: any = {};
+      Object.entries(entity).forEach(
+        ([key, value]) => {
+          if (this.rowEditorForm.contains(key + this.keySuffix)) {
+            editorEntity[key + this.keySuffix] = entity[key];
+          } else {
+            console.debug('Skipping property "' + key + '" because there is no control for it');
+          }
         }
-      }
-    );
-    this.rowEditorForm.setValue(editorEntity);
+      );
+      this.rowEditorForm.setValue(editorEntity);
+    } else {
+      this.rowEditorForm.reset();
+    }
   }
 
 

@@ -1,4 +1,4 @@
-<div class="editor-row no-label-space" [formGroup]="rowEditorForm">
+<div class="editor-row" [formGroup]="rowEditorForm">
   <div *ngFor="let key of meta.displayedColumns" class="editor-cell mat-column-{{key}}">
     <div [ngSwitch]="getEditor(key).type">
 

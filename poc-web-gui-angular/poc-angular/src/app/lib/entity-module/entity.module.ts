@@ -1,4 +1,6 @@
 import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+
 import {EntityCommonModule} from "./common/entity-common.module";
 import {EntityMaterialModule} from "./common/entity-material.module";
 
@@ -11,6 +13,7 @@ import {EntityComponentStyleOverrideDirective} from "./entity-component-style-ov
 
 @NgModule({
   imports: [
+    CommonModule,
     EntityCommonModule,
     EntityMaterialModule,
     TableRowEditorModule,

@@ -36,9 +36,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   fieldSuffix: string = 'Filter';
   contextMenuPosition = {x: '0px', y: '0px'};
 
-  editorRowPosition = {x: 'auto', y: 'auto'};
+  editorViewState: any = {
+    rowElement: null,
+    rowIndex: null,
+    transform: 'translateY(0)'
+  };
 
-  hiddenRow: HTMLElement;
+
+  rowHeight: number = 31;
 
   @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
@@ -127,22 +132,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
-  saveEntity(): void {
-    console.debug('Save this ' + this.meta.displayName);
-    // Validate
-    // Save
-
-    // Hide the editor
-    this.toggleEditor();
-
-    // Show the row
-    if (this.hiddenRow) {
-      // this.hiddenRow.style.display = 'flex';
-      this.hiddenRow.style.opacity = '1';
-
-      this.hiddenRow = null;
-    }
-  }
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
@@ -193,24 +182,54 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  public loadEntityInEditor(entity: T, targetElement: Element) {
-    if (!this.editorRowVisible) {
-      this.toggleEditor();
+  saveEntity(): void {
+    console.debug('Save this ' + this.meta.displayName.toLowerCase());
+
+    // Validate
+
+    // Update the list
+    this.dataSource.updateEntity(this.editorRow.rowEditorForm.getRawValue(), this.editorViewState.rowIndex);
+
+    // Save
+
+    // Reset the editor
+    this.stopEditing();
+  }
+
+  startEditing(entity: T, targetElement: Element, idx: number) {
+
+    console.debug('Are we currently editing? ' + this.isEditing());
+    console.debug(this.editorRow.rowEditorForm.getRawValue());
+
+    if (this.isEditing()) {
+      this.stopEditing();
     }
 
-    this.hiddenRow = (targetElement.parentElement as HTMLElement);
-    // this.hiddenRow.style.display = 'none';
-
-    this.hiddenRow.style.opacity = '0.5';
-
-    // console.debug(targetElement.parentElement);
-    //
-    // this.editorRowPosition.x =  targetElement.parentElement.clientLeft + 'px';
-    // this.editorRowPosition.y =  targetElement.parentElement.clientTop + 'px';
-    // console.debug(this.editorRowPosition);
-
+    this.editorRowVisible = true;
+    this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
+    this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
+    this.editorViewState.rowElement.style.opacity = '0.5';
 
     this.editorRow.loadEntity(entity);
+  }
+
+  stopEditing() {
+    this.editorRowVisible = false;
+    if (this.editorViewState.rowElement) {
+      this.editorViewState.rowElement.style.opacity = '1';
+      this.editorViewState.transform = 'translateY(0)';
+      this.editorViewState.rowElement = null;
+    }
+    this.editorRow.loadEntity(null);
+  }
+
+  isEditing(): boolean {
+    if (this.editorViewState.rowElement) {
+      if (this.editorRow.rowEditorForm.getRawValue() && this.editorRow.rowEditorForm.getRawValue()['id']) {
+        return this.editorRow.rowEditorForm.getRawValue()['id'] != null;
+      }
+    }
+    return false;
   }
 
 
@@ -257,18 +276,21 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  onContextMenu(event: MouseEvent, entity: T) {
+  onContextMenu(event: MouseEvent, entity: T, idx: number) {
     console.debug('Context menu for entity ', entity);
     event.preventDefault();
     const target: EventTarget = event.target || event.srcElement || event.currentTarget;
     const targetElement: Element = (target as Element);
     console.debug(targetElement);
 
+    console.debug('idx: ' + idx);
+
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
     this.contextMenuTrigger.menuData = {
       entity: entity,
-      targetElement: targetElement
+      targetElement: targetElement,
+      dataIndex: idx
     };
     this.contextMenuTrigger.openMenu();
   }
