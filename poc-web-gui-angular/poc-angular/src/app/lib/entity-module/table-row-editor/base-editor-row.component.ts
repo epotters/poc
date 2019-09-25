@@ -1,4 +1,4 @@
-import {AfterContentInit, EventEmitter, Injector, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {AfterContentInit, EventEmitter, Injector, OnChanges, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Subject} from "rxjs";
 import {debounceTime} from "rxjs/operators";
@@ -6,19 +6,20 @@ import {EntityDataSource} from "../entity-data-source";
 import {EntityMeta, FieldEditorConfig} from "../domain/entity-meta.model";
 
 
-export abstract class BaseEditorRowComponent<T extends Identifiable> implements OnInit, OnChanges, AfterContentInit {
+export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
 
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
   editorColumns: Record<string, FieldEditorConfig>;
+  rowEditorForm: FormGroup;
+
   dataSources: Record<string, any> = {};
   keySuffix: string;
   debounceTime: number = 300;
-
+  autoCompletePageSize: number = 20;
   defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
 
   debouncer: Subject<string> = new Subject<string>();
-  rowEditorForm: FormGroup;
 
   visible: boolean = true;
 
@@ -30,25 +31,20 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     console.debug('Constructing BaseEditorRowComponent (keySuffix: ' + this.keySuffix + ')');
   }
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.debug('ngOnChanges called for BaseEditorRowComponent');
-    console.debug(changes);
-  }
-
-
-  ngOnInit() {
-    console.debug('ngOnInit called for BaseEditorRowComponent');
-  }
-
   ngAfterContentInit() {
     console.debug('ngAfterViewInit called for BaseEditorRowComponent');
     this.editorColumns = this.getColumns();
     this.prepareAutoCompletes();
     this.rowEditorForm = this.buildFormGroup();
+    this.activateAutoCompletes();
     this.debouncer.pipe(debounceTime(this.debounceTime))
-      .subscribe((val) => this.editorChange.emit(this.rowEditorForm.getRawValue()));
+      .subscribe((val) => this.editorChange.emit(this.getOutputValue()));
     this.onChanges();
+  }
+
+
+  getOutputValue() {
+    return this.rowEditorForm.getRawValue();
   }
 
 
@@ -66,8 +62,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   onChanges(): void {
     this.rowEditorForm.valueChanges.subscribe(entityData => {
-      console.debug('Editor form changed');
-      console.debug(entityData);
       this.debouncer.next(entityData);
     });
   }
@@ -96,6 +90,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
         if (editorConfig.relatedEntity) {
           if (!this.dataSources[editorConfig.relatedEntity.name]) {
             let service = this.injector.get(editorConfig.relatedEntity.serviceName);
+            console.debug(service);
             this.dataSources[editorConfig.relatedEntity.name] = new EntityDataSource<T>(service.meta, service);
           }
         }
@@ -103,6 +98,34 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     }
     console.debug('this.dataSources');
     console.debug(this.dataSources);
+  }
+
+
+  private activateAutoCompletes(): void {
+    for (let key in this.editorColumns) {
+      if (this.editorColumns.hasOwnProperty(key)) {
+        let editorConfig: FieldEditorConfig = this.getEditor(key);
+        if (editorConfig.type == 'autocomplete') {
+          this.activateAutocomplete(key, editorConfig);
+        }
+      }
+    }
+  }
+
+  private activateAutocomplete(fieldName: string, editorConfig: FieldEditorConfig): void {
+    this.rowEditorForm
+      .get(fieldName)
+      .valueChanges
+      .subscribe((value) => {
+        console.debug('About to load new related entities for autocomplete. Filter ' + value);
+        this.dataSources[editorConfig.relatedEntity.name].loadEntities(
+          [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
+          editorConfig.relatedEntity.displayField,
+          'asc',
+          0,
+          this.autoCompletePageSize
+        );
+      });
   }
 
 }

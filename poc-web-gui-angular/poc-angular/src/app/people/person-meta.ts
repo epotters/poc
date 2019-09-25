@@ -25,22 +25,15 @@ export const personMeta: EntityMeta<Person> = {
   displayedColumns: ['id', 'firstName', 'prefix', 'lastName', 'gender', 'birthDate', 'birthPlace'],
   displayedColumnsDialog: ['id', 'firstName', 'prefix', 'lastName', 'gender'],
 
-  filteredColumns: {
-    id: {type: "text"},
-    firstName: {type: "text"},
-    prefix: {type: "none"},
-    lastName: {type: "text"},
-    gender: {
-      type: "select",
-      options: genderOptions
-    },
-    birthDate: {type: "date"},
-    birthPlace: {type: "text"}
-  },
-
   columnConfigs: {
     id: {
-      label: 'ID'
+      label: 'ID',
+      editor: {
+        type: 'none'
+      },
+      filter: {
+        type: 'text'
+      }
     },
     firstName: {
       label: 'First name'

@@ -4,14 +4,6 @@
 
     <span class="fill-remaining-space"></span>
 
-<!--    <button-->
-<!--      [routerLink]="['/' + meta.apiBase + '/', 'new']"-->
-<!--      [queryParams]="prefillQueryParams"-->
-<!--      [routerLinkActive]="'active'"-->
-<!--      mat-icon-button>-->
-<!--      <mat-icon>add</mat-icon>-->
-<!--    </button>-->
-
     <button *ngIf="formVisible" (click) = "hideForm()" mat-icon-button>
       <mat-icon>close</mat-icon>
     </button>

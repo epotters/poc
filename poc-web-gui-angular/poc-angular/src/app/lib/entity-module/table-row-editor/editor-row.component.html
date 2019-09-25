@@ -1,9 +1,8 @@
 <div class="editor-row" [formGroup]="rowEditorForm">
   <div *ngFor="let key of meta.displayedColumns" class="editor-cell mat-column-{{key}}">
-    <div [ngSwitch]="getEditor(key).type">
+    <div class="editor-type-switch" [ngSwitch]="getEditor(key).type">
 
       <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
-        <mat-label></mat-label>
         <input matInput formControlName="{{key + keySuffix}}" readonly>
       </mat-form-field>
 

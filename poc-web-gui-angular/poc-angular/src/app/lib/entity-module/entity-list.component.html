@@ -2,6 +2,8 @@
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 
+<editor-actions (actionResult)="onActionResult($event)"></editor-actions>
+
 <mat-card class="list-card" component-style="entity-list">
 
   <mat-card-header>
@@ -79,8 +81,6 @@
         >
         </editor-row>
 
-        <!--                    [style.transform]="editorViewState.transform"-->
-
       </ng-container>
 
       <mat-row (contextmenu)="onContextMenu($event, row, idx)" (click)="onShiftClick($event, row)"
@@ -113,7 +113,9 @@
 </div>
 <mat-menu #contextMenu="matMenu">
   <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex">
-    <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Start editing here</button>
+    <button mat-menu-item (click)="startEditing(entity, target, idx)">{{isEditing() ? 'Continue' : 'Start'}} editing
+      here
+    </button>
     <button mat-menu-item (click)="stopEditing()" *ngIf="isEditing()">Stop editing</button>
     <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
     <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>

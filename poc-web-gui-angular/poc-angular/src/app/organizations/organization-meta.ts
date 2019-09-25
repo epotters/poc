@@ -19,14 +19,16 @@ export const organizationMeta: EntityMeta<Organization> = {
   defaultSortDirection: 'asc',
 
   displayedColumns: ['id', 'name'],
-  filteredColumns: {
-    id: {type: 'text'},
-    name: {type: 'text'}
-  },
 
   columnConfigs: {
     id: {
       label: 'ID',
+      editor: {
+        type: 'none'
+      },
+      filter: {
+        type: 'text'
+      }
     },
     name: {
       label: 'Name'

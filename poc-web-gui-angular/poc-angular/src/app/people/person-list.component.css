@@ -10,7 +10,7 @@
   padding-right: 24px;
 }
 
-[component-style='entity-list'] .editor-cell.mat-column-id div[ng-reflect-ng-switch=text] {
+[component-style='entity-list'] .editor-cell.mat-column-id .editor-type-switch {
   margin-right: -24px;
 }
 

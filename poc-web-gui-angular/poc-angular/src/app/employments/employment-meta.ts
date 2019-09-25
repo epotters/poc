@@ -19,16 +19,17 @@ export const employmentMeta: EntityMeta<Employment> = {
   defaultSortDirection: 'asc',
 
   displayedColumns: ['id', 'employer', 'employee.firstName', 'employee.lastName'],
-  filteredColumns: {
-    id: {type: 'text'},
-    'employer': {type: 'none'},
-    'employee.firstName': {type: 'none'},
-    'employee.lastName': {type: 'none'}
-  },
+
 
   columnConfigs: {
     id: {
       label: 'ID',
+      editor: {
+        type: 'none'
+      },
+      filter: {
+        type: 'text'
+      }
     },
     employer: {
       label: 'Employer',
@@ -42,8 +43,8 @@ export const employmentMeta: EntityMeta<Employment> = {
           serviceName: 'OrganizationService',
           displayField: 'name',
           displayOption: (entity) => {
-            console.debug('Displayning organization');
-            return entity['name']
+            console.debug('Displaying organization');
+            return (entity) ? entity['name'] : null;
           }
         }
       }

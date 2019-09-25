@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {FieldFilter} from "./domain/filter.model";
-import {EntityMeta} from "./domain/entity-meta.model";
+import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
 import {ApiService} from "./domain/api-service.model";
 import {Moment} from "moment";
@@ -107,24 +107,38 @@ export class EntityService<T extends Identifiable> {
 
   private buildFilterParams(filters?: FieldFilter[]): string {
     let filterParams: string = '';
-    let exactMatchOperator = ':';
-    if (filters && filters.length > 0) {
-      for (let filter of filters) {
-        let operator: string = '~';
-        let value = filter.rawValue;
-        if (this.meta.filteredColumns[filter.name].type == 'select') {
-          operator = exactMatchOperator;
-        } else if (this.meta.filteredColumns[filter.name].type == 'date') {
-          value = (<Moment>(<any>filter.rawValue)).format(this.dateFormat);
-          operator = exactMatchOperator;
-        } else if (filter.name === 'id') {
-          operator = exactMatchOperator;
-        }
-        filterParams += filter.name + operator + value + ',';
-      }
-      filterParams = (filterParams.length > 0) ? filterParams.substr(0, filterParams.length - 1) : '';
+
+    if (!filters || filters.length == 0) {
+      return filterParams;
     }
+    let exactMatchOperator = ':';
+
+    for (let filter of filters) {
+      let operator: string = '~';
+      let value: string = filter.rawValue;
+      let fieldType: string = this.getFieldType(filter.name);
+      if (fieldType == 'select') {
+        operator = exactMatchOperator;
+      } else if (fieldType == 'date') {
+        value = (<Moment>(<any>filter.rawValue)).format(this.dateFormat);
+        operator = exactMatchOperator;
+      } else if (filter.name === 'id') {
+        operator = exactMatchOperator;
+      }
+      filterParams += filter.name + operator + value + ',';
+    }
+    filterParams = (filterParams.length > 0) ? filterParams.substr(0, filterParams.length - 1) : '';
+
     return filterParams;
+  }
+
+  private getFieldType(fieldName: string): string {
+    let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
+
+    if (!columnConfig.editor) {
+      return 'text';
+    }
+    return (columnConfig.editor.type ? columnConfig.editor.type : columnConfig.filter.type);
   }
 
 

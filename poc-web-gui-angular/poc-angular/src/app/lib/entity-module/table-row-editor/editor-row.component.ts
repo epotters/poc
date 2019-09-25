@@ -14,7 +14,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
-  keySuffix = 'Editor';
+  keySuffix = ''; // 'Editor';
   visible = false;
 
   constructor(
@@ -23,6 +23,33 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     injector: Injector) {
     super(meta, formBuilder, injector);
     console.debug('Constructing EditorRowComponent for type ' + meta.displayName);
+  }
+
+
+  public loadEntity(entity: T) {
+    if (entity) {
+      let editorEntity: Partial<T> = this.prepareEntity(entity);
+      this.rowEditorForm.setValue(editorEntity);
+      this.rowEditorForm.markAsPristine();
+    } else {
+      this.rowEditorForm.reset();
+    }
+  }
+
+
+  // Only include fields that are in the form and add key suffix to field names
+  private prepareEntity(entity: T): Partial<T> {
+    let editorEntity: Partial<T> = {};
+    Object.entries(entity).forEach(
+      ([key, value]) => {
+        if (this.rowEditorForm.contains(key + this.keySuffix)) {
+          editorEntity[key + this.keySuffix] = entity[key];
+        } else {
+          console.debug('Skipping property "' + key + '" because there is no control for it');
+        }
+      }
+    );
+    return editorEntity;
   }
 
 
@@ -39,32 +66,5 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     return editorColumns;
   }
 
-
-  public loadEntity(entity: T) {
-    if (entity) {
-      let editorEntity: any = {};
-      Object.entries(entity).forEach(
-        ([key, value]) => {
-          if (this.rowEditorForm.contains(key + this.keySuffix)) {
-            editorEntity[key + this.keySuffix] = entity[key];
-          } else {
-            console.debug('Skipping property "' + key + '" because there is no control for it');
-          }
-        }
-      );
-      this.rowEditorForm.setValue(editorEntity);
-    } else {
-      this.rowEditorForm.reset();
-    }
-  }
-
-
-  onChanges(): void {
-    this.rowEditorForm.valueChanges.subscribe(entity => {
-      console.debug('Editor form changed');
-      console.debug(entity);
-      this.debouncer.next(entity);
-    });
-  }
 }
 

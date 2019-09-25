@@ -3,6 +3,7 @@ import {FormBuilder} from "@angular/forms";
 import {EntityMeta, FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {META} from "../entity-tokens";
+import {FieldFilter} from "../domain/filter.model";
 
 
 @Component({
@@ -14,7 +15,7 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
-  keySuffix: string = 'Filter';
+  keySuffix: string = ''; // 'Filter';
 
   constructor(
     @Inject(META) public meta: EntityMeta<any>,
@@ -24,8 +25,37 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     console.debug('Constructing FilterRowComponent for type ' + meta.displayName);
   }
 
+
   getColumns(): Record<string, FieldEditorConfig> {
-    return this.meta.filteredColumns;
+    let editorColumns: Record<string, FieldEditorConfig> = {};
+    for (let idx in this.meta.displayedColumns) {
+      let key: string = this.meta.displayedColumns[idx];
+      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
+        editorColumns[key] = this.meta.columnConfigs[key].filter;
+      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
+        editorColumns[key] = this.meta.columnConfigs[key].editor;
+      } else {
+        editorColumns[key] = this.defaultFieldEditorConfig;
+      }
+    }
+    return editorColumns;
+  }
+
+  getOutputValue(): FieldFilter[] {
+    let entityFilter: any = this.rowEditorForm.getRawValue();
+    let fieldFilters: FieldFilter[] = [];
+    Object.entries(entityFilter).forEach(
+      ([key, value]) => {
+        if (value && value !== '') {
+          let name: string = key.substring(0, (key.length - this.keySuffix.length));
+          fieldFilters.push({
+            name: name,
+            rawValue: (value as string)
+          })
+        }
+      }
+    );
+    return fieldFilters;
   }
 
 }

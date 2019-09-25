@@ -12,7 +12,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   private entitiesSubject: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
   private totalSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
 
@@ -70,17 +70,4 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   public awaitTotal(): Observable<number> {
     return this.totalSubject.asObservable();
   }
-
-  public updateEntity(updatedEntity: T, idx: number): void {
-    if (updatedEntity.id) {
-      let entities: T[] = this.entitiesSubject.getValue();
-      Object.entries(updatedEntity).forEach(
-        ([key, value]) => {
-          entities[idx][key] = value;
-        }
-      );
-      this.entitiesSubject.next(entities);
-    }
-  }
-
 }

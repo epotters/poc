@@ -3,6 +3,7 @@ export interface ColumnConfig {
   helpText?: string;
   renderer?: (entity: any, value: string) => string;
   editor?: FieldEditorConfig;
+  filter?: FieldEditorConfig;
 }
 
 export interface FieldEditorConfig {
@@ -11,23 +12,20 @@ export interface FieldEditorConfig {
   relatedEntity?: RelatedEntity;
 }
 
-export interface RelatedEntity {
-  name: string;
-  serviceName: string;
-  displayField: string;
-
-  displayOption?(entity?: any): string | undefined;
-}
-
-export class FilterConfig {
-  type: 'none' | 'text' | 'select' | 'date' = "none";
-  options?: SelectOption[];
-}
-
 export interface SelectOption {
   label: string,
   value: string
 }
+
+export interface RelatedEntity {
+  name: string;
+  serviceName: string;
+  displayField: string;
+  displayOption?(entity?: any): string | undefined;
+}
+
+
+
 
 export interface EntityMeta<T extends Identifiable> {
 
@@ -47,13 +45,10 @@ export interface EntityMeta<T extends Identifiable> {
 
   displayedColumns: string[];
   displayedColumnsDialog?: string[];
-  filteredColumns: Record<string, FilterConfig>;
 
   columnConfigs: Record<string, ColumnConfig>;
-
   relatedEntities?: string[];
 
   // Form
   validationMessages?: any;
-
 }

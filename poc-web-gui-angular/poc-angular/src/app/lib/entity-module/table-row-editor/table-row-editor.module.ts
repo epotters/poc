@@ -3,6 +3,7 @@ import {EditorRowComponent} from "./editor-row.component";
 import {FilterRowComponent} from "./filter-row.component";
 import {EntityCommonModule} from "../common/entity-common.module";
 import {EntityMaterialModule} from "../common/entity-material.module";
+import {EntityEditorActionsComponent} from "./entity-editor-actions.component";
 
 
 @NgModule({
@@ -12,15 +13,18 @@ import {EntityMaterialModule} from "../common/entity-material.module";
   ],
   declarations: [
     EditorRowComponent,
-    FilterRowComponent
+    FilterRowComponent,
+    EntityEditorActionsComponent
   ],
   entryComponents: [
     EditorRowComponent,
-    FilterRowComponent
+    FilterRowComponent,
+    EntityEditorActionsComponent
   ],
   exports: [
     EditorRowComponent,
-    FilterRowComponent
+    FilterRowComponent,
+    EntityEditorActionsComponent
   ]
 })
 export class TableRowEditorModule {

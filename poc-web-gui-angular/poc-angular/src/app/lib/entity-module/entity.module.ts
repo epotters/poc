@@ -8,7 +8,7 @@ import {TableRowEditorModule} from "./table-row-editor/table-row-editor.module";
 import {DialogModule} from "./dialog/dialog.module";
 
 import {NGridModule} from "../../core/n-grid/n-grid.module";
-import {EntityComponentStyleOverrideDirective} from "./entity-component-style-override.directive";
+import {EntityComponentStyleOverrideDirective} from "./common/entity-component-style-override.directive";
 
 
 @NgModule({

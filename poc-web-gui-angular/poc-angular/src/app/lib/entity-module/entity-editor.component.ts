@@ -18,7 +18,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   title: string;
   entityForm: FormGroup;
-  entitySubject = new BehaviorSubject<T>(this.entityToLoad);
+  entitySubject = new BehaviorSubject<T>(this.entityToLoad); // Used by the relations submodules
 
   constructor(
     public meta: EntityMeta<T>,
@@ -49,6 +49,14 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.entityToLoad.currentValue &&
+      changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue) {
+      console.debug('EntityToLoad has changed. Loading...');
+      this.loadNewEntity(changes.entityToLoad.currentValue);
+    }
+  }
+
   prefillFromQueryString() {
     this.route.queryParams.subscribe(params => {
       for (let key in params) {
@@ -57,15 +65,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         }
       }
     });
-  }
-
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.entityToLoad.currentValue &&
-      changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue) {
-      console.debug('EntityToLoad has changed. Loading...');
-      this.loadNewEntity(changes.entityToLoad.currentValue);
-    }
   }
 
 
@@ -82,11 +81,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   loadEntity(entityId) {
     this.service.get(entityId).pipe(
       tap(entity => {
-        console.log('About to patch the entity loaded');
-        console.debug(entity);
+        console.debug('About to patch the entity loaded');
+        // console.debug(entity);
         this.entityForm.patchValue(entity);
         this.entitySubject.next(entity);
-        console.log(this.meta.displayName + ' loaded');
+        console.info(this.meta.displayName + ' loaded in the editor');
       })
     ).subscribe();
   }
@@ -210,7 +209,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   goToList() {
     this.router.navigate([this.meta.apiBase]).then(() => {
-      console.info('Navigated to list view');
+      console.info('Navigated from the editor to list view');
     });
   }
 }

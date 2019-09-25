@@ -39,5 +39,4 @@ export class PersonEmployersRelationComponent extends EntityRelationComponent<Em
     this.sortDirection = 'asc';
 
   }
-
 }

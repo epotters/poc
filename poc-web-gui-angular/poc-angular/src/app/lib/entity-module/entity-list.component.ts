@@ -16,7 +16,19 @@ import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
 import {EditorRowComponent} from "./table-row-editor/editor-row.component";
 import {FilterRowComponent} from "./table-row-editor/filter-row.component";
+import {ActionResult, EntityEditorActionsComponent} from "./table-row-editor/entity-editor-actions.component";
 
+
+export interface EditorViewState {
+  rowElement: HTMLElement,
+  rowIndex: number,
+  transform: string
+}
+
+export interface Position {
+  x: string,
+  y: string
+}
 
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
@@ -33,10 +45,9 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   displayedColumns: string[];
 
-  fieldSuffix: string = 'Filter';
-  contextMenuPosition = {x: '0px', y: '0px'};
+  contextMenuPosition: Position = {x: '0px', y: '0px'};
 
-  editorViewState: any = {
+  editorViewState: EditorViewState = {
     rowElement: null,
     rowIndex: null,
     transform: 'translateY(0)'
@@ -44,6 +55,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   rowHeight: number = 31;
+
+  @ViewChild(EntityEditorActionsComponent, {static: false}) editorActions: EntityEditorActionsComponent<T>;
 
   @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
@@ -86,6 +99,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         startWith({}),
         delay(0), // Workarond for "Expression has changed" error
         switchMap(() => {
+          this.stopEditing();
           this.loadEntitiesPage();
           return this.dataSource.awaitEntities();
         }),
@@ -132,39 +146,37 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
+  saveEntity(): void {
+    console.debug('Save this ' + this.meta.displayName.toLowerCase());
+
+    // Validate
+
+    // Save the changes
+    if (this.editorActions) {
+      this.editorActions.saveEntity(this.editorRow.rowEditorForm);
+    }
+  }
+
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
+    if (this.editorActions) {
+      this.editorActions.deleteEntity(entity);
+    }
   }
 
 
   updateEntities() {
-    const dialogRef = this.openConfirmationDialog('Confirm batch update',
-      'Are you sure you want to update all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
-    dialogRef.afterClosed().subscribe(
-      data => {
-        if (data.confirmed) {
-          console.info('User confirmed batch update action, so ik will be executed');
-        } else {
-          console.info('User canceled update action');
-        }
-      }
-    );
+    if (this.editorActions) {
+      this.editorActions.updateEntities();
+    }
   }
 
 
   deleteEntities() {
-    const dialogRef = this.openConfirmationDialog('Confirm deletion',
-      'Are you sure you want to delete all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
-    dialogRef.afterClosed().subscribe(
-      data => {
-        if (data.confirmed) {
-          console.info('User confirmed batch delete action, so it will be executed');
-        } else {
-          console.info('User canceled batch delete action');
-        }
-      }
-    );
+    if (this.editorActions) {
+      this.editorActions.deleteEntities();
+    }
   }
 
 
@@ -179,24 +191,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     console.debug($event);
     // Validate the entity
     // Save the entity
+
+    let patchEnity: Partial<T> = $event;
   }
 
 
-  saveEntity(): void {
-    console.debug('Save this ' + this.meta.displayName.toLowerCase());
-
-    // Validate
-
-    // Update the list
-    this.dataSource.updateEntity(this.editorRow.rowEditorForm.getRawValue(), this.editorViewState.rowIndex);
-
-    // Save
-
-    // Reset the editor
-    this.stopEditing();
-  }
-
-  startEditing(entity: T, targetElement: Element, idx: number) {
+  public startEditing(entity: T, targetElement: Element, idx: number) {
 
     console.debug('Are we currently editing? ' + this.isEditing());
     console.debug(this.editorRow.rowEditorForm.getRawValue());
@@ -213,15 +213,40 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     this.editorRow.loadEntity(entity);
   }
 
-  stopEditing() {
+  public stopEditing() {
+    this.checkForUnsavedChanges();
+    this.hideAndResetEditorView();
+    this.editorRow.loadEntity(null);
+  }
+
+  private checkForUnsavedChanges(): void {
+    if (this.editorRow.rowEditorForm.dirty) {
+      console.debug('The editor row has unsaved changes');
+      const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
+      dialogRef.afterClosed().subscribe(
+        data => {
+          if (data.confirmed) {
+            console.info('User confirmed het wants to save changes');
+            // TODO: Save the changes
+          } else {
+            console.info('User chose to discard changes in the editor');
+          }
+        }
+      );
+    } else {
+      console.debug('The editor row doesn\'t have unsaved changes');
+    }
+  }
+
+  private hideAndResetEditorView() {
     this.editorRowVisible = false;
     if (this.editorViewState.rowElement) {
       this.editorViewState.rowElement.style.opacity = '1';
       this.editorViewState.transform = 'translateY(0)';
       this.editorViewState.rowElement = null;
     }
-    this.editorRow.loadEntity(null);
   }
+
 
   isEditing(): boolean {
     if (this.editorViewState.rowElement) {
@@ -240,34 +265,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   public onFilterChanged($event): void {
-    console.debug('onFilterChanged: Event received');
-    console.debug($event);
-    this.fieldFilters = this.filtersAsArray($event);
+    this.fieldFilters = $event;
   }
-
-
-  private filtersAsArray(entityFilter: object): FieldFilter[] {
-    console.debug('entityFilter as JSON: ' + JSON.stringify(entityFilter));
-    let filtersArray: FieldFilter[] = [];
-    if (this.filterRow) {
-      Object.entries(entityFilter).forEach(
-        ([key, value]) => {
-          if (value && value !== "") {
-            let name: string = key.substring(0, (key.length - this.fieldSuffix.length));
-            filtersArray.push({
-              name: name,
-              rawValue: value
-            })
-          }
-        }
-      );
-    } else {
-      console.debug('No tableFilter yet');
-    }
-    console.debug('filtersArray as JSON: ' + JSON.stringify(filtersArray));
-    return filtersArray;
-  }
-
 
   onShiftClick(event: MouseEvent, entity: T) {
     if (event.shiftKey) {
@@ -293,6 +292,17 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       dataIndex: idx
     };
     this.contextMenuTrigger.openMenu();
+  }
+
+
+  onActionResult(actionResult: ActionResult<T>) {
+    if (actionResult.action == 'save') {
+      this.editorRow.rowEditorForm.markAsPristine();
+      this.stopEditing();
+    } else if (actionResult.action == 'delete') {
+      console.debug('Entity deleted');
+    }
+    this.loadEntitiesPage();
   }
 
 

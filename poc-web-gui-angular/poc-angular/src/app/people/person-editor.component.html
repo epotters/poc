@@ -61,7 +61,7 @@
           <mat-select formControlName="gender" name="gender" required>
             <mat-option [value]="">-</mat-option>
             <mat-option [value]="option.value" [id]="'gender-option-' + option.value.toLowerCase()"
-                        *ngFor="let option of meta.filteredColumns['gender'].options">{{option.label}}</mat-option>
+                        *ngFor="let option of meta.columnConfigs['gender'].editor.options">{{option.label}}</mat-option>
           </mat-select>
         </mat-form-field>
 
