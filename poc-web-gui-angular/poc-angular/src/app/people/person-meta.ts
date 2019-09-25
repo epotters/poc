@@ -6,6 +6,8 @@ const genderOptions: SelectOption[] = [
   {value: 'FEMALE', label: 'Female'}
 ];
 
+const personNamePattern: string = '[a-zA-Z -]*';
+
 export const personMeta: EntityMeta<Person> = {
 
   // General
@@ -36,13 +38,32 @@ export const personMeta: EntityMeta<Person> = {
       }
     },
     firstName: {
-      label: 'First name'
+      label: 'First name',
+      validators: [
+
+        {type: 'required', message: 'First name is required'},
+        {
+          type: 'pattern',
+          argument: personNamePattern,
+          message: 'First name can only contain characters, dashes and spaces'
+        }
+
+      ]
     },
     prefix: {
       label: 'Prefix'
     },
     lastName: {
-      label: 'Last name'
+      label: 'Last name',
+      validators: [
+        {type: 'required', message: 'Last name is required'},
+        {
+          type: 'pattern',
+          message: 'Last name can only contain characters, dashes and spaces',
+          argument: personNamePattern
+        },
+        {type: 'maxLength', message: 'Last name must not be longer than 60 characters', argument: 60}
+      ]
     },
     gender: {
       label: 'M/F',
@@ -68,20 +89,6 @@ export const personMeta: EntityMeta<Person> = {
     birthPlace: {
       label: 'Birth place'
     }
-  },
-
-
-  // Editor
-  validationMessages: {
-    'firstName': [
-      {type: 'required', message: 'First name is required'},
-      {type: 'pattern', message: 'First name can only contain characters, dashes and spaces'}
-    ],
-    'lastName': [
-      {type: 'required', message: 'Last name is required'},
-      {type: 'pattern', message: 'Last name can only contain characters, dashes and spaces'},
-      {type: 'maxlength', message: 'Last name must not be longer than 60 characters'}
-    ]
   }
 };
 

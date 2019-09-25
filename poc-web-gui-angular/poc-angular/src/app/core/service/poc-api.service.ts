@@ -25,8 +25,7 @@ export class PocApiService implements ApiService {
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
 
-    console.debug('Inside PocApiService.get()');
-    console.debug('URL to get: ' + `${environment.apiUrl}${path}`);
+    console.debug('PocApiService - URL to get: ' + `${environment.apiUrl}${path}`);
 
     return this.http.get(
       `${environment.apiUrl}${path}`,
@@ -59,8 +58,7 @@ export class PocApiService implements ApiService {
 
   delete(path): Observable<any> {
 
-    console.debug('Inside PocApiService.delete()');
-    console.debug('Resource to delete: ' + `${environment.apiUrl}${path}`);
+    console.debug('PocApiService.delete() - Resource to delete: ' + `${environment.apiUrl}${path}`);
 
     return this.http.delete(
       `${environment.apiUrl}${path}`,

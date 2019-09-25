@@ -4,6 +4,7 @@ export interface ColumnConfig {
   renderer?: (entity: any, value: string) => string;
   editor?: FieldEditorConfig;
   filter?: FieldEditorConfig;
+  validators?: ValidatorDescriptor[]
 }
 
 export interface FieldEditorConfig {
@@ -21,10 +22,15 @@ export interface RelatedEntity {
   name: string;
   serviceName: string;
   displayField: string;
+
   displayOption?(entity?: any): string | undefined;
 }
 
-
+export interface ValidatorDescriptor {
+  type: 'required' | 'pattern' | 'maxLength',
+  argument?: any,
+  message: string
+}
 
 
 export interface EntityMeta<T extends Identifiable> {
@@ -49,6 +55,4 @@ export interface EntityMeta<T extends Identifiable> {
   columnConfigs: Record<string, ColumnConfig>;
   relatedEntities?: string[];
 
-  // Form
-  validationMessages?: any;
 }

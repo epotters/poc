@@ -45,15 +45,13 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
           msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
         } else {
           msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
-          this.actionResult.emit({action: 'save', result: 'ok', entity: savedEntity});
         }
-        console.info(msg);
+        this.actionResult.emit({action: 'save', result: 'ok', entity: savedEntity});
 
+        console.info(msg);
         this.snackbar.open(msg, null, {
           duration: this.snackbarDuration
         });
-
-        console.log('savedEntity: ', savedEntity);
 
         entityForm.patchValue(savedEntity);
         entityForm.markAsPristine();
@@ -68,7 +66,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
   deleteEntity(entity: T) {
 
-
     if ((!entity || !entity.id)) {
       let msg: string = 'This entity is either not available or not yet created and therfore cannot be deleted';
       console.info(msg);
@@ -77,7 +74,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       });
       return;
     }
-
 
     const dialogRef = this.openConfirmationDialog('Confirm delete',
       'Are you sure you want to delete this ' + this.meta.displayName + '?');

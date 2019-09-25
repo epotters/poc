@@ -2,7 +2,7 @@
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 
-<editor-actions (actionResult)="onActionResult($event)"></editor-actions>
+<editor-actions (actionResult)="afterAction($event)"></editor-actions>
 
 <mat-card class="list-card" component-style="entity-list">
 
@@ -72,7 +72,7 @@
         <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!filterRowVisible"
                     [class.editor-inline]="true"></filter-row>
 
-        <editor-row (editorChange)="onEditorChanged($event)" [hidden]="!editorRowVisible"
+        <editor-row [hidden]="!editorRowVisible"
                     (keydown.enter)="saveEntity()"
                     (keydown.escape)="stopEditing()"
                     [class.editor-inline]="true"
@@ -113,9 +113,7 @@
 </div>
 <mat-menu #contextMenu="matMenu">
   <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex">
-    <button mat-menu-item (click)="startEditing(entity, target, idx)">{{isEditing() ? 'Continue' : 'Start'}} editing
-      here
-    </button>
+    <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Start editing here</button>
     <button mat-menu-item (click)="stopEditing()" *ngIf="isEditing()">Stop editing</button>
     <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
     <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>

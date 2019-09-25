@@ -26,7 +26,7 @@
         <mat-form-field>
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstName" name="firstName" required>
-          <mat-error *ngFor="let validation of meta.validationMessages.firstName">
+          <mat-error *ngFor="let validation of meta.columnConfigs['firstName']validators">
             <mat-error class="error-message" *ngIf="hasErrorOfType('firstName', validation.type)">
               {{validation.message}}
             </mat-error>
@@ -45,7 +45,7 @@
           <mat-label>Last Name</mat-label>
           <input matInput formControlName="lastName" name="lastName" required>
           <mat-hint>Enter your family name here</mat-hint>
-          <mat-error *ngFor="let validation of meta.validationMessages.lastName">
+          <mat-error *ngFor="let validation of meta.columnConfigs['lastName'].validators">
             <mat-error class="error-message" *ngIf="hasErrorOfType('lastName', validation.type)">
               {{validation.message}}
             </mat-error>

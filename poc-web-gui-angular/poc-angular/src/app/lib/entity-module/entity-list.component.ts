@@ -132,7 +132,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (this.isManaged) {
       this.entitySelector.emit(entity);
     } else {
-      // this.router.navigate([this.meta.apiBase + '/' + entity.id]);
       this.router.navigate([this.meta.namePlural + '/' + entity.id]);
     }
   }
@@ -146,17 +145,21 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
+
+  toggleEditor(): void {
+    if (this.editorRowVisible) {
+      this.stopEditing();
+    } else {
+      this.editorRowVisible = true;
+    }
+  }
+
   saveEntity(): void {
     console.debug('Save this ' + this.meta.displayName.toLowerCase());
-
-    // Validate
-
-    // Save the changes
     if (this.editorActions) {
       this.editorActions.saveEntity(this.editorRow.rowEditorForm);
     }
   }
-
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
@@ -172,7 +175,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
-
   deleteEntities() {
     if (this.editorActions) {
       this.editorActions.deleteEntities();
@@ -182,18 +184,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   // Editor
 
-  toggleEditor(): void {
-    this.editorRowVisible = !this.editorRowVisible;
-  }
 
-  public onEditorChanged($event): void {
-    console.debug('onEditorChanged: Event received');
-    console.debug($event);
-    // Validate the entity
-    // Save the entity
-
-    let patchEnity: Partial<T> = $event;
-  }
 
 
   public startEditing(entity: T, targetElement: Element, idx: number) {
@@ -213,10 +204,9 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     this.editorRow.loadEntity(entity);
   }
 
+
   public stopEditing() {
     this.checkForUnsavedChanges();
-    this.hideAndResetEditorView();
-    this.editorRow.loadEntity(null);
   }
 
   private checkForUnsavedChanges(): void {
@@ -226,8 +216,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       dialogRef.afterClosed().subscribe(
         data => {
           if (data.confirmed) {
-            console.info('User confirmed het wants to save changes');
-            // TODO: Save the changes
+            console.info('User confirmed he wants to save changes to ' + this.meta.displayName.toLowerCase());
+            this.saveEntity();
           } else {
             console.info('User chose to discard changes in the editor');
           }
@@ -235,16 +225,20 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       );
     } else {
       console.debug('The editor row doesn\'t have unsaved changes');
+
+      this.hideAndResetEditorView();
+      this.editorRow.loadEntity(null);
     }
   }
+
 
   private hideAndResetEditorView() {
     this.editorRowVisible = false;
     if (this.editorViewState.rowElement) {
       this.editorViewState.rowElement.style.opacity = '1';
-      this.editorViewState.transform = 'translateY(0)';
       this.editorViewState.rowElement = null;
     }
+    this.editorViewState.transform = 'translateY(0)';
   }
 
 
@@ -277,15 +271,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   onContextMenu(event: MouseEvent, entity: T, idx: number) {
     console.debug('Context menu for entity ', entity);
-    event.preventDefault();
-    const target: EventTarget = event.target || event.srcElement || event.currentTarget;
-    const targetElement: Element = (target as Element);
-    console.debug(targetElement);
-
     console.debug('idx: ' + idx);
+    event.preventDefault();
+    const target: EventTarget = event.target || event.currentTarget;
+    const targetElement: Element = (target as Element);
 
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
       entity: entity,
       targetElement: targetElement,
@@ -295,7 +286,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
 
-  onActionResult(actionResult: ActionResult<T>) {
+  afterAction(actionResult: ActionResult<T>) {
     if (actionResult.action == 'save') {
       this.editorRow.rowEditorForm.markAsPristine();
       this.stopEditing();
