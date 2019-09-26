@@ -176,6 +176,10 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     return (!entity || !entity.id);
   }
 
+  getValidators(fieldName: string) {
+    return this.meta.columnConfigs['firstName'].validators;
+  }
+
 
   hasErrorOfType(fieldName: string, validationType: string): boolean {
     const formControl = this.entityForm.get(fieldName);

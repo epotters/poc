@@ -17,13 +17,13 @@ export class EntityService<T extends Identifiable> {
     public meta: EntityMeta<T>,
     public apiService: ApiService
   ) {
-    console.debug('Start constructing entity service for type ' + this.meta.displayName);
+    console.debug('Start constructing entity service for type', this.meta.displayName);
   }
 
 
   public list(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
-    console.log('@EntityService.list - this.buildFilterParams(filters): ', this.buildFilterParams(filters));
+    console.debug('@EntityService <', this.meta.displayName, '>.list - this.buildFilterParams(filters): ', this.buildFilterParams(filters));
 
     let params: HttpParams = new HttpParams()
       .set('filters', this.buildFilterParams(filters))
@@ -31,7 +31,7 @@ export class EntityService<T extends Identifiable> {
       .set('page', pageNumber.toString())
       .set('size', pageSize.toString());
 
-    console.log('@EntityService.list - HttpParams: ', params);
+    console.debug('@EntityService <', this.meta.displayName, '>.list - HttpParams:', params);
 
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(map((response: Response) => {
@@ -57,7 +57,7 @@ export class EntityService<T extends Identifiable> {
       .set('page', pageNumber.toString())
       .set('size', pageSize.toString());
 
-    console.log('Params: ', params);
+    console.debug('Params for', this.meta.displayName.toLowerCase(), 'request:', params);
 
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(map((response: Response) => {
@@ -72,11 +72,10 @@ export class EntityService<T extends Identifiable> {
 
 
   get(id: string): Observable<any> {
-    console.debug('Get ' + this.meta.name + ' called for id ' + id);
+    console.debug('Get', this.meta.name, 'called for id', id);
     return this.apiService.get(this.meta.apiBase + id)
       .pipe(map((response: Response) => {
-        console.debug('Response on the next line');
-        console.debug(response);
+        console.debug('@EntityService <', this.meta.displayName, '>.get - Response: ', response);
         return response;
       }));
   }
@@ -85,8 +84,7 @@ export class EntityService<T extends Identifiable> {
   save(entity: T): Observable<T> {
 
     // Update existing
-    console.debug('entity.service.save:');
-    console.debug(entity);
+    console.debug('entity.service.save:', entity);
 
     if (entity.id) {
       return this.apiService.post(this.meta.apiBase + entity.id, entity)
@@ -100,7 +98,7 @@ export class EntityService<T extends Identifiable> {
   }
 
   destroy(id: string) {
-    console.debug('About to destroy ' + this.meta.displayName.toLowerCase() + ' with id ' + id);
+    console.debug('About to destroy', this.meta.displayName.toLowerCase(), 'with id', id);
     return this.apiService.delete(this.meta.apiBase + id);
   }
 
@@ -124,6 +122,8 @@ export class EntityService<T extends Identifiable> {
         operator = exactMatchOperator;
       } else if (filter.name === 'id') {
         operator = exactMatchOperator;
+      } else if (fieldType === 'autocomplete') {
+        operator = exactMatchOperator;
       }
       filterParams += filter.name + operator + value + ',';
     }
@@ -134,7 +134,6 @@ export class EntityService<T extends Identifiable> {
 
   private getFieldType(fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
-
     if (!columnConfig.editor) {
       return 'text';
     }
@@ -151,6 +150,5 @@ export class EntityService<T extends Identifiable> {
 
     return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + relatedNamePlural, params);
   }
-
 
 }

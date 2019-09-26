@@ -12,7 +12,7 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="toggleFilter()" mat-button>
+    <button (click)="toggleFilter()" matTooltip="Show a filter row" mat-button>
       <mat-icon>search</mat-icon>
       <span>{{this.filterRowVisible ? 'Hide' : 'Show'}} filter</span>
     </button>
@@ -21,7 +21,7 @@
     </button>
 
 
-    <button (click)="toggleEditor()" mat-button>
+    <button (click)="toggleEditor()" matTooltip="Create a new {{meta.displayName.toLowerCase()}}" mat-button>
       <mat-icon>add</mat-icon>
       <span>{{this.editorRowVisible ? 'Hide' : 'New entity'}}</span>
     </button>
@@ -113,7 +113,8 @@
 </div>
 <mat-menu #contextMenu="matMenu">
   <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex">
-    <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Start editing here</button>
+    <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Edit
+      this {{meta.displayName.toLowerCase()}}</button>
     <button mat-menu-item (click)="stopEditing()" *ngIf="isEditing()">Stop editing</button>
     <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
     <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>

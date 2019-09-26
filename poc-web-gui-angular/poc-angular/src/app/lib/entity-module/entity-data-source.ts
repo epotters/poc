@@ -20,16 +20,16 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
     public meta: EntityMeta<T>,
     public service: EntityService<T>
   ) {
-    console.debug('Creating EntityDataSource for type ' + this.meta.displayName);
+    console.debug('Creating EntityDataSource for type', this.meta.displayName);
   }
 
   public connect(collectionViewer: CollectionViewer): Observable<T[]> {
-    console.debug('Connecting the ' + this.meta.displayNamePlural.toLowerCase() + ' datasource...');
+    console.debug('Connecting the', this.meta.displayNamePlural.toLowerCase(), 'datasource...');
     return this.entitiesSubject.asObservable();
   }
 
   public disconnect(collectionViewer: CollectionViewer): void {
-    console.debug('Disconnecting the ' + this.meta.displayNamePlural.toLowerCase() + ' datasource...');
+    console.debug('Disconnecting the', this.meta.displayNamePlural.toLowerCase(), 'datasource...');
     this.entitiesSubject.complete();
     this.totalSubject.complete();
     this.loadingSubject.complete();
@@ -42,9 +42,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
     pageNumber: number,
     pageSize: number): void {
 
-    console.debug('Datasource loading ' + this.meta.displayNamePlural.toLowerCase() + '...');
-
-
+    console.debug('Datasource loading', this.meta.displayNamePlural.toLowerCase(), '...');
     this.loadingSubject.next(true);
 
     this.service.list(filter, sortField, sortDirection, pageNumber, pageSize)
@@ -54,12 +52,14 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
       )
       .subscribe(entityResult => {
 
-        console.debug('Datasource entityResult:');
-        console.debug(entityResult);
+        console.debug('Datasource', this.meta.displayNamePlural.toLowerCase(), 'received result:', entityResult);
 
         this.entitiesSubject.next(entityResult.entities);
         this.totalSubject.next(entityResult.total);
         this.loadingSubject.next(false);
+
+        console.debug('Datasource', this.meta.displayNamePlural.toLowerCase(), 'processed result');
+
       });
   }
 

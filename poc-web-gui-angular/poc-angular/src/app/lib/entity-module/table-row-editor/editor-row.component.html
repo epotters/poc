@@ -7,7 +7,10 @@
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'text'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key + keySuffix}}">
+        <input matInput formControlName="{{key + keySuffix}}"
+               [matTooltip]="getErrorMessage(key)"
+               [matTooltipDisabled]="hasErrors(key)"
+        >
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">

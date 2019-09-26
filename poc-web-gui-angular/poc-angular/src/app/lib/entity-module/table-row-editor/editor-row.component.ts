@@ -17,12 +17,14 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
   keySuffix = ''; // 'Editor';
   visible = false;
 
+
   constructor(
     @Inject(META) public meta: EntityMeta<any>,
     public formBuilder: FormBuilder,
     injector: Injector) {
     super(meta, formBuilder, injector);
     console.debug('Constructing EditorRowComponent for type ' + meta.displayName);
+    this.enableValidation = true;
   }
 
 

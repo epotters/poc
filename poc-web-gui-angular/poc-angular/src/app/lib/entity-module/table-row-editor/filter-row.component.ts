@@ -22,6 +22,7 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     public formBuilder: FormBuilder,
     injector: Injector) {
     super(meta, formBuilder, injector);
+
     console.debug('Constructing FilterRowComponent for type ' + meta.displayName);
   }
 
@@ -41,21 +42,40 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     return editorColumns;
   }
 
+
   getOutputValue(): FieldFilter[] {
-    let entityFilter: any = this.rowEditorForm.getRawValue();
-    let fieldFilters: FieldFilter[] = [];
+
+    console.debug('---> Start building form output value');
+    const entityFilter: any = this.rowEditorForm.getRawValue();
+    const fieldFilters: FieldFilter[] = [];
+
     Object.entries(entityFilter).forEach(
       ([key, value]) => {
+
         if (value && value !== '') {
           let name: string = key.substring(0, (key.length - this.keySuffix.length));
+          let type: any = this.getEditor(key).type;
+
+          if (type == 'autocomplete') {
+            if (!value['id']) {
+              console.debug('No related entity to search for selected yet. Skipping.');
+              return;
+            }
+            name = name + '.id';
+            value = value['id'];
+            console.debug('Selected entity converted to id only for filter {', name, ': ', value, '}');
+          }
+
           fieldFilters.push({
             name: name,
             rawValue: (value as string)
-          })
+          });
         }
       }
     );
+    console.debug('---> Finished building form output value: ', fieldFilters);
     return fieldFilters;
   }
+
 
 }
