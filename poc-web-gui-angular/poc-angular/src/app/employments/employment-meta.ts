@@ -37,7 +37,7 @@ export const employmentMeta: EntityMeta<Employment> = {
         return entity.employer.name;
       },
       editor: {
-        type: "autocomplete",
+        type: 'autocomplete',
         relatedEntity: {
           name: 'organization',
           serviceName: 'OrganizationService',
@@ -59,7 +59,7 @@ export const employmentMeta: EntityMeta<Employment> = {
         return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
       },
       editor: {
-        type: "autocomplete",
+        type: 'autocomplete',
         relatedEntity: {
           name: 'person',
           serviceName: 'PersonService',
