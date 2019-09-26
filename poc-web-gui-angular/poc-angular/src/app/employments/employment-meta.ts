@@ -18,7 +18,7 @@ export const employmentMeta: EntityMeta<Employment> = {
   defaultSortField: 'id',
   defaultSortDirection: 'asc',
 
-  displayedColumns: ['id', 'employer', 'employee.firstName', 'employee.lastName'],
+  displayedColumns: ['id', 'employer', 'employee'],
 
 
   columnConfigs: {
@@ -47,13 +47,42 @@ export const employmentMeta: EntityMeta<Employment> = {
             return (entity) ? entity['name'] : null;
           }
         }
-      }
+      },
+      validators: [
+        {type: 'required', message: 'Employer is required'}
+        ]
     },
-    'employee.firstName': {
-      label: 'First Name'
-    },
-    'employee.lastName': {
-      label: 'Last Name'
+
+    employee: {
+      label: 'Employee',
+      renderer: (entity, value) => {
+        return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
+      },
+      editor: {
+        type: "autocomplete",
+        relatedEntity: {
+          name: 'person',
+          serviceName: 'PersonService',
+          displayField: 'lastName',
+          displayOption: (entity) => {
+            console.debug('Displaying person');
+            return (entity) ?
+              entity.firstName + ' ' + ((entity.prefix) ? (entity.prefix) + ' ' : '') + entity.lastName :
+              null;
+          }
+        }
+      },
+      validators: [
+        {type: 'required', message: 'Employee is required'}
+      ]
     }
+
+    //
+    // 'employee.firstName': {
+    //   label: 'First Name'
+    // },
+    // 'employee.lastName': {
+    //   label: 'Last Name'
+    // }
   }
 };
