@@ -1,5 +1,5 @@
 import {EntityMeta} from "../lib/entity-module";
-import {Employment} from "../core/domain/";
+import {Employment, Organization, Person} from "../core/domain/";
 
 
 export const employmentMeta: EntityMeta<Employment> = {
@@ -18,18 +18,22 @@ export const employmentMeta: EntityMeta<Employment> = {
   defaultSortField: 'id',
   defaultSortDirection: 'asc',
 
-  displayedColumns: ['id', 'employer', 'employee'],
+  displayedColumns: ['id', 'startDate', 'employer', 'employee'],
 
 
   columnConfigs: {
     id: {
       label: 'ID',
-      editor: {
-        type: 'none'
-      },
-      filter: {
-        type: 'text'
-      }
+      editor: {type: 'none'},
+      filter: {type: 'text'}
+    },
+    startDate: {
+      label: 'Start date',
+      editor: {type: 'date'}
+    },
+    endDate: {
+      label: 'End date',
+      editor: {type: 'date'}
     },
     employer: {
       label: 'Employer',
@@ -42,7 +46,7 @@ export const employmentMeta: EntityMeta<Employment> = {
           name: 'organization',
           serviceName: 'OrganizationService',
           displayField: 'name',
-          displayOption: (entity) => {
+          displayOption: (entity: Organization) => {
             console.debug('Displaying organization');
             return (entity) ? entity['name'] : null;
           }
@@ -50,13 +54,14 @@ export const employmentMeta: EntityMeta<Employment> = {
       },
       validators: [
         {type: 'required', message: 'Employer is required'}
-        ]
+      ]
     },
 
     employee: {
       label: 'Employee',
-      renderer: (entity, value) => {
-        return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
+      renderer: (entity: Employment, value) => {
+        // return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
+        return (entity.employee) ? entity.employee.fullName() : '';
       },
       editor: {
         type: 'autocomplete',
@@ -64,25 +69,20 @@ export const employmentMeta: EntityMeta<Employment> = {
           name: 'person',
           serviceName: 'PersonService',
           displayField: 'lastName',
-          displayOption: (entity) => {
+          displayOption: (entity: Person) => {
             console.debug('Displaying person');
-            return (entity) ?
-              entity.firstName + ' ' + ((entity.prefix) ? (entity.prefix) + ' ' : '') + entity.lastName :
-              null;
+            return (entity) ? entity.fullName() : null;
+            // entity.firstName + ' ' + ((entity.prefix) ? (entity.prefix) + ' ' : '') + entity.lastName :
+            // null;
           }
         }
       },
       validators: [
         {type: 'required', message: 'Employee is required'}
       ]
+    },
+    description: {
+      label: 'Description'
     }
-
-    //
-    // 'employee.firstName': {
-    //   label: 'First Name'
-    // },
-    // 'employee.lastName': {
-    //   label: 'Last Name'
-    // }
   }
 };
