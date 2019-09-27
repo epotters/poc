@@ -258,6 +258,10 @@ mat-footer-cell {
 }
 
 
+.hidden {
+  display: none !important;
+}
+
 
 /*
 Related entity control

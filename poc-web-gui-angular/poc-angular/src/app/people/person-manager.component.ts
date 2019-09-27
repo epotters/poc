@@ -25,17 +25,22 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     super(personMeta, service, route, componentFactoryResolver, dialog);
   }
 
-
   openDialogWithList() {
-    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent, {columns: this.meta.displayedColumnsDialog});
+    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent,
+      {
+        columns: this.meta.displayedColumnsDialog,
+        title: 'Minimal list with all features hidden',
+        headerVisible: false,
+        paginatorVisible: false,
+        filterVisible: false,
+        editorVisible: false
+      });
     this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }
-
 
   openDialogWithEditor() {
     const entityEditorComponentDescriptor = new EntityComponentDescriptor(PersonEditorComponent, {});
     this.openDialogWithEntityComponent(entityEditorComponentDescriptor);
   }
-
 
 }

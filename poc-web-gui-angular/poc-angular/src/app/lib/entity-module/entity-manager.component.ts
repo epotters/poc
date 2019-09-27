@@ -13,14 +13,12 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   dialogEntity: T;
 
   columns: string[] = [];
-  columnSetName: string = 'displayColumnsDialog';
+  columnSetName: string = 'displayedColumnsDialog';
 
   selectedEntity?: T;
 
-
   listVisible: boolean = true;
   editorVisible: boolean = true;
-
 
   defaultDialogWidth: string = '600px';
 

@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, Inject, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, Inject, OnInit, Type, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {EntityComponentEntryPointDirective} from "./entity-component-entrypoint.directive";
 
@@ -20,7 +20,7 @@ export interface DialogData {
   selector: 'entity-component-dialog',
   templateUrl: 'entity-component-dialog.component.html'
 })
-export class EntityComponentDialogComponent<T extends Identifiable> {
+export class EntityComponentDialogComponent<T extends Identifiable> implements OnInit {
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
 
@@ -43,7 +43,13 @@ export class EntityComponentDialogComponent<T extends Identifiable> {
     const componentFactory = this.dialogData.componentFactoryResolver.resolveComponentFactory(componentDescriptor.component);
     this.componentEntrypoint.viewContainerRef.clear();
     const componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
-    (<EntityComponentDescriptor>componentRef.instance).data = componentDescriptor.data;
+
+    for (let key in componentDescriptor.data) {
+      if (componentDescriptor.data.hasOwnProperty(key)) {
+        console.debug('Set @input', key, 'to value', componentDescriptor.data[key]);
+        (<EntityComponentDescriptor>componentRef.instance as any)[key] = componentDescriptor.data[key];
+      }
+    }
   }
 
 }

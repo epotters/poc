@@ -19,5 +19,9 @@
 <person-list-card
   *ngIf="listVisible"
   [isManaged]="true"
-  (entitySelector)="onEntitySelected($event)">
+  (entitySelector)="onEntitySelected($event)"
+  [columns]="columns"
+  [title]="'Managed people list'"
+  [filterVisible]="false"
+>
 </person-list-card>

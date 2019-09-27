@@ -1,4 +1,4 @@
-import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
@@ -30,19 +30,31 @@ export interface Position {
   y: string
 }
 
-export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
+export abstract class EntityListComponent<T extends Identifiable> implements OnChanges, OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
   @Input() columns: string[];
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
-  dataSource: EntityDataSource<T>;
 
+  sortable: boolean = true;
+  pageable: boolean = true;
+  filterable: boolean = true;
+  editable: boolean = true;
+
+  @Input() title: string;
+
+  @Input() headerVisible: boolean = true;
+  @Input() paginatorVisible: boolean = true;
+  @Input() filterVisible: boolean = true;
+  @Input() editorVisible: boolean = false;
+
+  @Input() initialFieldFilters: FieldFilter[] = [];
+
+
+  dataSource: EntityDataSource<T>;
   fieldFilters: FieldFilter[] = [];
   startPage: number = 0;
-
-  filterRowVisible: boolean = true;
-  editorRowVisible: boolean = false;
 
   contextMenuPosition: Position = {x: '0px', y: '0px'};
 
@@ -52,8 +64,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     transform: 'translateY(0)'
   };
 
-
-  rowHeight: number = 31;
+  rowHeight: number = 31; // Keep this in sync with the styling manually
 
   @ViewChild(EntityEditorActionsComponent, {static: false}) editorActions: EntityEditorActionsComponent<T>;
 
@@ -72,6 +83,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
+
+    this.title = meta.displayNamePlural;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.debug('EntityListComponent -', 'Input changed:', changes);
   }
 
 
@@ -80,6 +97,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
     if (!this.columns) {
+      console.debug('No columns set through columns @Input. Applying default.');
       this.columns = this.meta.displayedColumns;
     }
 
@@ -148,10 +166,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   toggleEditor(): void {
-    if (this.editorRowVisible) {
+    if (this.editorVisible) {
       this.stopEditing();
     } else {
-      this.editorRowVisible = true;
+      this.editorVisible = true;
     }
   }
 
@@ -195,7 +213,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.stopEditing();
     }
 
-    this.editorRowVisible = true;
+    this.editorVisible = true;
     this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
     this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
     this.editorViewState.rowElement.style.opacity = '0.5';
@@ -232,7 +250,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   private hideAndResetEditorView() {
-    this.editorRowVisible = false;
+    this.editorVisible = false;
     if (this.editorViewState.rowElement) {
       this.editorViewState.rowElement.style.opacity = '1';
       this.editorViewState.rowElement = null;
@@ -254,7 +272,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   // Filters
 
   toggleFilter(): void {
-    this.filterRowVisible = !this.filterRowVisible;
+    this.filterVisible = !this.filterVisible;
   }
 
   public onFilterChanged($event): void {

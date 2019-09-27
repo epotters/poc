@@ -8,34 +8,35 @@
 
   <mat-card-header>
 
-    <mat-card-title>{{meta.displayNamePlural}}</mat-card-title>
+    <mat-card-title>{{title}}</mat-card-title>
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="toggleFilter()" matTooltip="Show a filter row" mat-button>
-      <mat-icon>search</mat-icon>
-      <span>{{this.filterRowVisible ? 'Hide' : 'Show'}} filter</span>
-    </button>
-    <button [disabled]="fieldFilters.length == 0" (click)="filterRow.clear()" mat-button>
-      <span>Clear filter</span>
-    </button>
-
-
-    <button (click)="toggleEditor()" matTooltip="Create a new {{meta.displayName.toLowerCase()}}" mat-button>
-      <mat-icon>add</mat-icon>
-      <span>{{this.editorRowVisible ? 'Hide' : 'New entity'}}</span>
-    </button>
-    <button (click)="editorRow.clear()" mat-button>
-      <span>Clear editor</span>
-    </button>
-
-
-    <button mat-button [matMenuTriggerFor]="batchActionsMenu" #batchActionsMenuTrigger>
+    <button mat-button [matMenuTriggerFor]="titlebarMenu" #batchActionsMenuTrigger>
       <mat-icon>more_vert</mat-icon>
     </button>
 
 
-    <mat-menu #batchActionsMenu="matMenu">
+    <mat-menu #titlebarMenu="matMenu">
+
+      <button mat-menu-item (click)="toggleFilter()">
+        <mat-icon>search</mat-icon>
+        <span>{{this.filterVisible ? 'Hide' : 'Show'}} filter</span>
+      </button>
+      <button mat-menu-item [disabled]="fieldFilters.length == 0" (click)="filterRow.clear()">
+        <span>Clear filter</span>
+      </button>
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="toggleEditor()">
+        <mat-icon>add</mat-icon>
+        <span>{{this.editorVisible ? 'Hide editor' : 'New entity'}}</span>
+      </button>
+      <button mat-menu-item (click)="editorRow.clear()">
+        <span>Clear editor</span>
+      </button>
+      <mat-divider></mat-divider>
+
       <button mat-menu-item (click)="newEntity()">
         <span>New {{meta.name}}</span>
       </button>
@@ -43,6 +44,7 @@
         <span>{{meta.displayName}} Manager</span>
       </button>
       <mat-divider></mat-divider>
+
       <button mat-menu-item (click)="deleteEntities()">
         <span>Delete {{meta.namePlural}}</span>
       </button>
@@ -57,7 +59,7 @@
   <mat-card-content>
 
     <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultSortField}}"
-               matSortDirection="asc" class="mat-elevation-z2" matSortDisableClear>
+               matSortDirection="asc" matSortDisableClear>
 
       <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
         <mat-header-cell *matHeaderCellDef>
@@ -67,15 +69,16 @@
       </ng-container>
 
       <ng-container *matHeaderRowDef="columns">
-        <mat-header-row></mat-header-row>
+        <mat-header-row [class.hidden]="!headerVisible"></mat-header-row>
 
         <filter-row [columns]="columns"
+                    [hidden]="!filterVisible"
                     (editorChange)="onFilterChanged($event)"
-                    [hidden]="!filterRowVisible"
                     [class.editor-inline]="true">
         </filter-row>
 
-        <editor-row [columns]="columns" [hidden]="!editorRowVisible"
+        <editor-row [columns]="columns"
+                    [hidden]="!editorVisible"
                     (keydown.enter)="saveEntity()"
                     (keydown.escape)="stopEditing()"
                     [class.editor-inline]="true"
@@ -100,7 +103,7 @@
         </mat-footer-cell>
       </ng-container>
 
-      <mat-footer-row *matFooterRowDef="['paginator']"></mat-footer-row>
+      <mat-footer-row *matFooterRowDef="['paginator']" [class.hidden]="!paginatorVisible"></mat-footer-row>
 
     </mat-table>
 
