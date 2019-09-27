@@ -33,6 +33,7 @@ export interface Position {
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
+  @Input() columns: string[];
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
   dataSource: EntityDataSource<T>;
@@ -42,8 +43,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   filterRowVisible: boolean = true;
   editorRowVisible: boolean = false;
-
-  displayedColumns: string[];
 
   contextMenuPosition: Position = {x: '0px', y: '0px'};
 
@@ -73,7 +72,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
-    this.displayedColumns = meta.displayedColumns;
   }
 
 
@@ -81,9 +79,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
+    if (!this.columns) {
+      this.columns = this.meta.displayedColumns;
+    }
+
     this.dataSource.loadEntities(this.fieldFilters, this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.meta.defaultPageSize);
-
   }
 
 
@@ -185,8 +186,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   // Editor
 
 
-
-
   public startEditing(entity: T, targetElement: Element, idx: number) {
 
     console.debug('Are we currently editing? ' + this.isEditing());
@@ -266,6 +265,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (event.shiftKey) {
       this.selectEntity(entity);
     }
+  }
+
+  onDblClick(event: MouseEvent, entity: T, idx: number) {
+    console.debug('Double click on entity ', entity);
+    event.preventDefault();
+    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+    this.startEditing(entity, targetElement, idx);
   }
 
 

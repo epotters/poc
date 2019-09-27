@@ -1,5 +1,5 @@
 <div class="editor-row" [formGroup]="rowEditorForm">
-  <div *ngFor="let key of meta.displayedColumns" class="editor-cell mat-column-{{key}}">
+  <div *ngFor="let key of columns" class="editor-cell mat-column-{{key}}">
     <div class="editor-type-switch" [ngSwitch]="getEditor(key).type">
 
       <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
@@ -10,6 +10,7 @@
         <input matInput formControlName="{{key + keySuffix}}"
                [matTooltip]="getErrorMessage(key)"
                [matTooltipDisabled]="hasErrors(key)"
+               matTooltipClass="red-tooltip"
         >
       </mat-form-field>
 

@@ -200,11 +200,6 @@ mat-footer-cell {
   text-align: right;
 }
 
-/* Experimental */
-mat-header-row {
-  position: sticky; top: 30px;
-}
-
 
 /* Editor moved */
 
@@ -216,6 +211,7 @@ mat-header-row {
   z-index: 50;
   transform: translateY(0);
 }
+
 
 /* Editor inline */
 .editor-inline .mat-form-field-infix {
@@ -235,7 +231,6 @@ mat-header-row {
 .editor-inline .mat-form-field-wrapper {
   padding-bottom: 0;
 }
-
 
 .editor-inline .mat-form-field-appearance-fill .mat-form-field-flex {
   padding: 0;
@@ -262,31 +257,6 @@ mat-header-row {
   display: none;
 }
 
-
-/* List of cards
-TODO: Move to entity-list-of-cards.component.css
-*/
-
-.list-of-cards {
-  background-color: #fafafa;
-  min-height: 300px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  border-top: 1px rgba(0, 0, 0, .12);
-  border-bottom: 1px rgba(0, 0, 0, .12);
-}
-
-
-.list-of-cards mat-card {
-  display: inline-block;
-  min-width: 240px;
-  min-height: 90px;
-  margin: 6px;
-}
-
-.list-of-cards-paginator .mat-paginator-range-label {
-  display: none;
-}
 
 
 /*
@@ -328,6 +298,41 @@ TODO: Move to entity-relation.component.css
   color: rgba(0, 0, 0, .87);
   line-height: 30px;
   display: block;
+}
+
+
+
+
+
+/* List of cards
+TODO: Move to entity-list-of-cards.component.css
+*/
+
+.list-of-cards {
+  background-color: #fafafa;
+  min-height: 300px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-top: 1px rgba(0, 0, 0, .12);
+  border-bottom: 1px rgba(0, 0, 0, .12);
+}
+
+
+.list-of-cards mat-card {
+  display: inline-block;
+  min-width: 240px;
+  min-height: 90px;
+  margin: 6px;
+}
+
+.list-of-cards-paginator .mat-paginator-range-label {
+  display: none;
+}
+
+
+/* Experimental */
+mat-header-row {
+  position: sticky; top: 0;
 }
 
 

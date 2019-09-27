@@ -59,32 +59,36 @@
     <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultSortField}}"
                matSortDirection="asc" class="mat-elevation-z2" matSortDisableClear>
 
-      <ng-container *ngFor="let column of meta.displayedColumns" matColumnDef="{{column}}">
+      <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
         <mat-header-cell *matHeaderCellDef>
           <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
         </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{getCellDisplayValue(row, column)}}</mat-cell>
       </ng-container>
 
-      <ng-container *matHeaderRowDef="meta.displayedColumns">
+      <ng-container *matHeaderRowDef="columns">
         <mat-header-row></mat-header-row>
 
-        <filter-row (editorChange)="onFilterChanged($event)" [hidden]="!filterRowVisible"
-                    [class.editor-inline]="true"></filter-row>
+        <filter-row [columns]="columns"
+                    (editorChange)="onFilterChanged($event)"
+                    [hidden]="!filterRowVisible"
+                    [class.editor-inline]="true">
+        </filter-row>
 
-        <editor-row [hidden]="!editorRowVisible"
+        <editor-row [columns]="columns" [hidden]="!editorRowVisible"
                     (keydown.enter)="saveEntity()"
                     (keydown.escape)="stopEditing()"
                     [class.editor-inline]="true"
                     [class.editor-moved]="editorViewState.rowElement"
-                    [style.transform]="editorViewState.transform"
-        >
+                    [style.transform]="editorViewState.transform">
         </editor-row>
 
       </ng-container>
 
-      <mat-row (contextmenu)="onContextMenu($event, row, idx)" (click)="onShiftClick($event, row)"
-               *matRowDef="let row; columns: meta.displayedColumns; let idx = index;"></mat-row>
+      <mat-row (contextmenu)="onContextMenu($event, row, idx)"
+               (click)="onShiftClick($event, row)"
+               (dblclick)="onDblClick($event, row, idx)"
+               *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
 
 
       <ng-container matColumnDef="paginator">

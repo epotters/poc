@@ -20,6 +20,12 @@
   margin-left: -24px;
 }
 
+
+.error-tooltip {
+  color: white;
+  background-color: red;
+}
+
 .editor-row .editor-cell:last-of-type .mat-form-field-wrapper {
   margin-right: -24px;
 }

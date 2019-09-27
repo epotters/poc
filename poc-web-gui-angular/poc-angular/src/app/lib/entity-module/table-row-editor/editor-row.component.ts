@@ -1,17 +1,29 @@
-import {Component, EventEmitter, Inject, Injector, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Injector, Input, Output} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {EntityMeta, FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {META} from "../entity-tokens";
+import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/material/tooltip";
+
+
+export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 1000,
+  hideDelay: 1000,
+  touchendHideDelay: 1000,
+};
 
 
 @Component({
   selector: 'editor-row',
   templateUrl: './editor-row.component.html',
-  styleUrls: ['./editor-row.component.css']
+  styleUrls: ['./editor-row.component.css'],
+  providers: [
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: InlineEditorTooltipDefaults}
+  ],
 })
 export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
 
+  @Input() readonly columns: string[];
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
   keySuffix = ''; // 'Editor';
@@ -57,8 +69,8 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   getColumns(): Record<string, FieldEditorConfig> {
     let editorColumns: Record<string, FieldEditorConfig> = {};
-    for (let idx in this.meta.displayedColumns) {
-      let key: string = this.meta.displayedColumns[idx];
+    for (let idx in this.columns) {
+      let key: string = this.columns[idx];
       if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
         editorColumns[key] = this.meta.columnConfigs[key].editor;
       } else {

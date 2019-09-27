@@ -1,4 +1,4 @@
-import {AfterContentInit, EventEmitter, Injector, Output} from '@angular/core';
+import {AfterContentInit, EventEmitter, Injector, Input, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subject} from "rxjs";
 import {debounceTime} from "rxjs/operators";
@@ -8,7 +8,9 @@ import {EntityMeta, FieldEditorConfig, ValidatorDescriptor} from "../domain/enti
 
 export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
 
+  @Input() readonly columns: string[];
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
+
 
   editorColumns: Record<string, FieldEditorConfig>;
   rowEditorForm: FormGroup;

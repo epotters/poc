@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Injector, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Injector, Input, Output} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {EntityMeta, FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
@@ -13,7 +13,9 @@ import {FieldFilter} from "../domain/filter.model";
 })
 export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
 
+  @Input() readonly columns: string[];
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
+
 
   keySuffix: string = ''; // 'Filter';
 
@@ -29,8 +31,8 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   getColumns(): Record<string, FieldEditorConfig> {
     let editorColumns: Record<string, FieldEditorConfig> = {};
-    for (let idx in this.meta.displayedColumns) {
-      let key: string = this.meta.displayedColumns[idx];
+    for (let idx in this.columns) {
+      let key: string = this.columns[idx];
       if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
         editorColumns[key] = this.meta.columnConfigs[key].filter;
       } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {

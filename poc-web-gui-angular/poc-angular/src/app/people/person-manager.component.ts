@@ -27,7 +27,7 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
 
   openDialogWithList() {
-    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent, {});
+    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent, {columns: this.meta.displayedColumnsDialog});
     this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }
 

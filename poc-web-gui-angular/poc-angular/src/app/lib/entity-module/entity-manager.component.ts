@@ -12,8 +12,15 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   title: string = this.meta.displayName + ' manager';
   dialogEntity: T;
 
+  columns: string[] = [];
+  columnSetName: string = 'displayColumnsDialog';
+
   selectedEntity?: T;
-  view: string = 'list';  // 'list' | 'editor'
+
+
+  listVisible: boolean = true;
+  editorVisible: boolean = true;
+
 
   defaultDialogWidth: string = '600px';
 
@@ -25,6 +32,8 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     public dialog: MatDialog
   ) {
     console.debug('Constructing the EntityManagerComponent for type ' + this.meta.displayName);
+    this.columns = meta[this.columnSetName] || meta.displayedColumns;
+    console.debug('Columns:', this.columns);
   }
 
   ngOnInit() {
@@ -41,35 +50,17 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     }
   }
 
-
   onEntitySelected($event) {
-    console.debug('EntitySelected event received');
-    console.debug($event);
+    console.debug('EntitySelected event received', $event);
     this.selectedEntity = $event;
   }
 
-  showList() {
-    this.view = 'list';
-    console.debug('Show list only');
-
-    // this.editor.hide();
-    // this.list.show();
+  toggleList() {
+    this.listVisible = !this.listVisible;
   }
 
-  showEditor() {
-    this.view = 'editor';
-    console.debug('Show editor only');
-
-    // this.list.hide();
-    // this.editor.show();
-  }
-
-  toggleView(): void {
-    if (this.view === 'list') {
-      this.showEditor();
-    } else {
-      this.showList();
-    }
+  toggleEditor() {
+    this.editorVisible = !this.editorVisible;
   }
 
 
