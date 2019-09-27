@@ -7,8 +7,11 @@ export interface ColumnConfig {
   validators?: ValidatorDescriptor[]
 }
 
+export declare type EditorType = 'none' | 'text' | 'select' | 'date' | 'autocomplete';;
+
+
 export interface FieldEditorConfig {
-  type: 'none' | 'text' | 'select' | 'date' | 'autocomplete';
+  type: EditorType;
   options?: SelectOption[];
   relatedEntity?: RelatedEntity;
 }
