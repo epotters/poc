@@ -101,6 +101,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       this.columns = this.meta.displayedColumns;
     }
 
+    this.fieldFilters = this.initialFieldFilters;
+
     this.dataSource.loadEntities(this.fieldFilters, this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.meta.defaultPageSize);
   }
@@ -112,6 +114,9 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
     });
+
+    // TODO: fix this
+    // this.filterRow.setFilters(this.fieldFilters);
 
     merge(this.sort.sortChange, this.paginator.page, this.filterRow.editorChange)
       .pipe(
@@ -164,15 +169,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     }
   }
 
-
-  toggleEditor(): void {
-    if (this.editorVisible) {
-      this.stopEditing();
-    } else {
-      this.editorVisible = true;
-    }
-  }
-
   saveEntity(): void {
     console.debug('Save this ' + this.meta.displayName.toLowerCase());
     if (this.editorActions) {
@@ -203,6 +199,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
   // Editor
 
+  toggleEditor(): void {
+    if (this.editorVisible) {
+      this.stopEditing();
+    } else {
+      this.editorVisible = true;
+    }
+  }
 
   public startEditing(entity: T, targetElement: Element, idx: number) {
 

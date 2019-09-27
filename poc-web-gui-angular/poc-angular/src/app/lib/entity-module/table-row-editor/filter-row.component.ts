@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Inject, Injector, Input, Output} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {EntityMeta, FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {META} from "../entity-tokens";
@@ -42,6 +42,26 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
       }
     }
     return editorColumns;
+  }
+
+
+  public setFilters(fieldFilters: FieldFilter[]): void {
+    if (fieldFilters.length > 0) {
+      const filter: any = {};
+      for (let key in this.editorColumns) {
+        if (this.editorColumns.hasOwnProperty(key)) {
+          filter[key] = '';
+        }
+      }
+      for (let idx in fieldFilters) {
+        let fieldFilter: FieldFilter = fieldFilters[idx];
+        filter[fieldFilter.name] = fieldFilter.rawValue;
+        console.debug('---> Setting filter to', fieldFilter);
+      }
+      this.rowEditorForm.setValue(filter);
+    } else {
+      this.rowEditorForm.reset();
+    }
   }
 
 

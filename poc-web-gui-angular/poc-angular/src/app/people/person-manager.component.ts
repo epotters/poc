@@ -8,6 +8,7 @@ import {EntityComponentDescriptor} from "../lib/entity-module/dialog/entity-comp
 import {MatDialog} from "@angular/material/dialog";
 import {PersonListComponent} from "./person-list.component";
 import {PersonEditorComponent} from "./person-editor.component";
+import {FieldFilter} from "../lib/entity-module/domain/filter.model";
 
 @Component({
   selector: 'person-manager',
@@ -16,6 +17,8 @@ import {PersonEditorComponent} from "./person-editor.component";
 })
 export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
+  initialFieldFilters: FieldFilter[];
+
   constructor(
     public service: PersonService,
     public route: ActivatedRoute,
@@ -23,7 +26,13 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     public dialog: MatDialog
   ) {
     super(personMeta, service, route, componentFactoryResolver, dialog);
+
+    this.initialFieldFilters = [
+      {name: 'lastName', rawValue: 'po'}
+    ]
   }
+
+
 
   openDialogWithList() {
     const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent,
@@ -33,7 +42,8 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
         headerVisible: false,
         paginatorVisible: false,
         filterVisible: false,
-        editorVisible: false
+        editorVisible: false,
+        initialFieldFilters: this.initialFieldFilters
       });
     this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }
