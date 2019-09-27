@@ -1,4 +1,4 @@
-import {animate, keyframes, style, transition, trigger} from "@angular/animations";
+import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 export const grow = trigger(
   "grow",
@@ -13,16 +13,27 @@ export const grow = trigger(
 
 
 export const slideTo = trigger(
-  'slideTo',
-  [
-    transition(
-      "* => *",
+  'slideTo', [
+    state('invisible', style({transform: 'translateY(0)', height: '0', minHeight: '0', visibility: 'hidden'})),
+    state('*', style({transform: 'translateY(*)', height: '31', minHeight: '31', visibility: 'visible'})),
+
+    transition("invisible => *", animate('200ms')),
+    transition("* => *",
       animate('{{ duration }}', style({transform: 'translateY({{y}}px)'})),
       {params: {duration: '1s', y: 0}}
-    )
-
+    ),
+    transition("* => invisible", animate('200ms'))
   ]
 );
+
+
+export const detailExpand = [
+  trigger('detailExpand', [
+    state('void', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
+    state('*', style({height: '*', visibility: 'visible'})),
+    transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+  ]),
+];
 
 
 export const leavingTowardsTop =
@@ -34,4 +45,4 @@ export const leavingTowardsTop =
         style({top: "{{topPixels}}"})
       ]))
     ], {params: {topPixels: "-3000px"}})
-  ])
+  ]);
