@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.jpa.domain.Specification;
+import poc.core.domain.Employment;
 import poc.core.domain.Gender;
 import poc.core.domain.Person;
 
@@ -35,10 +36,29 @@ public class QuerystringFilterTranslatorTest {
     spec = filterTanslator.translate(queryString);
     Assert.assertNotNull(spec);
 
+    queryString = "birthDate:1995";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+
+    queryString = "birthDate:1995-12";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+
     queryString = "gender:blah";
     spec = filterTanslator.translate(queryString);
     Assert.assertNull(spec);
   }
+
+
+  @Test
+  public void translateNested() {
+    QuerystringFilterTranslator<Employment> filterTanslator = new QuerystringFilterTranslator<>(Employment.class);
+
+    String queryString = "employee.id:5";
+    Specification<Employment> spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+  }
+
 
   @Test
   public void ConvertStringsToObjects() {

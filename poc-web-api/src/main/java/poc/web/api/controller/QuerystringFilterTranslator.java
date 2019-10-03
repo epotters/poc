@@ -30,7 +30,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   private static final String SEPARATOR = ",";
   private final String operationSetExpr = "(" + String.join("|", SearchOperation.SIMPLE_OPERATION_SET) + ")";
-  private final Pattern pattern = Pattern.compile("(\\w+?)" + operationSetExpr + "(.*$)", Pattern.UNICODE_CHARACTER_CLASS);
+  private final Pattern pattern = Pattern.compile("(\\w+\\.?\\w+)" + operationSetExpr + "(.*$)", Pattern.UNICODE_CHARACTER_CLASS);
 
   private static final SearchCriteria ALWAYS_TRUE_CRITERIA = new SearchCriteria("1", SearchOperation.EQUALITY, "1");
 
@@ -55,59 +55,95 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
     Object value = null;
 
     for (String labelValue : labelValueParts) {
-      if (!"".equals(labelValue)) {
-        matcher = pattern.matcher(labelValue);
-        if (matcher.find()) {
+      if ("".equals(labelValue)) {
+        continue;
+      }
+      matcher = pattern.matcher(labelValue);
+      if (matcher.find()) {
 
-          fieldName = matcher.group(1);
-          operator = matcher.group(2);
-          rawValue = matcher.group(3);
+        fieldName = matcher.group(1);
+        operator = matcher.group(2);
+        rawValue = matcher.group(3);
+        log.debug("Matched filter: " + fieldName + operator + rawValue);
 
-          log.debug("Matched filter: " + fieldName + operator + rawValue);
+        Class<?> fieldType = null;
+        if (fieldName.contains(".")) {
 
-          Class<?> fieldType = null;
+          log.debug("Processing nested field");
+
+          String[] fieldNames = fieldName.split("\\.");
+          if (fieldNames.length > 2) {
+            log.warn("Only one level of nesting is supported");
+          }
+
+          try {
+            Class<?> relatedEntityType = this.getFieldType(fieldNames[0]);
+            fieldType = this.getFieldType(relatedEntityType, fieldNames[1]);
+          } catch (NoSuchFieldException nsfe) {
+            nsfe.printStackTrace();
+            log.warn("Field \"" + fieldName + "\" does not exist. Skipping.");
+            continue;
+          }
+
+        } else {
+
           try {
             fieldType = this.getFieldType(fieldName);
           } catch (NoSuchFieldException nsfe) {
             log.warn("Field \"" + fieldName + "\" does not exist. Skipping.");
             continue;
           }
-          if (fieldType.getSimpleName().equals("String")) {
-            value = rawValue + (("~".equals(operator)) ? SearchOperation.WILDCARD : "");
-          } else {
+        }
 
-            try {
-              value = this.mapStringValueToObject(fieldType, rawValue);
-            } catch (Exception e) {
-              log.warn("Unable to translate value \"" + rawValue + "\" to " + fieldType.getSimpleName() + ". Skipping.");
-            }
 
+        if (fieldType.getSimpleName().equals("String")) {
+          value = rawValue + (("~".equals(operator)) ? SearchOperation.WILDCARD : "");
+        } else {
+
+          try {
+            value = this.mapStringValueToObject(fieldType, rawValue);
+          } catch (Exception e) {
 
             if (value == null & fieldType.getSimpleName().equals("LocalDate")) {
-              if (YEAR_PATTERN.matcher(rawValue).matches()) {
-                int year = Integer.parseInt(rawValue);
-                builder.with(fieldName, ">", LocalDate.of(year, 1, 1).minusDays(1));
-                builder.with(fieldName, "<", LocalDate.of(year, 12, 31).plusDays(1));
-              }
-
-              if (YEAR_MONTH_PATTERN.matcher(rawValue).matches()) {
-                int year = Integer.parseInt(rawValue.substring(0, 4));
-                int month = Integer.parseInt(rawValue.substring(5, 2));
-                YearMonth ym = YearMonth.of(year, month);
-                builder.with(fieldName, ">", ym.atDay(1).minusDays(1));
-                builder.with(fieldName, "<", ym.atEndOfMonth().plusDays(1));
+              if (!this.partialDate(fieldName, rawValue, builder)) {
+                log.warn("Unable to translate value \"" + rawValue + "\" to " + fieldType.getSimpleName() + ". Skipping.");
               }
             }
           }
+        }
 
-
-          if (value != null) {
-            builder.with(fieldName, operator, value);
-          }
+        if (value != null) {
+          builder.with(fieldName, operator, value);
         }
       }
     }
+
     return builder.build();
+  }
+
+
+  private boolean partialDate(String fieldName, String rawValue, SpecificationsBuilder<T> builder) {
+
+    if (YEAR_PATTERN.matcher(rawValue).matches()) {
+      int year = Integer.parseInt(rawValue);
+      log.debug("Match on a partial date (year) " + year);
+      builder.with(fieldName, ">", LocalDate.of(year, 1, 1).minusDays(1));
+      builder.with(fieldName, "<", LocalDate.of(year, 12, 31).plusDays(1));
+      return true;
+    }
+
+    if (YEAR_MONTH_PATTERN.matcher(rawValue).matches()) {
+      String[] parts = rawValue.split("-");
+      int year = Integer.parseInt(parts[0]);
+      int month = Integer.parseInt(parts[1]);
+      YearMonth ym = YearMonth.of(year, month);
+      log.debug("Match on a partial date (year-month combination) " + ym.toString());
+      builder.with(fieldName, ">", ym.atDay(1).minusDays(1));
+      builder.with(fieldName, "<", ym.atEndOfMonth().plusDays(1));
+
+      return true;
+    }
+    return false;
   }
 
 
@@ -154,11 +190,15 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
   }
 
 
-  private Class<?> getFieldType(String fieldName) throws NoSuchFieldException {
-    final Field field = genericType.getDeclaredField(fieldName);
+  private Class<?> getFieldType(Class<?> type, String fieldName) throws NoSuchFieldException {
+    final Field field = type.getDeclaredField(fieldName);
     final Class<?> valueType = field.getType();
     log.debug("Found field named \"" + field.getName() + "\" with type \"" + valueType.getSimpleName() + "\"");
     return valueType;
+  }
+
+  private Class<?> getFieldType(String fieldName) throws NoSuchFieldException {
+    return this.getFieldType(genericType, fieldName);
   }
 
 
