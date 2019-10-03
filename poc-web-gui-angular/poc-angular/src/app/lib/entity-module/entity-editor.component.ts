@@ -82,10 +82,9 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     this.service.get(entityId).pipe(
       tap(entity => {
         console.debug('About to patch the entity loaded');
-        // console.debug(entity);
         this.entityForm.patchValue(entity);
-        this.entitySubject.next(entity);
         console.info(this.meta.displayName + ' loaded in the editor');
+        this.entitySubject.next(entity);
       })
     ).subscribe();
   }
@@ -99,9 +98,9 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
       this.service.save(entity).subscribe((savedEntity) => {
         let msg: string;
         if (entity.id) {
-          msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
+          msg = this.meta.displayName + ' named "' + this.meta.displayNameRenderer(entity) + '" is updated successfully';
         } else {
-          msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
+          msg = this.meta.displayName + ' named "' + this.meta.displayNameRenderer(savedEntity) + '" is created successfully with id ' + savedEntity.id;
           this.router.navigate([this.meta.apiBase + '/' + savedEntity.id]);
         }
         console.info(msg);
@@ -110,7 +109,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
           duration: 3000
         });
 
-        console.log('savedEntity: ', savedEntity);
+        console.log('savedEntity:', savedEntity);
 
         this.entityForm.patchValue(savedEntity);
         this.entitySubject.next(savedEntity);
@@ -119,14 +118,14 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
       });
     } else {
-      console.info('Not a valid entity');
+      console.info('Not a valid entity', this.entityForm.errors);
     }
   }
 
 
   deleteEntity() {
     if (this.isNew()) {
-      console.info('This entity is not yet created and therfor cannot be deleted');
+      console.info('This entity is not yet created and therfore cannot be deleted');
       return;
     }
 
@@ -177,7 +176,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
   getValidators(fieldName: string) {
-    return this.meta.columnConfigs['firstName'].validators;
+    return this.meta.columnConfigs[fieldName].validators;
   }
 
 

@@ -70,7 +70,7 @@ footer {
   flex-direction: row;
 
   color: darkgray;
-  padding: 9px 18px;
+  padding: 36px 18px 18px 18px;
 }
 
 footer .right {
@@ -104,6 +104,8 @@ footer .right {
 }
 
 
+
+
 /*
 Editor Forms
 TODO: Move to entity-editor.component.css
@@ -123,33 +125,32 @@ TODO: Move to entity-editor.component.css
   margin-bottom: 15px;
 }
 
-
-/*
-List Table and Editor rows
-TODO: Move to entity-list.component.css
-*/
-
-.list-card {
-  max-width: 1200px;
-}
-
-.list-card mat-card-header {
-  padding-bottom: 16px;
-  align-items: center;
-}
-
-.list-card .mat-card-header .mat-card-title {
-  margin-bottom: 0;
+.main-form .mat-form-field .mat-form-field-suffix .mat-icon-button {
+  height: 2.4em !important;
 }
 
 
-.list-card mat-card-actions {
-  padding-left: 24px;
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-  align-items: center;
-  white-space: nowrap;
+  /*
+  List Table and Editor rows
+  */
+
+
+.entity-list {
+  width: 100%;
+  max-width: 960px;
+  /* border: 1px solid green; */ /* debug */
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.entity-list .progress {
+  opacity: 0;
+}
+
+.entity-list .progress.progress-visible {
+  opacity: 1;
 }
 
 
@@ -159,7 +160,13 @@ TODO: Move to entity-list.component.css
 .editor-cell,
 .filter-cell {
   flex: 3;
+  /* border-right: 1px solid red; */ /* debug */
 }
+
+.mat-footer-cell {
+  justify-content: flex-end;
+}
+
 
 .mat-cell,
 .mat-footer-cell,
@@ -178,11 +185,6 @@ input.mat-input-element,
   box-sizing: border-box;
 }
 
-/* Set to 180px somewhere for some reason */
-mat-card-content .mat-form-field-infix,
-.editor-field-container .mat-form-field-infix {
-  width: auto;
-}
 
 mat-row {
   cursor: pointer;
@@ -201,19 +203,33 @@ mat-footer-cell {
 }
 
 
+.form-card .mat-form-field-infix {
+  width: auto;
+}
+
+
+
+
 /* Editor moved */
 
 .editor-moved {
   background-color: white;
   position: absolute;
-  left: 16px;
-  right: 16px;
+  width: 100%;
   z-index: 50;
   transform: translateY(0);
+  max-width: 960px; /* Keep in sync with .entity-list max-width*/
 }
 
 
 /* Editor inline */
+
+/* debug */
+/*.editor-inline {*/
+/*  background-color: orange;*/
+/*  opacity: 0.6;*/
+/*}*/
+
 .editor-inline .mat-form-field-infix {
   border-top: 0;
 }
@@ -234,11 +250,6 @@ mat-footer-cell {
 
 .editor-inline .mat-form-field-appearance-fill .mat-form-field-flex {
   padding: 0;
-
-  /*Debug classes*/
-  /*border-radius: 0;*/
-  /*background-color: orange;*/
-  /*opacity: 0.6;*/
 }
 
 .editor-inline .mat-form-field-appearance-fill .mat-form-field-infix {
@@ -268,44 +279,36 @@ Related entity control
 TODO: Move to entity-relation.component.css
 */
 
-.related-entities-control {
-  width: 360px;
+.relation {
 }
 
-.related-entities-control mat-form-field {
-  display: block;
+.relation mat-toolbar.mat-toolbar-single-row {
+  height: 48px !important;
 }
 
-.related-entity-header {
-  display: flex;
-  line-height: 1.125;
-  background-color: rgba(0, 0, 0, .04);
-  padding: 0 0.75em 0 0.75em;
-  align-items: center;
+.relation .mat-toolbar h4 {
+  font-size: 16px;
 }
 
-.related-entity-header h4 {
-  margin-bottom: 0;
-  line-height: 1.25;
+.form-row .relation {
+  width: 100%;
 }
 
-.related-entity {
-  border-bottom: 1px solid #efefef;
-  height: 30px;
-  padding: 0 0.75em 0 0.75em;
-  align-items: center;
-}
-
-.related-entity a {
-  text-decoration: none;
-  font-size: 15px;
-  color: rgba(0, 0, 0, .87);
-  line-height: 30px;
-  display: block;
+.relation editor-row {
+  width: auto;
+  margin-right: 16px;
 }
 
 
+/* Entity Component in dialog */
 
+.entity-dialog-actions {
+  justify-content: flex-end;
+}
+
+mat-dialog-content editor-row.editor-moved {
+  width: 552px; /* TODO: better solution for this style e.g. auto */
+}
 
 
 /* List of cards
@@ -321,7 +324,6 @@ TODO: Move to entity-list-of-cards.component.css
   border-bottom: 1px rgba(0, 0, 0, .12);
 }
 
-
 .list-of-cards mat-card {
   display: inline-block;
   min-width: 240px;
@@ -336,7 +338,9 @@ TODO: Move to entity-list-of-cards.component.css
 
 /* Experimental */
 mat-header-row {
-  position: sticky; top: 0;
+  position: sticky;
+  z-index: 51;
+  top: 0;
 }
 
 

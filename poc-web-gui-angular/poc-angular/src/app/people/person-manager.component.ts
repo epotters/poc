@@ -17,7 +17,9 @@ import {FieldFilter} from "../lib/entity-module/domain/filter.model";
 })
 export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
-  initialFieldFilters: FieldFilter[];
+  initialFilters: FieldFilter[];
+
+  listOfCardsVisible: boolean = false;
 
   constructor(
     public service: PersonService,
@@ -27,11 +29,14 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   ) {
     super(personMeta, service, route, componentFactoryResolver, dialog);
 
-    this.initialFieldFilters = [
+    this.initialFilters = [
       {name: 'lastName', rawValue: 'po'}
     ]
   }
 
+  toggleListOfCards() {
+    this.listOfCardsVisible = !this.listOfCardsVisible;
+  }
 
 
   openDialogWithList() {
@@ -43,7 +48,7 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
         paginatorVisible: false,
         filterVisible: false,
         editorVisible: false,
-        initialFieldFilters: this.initialFieldFilters
+        initialFilters: this.initialFilters
       });
     this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }

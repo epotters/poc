@@ -8,6 +8,7 @@ import {EntityMeta, FieldEditorConfig, ValidatorDescriptor} from "../domain/enti
 
 export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
 
+  @Input() readonly meta: EntityMeta<T>;
   @Input() readonly columns: string[];
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -24,11 +25,10 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   visible: boolean = true;
 
   constructor(
-    public meta: EntityMeta<T>,
     public formBuilder: FormBuilder,
     public injector: Injector
   ) {
-    console.debug('Constructing BaseEditorRowComponent (keySuffix: ' + this.keySuffix + ')');
+    console.debug('Constructing BaseEditorRowComponent');
   }
 
   ngAfterContentInit() {
@@ -56,6 +56,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     });
   }
 
+
   private buildFormGroup(): FormGroup {
     let group = {};
     for (let key in this.editorColumns) {
@@ -67,10 +68,16 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     return this.formBuilder.group(group);
   }
 
+
   buildValidators(fieldName: string): any[] {
     if (!this.enableValidation) {
       return [];
     }
+
+    if (fieldName.indexOf('.') > -1) {
+      fieldName = fieldName.split('.')[0];
+    }
+
     const validators: any[] = [];
     const validatorDescriptors = this.meta.columnConfigs[fieldName].validators;
     if (validatorDescriptors) {
@@ -149,14 +156,16 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
       .get(fieldName)
       .valueChanges
       .subscribe((value) => {
-        console.debug('About to load new related entities for autocomplete. Filter ' + value);
-        this.dataSources[editorConfig.relatedEntity.name].loadEntities(
-          [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
-          editorConfig.relatedEntity.displayField,
-          'asc',
-          0,
-          this.autoCompletePageSize
-        );
+        if (value) {
+          console.debug('About to load new related entities for autocomplete. Filter ', value);
+          this.dataSources[editorConfig.relatedEntity.name].loadEntities(
+            [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
+            editorConfig.relatedEntity.displayField,
+            'asc',
+            0,
+            this.autoCompletePageSize
+          );
+        }
       });
   }
 

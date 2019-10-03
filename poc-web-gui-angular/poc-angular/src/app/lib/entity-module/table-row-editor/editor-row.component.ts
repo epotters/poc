@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Inject, Injector, Input, Output} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import {EntityMeta, FieldEditorConfig} from "..";
+import {FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
-import {META} from "../entity-tokens";
 import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/material/tooltip";
 
 
@@ -21,22 +20,22 @@ export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
     {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: InlineEditorTooltipDefaults}
   ],
 })
-export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
-
-  @Input() readonly columns: string[];
-  @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
+export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> implements OnInit {
 
   keySuffix = ''; // 'Editor';
   visible = false;
 
 
   constructor(
-    @Inject(META) public meta: EntityMeta<any>,
     public formBuilder: FormBuilder,
     injector: Injector) {
-    super(meta, formBuilder, injector);
-    console.debug('Constructing EditorRowComponent for type ' + meta.displayName);
+    super(formBuilder, injector);
+    console.debug('Constructing EditorRowComponent');
     this.enableValidation = true;
+  }
+
+  ngOnInit(): void {
+    console.debug('Initializing EditorRowComponent for type ' + this.meta.displayName);
   }
 
 
@@ -46,6 +45,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
       this.rowEditorForm.setValue(editorEntity);
       this.rowEditorForm.markAsPristine();
     } else {
+      console.debug('Clearing the editor');
       this.rowEditorForm.reset();
     }
   }

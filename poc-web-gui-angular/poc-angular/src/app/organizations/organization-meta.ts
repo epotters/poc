@@ -10,6 +10,10 @@ export const organizationMeta: EntityMeta<Organization> = {
   displayName: 'Organization',
   displayNamePlural: 'Organizations',
 
+  displayNameRenderer: (organization: Organization) => {
+    return organization.name;
+  },
+
   // API
   apiBase: '/organizations/',
 
@@ -17,6 +21,8 @@ export const organizationMeta: EntityMeta<Organization> = {
   defaultPageSize: 150,
   defaultSortField: 'name',
   defaultSortDirection: 'asc',
+
+
 
   displayedColumns: ['id', 'name'],
 
@@ -32,9 +38,21 @@ export const organizationMeta: EntityMeta<Organization> = {
     },
     name: {
       label: 'Name'
+    },
+
+    employees: {
+      label: 'Employees',
+      editor: {
+        type: 'relation',
+        relationEntity: {
+          relationClass: 'Employment',
+          owner: 'employer',
+          columns: ['id', 'startDate', 'endDate', 'employee'],
+          sort: 'employee.lastName',
+          sortDirection: "asc"
+        }
+      }
     }
-  },
 
-  relatedEntities: ['employees']
-
+  }
 };

@@ -4,7 +4,7 @@
   </mat-card-header>
   <mat-card-content>
 
-    <form [formGroup]="entityForm">
+    <form [formGroup]="entityForm" class="main-form">
 
       <div class="form-row">
 
@@ -96,8 +96,9 @@
 
     </form>
 
-    <person-employers-relation-card [ownerSubject]="entitySubject"></person-employers-relation-card>
-
+    <div class="form-row">
+      <person-employers-relation class="relation" [ownerSubject]="entitySubject"></person-employers-relation>
+    </div>
 
   </mat-card-content>
 

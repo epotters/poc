@@ -9,6 +9,7 @@ import {DialogModule} from "./dialog/dialog.module";
 
 import {NGridModule} from "../../core/n-grid/n-grid.module";
 import {EntityComponentStyleOverrideDirective} from "./common/entity-component-style-override.directive";
+import {EntityLinkDirective} from "./common/entity-link.directive";
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {EntityComponentStyleOverrideDirective} from "./common/entity-component-s
     NGridModule
   ],
   declarations: [
-    EntityComponentStyleOverrideDirective
+    EntityComponentStyleOverrideDirective,
+    EntityLinkDirective
   ]
 })
 

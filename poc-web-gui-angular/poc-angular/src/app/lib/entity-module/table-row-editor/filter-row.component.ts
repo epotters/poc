@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Inject, Injector, Input, Output} from '@angular/core';
-import {FormBuilder, FormControl} from "@angular/forms";
-import {EntityMeta, FieldEditorConfig} from "..";
+import {Component, Injector} from '@angular/core';
+import {FormBuilder} from "@angular/forms";
+import {FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
-import {META} from "../entity-tokens";
 import {FieldFilter} from "../domain/filter.model";
 
 
@@ -13,35 +12,18 @@ import {FieldFilter} from "../domain/filter.model";
 })
 export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
 
-  @Input() readonly columns: string[];
-  @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
-
-
   keySuffix: string = ''; // 'Filter';
 
   constructor(
-    @Inject(META) public meta: EntityMeta<any>,
     public formBuilder: FormBuilder,
     injector: Injector) {
-    super(meta, formBuilder, injector);
+    super(formBuilder, injector);
 
-    console.debug('Constructing FilterRowComponent for type ' + meta.displayName);
+    console.debug('Constructing FilterRowComponent');
   }
 
-
-  getColumns(): Record<string, FieldEditorConfig> {
-    let editorColumns: Record<string, FieldEditorConfig> = {};
-    for (let idx in this.columns) {
-      let key: string = this.columns[idx];
-      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
-        editorColumns[key] = this.meta.columnConfigs[key].filter;
-      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
-        editorColumns[key] = this.meta.columnConfigs[key].editor;
-      } else {
-        editorColumns[key] = this.defaultFieldEditorConfig;
-      }
-    }
-    return editorColumns;
+  ngOnInit(): void {
+    console.debug('Initializing FilterRowComponent for type ' + this.meta.displayName);
   }
 
 
@@ -55,8 +37,14 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
       }
       for (let idx in fieldFilters) {
         let fieldFilter: FieldFilter = fieldFilters[idx];
-        filter[fieldFilter.name] = fieldFilter.rawValue;
-        console.debug('---> Setting filter to', fieldFilter);
+        console.debug('---> fieldFilters, idx, fieldFilter', fieldFilters, idx, fieldFilter);
+
+        if (filter[fieldFilter.name]) {
+          filter[fieldFilter.name] = fieldFilter.rawValue;
+          console.debug('Setting filter to', fieldFilter);
+        } else {
+          console.debug(fieldFilter.name, 'is not a part of the filter form');
+        }
       }
       this.rowEditorForm.setValue(filter);
     } else {
@@ -65,9 +53,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
   }
 
 
-  getOutputValue(): FieldFilter[] {
+  public getFilters(): FieldFilter[] {
 
-    console.debug('---> Start building form output value');
+    console.debug('Start building form output value');
     const entityFilter: any = this.rowEditorForm.getRawValue();
     const fieldFilters: FieldFilter[] = [];
 
@@ -95,9 +83,29 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
         }
       }
     );
-    console.debug('---> Finished building form output value: ', fieldFilters);
+    console.debug('Finished building form output value: ', fieldFilters);
     return fieldFilters;
   }
 
+
+  getOutputValue(): FieldFilter[] {
+    return this.getFilters()
+  }
+
+
+  getColumns(): Record<string, FieldEditorConfig> {
+    let editorColumns: Record<string, FieldEditorConfig> = {};
+    for (let idx in this.columns) {
+      let key: string = this.columns[idx];
+      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
+        editorColumns[key] = this.meta.columnConfigs[key].filter;
+      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
+        editorColumns[key] = this.meta.columnConfigs[key].editor;
+      } else {
+        editorColumns[key] = this.defaultFieldEditorConfig;
+      }
+    }
+    return editorColumns;
+  }
 
 }

@@ -1,9 +1,9 @@
 import {EntityMeta, SelectOption} from "../lib/entity-module";
-import {Person} from "../core/domain";
+import {Employment, Person} from "../core/domain";
 
 const genderOptions: SelectOption[] = [
-  {value: 'MALE', label: 'Male'},
-  {value: 'FEMALE', label: 'Female'}
+  {value: 'MALE', label: '♂'},
+  {value: 'FEMALE', label: '♀'}
 ];
 
 const personNamePattern: string = '[a-zA-Z -]*';
@@ -15,6 +15,10 @@ export const personMeta: EntityMeta<Person> = {
   namePlural: 'people',
   displayName: 'Person',
   displayNamePlural: 'People',
+
+  displayNameRenderer: (person: Person) => {
+    return person.firstName + ' ' + ((person.prefix) ? (person.prefix) + ' ' : '') + person.lastName;
+  },
 
   // API
   apiBase: '/people/',
@@ -88,6 +92,21 @@ export const personMeta: EntityMeta<Person> = {
     },
     birthPlace: {
       label: 'Birth place'
+    },
+
+
+    employers: {
+      label: 'Employers',
+      editor: {
+        type: 'relation',
+        relationEntity: {
+          relationClass: 'Employment',
+          owner: 'employee',
+          columns: ['id', 'startDate', 'endDate', 'employer'],
+          sort: 'employer.name',
+          sortDirection: "asc"
+        }
+      }
     }
   }
 };

@@ -1,14 +1,17 @@
-<div *ngIf="dataSource.loading$ | async" class="progress">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-</div>
+<div class="entity-list" component-style="entity-list">
 
-<editor-actions (actionResult)="afterAction($event)"></editor-actions>
+  <div class.progress-visible="dataSource.loading$ | async" class="progress">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
 
-<mat-card class="list-card" component-style="entity-list">
+  <editor-actions
+    [meta]="meta"
+    [service]="service"
+  ></editor-actions>
 
-  <mat-card-header>
+  <mat-toolbar class="list-toolbar-top">
 
-    <mat-card-title>{{title}}</mat-card-title>
+    <h4>{{title}}</h4>
 
     <span class="fill-remaining-space"></span>
 
@@ -20,7 +23,6 @@
     <mat-menu #titlebarMenu="matMenu">
 
       <button mat-menu-item (click)="toggleFilter()">
-        <mat-icon>search</mat-icon>
         <span>{{this.filterVisible ? 'Hide' : 'Show'}} filter</span>
       </button>
       <button mat-menu-item [disabled]="fieldFilters.length == 0" (click)="filterRow.clear()">
@@ -29,8 +31,7 @@
       <mat-divider></mat-divider>
 
       <button mat-menu-item (click)="toggleEditor()">
-        <mat-icon>add</mat-icon>
-        <span>{{this.editorVisible ? 'Hide editor' : 'New entity'}}</span>
+        <span>{{this.editorVisible ? 'Hide editor' : 'New ' + this.meta.displayName.toLowerCase()}}</span>
       </button>
       <button mat-menu-item (click)="editorRow.clear()">
         <span>Clear editor</span>
@@ -53,62 +54,60 @@
       </button>
     </mat-menu>
 
-  </mat-card-header>
+  </mat-toolbar>
 
 
-  <mat-card-content>
+  <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultSortField}}"
+             matSortDirection="{{meta.defaultSortDirection}}" matSortDisableClear>
 
-    <mat-table [dataSource]="dataSource" matSort matSortActive="{{meta.defaultSortField}}"
-               matSortDirection="asc" matSortDisableClear>
+    <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
+      <mat-header-cell *matHeaderCellDef>
+        <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{getCellDisplayValue(row, column)}}</mat-cell>
+    </ng-container>
 
-      <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
-        <mat-header-cell *matHeaderCellDef>
-          <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{getCellDisplayValue(row, column)}}</mat-cell>
-      </ng-container>
+    <ng-container *matHeaderRowDef="columns">
+      <mat-header-row [class.hidden]="!headerVisible"></mat-header-row>
 
-      <ng-container *matHeaderRowDef="columns">
-        <mat-header-row [class.hidden]="!headerVisible"></mat-header-row>
+      <filter-row [meta]="meta"
+                  [columns]="columns"
+                  [hidden]="!filterVisible"
+                  (editorChange)="onFilterChanged($event)"
+                  [class.editor-inline]="true">
+      </filter-row>
 
-        <filter-row [columns]="columns"
-                    [hidden]="!filterVisible"
-                    (editorChange)="onFilterChanged($event)"
-                    [class.editor-inline]="true">
-        </filter-row>
+      <editor-row [meta]="meta"
+                  [columns]="columns"
+                  [hidden]="!editorVisible"
+                  (keydown.enter)="saveEntity()"
+                  (keydown.escape)="stopEditing()"
+                  [class.editor-inline]="true"
+                  [class.editor-moved]="editorViewState.rowElement"
+                  [style.transform]="editorViewState.transform">
+      </editor-row>
 
-        <editor-row [columns]="columns"
-                    [hidden]="!editorVisible"
-                    (keydown.enter)="saveEntity()"
-                    (keydown.escape)="stopEditing()"
-                    [class.editor-inline]="true"
-                    [class.editor-moved]="editorViewState.rowElement"
-                    [style.transform]="editorViewState.transform">
-        </editor-row>
+    </ng-container>
 
-      </ng-container>
+    <mat-row (contextmenu)="onContextMenu($event, row, idx)"
+             (click)="onShiftClick($event, row)"
+             (dblclick)="onDblClick($event, row, idx)"
+             *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
 
-      <mat-row (contextmenu)="onContextMenu($event, row, idx)"
-               (click)="onShiftClick($event, row)"
-               (dblclick)="onDblClick($event, row, idx)"
-               *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
+    <ng-container matColumnDef="paginator">
+      <mat-footer-cell *matFooterCellDef>
+        <mat-paginator
+          [length]="dataSource.awaitTotal() | async"
+          [pageSize]="meta.defaultPageSize">
+        </mat-paginator>
+      </mat-footer-cell>
+    </ng-container>
 
+    <mat-footer-row *matFooterRowDef="['paginator']" [class.hidden]="!paginatorVisible"></mat-footer-row>
 
-      <ng-container matColumnDef="paginator">
-        <mat-footer-cell *matFooterCellDef>
-          <mat-paginator
-            [length]="dataSource.awaitTotal() | async"
-            [pageSize]="meta.defaultPageSize">
-          </mat-paginator>
-        </mat-footer-cell>
-      </ng-container>
+  </mat-table>
 
-      <mat-footer-row *matFooterRowDef="['paginator']" [class.hidden]="!paginatorVisible"></mat-footer-row>
-
-    </mat-table>
-
-  </mat-card-content>
-</mat-card>
+</div>
 
 
 <!-- Context menu-->
@@ -122,7 +121,7 @@
   <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex">
     <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Edit
       this {{meta.displayName.toLowerCase()}}</button>
-    <button mat-menu-item (click)="stopEditing()" *ngIf="isEditing()">Stop editing</button>
+    <button mat-menu-item (click)="stopEditing().subscribe()" *ngIf="isEditing()">Stop editing</button>
     <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
     <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>
   </ng-template>

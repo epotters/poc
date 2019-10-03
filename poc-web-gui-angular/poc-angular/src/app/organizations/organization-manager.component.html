@@ -1,16 +1,27 @@
 <h1>{{title}}</h1>
 
 <mat-toolbar>
-  <button (click)="openDialogWithList()" mat-button>List</button>
-  <button (click)="openDialogWithEditor()" mat-button>Editor</button>
+
+  <button (click)="toggleList()" mat-button>{{(listVisible) ? 'Hide' : 'Show'}} List</button>
+  <button (click)="toggleEditor()" mat-button>{{(editorVisible) ? 'Hide' : 'Show'}} Editor</button>
+
+  <button (click)="openDialogWithList()" mat-button>List in dialog</button>
+  <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
+
 </mat-toolbar>
 
 <organization-editor-card
+  *ngIf="editorVisible"
   [isManaged]="true"
   [entityToLoad]="selectedEntity">
 </organization-editor-card>
 
 <organization-list-card
+  *ngIf="listVisible"
   [isManaged]="true"
-  (entitySelector)="onEntitySelected($event)">
+  (entitySelector)="onEntitySelected($event)"
+  [title]="'Managed organization list'"
+  [filterVisible]="false"
+>
 </organization-list-card>
+

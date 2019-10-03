@@ -20,6 +20,9 @@ import {EntityComponentEntryPointDirective} from "./entity-component-entrypoint.
     ConfirmationDialogComponent,
     EntityComponentDialogComponent
   ],
+  exports: [
+    EntityComponentEntryPointDirective
+  ],
   providers: []
 })
 export class DialogModule {

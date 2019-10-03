@@ -14,6 +14,16 @@
         >
       </mat-form-field>
 
+      <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="'never'">
+        <textarea matInput formControlName="{{key + keySuffix}}"
+               [matTooltip]="getErrorMessage(key)"
+               [matTooltipDisabled]="hasErrors(key)"
+               matTooltipClass="red-tooltip"
+        ></textarea>
+      </mat-form-field>
+
+
+
       <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">
         <mat-select formControlName="{{key + keySuffix}}">
           <mat-option [value]="">-</mat-option>
@@ -35,7 +45,7 @@
           <mat-option
             *ngFor="let relatedEntity of dataSources[editorColumns[key].relatedEntity.name].awaitEntities() | async"
             [value]="relatedEntity">
-            {{relatedEntity[editorColumns[key].relatedEntity.displayField]}}
+            {{editorColumns[key].relatedEntity.displayOption(relatedEntity)}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

@@ -6,7 +6,7 @@ import {MatSort} from "@angular/material/sort";
 import {merge} from "rxjs";
 import {tap} from "rxjs/operators";
 
-import {EntityMeta} from "./domain/entity-meta.model";
+import {EntityMeta, SortDirectionType} from "./domain/entity-meta.model";
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
 
@@ -16,7 +16,7 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
   @Input() activeSort: string = 'id';
-  @Input() sortDirection: 'asc' | 'desc' = 'asc';
+  @Input() sortDirection: SortDirectionType = 'asc';
   @Input() pageSize: number = 2;
   startPage: number = 0;
 

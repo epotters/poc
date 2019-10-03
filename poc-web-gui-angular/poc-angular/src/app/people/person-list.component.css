@@ -8,6 +8,7 @@
   flex: 1;
   justify-content: flex-end;
   padding-right: 24px;
+  user-select: none;
 }
 
 [component-style='entity-list'] .editor-cell.mat-column-id .editor-type-switch {

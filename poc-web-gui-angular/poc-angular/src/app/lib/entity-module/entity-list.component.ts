@@ -1,16 +1,15 @@
 import {AfterViewInit, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatMenuTrigger} from "@angular/material/menu";
 
-import {merge, of as observableOf} from "rxjs";
+import {merge, Observable, of as observableOf} from "rxjs";
 import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
 
 import {FieldFilter} from "./domain/filter.model";
-import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
-import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
+import {ColumnConfig, EntityMeta, SortDirectionType} from "./domain/entity-meta.model";
 
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
@@ -18,6 +17,19 @@ import {EditorRowComponent} from "./table-row-editor/editor-row.component";
 import {FilterRowComponent} from "./table-row-editor/filter-row.component";
 import {ActionResult, EntityEditorActionsComponent} from "./table-row-editor/entity-editor-actions.component";
 
+
+export interface ListConfig<T> {
+  title?: string;
+  columns?: string[];
+  overlay?: any;
+  initialFilters?: FieldFilter[];
+  initialSort?: string;
+  initialSortDirection?: SortDirectionType;
+  headerVisible?: boolean;
+  paginatorVisible?: boolean;
+  filterVisible?: boolean;
+  editorVisible?: boolean;
+}
 
 export interface EditorViewState {
   rowElement: HTMLElement,
@@ -33,23 +45,21 @@ export interface Position {
 export abstract class EntityListComponent<T extends Identifiable> implements OnChanges, OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
-  @Input() columns: string[];
-  @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
+  @Input() title: string = this.meta.displayName;
+  @Input() columns: string[] = this.meta.displayedColumns;
+  @Input() overlay: any = {};
 
-  sortable: boolean = true;
-  pageable: boolean = true;
-  filterable: boolean = true;
-  editable: boolean = true;
-
-  @Input() title: string;
+  @Input() initialSort?: string = this.meta.defaultSortField || 'id';
+  @Input() initialSortDirection?: SortDirectionType = this.meta.defaultSortDirection || 'asc';
+  @Input() initialFilters: FieldFilter[] = [];
 
   @Input() headerVisible: boolean = true;
   @Input() paginatorVisible: boolean = true;
   @Input() filterVisible: boolean = true;
   @Input() editorVisible: boolean = false;
 
-  @Input() initialFieldFilters: FieldFilter[] = [];
+  @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
 
   dataSource: EntityDataSource<T>;
@@ -85,6 +95,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
 
     this.title = meta.displayNamePlural;
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -94,40 +105,36 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
   ngOnInit() {
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
+
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
-
-    if (!this.columns) {
-      console.debug('No columns set through columns @Input. Applying default.');
-      this.columns = this.meta.displayedColumns;
-    }
-
-    this.fieldFilters = this.initialFieldFilters;
-
-    this.dataSource.loadEntities(this.fieldFilters, this.meta.defaultSortField, this.meta.defaultSortDirection,
-      this.startPage, this.meta.defaultPageSize);
   }
 
 
   ngAfterViewInit(): void {
 
-    // Reset the paginator after sorting
-    this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0;
-    });
+    this.fieldFilters = this.applyOverlay(this.initialFilters);
+    this.filterRow.setFilters(this.fieldFilters);
 
-    // TODO: fix this
-    // this.filterRow.setFilters(this.fieldFilters);
+    this.sort.active = this.initialSort || this.meta.defaultSortField;
+    this.sort.direction = this.initialSortDirection || this.meta.defaultSortDirection;
+
+    this.paginator.pageIndex = this.startPage;
+    this.paginator.pageSize = this.meta.defaultPageSize;
+
+
+    // Reset the paginator after sorting
+    this.sort.sortChange
+      .subscribe(() => {
+        this.paginator.pageIndex = 0;
+      });
 
     merge(this.sort.sortChange, this.paginator.page, this.filterRow.editorChange)
       .pipe(
         startWith({}),
-        delay(0), // Workarond for "Expression has changed" error
+        delay(200), // Workarond for "Expression has changed" error
         switchMap(() => {
-          this.stopEditing();
+          this.stopEditing().subscribe();
           this.loadEntitiesPage();
-          return this.dataSource.awaitEntities();
-        }),
-        map(() => {
           return this.dataSource.awaitEntities();
         }),
         catchError(() => {
@@ -169,20 +176,34 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     }
   }
 
+
   saveEntity(): void {
     console.debug('Save this ' + this.meta.displayName.toLowerCase());
-    if (this.editorActions) {
-      this.editorActions.saveEntity(this.editorRow.rowEditorForm);
-    }
+
+    this.editorActions.saveEntity(this.editorRow.rowEditorForm, this.overlay)
+      .subscribe((result: ActionResult<T>) => {
+        if (result.success) {
+          this.stopEditing().subscribe(result => {
+            console.info(result.msg);
+          });
+          this.loadEntitiesPage();
+        }
+      });
+
   }
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
     if (this.editorActions) {
-      this.editorActions.deleteEntity(entity);
+      this.editorActions.deleteEntity(entity).subscribe((result: ActionResult<T>) => {
+        if (result.success) {
+          console.debug('Entity deleted');
+          this.loadEntitiesPage();
+        }
+
+      });
     }
   }
-
 
   updateEntities() {
     if (this.editorActions) {
@@ -201,7 +222,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
   toggleEditor(): void {
     if (this.editorVisible) {
-      this.stopEditing();
+      this.stopEditing().subscribe();
     } else {
       this.editorVisible = true;
     }
@@ -210,49 +231,48 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   public startEditing(entity: T, targetElement: Element, idx: number) {
 
     console.debug('Are we currently editing? ' + this.isEditing());
-    console.debug(this.editorRow.rowEditorForm.getRawValue());
+    console.debug('rowEditorForm value', this.editorRow.rowEditorForm.getRawValue());
 
     if (this.isEditing()) {
-      this.stopEditing();
+      this.stopEditing().subscribe((result: ActionResult<T>) => {
+        if (result.success) {
+          console.debug('Start editing...');
+          this.showAndPositionEditor(targetElement, idx)
+          this.editorRow.loadEntity(entity);
+          if (result.changes) {
+            this.loadEntitiesPage();
+          }
+        } else {
+          console.debug('Failed to stop editing...');
+        }
+      });
+    } else {
+      this.showAndPositionEditor(targetElement, idx)
+      this.editorRow.loadEntity(entity);
     }
+  }
 
+
+  public stopEditing(): Observable<ActionResult<T>> {
+    return this.editorActions.handleUnsavedChanges(this.editorRow.rowEditorForm, this.overlay)
+      .pipe(map((result: ActionResult<T>) => {
+        if (result.success) {
+          this.editorRow.rowEditorForm.reset();
+          this.hideAndResetEditor();
+        }
+        return result;
+      }));
+  }
+
+  private showAndPositionEditor(targetElement: Element, idx: number) {
     this.editorVisible = true;
     this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
     this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
     this.editorViewState.rowElement.style.opacity = '0.5';
-
-    this.editorRow.loadEntity(entity);
   }
 
 
-  public stopEditing() {
-    this.checkForUnsavedChanges();
-  }
-
-  private checkForUnsavedChanges(): void {
-    if (this.editorRow.rowEditorForm.dirty) {
-      console.debug('The editor row has unsaved changes');
-      const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
-      dialogRef.afterClosed().subscribe(
-        data => {
-          if (data.confirmed) {
-            console.info('User confirmed he wants to save changes to ' + this.meta.displayName.toLowerCase());
-            this.saveEntity();
-          } else {
-            console.info('User chose to discard changes in the editor');
-          }
-        }
-      );
-    } else {
-      console.debug('The editor row doesn\'t have unsaved changes');
-
-      this.hideAndResetEditorView();
-      this.editorRow.loadEntity(null);
-    }
-  }
-
-
-  private hideAndResetEditorView() {
+  private hideAndResetEditor() {
     this.editorVisible = false;
     if (this.editorViewState.rowElement) {
       this.editorViewState.rowElement.style.opacity = '1';
@@ -263,45 +283,50 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
 
   isEditing(): boolean {
-    if (this.editorViewState.rowElement) {
-      if (this.editorRow.rowEditorForm.getRawValue() && this.editorRow.rowEditorForm.getRawValue()['id']) {
-        return this.editorRow.rowEditorForm.getRawValue()['id'] != null;
-      }
-    }
-    return false;
+    const form = this.editorRow.rowEditorForm;
+    return (form.dirty ||
+      (this.editorViewState.rowElement &&
+        form.getRawValue() && form.getRawValue()['id'] && form.getRawValue()['id'] != null)
+    );
   }
 
 
-  // Filters
-
-  toggleFilter(): void {
+// Filters
+  toggleFilter()
+    :
+    void {
     this.filterVisible = !this.filterVisible;
   }
 
-  public onFilterChanged($event): void {
-    this.fieldFilters = $event;
+  public
+
+  onFilterChanged($event)
+    :
+    void {
+    console.debug('onFilterChanged', $event);
+    this.fieldFilters = this.applyOverlay($event);
+    console.debug('onFilterChanged, after appyOverlay', this.overlay, this.fieldFilters);
   }
 
+
+// User actions
   onShiftClick(event: MouseEvent, entity: T) {
     if (event.shiftKey) {
       this.selectEntity(entity);
     }
   }
 
-  onDblClick(event: MouseEvent, entity: T, idx: number) {
+  onDblClick(event: MouseEvent, entity:T, idx:number) {
     console.debug('Double click on entity ', entity);
     event.preventDefault();
     const targetElement: Element = ((event.target || event.currentTarget) as Element);
     this.startEditing(entity, targetElement, idx);
   }
 
-
   onContextMenu(event: MouseEvent, entity: T, idx: number) {
-    console.debug('Context menu for entity ', entity);
-    console.debug('idx: ' + idx);
+    console.debug('Context menu for entity ', entity, 'idx: ' + idx);
     event.preventDefault();
-    const target: EventTarget = event.target || event.currentTarget;
-    const targetElement: Element = (target as Element);
+    const targetElement: Element = ((event.target || event.currentTarget) as Element);
 
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
@@ -313,26 +338,31 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   }
 
 
-  afterAction(actionResult: ActionResult<T>) {
-    if (actionResult.action == 'save') {
-      this.editorRow.rowEditorForm.markAsPristine();
-      this.stopEditing();
-    } else if (actionResult.action == 'delete') {
-      console.debug('Entity deleted');
+  private
+
+  applyOverlay(filters
+                 :
+                 FieldFilter[]
+  ):
+    FieldFilter[] {
+    const newFieldFilters: FieldFilter[] = [];
+    console.debug('-> Reflect.ownKeys(this.overlay)', Reflect.ownKeys(this.overlay));
+    for (let idx in Reflect.ownKeys(this.overlay)) {
+      let key = (Reflect.ownKeys(this.overlay)[idx] as string);
+      console.debug('-> applyOverlay', key, this.overlay[key]);
+      if (this.overlay[key]['id']) {
+        newFieldFilters.push({name: key + '.id', rawValue: this.overlay[key]['id']});
+      } else {
+        newFieldFilters.push({name: key, rawValue: this.overlay[key]});
+      }
     }
-    this.loadEntitiesPage();
-  }
-
-
-  openConfirmationDialog(title: string, message: string) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {
-      title: title,
-      message: message
-    };
-    return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    for (let idx in filters) {
+      let fieldFilter: FieldFilter = filters[idx];
+      if (!Reflect.ownKeys(this.overlay).includes(fieldFilter.name)) {
+        newFieldFilters.push(fieldFilter);
+      }
+    }
+    return newFieldFilters;
   }
 
 
@@ -356,5 +386,4 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     }
     return value;
   }
-
 }

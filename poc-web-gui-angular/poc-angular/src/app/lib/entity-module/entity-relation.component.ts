@@ -1,204 +1,87 @@
-import {Input, OnInit} from "@angular/core";
-import {EntityMeta} from "./domain/entity-meta.model";
-import {EntityService} from "./entity.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from "@angular/core";
+import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {EntityDataSource} from "./entity-data-source";
+import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
+import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entrypoint.directive";
+import {ListConfig} from "./entity-list.component";
+
 
 export abstract class EntityRelationComponent<T extends Identifiable, S extends Identifiable, R extends Identifiable> implements OnInit {
 
-  @Input() ownerSubject: BehaviorSubject<S>;
+  @Input() readonly ownerSubject: BehaviorSubject<S>;
 
-  relationsSubject: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
-  relatedDataSource: EntityDataSource<R>;
+  fieldName: string;
+  component: Type<any>;
+  visible: boolean = false;
 
-  relatedEntityForm: FormGroup;
-  isVisible: boolean = false;
-
-  formVisible: boolean = false;
-  showAddButton: boolean = true;
-
-  prefillQueryParams: any = {};
-
-
-  // TODO: Move this to meta config
-  relationDisplayName: string;
-  ownerFieldName: string;
-  relatedFieldName: string;
-  relatedDisplayField: string;
-  relatedNamePlural: string;
-
-  filterFieldName: string;
-  sortFieldName: string;
-  sortDirection: ('asc' | 'desc') = 'asc';
-
-  autoCompletePageSize: number = 25;
-
+  @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
 
   constructor(
     public meta: EntityMeta<T>,
     public ownerMeta: EntityMeta<S>,
     public relatedMeta: EntityMeta<R>,
-    public service: EntityService<T>,
-    public relatedService: EntityService<R>,
-    public formBuilder: FormBuilder,
-    public router: Router,
-    public route: ActivatedRoute
+    public componentFactoryResolver: ComponentFactoryResolver
   ) {
     console.debug('Constructing the EntityRelationComponent for relation ' + this.meta.displayName + ' between ' +
       this.ownerMeta.displayName + ' and ' + this.relatedMeta.displayName);
   }
 
-
-  ngOnInit() {
-    console.debug('Initializing the EntityRelationComponent for relation ' + this.meta.displayName + ' between ' +
-      this.ownerMeta.displayName + ' and ' + this.relatedMeta.displayName);
-
-    this.relatedDataSource = new EntityDataSource<R>(this.relatedMeta, this.relatedService);
-    this.relatedEntityForm = this.buildForm(this.formBuilder);
-
-    this.prefillQueryParams[this.ownerFieldName + '.id'] = this.getOwnerIdFromPath();
-    console.debug(this.prefillQueryParams);
-
-    this.activateRelatedEntityList();
-    this.activateRelatedEntityControl();
+  ngOnInit(): void {
+    this.activateRelation();
   }
 
-
-  private activateRelatedEntityList(): void {
+  private activateRelation(): void {
     this.ownerSubject.asObservable().subscribe(owner => {
         if (owner) {
-          this.prefillQueryParams[this.ownerFieldName + '.id'] = owner.id;
-          this.isVisible = true;
-          this.loadRelatedEntities(owner);
+          console.debug('Owner loaded, about to build relation', this.fieldName);
+          this.visible = true;
+          this.loadRelationList(owner);
         } else {
-          console.debug('No owner entity yet');
+          console.debug('No owner loaded yet');
         }
       }
     );
   }
 
-  private loadRelatedEntities(owner: S): void {
-    this.service.listRelationsByOwner(this.ownerMeta.namePlural, owner.id, this.relatedNamePlural, this.relatedFieldName + '.' + this.sortFieldName)
-      .subscribe(relations => {
-        console.debug('Inside subscription to the relationService');
-        console.debug(relations);
-        this.relationsSubject.next(relations);
-        console.debug('Just called relationsSubject.next');
-      });
-  }
 
+  // Load the table
+  private loadRelationList(owner: S) {
 
-  private activateRelatedEntityControl(): void {
+    const columnConfig: ColumnConfig = this.ownerMeta.columnConfigs[this.fieldName];
+    const relationOverlay = {};
 
-    console.debug('About to activateRelatedEntityControl');
-    console.debug('this.filterFieldName: ' + this.filterFieldName);
+    relationOverlay[columnConfig.editor.relationEntity.owner] = owner;
 
-    this.relatedEntityForm
-      .get(this.relatedFieldName)
-      .valueChanges
-      .subscribe((value) => {
-        console.debug('About to load new ' + this.relatedMeta.displayNamePlural + ' for autocomplete. Filter ' + value);
-        if (this.formVisible) {
-          this.relatedDataSource.loadEntities(
-            [{name: this.filterFieldName, rawValue: value}],
-            this.sortFieldName,
-            this.sortDirection,
-            0,
-            this.autoCompletePageSize
-          );
-        }
-      });
+    console.debug('loadRelationList: ', owner, relationOverlay, this.ownerMeta, this.fieldName, columnConfig);
 
-  }
+    const listConfig: ListConfig<T> = {
+      title: columnConfig.label,
+      columns: columnConfig.editor.relationEntity.columns,
+      overlay: relationOverlay,
+      initialSort: columnConfig.editor.relationEntity.sort,
+      initialSortDirection: columnConfig.editor.relationEntity.sortDirection,
+      headerVisible: false,
+      paginatorVisible: false,
+      filterVisible: false,
+      editorVisible: false
+    };
 
-  buildForm(formBuilder: FormBuilder): FormGroup {
-    return formBuilder.group({
-      [this.relatedFieldName]: new FormControl()
-    });
-  }
+    console.debug('listConfig', listConfig);
 
-  showForm(): void {
-    this.formVisible = true;
+    const componentDescriptor: EntityComponentDescriptor =
+      new EntityComponentDescriptor(this.component, listConfig);
 
-    // Focus o the form field
-    // this.relatedEntityForm.get(this.relatedFieldName).
-  }
+    console.debug(this.componentEntrypoint);
 
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentDescriptor.component);
+    this.componentEntrypoint.viewContainerRef.clear();
+    const componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
-  hideForm(): void {
-    this.formVisible = false;
-  }
-
-
-  addOption() {
-    console.debug('Add a new ' + this.relatedMeta.displayName);
-    this.router.navigate([this.relatedMeta.apiBase + '/new'], {queryParams: {[this.filterFieldName]: this.relatedEntityForm.get(this.relatedFieldName).value}});
-  }
-
-
-  getOwnerIdFromPath(): number | null {
-    return parseInt(this.route.snapshot.paramMap.get('id'));
-  }
-
-
-  displayOptionRelatedEntity(entity?: R): string | undefined {
-    console.debug('Inside displayOptionRelatedEntity');
-
-    if (entity) {
-      return (entity[this.relatedDisplayField]);
-    } else {
-      console.debug('No entity to display in autocomplete');
-      return undefined;
-    }
-  }
-
-  relatedEntitySelected(entity: R) {
-    console.log('Related entity selected', entity);
-    this.saveRelation();
-  }
-
-  onClick(event: MouseEvent, entity: T) {
-    event.preventDefault();
-    if (event.ctrlKey) {
-      this.deleteRelation(entity);
-    }
-  }
-
-  deleteRelation(relation) {
-    console.log('Delete this relation');
-  }
-
-  saveRelation() {
-    if (this.relatedEntityForm.valid) {
-
-      let relationEntity: T = this.relatedEntityForm.getRawValue();
-      relationEntity[this.ownerFieldName] = this.ownerSubject.getValue();
-
-      console.log('Ready to save', relationEntity);
-
-      this.service.save(relationEntity).subscribe((savedEntity) => {
-        let msg: string;
-        if (relationEntity.id) {
-          msg = this.meta.displayName + ' with id ' + relationEntity.id + ' is updated successfully';
-        } else {
-          msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
-        }
-        console.info(msg);
-        console.log('savedEntity: ', savedEntity);
-
-        this.relatedEntityForm.reset();
-        this.relatedEntityForm.markAsPristine();
-        this.relatedEntityForm.markAsUntouched();
-
-        this.hideForm();
-
-        this.loadRelatedEntities(this.ownerSubject.getValue());
-
-      });
-    } else {
-      console.info('No valid related entity chosen');
+    for (let key in componentDescriptor.data) {
+      if (componentDescriptor.data.hasOwnProperty(key)) {
+        console.debug('Set @input', key, 'to value', componentDescriptor.data[key]);
+        (<EntityComponentDescriptor>componentRef.instance as any)[key] = componentDescriptor.data[key];
+      }
     }
   }
 }

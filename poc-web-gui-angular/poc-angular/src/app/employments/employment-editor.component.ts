@@ -11,6 +11,8 @@ import {Employment, Organization, Person} from "../core/domain";
 import {employmentMeta} from "./employment-meta";
 import {organizationMeta} from "../organizations/organization-meta";
 import {personMeta} from "../people/person-meta";
+import {FieldFilter} from "../lib/entity-module/domain/filter.model";
+import {BehaviorSubject} from "rxjs";
 
 
 @Component({
@@ -24,6 +26,15 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
   peopleDataSource: EntityDataSource<Person>;
 
   autoCompletePageSize: number = 25;
+
+
+  // Experimental
+  showRelations: boolean = false;
+  personColumns: string[] = ['id'];
+  personFilters: FieldFilter[] = [];
+  organizationColumns: string[] = ['id'];
+  organizationFilters: FieldFilter[] = [];
+
 
   constructor(
     public service: EmploymentService,
@@ -52,19 +63,48 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     this.activateEmployerControl();
 
     this.activateEmployeeControl();
+
+    this.activateExperimentalRelatedEntityList();
+
   }
 
 
   buildForm(formBuilder: FormBuilder) {
     this.entityForm = formBuilder.group({
       id: new FormControl(),
+      startDate: new FormControl(),
+      endDate: new FormControl(),
       employer: new FormControl('', [
         Validators.required
       ]),
       employee: new FormControl('', [
         Validators.required
-      ])
+      ]),
+      description: new FormControl()
     });
+  }
+
+  private activateExperimentalRelatedEntityList(): void {
+    this.entitySubject.asObservable().subscribe(owner => {
+        if (owner) {
+
+          console.debug('---> Loaded employment', owner);
+
+          this.personColumns = ['id', 'startDate', 'endDate', 'employer'];
+          this.organizationColumns = ['id', 'startDate', 'endDate', 'employee'];
+
+
+          // [ownerSubject]="entitySubject"
+          this.personFilters = [{name: 'employee.id', rawValue: '' + owner.employee.id}];
+          this.organizationFilters = [{name: 'employer.id', rawValue: '' + owner.employer.id}];
+
+          this.showRelations = true;
+
+        } else {
+          console.debug('No owner entity yet');
+        }
+      }
+    );
   }
 
 
@@ -139,5 +179,9 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
       return undefined;
     }
   }
+
+
+  // Experimental
+
 
 }

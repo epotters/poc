@@ -1,12 +1,19 @@
-import {Component} from "@angular/core";
+import {Component, ComponentFactoryResolver, Input} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MatDialog, MatSnackBar} from "@angular/material";
 
 import {EntityEditorComponent} from "../lib/entity-module";
-import {Person} from "../core/domain/";
+import {Employment, Organization, Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
+import {employmentMeta} from "../employments/employment-meta";
+import {organizationMeta} from "../organizations/organization-meta";
+
 import {PersonService} from "./person.service";
+import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
+import {BehaviorSubject} from "rxjs";
+import {EmploymentListComponent} from "../employments/employments-list.component";
+
 
 @Component({
   selector: 'person-editor-card',
@@ -45,3 +52,21 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
     });
   }
 }
+
+
+@Component({
+  selector: 'person-employers-relation',
+  templateUrl: '../lib/entity-module/entity-relation.component.html'
+})
+export class PersonEmployersRelationComponent extends EntityRelationComponent<Employment, Person, Organization> {
+  @Input() readonly ownerSubject: BehaviorSubject<Person>;
+
+  constructor(
+    public componentFactoryResolver: ComponentFactoryResolver
+  ) {
+    super(employmentMeta, personMeta, organizationMeta, componentFactoryResolver);
+    this.fieldName = 'employers';
+    this.component = EmploymentListComponent;
+  }
+}
+

@@ -2,9 +2,12 @@
 
 .editor-row {
   display: flex;
+  box-sizing: border-box;
+  align-items: center;
 }
 
-.mat-form-field-infix {
+/* Set to 180px somewhere for some reason */
+.editor-row .mat-form-field-infix {
   width: auto;
 }
 
@@ -18,12 +21,6 @@
 
 .editor-row .editor-cell:first-of-type .mat-form-field-wrapper {
   margin-left: -24px;
-}
-
-
-.error-tooltip {
-  color: white;
-  background-color: red;
 }
 
 .editor-row .editor-cell:last-of-type .mat-form-field-wrapper {
@@ -66,5 +63,10 @@ filter-row .mat-form-field-appearance-fill .mat-form-field-flex {
 .editor-row .mat-select-arrow-wrapper {
   padding-top: 9px;
   padding-right: 6px;
+}
+
+.error-tooltip {
+  color: white;
+  background-color: red;
 }
 

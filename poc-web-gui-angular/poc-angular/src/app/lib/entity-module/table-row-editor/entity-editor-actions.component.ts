@@ -1,15 +1,18 @@
-import {Component, EventEmitter, Inject, Output} from "@angular/core";
-import {EntityMeta} from "../domain/entity-meta.model";
-import {EntityService} from "../entity.service";
+import {Component, Input} from "@angular/core";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormGroup} from "@angular/forms";
-import {META, SERVICE} from "../entity-tokens";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {BehaviorSubject, Observable} from "rxjs";
+import {EntityMeta} from "..";
+import {EntityService} from "../entity.service";
+import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog.component";
+import {Config} from "../common/config";
+
 
 export interface ActionResult<T> {
-  action: 'save' | 'delete';
-  result: 'ok' | 'error'
+  success: boolean;
+  changes: boolean;
+  msg: string;
   entity?: T
 }
 
@@ -20,59 +23,83 @@ export interface ActionResult<T> {
 })
 export class EntityEditorActionsComponent<T extends Identifiable> {
 
-  @Output() actionResult: EventEmitter<ActionResult<T>> = new EventEmitter<ActionResult<T>>();
+  @Input() meta: EntityMeta<T>;
+  @Input() service: EntityService<T>;
 
-  snackbarDuration: number = 3000;
-
+  // snackbarDuration: number = 3000;
 
   constructor(
-    @Inject(META) public meta: EntityMeta<T>,
-    @Inject(SERVICE) public service: EntityService<T>,
     public dialog: MatDialog,
     public snackbar: MatSnackBar
   ) {
   }
 
 
-  saveEntity(entityForm: FormGroup) {
+  saveEntity(entityForm: FormGroup, overlay?: any): Observable<ActionResult<T>> {
+
+    let savedEntitySubject: BehaviorSubject<ActionResult<T>> = new BehaviorSubject<ActionResult<T>>(
+      {success: false, changes: false, msg: 'BehaviorSubject for entity saving created'}
+    );
+
     if (entityForm.valid) {
+
       let entity: T = entityForm.getRawValue();
 
-      console.debug('Ready to save ' + this.meta.displayName + ': ' + JSON.stringify(entity));
-      this.service.save(entity).subscribe((savedEntity) => {
-        let msg: string;
-        if (entity.id) {
-          msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
-        } else {
-          msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
-        }
-        this.actionResult.emit({action: 'save', result: 'ok', entity: savedEntity});
+      for (let idx in Reflect.ownKeys(overlay)) {
+        let key = Reflect.ownKeys(overlay)[idx];
+        entity[key] = overlay[key];
+        console.debug('Apply overlay before saving', key, overlay[key]);
+      }
 
-        console.info(msg);
-        this.snackbar.open(msg, null, {
-          duration: this.snackbarDuration
+      console.debug('Ready to save', this.meta.displayName, ':', entity);
+      this.service.save(entity)
+        .subscribe((savedEntity) => {
+          let msg: string;
+          if (entity.id) {
+            msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
+          } else {
+            msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
+          }
+
+          console.info(msg);
+          this.snackbar.open(msg, null, {
+            duration: Config.defaultSnackbarDuration
+          });
+
+          console.debug('Before marking the form as pristine, is it dirty?', entityForm.dirty);
+
+          // entityForm.patchValue(savedEntity);
+          entityForm.markAsPristine();
+          entityForm.markAsUntouched();
+
+          console.debug('After marking the form as pristine, is it still dirty?', entityForm.dirty);
+
+          savedEntitySubject.next({success: true, changes: true, msg: msg, entity: savedEntity});
         });
-
-        entityForm.patchValue(savedEntity);
-        entityForm.markAsPristine();
-        entityForm.markAsUntouched();
-
-      });
     } else {
-      console.info('Not a valid entity');
+      let msg = 'Not a valid ' + this.meta.displayName.toLowerCase() + '. Please correct the errors before saving';
+      console.info(msg);
+      console.debug('Validation errors', entityForm.errors);
+      savedEntitySubject.next({success: false, changes: false, msg: msg});
     }
+    return savedEntitySubject.asObservable();
   }
 
 
-  deleteEntity(entity: T) {
+  deleteEntity(entity: T): Observable<ActionResult<T>> {
+
+    let deleteEntitySubject: BehaviorSubject<ActionResult<T>> = new BehaviorSubject<ActionResult<T>>(
+      {success: false, changes: false, msg: 'BehaviorSubject for entity deleting created'}
+    );
 
     if ((!entity || !entity.id)) {
-      let msg: string = 'This entity is either not available or not yet created and therfore cannot be deleted';
+      let msg: string = 'This entity is either not available or not yet created and therefore cannot be deleted';
       console.info(msg);
+
       this.snackbar.open(msg, null, {
-        duration: this.snackbarDuration
+        duration: Config.defaultSnackbarDuration
       });
-      return;
+      deleteEntitySubject.next({success: false, changes: false, msg: msg});
     }
 
     const dialogRef = this.openConfirmationDialog('Confirm delete',
@@ -82,26 +109,75 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       data => {
         console.debug("Dialog output:", data);
         if (data.confirmed) {
+
           console.info('User confirmed delete action, so it will be executed');
-          this.service.destroy(('' + entity.id)).subscribe((response) => {
-            console.info('response ', response);
-            let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
-            console.info(msg);
-            this.snackbar.open(msg, null, {
-              duration: this.snackbarDuration
+
+          return this.service.destroy(('' + entity.id))
+            .subscribe(response => {
+
+              let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
+              console.info(msg);
+              this.snackbar.open(msg, null, {
+                duration: Config.defaultSnackbarDuration
+              });
+              deleteEntitySubject.next({success: true, changes: true, msg: msg});
             });
 
-            // Redirect to the list view
-            // this.goToList();
-
-            this.actionResult.emit({action: 'delete', result: 'ok'});
-          });
         } else {
-          console.info('User canceled delete action');
+          let msg = 'User canceled delete action';
+          console.info();
+          deleteEntitySubject.next({success: false, changes: false, msg: msg});
         }
       }
     );
+
+    return deleteEntitySubject.asObservable();
   }
+
+
+  public handleUnsavedChanges(entityForm: FormGroup, overlay?: any): Observable<ActionResult<T>> {
+
+    let unsavedChangesSubject: BehaviorSubject<ActionResult<T>> = new BehaviorSubject<ActionResult<T>>(
+      {success: false, changes: false, msg: 'BehaviorSubject for unsaved changes created'}
+    );
+
+    if (entityForm.dirty) {
+
+      let msg = 'The editor row has unsaved changes';
+      console.debug(msg);
+
+      const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
+
+      dialogRef.afterClosed().subscribe(
+        data => {
+          if (data.confirmed) {
+            console.info('User confirmed he wants to save changes to ' + this.meta.displayName.toLowerCase());
+
+            this.saveEntity(entityForm, overlay)
+              .subscribe((result: ActionResult<T>) => {
+                let msg = 'Entity saved, no more unsaved changes';
+                console.debug(msg);
+                unsavedChangesSubject.next(result);
+              });
+
+          } else {
+            let msg = 'User chose to discard changes in the editor';
+            console.info(msg);
+            unsavedChangesSubject.next({success: true, changes: false, msg: msg});
+          }
+        }
+      );
+
+    } else {
+      let msg = 'The editor row doesn\'t have unsaved changes';
+      console.debug(msg);
+      unsavedChangesSubject.next({success: true, changes: false, msg: msg});
+    }
+
+    return unsavedChangesSubject.asObservable();
+  }
+
+
 
 
   updateEntities() {
@@ -111,10 +187,10 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
     dialogRef.afterClosed().subscribe(
       data => {
         if (data.confirmed) {
-          console.info('User confirmed batch update action, so ik will be executed');
-          this.actionResult.emit({action: 'save', result: 'ok'});
+          console.info('User confirmed batch update action, so it will be executed');
+          // this.actionResult.emit({action: 'save', result: 'ok'});
         } else {
-          console.info('User canceled update action');
+          console.info('User canceled batch update action');
         }
       }
     );
@@ -128,7 +204,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       data => {
         if (data.confirmed) {
           console.info('User confirmed batch delete action, so it will be executed');
-          this.actionResult.emit({action: 'save', result: 'ok'});
+          // this.actionResult.emit({action: 'save', result: 'ok'});
         } else {
           console.info('User canceled batch delete action');
         }

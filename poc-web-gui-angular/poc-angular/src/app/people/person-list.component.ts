@@ -13,15 +13,13 @@ import {slideTo} from "../lib/entity-module/common/animations.animation";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent extends EntityListComponent<Person> {
-
   constructor(
     public service: PersonService,
     public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog
   ) {
-
     super(meta, service, router, route, dialog);
   }
-
 }
+

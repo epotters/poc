@@ -47,7 +47,7 @@ export class AppRoutingModule {
       // console.debug(routerEvent);
 
       if (routerEvent instanceof RouteConfigLoadEnd) {
-        console.info('Module loaded lazily');
+        console.info('Module loaded lazily from path', routerEvent.route.path);
       }
     });
   }

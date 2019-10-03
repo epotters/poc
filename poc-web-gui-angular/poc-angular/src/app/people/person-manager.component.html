@@ -5,6 +5,9 @@
   <button (click)="toggleList()" mat-button>{{(listVisible) ? 'Hide' : 'Show'}} List</button>
   <button (click)="toggleEditor()" mat-button>{{(editorVisible) ? 'Hide' : 'Show'}} Editor</button>
 
+  <button (click)="toggleListOfCards()" mat-button>{{(listOfCardsVisible) ? 'Hide' : 'Show'}} List of Cards</button>
+
+
   <button (click)="openDialogWithList()" mat-button>List in dialog</button>
   <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
 
@@ -25,3 +28,9 @@
   [filterVisible]="false"
 >
 </person-list-card>
+
+
+<person-list-of-cards
+  *ngIf="listOfCardsVisible">
+
+</person-list-of-cards>

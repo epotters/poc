@@ -10,6 +10,9 @@ export const employmentMeta: EntityMeta<Employment> = {
   displayName: 'Employment',
   displayNamePlural: 'Employments',
 
+  displayNameRenderer: (employment: Employment) => {
+    return 'Employment of ' + employment.employee.lastName + ' at ' + employment.employer.name;
+    },
   // API
   apiBase: '/employments/',
 
@@ -60,8 +63,7 @@ export const employmentMeta: EntityMeta<Employment> = {
     employee: {
       label: 'Employee',
       renderer: (entity: Employment, value) => {
-        // return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
-        return (entity.employee) ? entity.employee.fullName() : '';
+        return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
       },
       editor: {
         type: 'autocomplete',
@@ -71,9 +73,9 @@ export const employmentMeta: EntityMeta<Employment> = {
           displayField: 'lastName',
           displayOption: (entity: Person) => {
             console.debug('Displaying person');
-            return (entity) ? entity.fullName() : null;
-            // entity.firstName + ' ' + ((entity.prefix) ? (entity.prefix) + ' ' : '') + entity.lastName :
-            // null;
+            return (entity) ?
+              entity.firstName + ' ' + ((entity.prefix) ? (entity.prefix) + ' ' : '') + entity.lastName :
+              null;
           }
         }
       },
@@ -82,7 +84,13 @@ export const employmentMeta: EntityMeta<Employment> = {
       ]
     },
     description: {
-      label: 'Description'
+      label: 'Description',
+      editor: {
+        type: 'textarea'
+      },
+      filter: {
+        type: 'text'
+      }
     }
   }
 };

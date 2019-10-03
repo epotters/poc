@@ -5,9 +5,10 @@ import {EntityManagerComponent} from "../lib/entity-module";
 import {ActivatedRoute} from "@angular/router";
 import {EntityComponentDescriptor} from "../lib/entity-module/dialog/entity-component-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {personMeta} from "../people/person-meta";
+
 import {OrganizationListComponent} from "./organization-list.component";
 import {OrganizationEditorComponent} from "./organization-editor.component";
+import {organizationMeta} from "./organization-meta";
 
 @Component({
   selector: 'organization-manager',
@@ -22,7 +23,10 @@ export class OrganizationManagerComponent extends EntityManagerComponent<Organiz
     public componentFactoryResolver: ComponentFactoryResolver,
     public dialog: MatDialog
   ) {
-    super(personMeta, service, route, componentFactoryResolver, dialog);
+    super(organizationMeta, service, route, componentFactoryResolver, dialog);
+
+    this.editorVisible = false;
+    this.listVisible = false;
   }
 
   openDialogWithList() {

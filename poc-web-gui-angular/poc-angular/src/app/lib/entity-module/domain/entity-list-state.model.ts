@@ -1,11 +1,12 @@
 import {FieldFilter} from "./filter.model";
+import {SortDirectionType} from "./entity-meta.model";
 
 export interface EntityListState {
 
   // Data
   fieldFilters: FieldFilter[];
   sortField: string;
-  sortDirection: 'asc' | 'desc';
+  sortDirection: SortDirectionType;
   page: number;
   pageSize: number;
 

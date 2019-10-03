@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, ComponentFactoryResolver, Input} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MatDialog, MatSnackBar} from "@angular/material";
@@ -6,9 +6,13 @@ import {MatDialog, MatSnackBar} from "@angular/material";
 import {BehaviorSubject} from "rxjs";
 
 import {EntityEditorComponent} from "../lib/entity-module";
-import {Employment, Organization} from "../core/domain/";
+import {Employment, Organization, Person} from "../core/domain/";
 import {organizationMeta} from "./organization-meta";
 import {OrganizationService} from "./organization.service";
+import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
+import {employmentMeta} from "../employments/employment-meta";
+import {personMeta} from "../people/person-meta";
+import {EmploymentListComponent} from "../employments/employments-list.component";
 
 
 @Component({
@@ -17,9 +21,6 @@ import {OrganizationService} from "./organization.service";
   styleUrls: ['../lib/entity-module/entity-editor.component.css']
 })
 export class OrganizationEditorComponent extends EntityEditorComponent<Organization> {
-
-  employeesSubject = new BehaviorSubject<Employment[]>([]);
-
 
   constructor(
     public service: OrganizationService,
@@ -40,5 +41,22 @@ export class OrganizationEditorComponent extends EntityEditorComponent<Organizat
       ])
     });
   }
+}
 
+
+@Component({
+  selector: 'organization-employees-relation',
+  templateUrl: '../lib/entity-module/entity-relation.component.html'
+})
+export class OrganizationEmployeesRelationComponent extends EntityRelationComponent<Employment, Organization, Person> {
+
+  @Input() readonly ownerSubject: BehaviorSubject<Organization>;
+
+  constructor(
+    public componentFactoryResolver: ComponentFactoryResolver
+  ) {
+    super(employmentMeta, organizationMeta, personMeta, componentFactoryResolver);
+    this.fieldName = 'employees';
+    this.component = EmploymentListComponent;
+  }
 }
