@@ -1,5 +1,6 @@
 
 
 export class Config {
-  public static defaultSnackbarDuration = 3000;
+  public static autoSave: boolean = true;
+  public static defaultSnackbarDuration: number = 3000;
 }

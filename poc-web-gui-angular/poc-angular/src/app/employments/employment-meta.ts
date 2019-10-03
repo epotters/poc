@@ -11,8 +11,9 @@ export const employmentMeta: EntityMeta<Employment> = {
   displayNamePlural: 'Employments',
 
   displayNameRenderer: (employment: Employment) => {
-    return 'Employment of ' + employment.employee.lastName + ' at ' + employment.employer.name;
-    },
+    return employment.employee.lastName + ' at ' + employment.employer.name;
+  },
+
   // API
   apiBase: '/employments/',
 
@@ -21,7 +22,7 @@ export const employmentMeta: EntityMeta<Employment> = {
   defaultSortField: 'id',
   defaultSortDirection: 'asc',
 
-  displayedColumns: ['id', 'startDate', 'employer', 'employee'],
+  displayedColumns: ['id', 'startDate', 'employer', 'employee', 'description'],
 
 
   columnConfigs: {

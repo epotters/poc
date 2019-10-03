@@ -243,7 +243,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
             this.loadEntitiesPage();
           }
         } else {
-          console.debug('Failed to stop editing...');
+          console.debug('Failed to stop editing...', result.msg);
         }
       });
     } else {
@@ -316,7 +316,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     }
   }
 
-  onDblClick(event: MouseEvent, entity:T, idx:number) {
+  onDblClick(event: MouseEvent, entity: T, idx: number) {
     console.debug('Double click on entity ', entity);
     event.preventDefault();
     const targetElement: Element = ((event.target || event.currentTarget) as Element);
@@ -368,6 +368,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
   goToManager() {
     this.router.navigate([this.meta.namePlural, 'manager']);
+  }
+
+
+  goToRelatedEntity(entity: Identifiable) {
+    this.router.navigate([this.meta.namePlural, entity.id]);
   }
 
 

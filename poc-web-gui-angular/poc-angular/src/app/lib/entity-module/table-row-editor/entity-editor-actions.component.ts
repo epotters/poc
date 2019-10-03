@@ -26,7 +26,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
 
-  // snackbarDuration: number = 3000;
 
   constructor(
     public dialog: MatDialog,
@@ -146,27 +145,27 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       let msg = 'The editor row has unsaved changes';
       console.debug(msg);
 
-      const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
+      if (Config.autoSave) {
 
-      dialogRef.afterClosed().subscribe(
-        data => {
-          if (data.confirmed) {
-            console.info('User confirmed he wants to save changes to ' + this.meta.displayName.toLowerCase());
+        this.saveSilently(unsavedChangesSubject, entityForm, overlay);
 
-            this.saveEntity(entityForm, overlay)
-              .subscribe((result: ActionResult<T>) => {
-                let msg = 'Entity saved, no more unsaved changes';
-                console.debug(msg);
-                unsavedChangesSubject.next(result);
-              });
+      } else {
 
-          } else {
-            let msg = 'User chose to discard changes in the editor';
-            console.info(msg);
-            unsavedChangesSubject.next({success: true, changes: false, msg: msg});
+        const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
+
+        dialogRef.afterClosed().subscribe(
+          data => {
+            if (data.confirmed) {
+              console.info('User confirmed he wants to save changes to ' + this.meta.displayName.toLowerCase());
+              this.saveSilently(unsavedChangesSubject, entityForm, overlay);
+            } else {
+              let msg = 'User chose to discard changes in the editor';
+              console.info(msg);
+              unsavedChangesSubject.next({success: true, changes: false, msg: msg});
+            }
           }
-        }
-      );
+        );
+      }
 
     } else {
       let msg = 'The editor row doesn\'t have unsaved changes';
@@ -175,6 +174,16 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
     }
 
     return unsavedChangesSubject.asObservable();
+  }
+
+  private saveSilently(unsavedChangesSubject: BehaviorSubject<ActionResult<T>>, entityForm: FormGroup, overlay?: any) {
+
+    this.saveEntity(entityForm, overlay)
+      .subscribe((result: ActionResult<T>) => {
+        let msg = 'Entity saved, no more unsaved changes';
+        console.debug(msg);
+        unsavedChangesSubject.next(result);
+      });
   }
 
 
