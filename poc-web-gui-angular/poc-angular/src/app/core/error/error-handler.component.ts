@@ -13,11 +13,9 @@ export class ErrorHandlerComponent {
   constructor(
     @Inject(ERROR_INJECTOR_TOKEN) public error,
     public snackbar: MatSnackBar) {
-
   }
 
-  showError(msg: string) : void {
-
+  showError(msg: string): void {
     this.snackbar.open(msg, null, {
       duration: Config.defaultSnackbarDuration
     });

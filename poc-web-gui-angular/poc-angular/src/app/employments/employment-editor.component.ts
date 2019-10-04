@@ -12,7 +12,6 @@ import {employmentMeta} from "./employment-meta";
 import {organizationMeta} from "../organizations/organization-meta";
 import {personMeta} from "../people/person-meta";
 import {FieldFilter} from "../lib/entity-module/domain/filter.model";
-import {BehaviorSubject} from "rxjs";
 
 
 @Component({
@@ -152,7 +151,7 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
         const personId = params['employee.id'];
         this.personService.get(personId)
           .subscribe(person => {
-            this.entityForm.patchValue({employee: person});
+            this.entityForm.patchValue({employee: person}, {emitEvent: false});
           });
       }
 
@@ -160,7 +159,7 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
         const employerId = params['employer.id'];
         this.organizationService.get(employerId)
           .subscribe(organization => {
-            this.entityForm.patchValue({employer: organization});
+            this.entityForm.patchValue({employer: organization}, {emitEvent: false});
           })
       }
     });

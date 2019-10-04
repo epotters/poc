@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Constants} from '../../constants';
+import {Config} from '../../config';
 
 
 @Component({
@@ -9,7 +9,7 @@ import {Constants} from '../../constants';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  Constants: any = Constants;
+  Config: any = Config;
 
   constructor(private router: Router) {
     console.debug('Constructing the HomeComponent');

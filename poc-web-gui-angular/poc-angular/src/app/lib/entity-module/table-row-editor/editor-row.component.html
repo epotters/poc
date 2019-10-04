@@ -3,11 +3,11 @@
     <div class="editor-type-switch" [ngSwitch]="getEditor(key).type">
 
       <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key + keySuffix}}" readonly>
+        <input matInput formControlName="{{key}}" readonly>
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'text'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key + keySuffix}}"
+        <input matInput formControlName="{{key}}"
                [matTooltip]="getErrorMessage(key)"
                [matTooltipDisabled]="hasErrors(key)"
                matTooltipClass="red-tooltip"
@@ -15,17 +15,15 @@
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="'never'">
-        <textarea matInput formControlName="{{key + keySuffix}}"
+        <textarea matInput formControlName="{{key}}"
                [matTooltip]="getErrorMessage(key)"
                [matTooltipDisabled]="hasErrors(key)"
                matTooltipClass="red-tooltip"
         ></textarea>
       </mat-form-field>
 
-
-
       <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">
-        <mat-select formControlName="{{key + keySuffix}}">
+        <mat-select formControlName="{{key}}">
           <mat-option [value]="">-</mat-option>
           <mat-option [value]="option.value"
                       *ngFor="let option of editorColumns[key].options">{{option.label}}</mat-option>
@@ -33,13 +31,13 @@
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'date'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key + keySuffix}}" [matDatepicker]="datePicker">
+        <input matInput formControlName="{{key}}" [matDatepicker]="datePicker">
         <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'autocomplete'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key + keySuffix}}" [matAutocomplete]="relatedEntitySelector">
+        <input matInput formControlName="{{key}}" [matAutocomplete]="relatedEntitySelector">
         <mat-autocomplete #relatedEntitySelector="matAutocomplete"
                           [displayWith]="editorColumns[key].relatedEntity.displayOption">
           <mat-option

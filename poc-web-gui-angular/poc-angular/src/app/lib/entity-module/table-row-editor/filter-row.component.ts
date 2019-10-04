@@ -12,18 +12,12 @@ import {FieldFilter} from "../domain/filter.model";
 })
 export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> {
 
-  keySuffix: string = ''; // 'Filter';
-
   constructor(
     public formBuilder: FormBuilder,
     injector: Injector) {
     super(formBuilder, injector);
 
     console.debug('Constructing FilterRowComponent');
-  }
-
-  ngOnInit(): void {
-    console.debug('Initializing FilterRowComponent for type ' + this.meta.displayName);
   }
 
 
@@ -37,7 +31,7 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
       ([key, value]) => {
 
         if (value && value !== '') {
-          let name: string = key.substring(0, (key.length - this.keySuffix.length));
+          let fieldName: string = key;
           let type: any = this.getEditor(key).type;
 
           if (type == 'autocomplete') {
@@ -45,13 +39,13 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
               console.debug('No related entity to search for selected yet. Skipping.');
               return;
             }
-            name = name + '.id';
+            fieldName = fieldName + '.id';
             value = value['id'];
-            console.debug('Selected entity converted to id only for filter {', name, ': ', value, '}');
+            console.debug('Selected entity converted to id only for filter {', fieldName, ': ', value, '}');
           }
 
           fieldFilters.push({
-            name: name,
+            name: fieldName,
             rawValue: (value as string)
           });
         }
@@ -66,14 +60,12 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     this.rowEditorForm.reset();
     for (let idx in fieldFilters) {
       let fieldFilter: FieldFilter = fieldFilters[idx];
-
       if (this.rowEditorForm.get(fieldFilter.name)) {
-        this.rowEditorForm.get(fieldFilter.name).setValue(fieldFilter.rawValue);
+        this.rowEditorForm.get(fieldFilter.name).setValue(fieldFilter.rawValue, {emitEvent: false});
         console.debug('---> fieldFilter', fieldFilter.name, 'set to', fieldFilter.rawValue);
       } else {
         console.debug('---> No field control for', fieldFilter.name);
       }
-
     }
   }
 

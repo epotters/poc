@@ -16,7 +16,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   editorColumns: Record<string, FieldEditorConfig>;
   rowEditorForm: FormGroup;
   dataSources: Record<string, any> = {};
-  keySuffix: string;
   debounceTime: number = 300;
   autoCompletePageSize: number = 20;
   defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
@@ -27,9 +26,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   constructor(
     public formBuilder: FormBuilder,
     public injector: Injector
-  ) {
-    console.debug('Constructing BaseEditorRowComponent');
-  }
+  ) {}
 
   ngAfterContentInit() {
     this.editorColumns = this.getColumns();
@@ -61,7 +58,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     for (let key in this.editorColumns) {
       if (this.editorColumns.hasOwnProperty(key)) {
         let column = this.editorColumns[key];
-        group[key + this.keySuffix] = new FormControl('', this.buildValidators(key));
+        group[key] = new FormControl('', this.buildValidators(key));
       }
     }
     return this.formBuilder.group(group);

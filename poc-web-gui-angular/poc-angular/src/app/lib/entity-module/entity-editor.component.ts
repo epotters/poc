@@ -111,7 +111,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
         console.log('savedEntity:', savedEntity);
 
-        this.entityForm.patchValue(savedEntity);
+        this.entityForm.patchValue(savedEntity, {emitEvent: false});
         this.entitySubject.next(savedEntity);
         this.entityForm.markAsPristine();
         this.entityForm.markAsUntouched();

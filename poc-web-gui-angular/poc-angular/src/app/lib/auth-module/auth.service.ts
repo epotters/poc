@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User, UserManager} from 'oidc-client';
-import {Constants} from '../../../constants';
+import {Config} from '../../../config';
 
 export {User};
 
@@ -18,7 +18,7 @@ export class AuthService implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute) {
-    this.userManager = new UserManager(Constants.userManagerSettings);
+    this.userManager = new UserManager(Config.userManagerSettings);
   }
 
   ngOnInit(): void {

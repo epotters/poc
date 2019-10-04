@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {Constants} from "../../../constants";
+import {Config} from "../../../config";
 
 import {AuthLoginComponent} from "./auth-login.component";
 import {AuthLogoutComponent} from "./auth-logout.component";
@@ -29,10 +29,10 @@ const routes: Routes = [
       url: 'externalUrlRedirectResolver'
     },
     data: {
-      externalUrl: Constants.accountUrl,
+      externalUrl: Config.accountUrl,
       queryParams: {
-        referer: Constants.userManagerSettings.client_id,
-        referrer_uri: Constants.clientRoot + Constants.applicationBasePath
+        referer: Config.userManagerSettings.client_id,
+        referrer_uri: Config.clientRoot + Config.applicationBasePath
       }
     }
   },

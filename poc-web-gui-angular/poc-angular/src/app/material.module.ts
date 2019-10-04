@@ -22,7 +22,7 @@ import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angu
 
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material";
 import {MomentDateAdapter} from "@angular/material-moment-adapter";
-import {POC_DATE_FORMATS} from "../constants";
+import {POC_DATE_FORMATS} from "../config";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 

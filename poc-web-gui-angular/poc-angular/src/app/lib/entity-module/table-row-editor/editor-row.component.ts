@@ -22,9 +22,7 @@ export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
 })
 export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowComponent<T> implements OnInit {
 
-  keySuffix = ''; // 'Editor';
   visible = false;
-
 
   constructor(
     public formBuilder: FormBuilder,
@@ -56,8 +54,8 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     let editorEntity: Partial<T> = {};
     Object.entries(entity).forEach(
       ([key, value]) => {
-        if (this.rowEditorForm.contains(key + this.keySuffix)) {
-          editorEntity[key + this.keySuffix] = entity[key];
+        if (this.rowEditorForm.contains(key)) {
+          editorEntity[key] = entity[key];
         } else {
           console.debug('Skipping property "' + key + '" because there is no control for it');
         }

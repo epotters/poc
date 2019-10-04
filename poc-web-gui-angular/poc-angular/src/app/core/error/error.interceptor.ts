@@ -8,9 +8,8 @@ import {AuthService} from "../../lib/auth-module";
 export interface PocError {
   code: string;
   message: string;
-
-
 }
+
 
 // Source: https://scotch.io/bar-talk/error-handling-with-angular-6-tips-and-best-practices192
 @Injectable({providedIn: 'root'})

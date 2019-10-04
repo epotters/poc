@@ -2,11 +2,12 @@ import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {MatSnackBar} from "@angular/material";
 
-import {Constants} from '../constants';
+import {Config} from '../config';
 import {AuthService} from "./lib/auth-module/";
 import {PocApiService} from "./core/service";
 import {Animations} from "./app-animations";
 import {HttpErrorInterceptor} from "./core/error/error.interceptor";
+import {ErrorHandlerService} from "./core/error/error-handler.service";
 
 
 @Component({
@@ -20,7 +21,7 @@ import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 })
 export class AppComponent implements OnInit, AfterContentInit {
 
-  Constants: any = Constants;
+  Config: any = Config;
   visible: boolean = false;
 
   constructor(
@@ -28,34 +29,45 @@ export class AppComponent implements OnInit, AfterContentInit {
     public authService: AuthService,
     public snackBar: MatSnackBar,
     public apiService: PocApiService,
-    public errorInterceptor: HttpErrorInterceptor
+    public errorInterceptor: HttpErrorInterceptor,
+    public errorHandlerService: ErrorHandlerService
   ) {
-    console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
-    this.titleService.setTitle(Constants.applicationDisplayName);
+    console.debug('Constructing the AppComponent "' + Config.applicationDisplayName + '"');
+    this.titleService.setTitle(Config.applicationDisplayName);
   }
 
   ngOnInit() {
 
-    this.errorInterceptor.awaitErrors().subscribe((error) => {
+
+
+    // this.errorInterceptor.awaitErrors().subscribe((error) => {
+    //     if (error != null) {
+    //       console.log('Received error with code ' + error.code);
+    //       this.openSnackBar(error.message, 'Close');
+    //     }
+    //   }
+    // );
+    //
+    //
+    // this.apiService.awaitErrors().subscribe((error) => {
+    //     if (error != null) {
+    //       console.log('Received error with status ' + error.status);
+    //       this.openSnackBar(error, 'Close');
+    //     }
+    //   }
+    // );
+  }
+
+  ngAfterContentInit() {
+    this.visible = true;
+
+    this.errorHandlerService.awaitErrors().subscribe((error) => {
         if (error != null) {
           console.log('Received error with code ' + error.code);
           this.openSnackBar(error.message, 'Close');
         }
       }
     );
-
-
-    this.apiService.awaitErrors().subscribe((error) => {
-        if (error != null) {
-          console.log('Received error with status ' + error.status);
-          this.openSnackBar(error, 'Close');
-        }
-      }
-    );
-  }
-
-  ngAfterContentInit() {
-    this.visible = true;
   }
 
   openSnackBar(message: string, action?: string) {

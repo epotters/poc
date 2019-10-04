@@ -66,8 +66,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
           });
 
           console.debug('Before marking the form as pristine, is it dirty?', entityForm.dirty);
-
-          // entityForm.patchValue(savedEntity);
           entityForm.markAsPristine();
           entityForm.markAsUntouched();
 

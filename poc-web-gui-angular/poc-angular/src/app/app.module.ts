@@ -11,7 +11,7 @@ import {AuthGuardService, AuthModule, AuthService} from "./lib/auth-module/";
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {Constants} from "../constants";
+import {Config} from "../config";
 import {ConfigService} from "./app-config.service";
 import {EntityServicesModule} from "./core/service/entity-services.module";
 
@@ -42,7 +42,7 @@ export function initApp(http: HttpClient, config: ConfigService): (() => Promise
               console.debug('Configuration file config.json was not found');
               resolve(false);
             }
-            config.baseUrl = Constants.apiRoot;
+            config.baseUrl = Config.apiRoot;
             resolve(true);
             return of({});
           })
@@ -80,7 +80,7 @@ export function initApp(http: HttpClient, config: ConfigService): (() => Promise
     },
 
     {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
-    {provide: APP_BASE_HREF, useValue: Constants.applicationBasePath},
+    {provide: APP_BASE_HREF, useValue: Config.applicationBasePath},
     AuthGuardService,
     AuthService
   ],

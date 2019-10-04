@@ -1,6 +1,6 @@
 import {UserManagerSettings} from "oidc-client";
 
-export class Constants {
+export class Config {
 
   public static timezone = 'Europe/Amsterdam';
   public static locale = 'NL-NL';
@@ -14,21 +14,19 @@ export class Constants {
 
   public static oidcProviderRoot = 'http://keycloak.localhost/auth/';
   public static realm = 'epo';
-  public static accountUrl = Constants.oidcProviderRoot + 'realms/' + Constants.realm + '/account';
+  public static accountUrl = Config.oidcProviderRoot + 'realms/' + Config.realm + '/account';
 
   public static userManagerSettings: UserManagerSettings = {
-    authority: 'http://keycloak.localhost/auth/realms/' + Constants.realm,
+    authority: 'http://keycloak.localhost/auth/realms/' + Config.realm,
     client_id: 'poc-gui',
     response_type: "code",
     scope: 'openid profile email',
-    redirect_uri: Constants.clientRoot + '/auth-callback',
-    silent_redirect_uri: Constants.clientRoot + '/auth-silent-callback',
-    post_logout_redirect_uri: Constants.clientRoot + '/auth-logout-callback',
+    redirect_uri: Config.clientRoot + '/auth-callback',
+    silent_redirect_uri: Config.clientRoot + '/auth-silent-callback',
+    post_logout_redirect_uri: Config.clientRoot + '/auth-logout-callback',
     filterProtocolClaims: true,
     loadUserInfo: true
   };
-
-
 
   // API
   public static apiRoot = 'https://localhost:8002/poc/api';
