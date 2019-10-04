@@ -110,7 +110,7 @@
 </div>
 
 
-<!-- Context menu-->
+<!-- Context menu -->
 <div style="visibility: hidden; position: fixed"
      [style.left]="contextMenuPosition.x"
      [style.top]="contextMenuPosition.y"
@@ -118,7 +118,11 @@
      #contextMenuTrigger="matMenuTrigger">
 </div>
 <mat-menu #contextMenu="matMenu">
-  <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex">
+  <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex" let-related="relatedEntity">
+
+    <button mat-menu-item (click)="goToRelatedEntity(related, entity[related])" *ngIf="related">Go to entity</button>
+    <mat-divider *ngIf="related"></mat-divider>
+
     <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Edit
       this {{meta.displayName.toLowerCase()}}</button>
     <button mat-menu-item (click)="stopEditing().subscribe()" *ngIf="isEditing()">Stop editing</button>

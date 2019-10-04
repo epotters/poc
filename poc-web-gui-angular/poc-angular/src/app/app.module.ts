@@ -1,6 +1,6 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {APP_BASE_HREF} from "@angular/common";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {Observable, ObservableInput, of} from "rxjs";
@@ -17,6 +17,8 @@ import {EntityServicesModule} from "./core/service/entity-services.module";
 
 import {HomeModule} from "./home/home.module";
 import {InfoModule} from "./info/info.module";
+import {ErrorHandlerModule} from "./core/error/error-handler.module";
+import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 
 
 export interface AppInitialConfig {
@@ -60,6 +62,7 @@ export function initApp(http: HttpClient, config: ConfigService): (() => Promise
 
     MaterialModule,
     AppRoutingModule,
+    ErrorHandlerModule.forRoot(),
     AuthModule,
     EntityServicesModule,
 
@@ -67,12 +70,16 @@ export function initApp(http: HttpClient, config: ConfigService): (() => Promise
     InfoModule
   ],
   providers: [
-    {provide: APP_INITIALIZER,
+    {
+      provide: APP_INITIALIZER,
       useFactory: initApp,
       deps: [
         HttpClient,
         ConfigService
-      ], multi: true},
+      ], multi: true
+    },
+
+    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
     {provide: APP_BASE_HREF, useValue: Constants.applicationBasePath},
     AuthGuardService,
     AuthService

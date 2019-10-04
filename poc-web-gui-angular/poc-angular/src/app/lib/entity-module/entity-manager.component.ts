@@ -51,6 +51,8 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   onEntitySelected($event) {
     console.debug('EntitySelected event received', $event);
     this.selectedEntity = $event;
+    this.openDialogWithEditor($event);
+
   }
 
   toggleList() {
@@ -64,7 +66,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
 
   abstract openDialogWithList();
 
-  abstract openDialogWithEditor();
+  abstract openDialogWithEditor(entity?: T);
 
 
   openDialogWithEntityComponent(componentToShow: EntityComponentDescriptor): void {

@@ -51,7 +51,6 @@ export const personMeta: EntityMeta<Person> = {
           argument: personNamePattern,
           message: 'First name can only contain characters, dashes and spaces'
         }
-
       ]
     },
     prefix: {

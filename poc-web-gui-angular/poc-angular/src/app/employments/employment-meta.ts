@@ -48,6 +48,7 @@ export const employmentMeta: EntityMeta<Employment> = {
         type: 'autocomplete',
         relatedEntity: {
           name: 'organization',
+          namePlural: 'organizations',
           serviceName: 'OrganizationService',
           displayField: 'name',
           displayOption: (entity: Organization) => {
@@ -70,6 +71,7 @@ export const employmentMeta: EntityMeta<Employment> = {
         type: 'autocomplete',
         relatedEntity: {
           name: 'person',
+          namePlural: 'people',
           serviceName: 'PersonService',
           displayField: 'lastName',
           displayOption: (entity: Person) => {

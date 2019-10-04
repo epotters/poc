@@ -7,8 +7,10 @@ export interface ColumnConfig {
   validators?: ValidatorDescriptor[]
 }
 
+
 export declare type EditorType = 'none' | 'text' | 'textarea' | 'select' | 'date' | 'autocomplete' | 'relation';
 export declare type SortDirectionType = 'asc' | 'desc';
+
 
 export interface FieldEditorConfig {
   type: EditorType;
@@ -22,11 +24,12 @@ export interface SelectOption {
   value: string
 }
 
+
 export interface RelatedEntity {
   name: string;
+  namePlural: string;
   serviceName: string;
   displayField: string;
-
   displayOption?(entity?: any): string | undefined;
 }
 
@@ -37,6 +40,7 @@ export interface RelationEntity {
   sort?: string;
   sortDirection?: SortDirectionType;
 }
+
 
 export interface ValidatorDescriptor {
   type: 'required' | 'pattern' | 'maxLength',
@@ -67,5 +71,4 @@ export interface EntityMeta<T extends Identifiable> {
   displayedColumnsDialog?: string[];
 
   columnConfigs: Record<string, ColumnConfig>;
-
 }

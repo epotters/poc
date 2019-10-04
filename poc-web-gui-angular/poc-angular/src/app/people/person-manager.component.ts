@@ -32,6 +32,9 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     this.initialFilters = [
       {name: 'lastName', rawValue: 'po'}
     ]
+
+    this.editorVisible = false;
+    this.listVisible = false;
   }
 
   toggleListOfCards() {
@@ -53,8 +56,10 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }
 
-  openDialogWithEditor() {
-    const entityEditorComponentDescriptor = new EntityComponentDescriptor(PersonEditorComponent, {});
+  openDialogWithEditor(entity?: Person) {
+    const entityEditorComponentDescriptor = new EntityComponentDescriptor(PersonEditorComponent, {
+      entityToLoad: entity
+    });
     this.openDialogWithEntityComponent(entityEditorComponentDescriptor);
   }
 

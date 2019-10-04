@@ -6,6 +6,7 @@ import {Constants} from '../constants';
 import {AuthService} from "./lib/auth-module/";
 import {PocApiService} from "./core/service";
 import {Animations} from "./app-animations";
+import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 
 
 @Component({
@@ -26,13 +27,24 @@ export class AppComponent implements OnInit, AfterContentInit {
     private titleService: Title,
     public authService: AuthService,
     public snackBar: MatSnackBar,
-    public apiService: PocApiService
+    public apiService: PocApiService,
+    public errorInterceptor: HttpErrorInterceptor
   ) {
     console.debug('Constructing the AppComponent "' + Constants.applicationDisplayName + '"');
     this.titleService.setTitle(Constants.applicationDisplayName);
   }
 
   ngOnInit() {
+
+    this.errorInterceptor.awaitErrors().subscribe((error) => {
+        if (error != null) {
+          console.log('Received error with code ' + error.code);
+          this.openSnackBar(error.message, 'Close');
+        }
+      }
+    );
+
+
     this.apiService.awaitErrors().subscribe((error) => {
         if (error != null) {
           console.log('Received error with status ' + error.status);

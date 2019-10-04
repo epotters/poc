@@ -16,7 +16,7 @@ export class AuthLoginCallbackComponent implements OnInit {
   ngOnInit() {
     console.debug(this.message);
     this.authService.completeAuthentication()
-      .then(() => console.info('Login completed successfully'));
+      .then(() => console.info('Login completed successfully for user', this.authService.getClaims().name));
   }
 
 }

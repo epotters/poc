@@ -1,28 +1,35 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 import {User, UserManager} from 'oidc-client';
 import {Constants} from '../../../constants';
-import {ActivatedRoute, Router} from "@angular/router";
 
 export {User};
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit {
 
   private userManager: UserManager;
   private user: User;
   private returnUrlKey: string = 'auth:redirect';
 
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute) {
     this.userManager = new UserManager(Constants.userManagerSettings);
+  }
+
+  ngOnInit(): void {
+
     this.userManager.getUser().then(user => {
       this.user = user;
     });
 
     this.registerEventlisteners();
   }
+
 
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
   public isLoggedIn(): boolean {
@@ -51,7 +58,7 @@ export class AuthService {
   }
 
   public startSilentAuthentication(): Promise<User> {
-    console.debug('About to set return url to ' + this.router.url);
+    console.debug('Silent authentication - About to set return url to ' + this.router.url);
     this.setReturnUrl(this.router.url);
     return this.userManager.signinSilent();
   }

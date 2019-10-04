@@ -27,32 +27,6 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
   }
 
 
-  public setFilters(fieldFilters: FieldFilter[]): void {
-    if (fieldFilters.length > 0) {
-      const filter: any = {};
-      for (let key in this.editorColumns) {
-        if (this.editorColumns.hasOwnProperty(key)) {
-          filter[key] = '';
-        }
-      }
-      for (let idx in fieldFilters) {
-        let fieldFilter: FieldFilter = fieldFilters[idx];
-        console.debug('---> fieldFilters, idx, fieldFilter', fieldFilters, idx, fieldFilter);
-
-        if (filter[fieldFilter.name]) {
-          filter[fieldFilter.name] = fieldFilter.rawValue;
-          console.debug('Setting filter to', fieldFilter);
-        } else {
-          console.debug(fieldFilter.name, 'is not a part of the filter form');
-        }
-      }
-      this.rowEditorForm.setValue(filter);
-    } else {
-      this.rowEditorForm.reset();
-    }
-  }
-
-
   public getFilters(): FieldFilter[] {
 
     console.debug('Start building form output value');
@@ -85,6 +59,22 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     );
     console.debug('Finished building form output value: ', fieldFilters);
     return fieldFilters;
+  }
+
+
+  public setFilters(fieldFilters: FieldFilter[]): void {
+    this.rowEditorForm.reset();
+    for (let idx in fieldFilters) {
+      let fieldFilter: FieldFilter = fieldFilters[idx];
+
+      if (this.rowEditorForm.get(fieldFilter.name)) {
+        this.rowEditorForm.get(fieldFilter.name).setValue(fieldFilter.rawValue);
+        console.debug('---> fieldFilter', fieldFilter.name, 'set to', fieldFilter.rawValue);
+      } else {
+        console.debug('---> No field control for', fieldFilter.name);
+      }
+
+    }
   }
 
 

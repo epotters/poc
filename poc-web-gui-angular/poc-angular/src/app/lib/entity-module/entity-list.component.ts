@@ -328,25 +328,46 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     event.preventDefault();
     const targetElement: Element = ((event.target || event.currentTarget) as Element);
 
+    let fieldName: string = this.fieldNameFromCellElement(targetElement);
+
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
       entity: entity,
       targetElement: targetElement,
-      dataIndex: idx
+      dataIndex: idx,
+      columnConfig: this.meta.columnConfigs[fieldName]
     };
+
+    if (this.isFieldRelatedEntity(fieldName)) {
+      this.contextMenuTrigger.menuData.relatedEntity = fieldName;
+    }
+
     this.contextMenuTrigger.openMenu();
   }
 
+  private isFieldRelatedEntity(fieldName: string): boolean {
+    let config = this.meta.columnConfigs[fieldName];
+    return (config.editor && !!config.editor.relatedEntity);
+  }
 
-  private
 
-  applyOverlay(filters
-                 :
-                 FieldFilter[]
-  ):
-    FieldFilter[] {
+  private fieldNameFromCellElement(cellElement: Element): string {
+    let classes: string[] = cellElement.getAttribute('class').split(' ');
+    // console.debug('---> classes: ', classes);
+    for (let idx in classes) {
+      let cls = classes[idx];
+      // console.debug('cls', cls);
+      if(cls.startsWith('mat-column-')) {
+        // console.debug(cls);
+        return cls.split('-')[2];
+      }
+    }
+    return '';
+  }
+
+
+  private applyOverlay(filters: FieldFilter[]): FieldFilter[] {
     const newFieldFilters: FieldFilter[] = [];
-    console.debug('-> Reflect.ownKeys(this.overlay)', Reflect.ownKeys(this.overlay));
     for (let idx in Reflect.ownKeys(this.overlay)) {
       let key = (Reflect.ownKeys(this.overlay)[idx] as string);
       console.debug('-> applyOverlay', key, this.overlay[key]);
@@ -371,8 +392,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   }
 
 
-  goToRelatedEntity(entity: Identifiable) {
-    this.router.navigate([this.meta.namePlural, entity.id]);
+  goToRelatedEntity(fieldName: string, entity: Identifiable) {
+    this.router.navigate([this.meta.columnConfigs[fieldName].editor.relatedEntity.namePlural, entity.id]);
   }
 
 
