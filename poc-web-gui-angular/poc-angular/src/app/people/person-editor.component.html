@@ -18,7 +18,7 @@
         <div>
           <mat-form-field>
             <mat-label>ID</mat-label>
-            <input matInput formControlName="id" name="id" readonly>
+            <input formControlName="id" matInput name="id" readonly>
             <mat-hint>Generated id</mat-hint>
           </mat-form-field>
         </div>
@@ -29,9 +29,9 @@
         <!-- First name-->
         <mat-form-field>
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstName" name="firstName" required>
+          <input formControlName="firstName" matInput name="firstName" required>
           <mat-error *ngFor="let validation of meta.columnConfigs['firstName'].validators">
-            <mat-error class="error-message" *ngIf="hasErrorOfType('firstName', validation.type)">
+            <mat-error *ngIf="hasErrorOfType('firstName', validation.type)" class="error-message">
               {{validation.message}}
             </mat-error>
           </mat-error>
@@ -40,17 +40,17 @@
         <!-- Prefix-->
         <mat-form-field style="flex: 1">
           <mat-label>Prefix</mat-label>
-          <input matInput formControlName="prefix" name="prefix">
+          <input formControlName="prefix" matInput name="prefix">
           <mat-hint>Like 'van der' or 'de la'</mat-hint>
         </mat-form-field>
 
         <!-- Last name-->
         <mat-form-field style="flex: 3">
           <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastName" name="lastName" required>
+          <input formControlName="lastName" matInput name="lastName" required>
           <mat-hint>Enter your family name here</mat-hint>
           <mat-error *ngFor="let validation of meta.columnConfigs['lastName'].validators">
-            <mat-error class="error-message" *ngIf="hasErrorOfType('lastName', validation.type)">
+            <mat-error *ngIf="hasErrorOfType('lastName', validation.type)" class="error-message">
               {{validation.message}}
             </mat-error>
           </mat-error>
@@ -64,8 +64,8 @@
           <mat-label>Gender</mat-label>
           <mat-select formControlName="gender" name="gender" required>
             <mat-option [value]="">-</mat-option>
-            <mat-option [value]="option.value" [id]="'gender-option-' + option.value.toLowerCase()"
-                        *ngFor="let option of meta.columnConfigs['gender'].editor.options">{{option.label}}</mat-option>
+            <mat-option *ngFor="let option of meta.columnConfigs['gender'].editor.options" [id]="'gender-option-' + option.value.toLowerCase()"
+                        [value]="option.value">{{option.label}}</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -79,15 +79,15 @@
         <!-- Date of birth-->
         <mat-form-field style="flex: 2">
           <mat-label>Date of birth</mat-label>
-          <input matInput formControlName="birthDate" [matDatepicker]="birthDatePicker">
-          <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+          <input [matDatepicker]="birthDatePicker" formControlName="birthDate" matInput>
+          <mat-datepicker-toggle [for]="birthDatePicker" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #birthDatePicker></mat-datepicker>
         </mat-form-field>
 
         <!-- Place of birth-->
         <mat-form-field style="flex: 3">
           <mat-label>Place of birth</mat-label>
-          <input matInput formControlName="birthPlace" name="birthPlace">
+          <input formControlName="birthPlace" matInput name="birthPlace">
           <mat-hint>Native place city</mat-hint>
         </mat-form-field>
 
@@ -103,13 +103,13 @@
     </form>
 
     <div class="form-row">
-      <person-employers-relation class="relation" [ownerSubject]="entitySubject"></person-employers-relation>
+      <person-employers-relation [ownerSubject]="entitySubject" class="relation"></person-employers-relation>
     </div>
 
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <button (click)="goToList()" *ngIf="!isManaged" matTooltip="Go to the list" mat-icon-button>
+    <button (click)="goToList()" *ngIf="!isManaged" mat-icon-button matTooltip="Go to the list">
       <mat-icon>menu</mat-icon>
     </button>
 

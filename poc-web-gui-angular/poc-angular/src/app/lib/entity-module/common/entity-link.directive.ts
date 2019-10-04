@@ -1,11 +1,11 @@
-import {Directive, ElementRef, Input, ViewContainerRef} from '@angular/core';
+import {Directive, ElementRef, Input} from '@angular/core';
 import {EntityMeta} from "..";
 
 @Directive({
   selector: '[entity-link]',
 })
 export class EntityLinkDirective<T extends Identifiable> {
-  @Input() entity: T ;
+  @Input() entity: T;
   @Input() meta: EntityMeta<T>;
 
   constructor(public element: ElementRef) {

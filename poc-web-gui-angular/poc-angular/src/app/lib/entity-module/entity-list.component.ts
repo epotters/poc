@@ -83,7 +83,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild('contextMenuTrigger', {static: false}) contextMenuTrigger: MatMenuTrigger;
-
+  public;
 
   protected constructor(
     public meta: EntityMeta<T>,
@@ -102,13 +102,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     console.debug('EntityListComponent -', 'Input changed:', changes);
   }
 
-
   ngOnInit() {
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
 
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
   }
-
 
   ngAfterViewInit(): void {
 
@@ -145,7 +143,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     );
   }
 
-
   // CRUD
   loadEntitiesPage() {
     this.dataSource.loadEntities(
@@ -157,7 +154,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     );
   }
 
-
   selectEntity(entity: T): void {
     console.info(this.meta.displayName + ' selected: ', entity);
     if (this.isManaged) {
@@ -167,7 +163,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     }
   }
 
-
   public newEntity() {
     if (this.isManaged) {
       this.selectEntity(null);
@@ -175,7 +170,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       this.router.navigate([this.meta.apiBase + '/new']);
     }
   }
-
 
   saveEntity(): void {
     console.debug('Save this ' + this.meta.displayName.toLowerCase());
@@ -211,14 +205,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     }
   }
 
+
+  // Editor
+
   deleteEntities() {
     if (this.editorActions) {
       this.editorActions.deleteEntities();
     }
   }
-
-
-  // Editor
 
   toggleEditor(): void {
     if (this.editorVisible) {
@@ -237,7 +231,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       this.stopEditing().subscribe((result: ActionResult<T>) => {
         if (result.success) {
           console.debug('Start editing...');
-          this.showAndPositionEditor(targetElement, idx)
+          this.showAndPositionEditor(targetElement, idx);
           this.editorRow.loadEntity(entity);
           if (result.changes) {
             this.loadEntitiesPage();
@@ -247,11 +241,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
         }
       });
     } else {
-      this.showAndPositionEditor(targetElement, idx)
+      this.showAndPositionEditor(targetElement, idx);
       this.editorRow.loadEntity(entity);
     }
   }
-
 
   public stopEditing(): Observable<ActionResult<T>> {
     return this.editorActions.handleUnsavedChanges(this.editorRow.rowEditorForm, this.overlay)
@@ -264,24 +257,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       }));
   }
 
-  private showAndPositionEditor(targetElement: Element, idx: number) {
-    this.editorVisible = true;
-    this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
-    this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
-    this.editorViewState.rowElement.style.opacity = '0.5';
-  }
-
-
-  private hideAndResetEditor() {
-    this.editorVisible = false;
-    if (this.editorViewState.rowElement) {
-      this.editorViewState.rowElement.style.opacity = '1';
-      this.editorViewState.rowElement = null;
-    }
-    this.editorViewState.transform = 'translateY(0)';
-  }
-
-
   isEditing(): boolean {
     const form = this.editorRow.rowEditorForm;
     return (form.dirty ||
@@ -290,15 +265,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     );
   }
 
-
 // Filters
   toggleFilter()
     :
     void {
     this.filterVisible = !this.filterVisible;
   }
-
-  public
 
   onFilterChanged($event)
     :
@@ -307,7 +279,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     this.fieldFilters = this.applyOverlay($event);
     console.debug('onFilterChanged, after appyOverlay', this.overlay, this.fieldFilters);
   }
-
 
 // User actions
   onShiftClick(event: MouseEvent, entity: T) {
@@ -345,26 +316,61 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     this.contextMenuTrigger.openMenu();
   }
 
+  goToManager() {
+    this.router.navigate([this.meta.namePlural, 'manager']);
+  }
+
+  goToRelatedEntity(fieldName: string, entity: Identifiable) {
+    this.router.navigate([this.meta.columnConfigs[fieldName].editor.relatedEntity.namePlural, entity.id]);
+  }
+
+  getCellDisplayValue(entity: T, fieldName: string): string {
+    let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
+    let value = entity[fieldName];
+    if (fieldName.indexOf('.')) {
+      let fieldNameParts = fieldName.split('.');
+      value = entity[fieldNameParts.shift()];
+      for (let fieldNamePart of fieldNameParts) {
+        value = value[fieldNamePart];
+      }
+    }
+    if (columnConfig.renderer) {
+      return columnConfig.renderer(entity, value);
+    }
+    return value;
+  }
+
+  private showAndPositionEditor(targetElement: Element, idx: number) {
+    this.editorVisible = true;
+    this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
+    this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
+    this.editorViewState.rowElement.style.opacity = '0.5';
+  }
+
+  private hideAndResetEditor() {
+    this.editorVisible = false;
+    if (this.editorViewState.rowElement) {
+      this.editorViewState.rowElement.style.opacity = '1';
+      this.editorViewState.rowElement = null;
+    }
+    this.editorViewState.transform = 'translateY(0)';
+  }
+
   private isFieldRelatedEntity(fieldName: string): boolean {
     let config = this.meta.columnConfigs[fieldName];
     return (config.editor && !!config.editor.relatedEntity);
   }
 
-
   private fieldNameFromCellElement(cellElement: Element): string {
     let classes: string[] = cellElement.getAttribute('class').split(' ');
-    // console.debug('---> classes: ', classes);
-    for (let idx in classes) {
+                                                  for (let idx in classes) {
       let cls = classes[idx];
-      // console.debug('cls', cls);
-      if(cls.startsWith('mat-column-')) {
-        // console.debug(cls);
+      if (cls.startsWith('mat-column-')) {
         return cls.split('-')[2];
       }
     }
     return '';
   }
-
 
   private applyOverlay(filters: FieldFilter[]): FieldFilter[] {
     const newFieldFilters: FieldFilter[] = [];
@@ -384,32 +390,5 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       }
     }
     return newFieldFilters;
-  }
-
-
-  goToManager() {
-    this.router.navigate([this.meta.namePlural, 'manager']);
-  }
-
-
-  goToRelatedEntity(fieldName: string, entity: Identifiable) {
-    this.router.navigate([this.meta.columnConfigs[fieldName].editor.relatedEntity.namePlural, entity.id]);
-  }
-
-
-  getCellDisplayValue(entity: T, fieldName: string): string {
-    let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
-    let value = entity[fieldName];
-    if (fieldName.indexOf('.')) {
-      let fieldNameParts = fieldName.split('.');
-      value = entity[fieldNameParts.shift()];
-      for (let fieldNamePart of fieldNameParts) {
-        value = value[fieldNamePart];
-      }
-    }
-    if (columnConfig.renderer) {
-      return columnConfig.renderer(entity, value);
-    }
-    return value;
   }
 }

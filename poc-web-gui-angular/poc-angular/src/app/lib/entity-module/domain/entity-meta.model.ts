@@ -30,6 +30,7 @@ export interface RelatedEntity {
   namePlural: string;
   serviceName: string;
   displayField: string;
+
   displayOption?(entity?: any): string | undefined;
 }
 

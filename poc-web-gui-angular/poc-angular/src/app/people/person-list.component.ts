@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {PersonService} from "./person.service";
 import {personMeta as meta} from "./person-meta";
-import {slideTo} from "../lib/entity-module/common/animations.animation";
 
 @Component({
   selector: 'person-list-card',

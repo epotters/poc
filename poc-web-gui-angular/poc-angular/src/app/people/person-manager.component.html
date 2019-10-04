@@ -15,17 +15,17 @@
 
 <person-editor-card
   *ngIf="editorVisible"
-  [isManaged]="true"
-  [entityToLoad]="selectedEntity">
+  [entityToLoad]="selectedEntity"
+  [isManaged]="true">
 </person-editor-card>
 
 <person-list-card
-  *ngIf="listVisible"
-  [isManaged]="true"
   (entitySelector)="onEntitySelected($event)"
+  *ngIf="listVisible"
   [columns]="columns"
-  [title]="'Managed people list'"
   [filterVisible]="false"
+  [isManaged]="true"
+  [title]="'Managed people list'"
 >
 </person-list-card>
 

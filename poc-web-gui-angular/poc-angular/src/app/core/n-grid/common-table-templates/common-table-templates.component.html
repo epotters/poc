@@ -29,8 +29,8 @@
 
 <div *pblNgridHeaderCellTypeDef="'drag_and_drop_handle'"></div>
 <div *pblNgridCellTypeDef="'drag_and_drop_handle'; let ctx" [pblNgridRowDrag]="ctx" style="cursor: move">
-  <mat-icon pblDragHandle class="pbl-ngrid-row-drag-handle">drag_handle</mat-icon>
-  <div class="pbl-ngrid-row-drag-placeholder" *cdkDragPlaceholder></div>
+  <mat-icon class="pbl-ngrid-row-drag-handle" pblDragHandle>drag_handle</mat-icon>
+  <div *cdkDragPlaceholder class="pbl-ngrid-row-drag-placeholder"></div>
 </div>
 
 <!-- START RATINGS -->

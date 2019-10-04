@@ -12,16 +12,16 @@
 
 <organization-editor-card
   *ngIf="editorVisible"
-  [isManaged]="true"
-  [entityToLoad]="selectedEntity">
+  [entityToLoad]="selectedEntity"
+  [isManaged]="true">
 </organization-editor-card>
 
 <organization-list-card
-  *ngIf="listVisible"
-  [isManaged]="true"
   (entitySelector)="onEntitySelected($event)"
-  [title]="'Managed organization list'"
+  *ngIf="listVisible"
   [filterVisible]="false"
+  [isManaged]="true"
+  [title]="'Managed organization list'"
 >
 </organization-list-card>
 

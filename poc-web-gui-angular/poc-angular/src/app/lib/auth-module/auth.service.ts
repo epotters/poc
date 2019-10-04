@@ -21,6 +21,10 @@ export class AuthService implements OnInit {
     this.userManager = new UserManager(Config.userManagerSettings);
   }
 
+  private static capitalizeFirst(text: string): string {
+    return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+  }
+
   ngOnInit(): void {
 
     this.userManager.getUser().then(user => {
@@ -29,7 +33,6 @@ export class AuthService implements OnInit {
 
     this.registerEventlisteners();
   }
-
 
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
   public isLoggedIn(): boolean {
@@ -44,7 +47,6 @@ export class AuthService implements OnInit {
     // Bearer is case sensitive, token_type is lowercase, doesn't work
     return AuthService.capitalizeFirst(this.user.token_type) + ' ' + this.user.access_token;
   }
-
 
   public startAuthentication(): Promise<void> {
     return this.userManager.signinRedirect();
@@ -88,6 +90,26 @@ export class AuthService implements OnInit {
     });
   }
 
+  public setReturnUrl(returnUrl: string): void {
+    console.debug('Setting return url to ' + returnUrl);
+    sessionStorage.setItem(this.returnUrlKey, returnUrl);
+  }
+
+  public getReturnUrl(): string {
+    return sessionStorage.getItem(this.returnUrlKey);
+  }
+
+  public returnToUrl(): void {
+    var returnUrl = this.getReturnUrl();
+    if (returnUrl) {
+      console.debug('Returning to URL ' + returnUrl);
+      sessionStorage.removeItem(this.returnUrlKey);
+      this.router.navigate([returnUrl]);
+    } else {
+      this.router.navigate(['']);
+    }
+  }
+
   private registerEventlisteners() {
     this.userManager.events.addUserLoaded(function () {
       console.info('User loaded');
@@ -104,34 +126,5 @@ export class AuthService implements OnInit {
     this.userManager.events.addUserSignedOut(function () {
       console.info('User signed out');
     });
-  }
-
-
-  public setReturnUrl(returnUrl: string): void {
-    console.debug('Setting return url to ' + returnUrl);
-    sessionStorage.setItem(this.returnUrlKey, returnUrl);
-  }
-
-  public getReturnUrl(): string {
-    return sessionStorage.getItem(this.returnUrlKey);
-  }
-
-  private hasReturnUrl(): boolean {
-    return (this.getReturnUrl() != null);
-  }
-
-  public returnToUrl(): void {
-    var returnUrl = this.getReturnUrl();
-    if (returnUrl) {
-      console.debug('Returning to URL ' + returnUrl);
-      sessionStorage.removeItem(this.returnUrlKey);
-      this.router.navigate([returnUrl]);
-    } else {
-      this.router.navigate(['']);
-    }
-  }
-
-  private static capitalizeFirst(text: string): string {
-    return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
   }
 }

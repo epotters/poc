@@ -2,22 +2,22 @@
 
   <mat-card-actions>
     <mat-paginator
+      (page)="showEvent($event)"
+      [hidePageSize]="true"
       [length]="dataSource.awaitTotal() | async"
       [pageSize]="pageSize"
-      [hidePageSize]="true"
-      (page)="showEvent($event)"
       class="list-of-cards-paginator">
     </mat-paginator>
   </mat-card-actions>
 
   <mat-card-content>
 
-    <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
+    <div class="list-of-cards" fxFill fxLayout="column" fxLayoutAlign="space-between">
       <div fxLayout="row wrap">
         <ng-container *ngFor="let organization of dataSource.awaitEntities() | async">
           <organization-editor-card
-            [isManaged]="true"
-            [entityToLoad]="organization">
+            [entityToLoad]="organization"
+            [isManaged]="true">
           </organization-editor-card>
         </ng-container>
       </div>

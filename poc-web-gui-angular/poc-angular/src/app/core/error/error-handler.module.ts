@@ -7,8 +7,6 @@ import {ErrorHandlerService} from './error-handler.service';
 import {ErrorHandlerComponent} from './error-handler.component';
 
 
-
-
 // Source: https://www.freecodecamp.org/news/global-error-handling-in-angular-with-the-help-of-the-cdk/
 @NgModule({
   declarations: [ErrorHandlerComponent],

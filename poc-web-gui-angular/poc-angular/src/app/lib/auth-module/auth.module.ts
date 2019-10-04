@@ -36,7 +36,7 @@ import {AuthService} from "./auth.service";
 
         let routeData = (route.data as any);
         let url = routeData.externalUrl;
-        if(routeData.queryParams) {
+        if (routeData.queryParams) {
           let isFirst = true;
           for (let key in routeData.queryParams) {
             let value = routeData.queryParams[key];

@@ -174,19 +174,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
     return unsavedChangesSubject.asObservable();
   }
 
-  private saveSilently(unsavedChangesSubject: BehaviorSubject<ActionResult<T>>, entityForm: FormGroup, overlay?: any) {
-
-    this.saveEntity(entityForm, overlay)
-      .subscribe((result: ActionResult<T>) => {
-        let msg = 'Entity saved, no more unsaved changes';
-        console.debug(msg);
-        unsavedChangesSubject.next(result);
-      });
-  }
-
-
-
-
   updateEntities() {
     const dialogRef = this.openConfirmationDialog('Confirm batch update',
       'Are you sure you want to update all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
@@ -202,7 +189,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       }
     );
   }
-
 
   deleteEntities() {
     const dialogRef = this.openConfirmationDialog('Confirm deletion',
@@ -228,6 +214,16 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       message: message
     };
     return this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+  }
+
+  private saveSilently(unsavedChangesSubject: BehaviorSubject<ActionResult<T>>, entityForm: FormGroup, overlay?: any) {
+
+    this.saveEntity(entityForm, overlay)
+      .subscribe((result: ActionResult<T>) => {
+        let msg = 'Entity saved, no more unsaved changes';
+        console.debug(msg);
+        unsavedChangesSubject.next(result);
+      });
   }
 
 }

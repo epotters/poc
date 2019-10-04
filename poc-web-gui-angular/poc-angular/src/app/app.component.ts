@@ -39,7 +39,6 @@ export class AppComponent implements OnInit, AfterContentInit {
   ngOnInit() {
 
 
-
     // this.errorInterceptor.awaitErrors().subscribe((error) => {
     //     if (error != null) {
     //       console.log('Received error with code ' + error.code);

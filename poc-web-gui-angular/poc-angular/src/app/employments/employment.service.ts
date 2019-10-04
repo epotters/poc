@@ -7,7 +7,6 @@ import {Employment} from "../core/domain";
 import {employmentMeta} from "./employment-meta";
 
 
-
 @Injectable({
   providedIn: 'root'
 })

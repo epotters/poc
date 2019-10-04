@@ -1,7 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
-import {employmentMeta as meta} from "./employment-meta";
 import {AuthGuardService} from "../lib/auth-module";
 import {EmploymentListComponent} from "./employments-list.component";
 import {EmploymentEditorComponent} from "./employment-editor.component";

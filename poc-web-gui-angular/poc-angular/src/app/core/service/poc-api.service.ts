@@ -66,20 +66,9 @@ export class PocApiService implements ApiService {
     ).pipe(catchError(this.handleError));
   }
 
-
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Accept': 'application/json',
-      // 'Content-Type': 'application/json',
-      'Authorization': this.authService.getAuthorizationHeaderValue()
-    });
-  }
-
-
   public awaitErrors(): Observable<any> {
     return this.errorsSubject.asObservable();
   }
-
 
   public handleError(error: any): Observable<never> {
 
@@ -93,6 +82,14 @@ export class PocApiService implements ApiService {
     console.error(error);
 
     return throwError(error.error);
+  }
+
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Accept': 'application/json',
+      // 'Content-Type': 'application/json',
+      'Authorization': this.authService.getAuthorizationHeaderValue()
+    });
   }
 
 }

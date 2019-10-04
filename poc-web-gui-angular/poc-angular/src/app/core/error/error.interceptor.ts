@@ -39,7 +39,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               message: `Error Status: ${error.status}\nMessage: ${error.message}`
             };
 
-            if(error.status === 401) {
+            if (error.status === 401) {
               console.debug('Trying to reauthenticate the user');
               this.authService.startSilentAuthentication();
             }

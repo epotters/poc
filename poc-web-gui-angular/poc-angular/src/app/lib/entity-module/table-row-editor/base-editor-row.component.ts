@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subject} from "rxjs";
 import {debounceTime} from "rxjs/operators";
 import {EntityDataSource} from "../entity-data-source";
-import {EntityMeta, FieldEditorConfig, ValidatorDescriptor} from "../domain/entity-meta.model";
+import {EntityMeta, FieldEditorConfig, ValidatorDescriptor} from "..";
 
 
 export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
@@ -26,7 +26,8 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   constructor(
     public formBuilder: FormBuilder,
     public injector: Injector
-  ) {}
+  ) {
+  }
 
   ngAfterContentInit() {
     this.editorColumns = this.getColumns();
@@ -34,7 +35,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.rowEditorForm = this.buildFormGroup();
     this.activateAutoCompletes();
     this.debouncer.pipe(debounceTime(this.debounceTime))
-      .subscribe((val) => this.editorChange.emit(this.getOutputValue()));
+      .subscribe(() => this.editorChange.emit(this.getOutputValue()));
     this.onChanges();
   }
 
@@ -51,19 +52,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
       this.debouncer.next(entityData);
     });
   }
-
-
-  private buildFormGroup(): FormGroup {
-    let group = {};
-    for (let key in this.editorColumns) {
-      if (this.editorColumns.hasOwnProperty(key)) {
-        let column = this.editorColumns[key];
-        group[key] = new FormControl('', this.buildValidators(key));
-      }
-    }
-    return this.formBuilder.group(group);
-  }
-
 
   buildValidators(fieldName: string): any[] {
     if (!this.enableValidation) {
@@ -90,9 +78,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     return validators;
   }
 
-
   abstract getColumns(): Record<string, FieldEditorConfig>;
-
 
   getEditor(key: string): FieldEditorConfig {
     return (this.editorColumns[key]) ? this.editorColumns[key] : this.defaultFieldEditorConfig;
@@ -122,6 +108,15 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
   }
 
+  private buildFormGroup(): FormGroup {
+    let group = {};
+    for (let key in this.editorColumns) {
+      if (this.editorColumns.hasOwnProperty(key)) {
+        group[key] = new FormControl('', this.buildValidators(key));
+      }
+    }
+    return this.formBuilder.group(group);
+  }
 
   private prepareAutoCompletes(): void {
     for (let key in this.editorColumns) {
@@ -150,17 +145,17 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   private activateAutocomplete(fieldName: string, editorConfig: FieldEditorConfig): void {
     this.rowEditorForm
       .get(fieldName).valueChanges.subscribe((value) => {
-        if (value) {
-          console.debug('About to load new related entities for autocomplete. Filter ', value);
-          this.dataSources[editorConfig.relatedEntity.name].loadEntities(
-            [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
-            editorConfig.relatedEntity.displayField,
-            'asc',
-            0,
-            this.autoCompletePageSize
-          );
-        }
-      });
+      if (value) {
+        console.debug('About to load new related entities for autocomplete. Filter ', value);
+        this.dataSources[editorConfig.relatedEntity.name].loadEntities(
+          [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
+          editorConfig.relatedEntity.displayField,
+          'asc',
+          0,
+          this.autoCompletePageSize
+        );
+      }
+    });
   }
 
 }

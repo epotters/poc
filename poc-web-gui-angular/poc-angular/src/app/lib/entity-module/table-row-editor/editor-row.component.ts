@@ -48,6 +48,18 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     }
   }
 
+  getColumns(): Record<string, FieldEditorConfig> {
+    let editorColumns: Record<string, FieldEditorConfig> = {};
+    for (let idx in this.columns) {
+      let key: string = this.columns[idx];
+      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
+        editorColumns[key] = this.meta.columnConfigs[key].editor;
+      } else {
+        editorColumns[key] = this.defaultFieldEditorConfig;
+      }
+    }
+    return editorColumns;
+  }
 
   // Only include fields that are in the form and add key suffix to field names
   private prepareEntity(entity: T): Partial<T> {
@@ -62,20 +74,6 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
       }
     );
     return editorEntity;
-  }
-
-
-  getColumns(): Record<string, FieldEditorConfig> {
-    let editorColumns: Record<string, FieldEditorConfig> = {};
-    for (let idx in this.columns) {
-      let key: string = this.columns[idx];
-      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
-        editorColumns[key] = this.meta.columnConfigs[key].editor;
-      } else {
-        editorColumns[key] = this.defaultFieldEditorConfig;
-      }
-    }
-    return editorColumns;
   }
 
 }

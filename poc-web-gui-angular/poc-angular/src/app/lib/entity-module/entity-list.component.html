@@ -1,6 +1,6 @@
 <div class="entity-list" component-style="entity-list">
 
-  <div class.progress-visible="dataSource.loading$ | async" class="progress">
+  <div class="progress" class.progress-visible="dataSource.loading$ | async">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 
@@ -15,41 +15,41 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button mat-button [matMenuTriggerFor]="titlebarMenu" #batchActionsMenuTrigger>
+    <button #batchActionsMenuTrigger [matMenuTriggerFor]="titlebarMenu" mat-button>
       <mat-icon>more_vert</mat-icon>
     </button>
 
 
     <mat-menu #titlebarMenu="matMenu">
 
-      <button mat-menu-item (click)="toggleFilter()">
+      <button (click)="toggleFilter()" mat-menu-item>
         <span>{{this.filterVisible ? 'Hide' : 'Show'}} filter</span>
       </button>
-      <button mat-menu-item [disabled]="fieldFilters.length == 0" (click)="filterRow.clear()">
+      <button (click)="filterRow.clear()" [disabled]="fieldFilters.length == 0" mat-menu-item>
         <span>Clear filter</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button mat-menu-item (click)="toggleEditor()">
+      <button (click)="toggleEditor()" mat-menu-item>
         <span>{{this.editorVisible ? 'Hide editor' : 'New ' + this.meta.displayName.toLowerCase()}}</span>
       </button>
-      <button mat-menu-item (click)="editorRow.clear()">
+      <button (click)="editorRow.clear()" mat-menu-item>
         <span>Clear editor</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button mat-menu-item (click)="newEntity()">
+      <button (click)="newEntity()" mat-menu-item>
         <span>New {{meta.name}}</span>
       </button>
-      <button mat-menu-item (click)="goToManager()">
+      <button (click)="goToManager()" mat-menu-item>
         <span>{{meta.displayName}} Manager</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button mat-menu-item (click)="deleteEntities()">
+      <button (click)="deleteEntities()" mat-menu-item>
         <span>Delete {{meta.namePlural}}</span>
       </button>
-      <button mat-menu-item (click)="updateEntities()">
+      <button (click)="updateEntities()" mat-menu-item>
         <span>Update {{meta.namePlural}}</span>
       </button>
     </mat-menu>
@@ -70,27 +70,27 @@
     <ng-container *matHeaderRowDef="columns">
       <mat-header-row [class.hidden]="!headerVisible"></mat-header-row>
 
-      <filter-row [meta]="meta"
+      <filter-row (editorChange)="onFilterChanged($event)"
+                  [class.editor-inline]="true"
                   [columns]="columns"
                   [hidden]="!filterVisible"
-                  (editorChange)="onFilterChanged($event)"
-                  [class.editor-inline]="true">
+                  [meta]="meta">
       </filter-row>
 
-      <editor-row [meta]="meta"
-                  [columns]="columns"
-                  [hidden]="!editorVisible"
-                  (keydown.enter)="saveEntity()"
+      <editor-row (keydown.enter)="saveEntity()"
                   (keydown.escape)="stopEditing()"
                   [class.editor-inline]="true"
                   [class.editor-moved]="editorViewState.rowElement"
+                  [columns]="columns"
+                  [hidden]="!editorVisible"
+                  [meta]="meta"
                   [style.transform]="editorViewState.transform">
       </editor-row>
 
     </ng-container>
 
-    <mat-row (contextmenu)="onContextMenu($event, row, idx)"
-             (click)="onShiftClick($event, row)"
+    <mat-row (click)="onShiftClick($event, row)"
+             (contextmenu)="onContextMenu($event, row, idx)"
              (dblclick)="onDblClick($event, row, idx)"
              *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
 
@@ -111,22 +111,23 @@
 
 
 <!-- Context menu -->
-<div style="visibility: hidden; position: fixed"
+<div #contextMenuTrigger="matMenuTrigger"
+     [matMenuTriggerFor]="contextMenu"
      [style.left]="contextMenuPosition.x"
      [style.top]="contextMenuPosition.y"
-     [matMenuTriggerFor]="contextMenu"
-     #contextMenuTrigger="matMenuTrigger">
+     style="visibility: hidden; position: fixed">
 </div>
 <mat-menu #contextMenu="matMenu">
-  <ng-template matMenuContent let-entity="entity" let-target="targetElement" let-idx="dataIndex" let-related="relatedEntity">
+  <ng-template let-entity="entity" let-idx="dataIndex" let-related="relatedEntity" let-target="targetElement"
+               matMenuContent>
 
-    <button mat-menu-item (click)="goToRelatedEntity(related, entity[related])" *ngIf="related">Go to entity</button>
+    <button (click)="goToRelatedEntity(related, entity[related])" *ngIf="related" mat-menu-item>Go to entity</button>
     <mat-divider *ngIf="related"></mat-divider>
 
-    <button mat-menu-item (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()">Edit
+    <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit
       this {{meta.displayName.toLowerCase()}}</button>
-    <button mat-menu-item (click)="stopEditing().subscribe()" *ngIf="isEditing()">Stop editing</button>
-    <button mat-menu-item (click)="selectEntity(entity)">Edit</button>
-    <button mat-menu-item (click)="deleteEntity(entity)">Delete</button>
+    <button (click)="stopEditing().subscribe()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
+    <button (click)="selectEntity(entity)" mat-menu-item>Edit</button>
+    <button (click)="deleteEntity(entity)" mat-menu-item>Delete</button>
   </ng-template>
 </mat-menu>

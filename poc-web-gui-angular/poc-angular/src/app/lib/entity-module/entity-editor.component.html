@@ -22,7 +22,7 @@
         </mat-form-field>
       </div>
 
- <!-- More fields go here -->
+      <!-- More fields go here -->
 
     </form>
   </mat-card-content>
@@ -31,7 +31,8 @@
     <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>Delete</button>
     <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>Revert</button>
     <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary"
-            mat-button>Save</button>
+            mat-button>Save
+    </button>
   </mat-card-actions>
 
 </mat-card>

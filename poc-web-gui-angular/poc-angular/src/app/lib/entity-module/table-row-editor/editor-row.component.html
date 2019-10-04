@@ -1,43 +1,43 @@
-<div class="editor-row" [formGroup]="rowEditorForm">
+<div [formGroup]="rowEditorForm" class="editor-row">
   <div *ngFor="let key of columns" class="editor-cell mat-column-{{key}}">
-    <div class="editor-type-switch" [ngSwitch]="getEditor(key).type">
+    <div [ngSwitch]="getEditor(key).type" class="editor-type-switch">
 
       <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key}}" readonly>
+        <input formControlName="{{key}}" matInput readonly>
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'text'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key}}"
-               [matTooltip]="getErrorMessage(key)"
-               [matTooltipDisabled]="hasErrors(key)"
+        <input [matTooltipDisabled]="hasErrors(key)" [matTooltip]="getErrorMessage(key)"
+               formControlName="{{key}}"
+               matInput
                matTooltipClass="red-tooltip"
         >
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="'never'">
-        <textarea matInput formControlName="{{key}}"
-               [matTooltip]="getErrorMessage(key)"
-               [matTooltipDisabled]="hasErrors(key)"
-               matTooltipClass="red-tooltip"
+        <textarea [matTooltipDisabled]="hasErrors(key)" [matTooltip]="getErrorMessage(key)"
+                  formControlName="{{key}}"
+                  matInput
+                  matTooltipClass="red-tooltip"
         ></textarea>
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">
         <mat-select formControlName="{{key}}">
           <mat-option [value]="">-</mat-option>
-          <mat-option [value]="option.value"
-                      *ngFor="let option of editorColumns[key].options">{{option.label}}</mat-option>
+          <mat-option *ngFor="let option of editorColumns[key].options"
+                      [value]="option.value">{{option.label}}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'date'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key}}" [matDatepicker]="datePicker">
-        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <input [matDatepicker]="datePicker" formControlName="{{key}}" matInput>
+        <mat-datepicker-toggle [for]="datePicker" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'autocomplete'" [floatLabel]="'never'">
-        <input matInput formControlName="{{key}}" [matAutocomplete]="relatedEntitySelector">
+        <input [matAutocomplete]="relatedEntitySelector" formControlName="{{key}}" matInput>
         <mat-autocomplete #relatedEntitySelector="matAutocomplete"
                           [displayWith]="editorColumns[key].relatedEntity.displayOption">
           <mat-option

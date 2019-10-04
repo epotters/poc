@@ -2,9 +2,9 @@
 
   <mat-card-actions>
     <mat-paginator
+      [hidePageSize]="true"
       [length]="dataSource.awaitTotal() | async"
       [pageSize]="pageSize"
-      [hidePageSize]="true"
       class="list-of-cards-paginator">
     </mat-paginator>
   </mat-card-actions>
@@ -12,12 +12,12 @@
 
   <mat-card-content>
 
-    <div fxFill fxLayout="column" fxLayoutAlign="space-between" class="list-of-cards">
+    <div class="list-of-cards" fxFill fxLayout="column" fxLayoutAlign="space-between">
       <div fxLayout="row wrap">
         <ng-container *ngFor="let person of dataSource.awaitEntities() | async">
           <person-editor-card
-            [isManaged]="true"
-            [entityToLoad]="person">
+            [entityToLoad]="person"
+            [isManaged]="true">
           </person-editor-card>
         </ng-container>
       </div>

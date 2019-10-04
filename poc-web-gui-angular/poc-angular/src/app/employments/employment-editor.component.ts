@@ -83,6 +83,40 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     });
   }
 
+  prefillFromParameters(): void {
+
+    this.route.queryParams.subscribe(params => {
+
+      if (params['employee.id']) {
+        const personId = params['employee.id'];
+        this.personService.get(personId)
+          .subscribe(person => {
+            this.entityForm.patchValue({employee: person}, {emitEvent: false});
+          });
+      }
+
+      if (params['employer.id']) {
+        const employerId = params['employer.id'];
+        this.organizationService.get(employerId)
+          .subscribe(organization => {
+            this.entityForm.patchValue({employer: organization}, {emitEvent: false});
+          })
+      }
+    });
+  }
+
+  displayOptionOrganization(organization?: Organization): string | undefined {
+    return organization.name;
+  }
+
+  displayOptionPerson(person?: Person): string | undefined {
+    if (person) {
+      return (person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName);
+    } else {
+      return undefined;
+    }
+  }
+
   private activateExperimentalRelatedEntityList(): void {
     this.entitySubject.asObservable().subscribe(owner => {
         if (owner) {
@@ -106,7 +140,6 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     );
   }
 
-
   private activateEmployeeControl(): void {
     this.entityForm
       .get('employee')
@@ -122,7 +155,6 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
         );
       });
   }
-
 
   private activateEmployerControl(): void {
     this.entityForm
@@ -140,43 +172,6 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
           this.autoCompletePageSize
         );
       });
-  }
-
-
-  prefillFromParameters(): void {
-
-    this.route.queryParams.subscribe(params => {
-
-      if (params['employee.id']) {
-        const personId = params['employee.id'];
-        this.personService.get(personId)
-          .subscribe(person => {
-            this.entityForm.patchValue({employee: person}, {emitEvent: false});
-          });
-      }
-
-      if (params['employer.id']) {
-        const employerId = params['employer.id'];
-        this.organizationService.get(employerId)
-          .subscribe(organization => {
-            this.entityForm.patchValue({employer: organization}, {emitEvent: false});
-          })
-      }
-    });
-  }
-
-
-  displayOptionOrganization(organization?: Organization): string | undefined {
-    return organization.name;
-  }
-
-
-  displayOptionPerson(person?: Person): string | undefined {
-    if (person) {
-      return (person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName);
-    } else {
-      return undefined;
-    }
   }
 
 

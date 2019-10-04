@@ -1,6 +1,6 @@
 <mat-sidenav-container *ngIf="visible" @fadeIn @fadeOut>
 
-  <mat-sidenav #sidenav mode="over" fixedInViewport="true">
+  <mat-sidenav #sidenav fixedInViewport="true" mode="over">
     <mat-card>
       <h2>Developer info</h2>
 
@@ -10,26 +10,26 @@
 
         <h4>People</h4>
 
-        <button routerLink="people/manager" mat-button>
+        <button mat-button routerLink="people/manager">
           <span>People Manager</span>
         </button>
-        <button routerLink="people/list-of-cards" mat-button>
+        <button mat-button routerLink="people/list-of-cards">
           <span>People list of cards</span>
         </button>
-        <button routerLink="people/n-grid" mat-button>
+        <button mat-button routerLink="people/n-grid">
           <span>People N-Grid</span>
         </button>
 
 
         <h4>Organizations</h4>
 
-        <button routerLink="organizations/manager" mat-button>
+        <button mat-button routerLink="organizations/manager">
           <span>Organizations Manager</span>
         </button>
-        <button routerLink="organizations/list-of-cards" mat-button>
+        <button mat-button routerLink="organizations/list-of-cards">
           <span>Organization list of cards</span>
         </button>
-        <button routerLink="organizations/n-grid" mat-button>
+        <button mat-button routerLink="organizations/n-grid">
           <span>Organizations N-Grid</span>
         </button>
 
@@ -41,7 +41,7 @@
   <mat-sidenav-content class="page">
 
     <header>
-      <mat-toolbar color="primary" class="mat-elevation-z4">
+      <mat-toolbar class="mat-elevation-z4" color="primary">
 
         <button (click)="sidenav.toggle()" mat-icon-button>
           <mat-icon>menu</mat-icon>
@@ -72,7 +72,7 @@
           <span>Info</span>
         </button>
 
-        <button mat-button [matMenuTriggerFor]="userMenu">
+        <button [matMenuTriggerFor]="userMenu" mat-button>
           <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>
           <mat-icon *ngIf="authService.isLoggedIn()">account_circle</mat-icon>
           <span
@@ -80,12 +80,12 @@
         </button>
 
         <mat-menu #userMenu="matMenu">
-          <button mat-menu-item routerLink="auth-login" [disabled]="authService.isLoggedIn()">
+          <button [disabled]="authService.isLoggedIn()" mat-menu-item routerLink="auth-login">
             <span>Login</span>
           </button>
-          <button mat-menu-item routerLink="auth-logout" [disabled]="!authService.isLoggedIn()">
+          <button [disabled]="!authService.isLoggedIn()" mat-menu-item routerLink="auth-logout">
             <span>Logout</span></button>
-          <button mat-menu-item routerLink="account" [disabled]="!authService.isLoggedIn()">
+          <button [disabled]="!authService.isLoggedIn()" mat-menu-item routerLink="account">
             <span>Account</span>
           </button>
         </mat-menu>

@@ -9,7 +9,7 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/mater
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-adapter";
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatRadioModule} from '@angular/material/radio';
@@ -18,10 +18,14 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angular/material";
-
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material";
-import {MomentDateAdapter} from "@angular/material-moment-adapter";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatAutocompleteModule,
+  MatGridListModule,
+  MatSnackBarModule
+} from "@angular/material";
 import {POC_DATE_FORMATS} from "../config";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 

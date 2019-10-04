@@ -1,4 +1,3 @@
-import {EntityListComponent} from "../lib/entity-module";
 import {Organization} from "../core/domain/";
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";

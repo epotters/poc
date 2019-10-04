@@ -18,13 +18,13 @@
       <div>
         <mat-form-field>
           <mat-label>Name</mat-label>
-          <input matInput formControlName="name" name="name">
+          <input formControlName="name" matInput name="name">
         </mat-form-field>
       </div>
 
     </form>
 
-    <organization-employees-relation class="relation" [ownerSubject]="entitySubject"></organization-employees-relation>
+    <organization-employees-relation [ownerSubject]="entitySubject" class="relation"></organization-employees-relation>
 
   </mat-card-content>
 

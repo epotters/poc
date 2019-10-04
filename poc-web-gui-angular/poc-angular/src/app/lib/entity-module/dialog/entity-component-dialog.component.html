@@ -3,6 +3,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="entity-dialog-actions">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button [mat-dialog-close]="dialogData.entity">Ok</button>
+  <button (click)="onCancel()" mat-button>Cancel</button>
+  <button [mat-dialog-close]="dialogData.entity" mat-button>Ok</button>
 </mat-dialog-actions>

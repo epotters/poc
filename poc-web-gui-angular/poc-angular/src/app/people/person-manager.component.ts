@@ -31,7 +31,7 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
     this.initialFilters = [
       {name: 'lastName', rawValue: 'po'}
-    ]
+    ];
 
     this.editorVisible = false;
     this.listVisible = false;

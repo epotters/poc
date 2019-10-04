@@ -1,4 +1,3 @@
-
 export class Person implements Identifiable {
   id: number;
   firstName: string;
@@ -10,6 +9,6 @@ export class Person implements Identifiable {
   household: string;
 
   fullName(): string {
-    return this.firstName + ' ' + (this.prefix)? this.prefix + ' ': '' + this.lastName;
+    return this.firstName + ' ' + (this.prefix) ? this.prefix + ' ' : '' + this.lastName;
   }
 }

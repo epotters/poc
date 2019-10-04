@@ -20,16 +20,16 @@
         <!-- Start date -->
         <mat-form-field style="flex: 2">
           <mat-label>Start date</mat-label>
-          <input matInput formControlName="startDate" [matDatepicker]="startDatePicker">
-          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <input [matDatepicker]="startDatePicker" formControlName="startDate" matInput>
+          <mat-datepicker-toggle [for]="startDatePicker" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>
         </mat-form-field>
 
         <!-- End date -->
         <mat-form-field style="flex: 2">
           <mat-label>End date</mat-label>
-          <input matInput formControlName="endDate" [matDatepicker]="endDatePicker">
-          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <input [matDatepicker]="endDatePicker" formControlName="endDate" matInput>
+          <mat-datepicker-toggle [for]="endDatePicker" matSuffix></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker></mat-datepicker>
         </mat-form-field>
 
@@ -43,7 +43,7 @@
         <mat-form-field style="flex: 2">
 
           <mat-label>Employer</mat-label>
-          <input matInput formControlName="employer" name="employer" [matAutocomplete]="organizationSelector">
+          <input [matAutocomplete]="organizationSelector" formControlName="employer" matInput name="employer">
 
           <mat-autocomplete #organizationSelector="matAutocomplete" [displayWith]="displayOptionOrganization">
             <mat-option *ngFor="let organization of organizationsDataSource.awaitEntities() | async"
@@ -57,7 +57,7 @@
         <!-- Employee -->
         <mat-form-field style="flex: 2">
           <mat-label>Employee</mat-label>
-          <input matInput formControlName="employee" name="employee" [matAutocomplete]="personSelector">
+          <input [matAutocomplete]="personSelector" formControlName="employee" matInput name="employee">
           <mat-autocomplete #personSelector="matAutocomplete" [displayWith]="displayOptionPerson">
             <mat-option *ngFor="let person of peopleDataSource.awaitEntities() | async" [value]="person">
               {{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}
@@ -72,7 +72,7 @@
         <!-- Description -->
         <mat-form-field style="flex: 1">
           <mat-label>Description</mat-label>
-          <textarea matInput formControlName="description" matTextareaAutosize></textarea>
+          <textarea formControlName="description" matInput matTextareaAutosize></textarea>
         </mat-form-field>
       </div>
 

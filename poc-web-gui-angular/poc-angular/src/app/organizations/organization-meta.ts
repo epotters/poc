@@ -23,7 +23,6 @@ export const organizationMeta: EntityMeta<Organization> = {
   defaultSortDirection: 'asc',
 
 
-
   displayedColumns: ['id', 'name'],
 
   columnConfigs: {
