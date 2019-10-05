@@ -4,7 +4,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from "../lib/auth-module";
 import {PersonListComponent} from "./person-list.component";
 import {PersonEditorComponent} from "./person-editor.component";
-import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {PersonManagerComponent} from "./person-manager.component";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 
@@ -34,11 +33,6 @@ const routes: Routes = [
   {
     path: base + 'list-of-cards',
     component: PersonListOfCardsComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'n-grid',
-    component: PersonListNGridComponent,
     canActivate: [AuthGuardService]
   }
 ];

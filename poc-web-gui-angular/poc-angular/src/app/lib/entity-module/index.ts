@@ -9,5 +9,3 @@ export * from './entity-editor.component';
 export * from './entity-list.component';
 export * from './entity-manager.component';
 
-
-export * from './entity-list-n-grid.component';

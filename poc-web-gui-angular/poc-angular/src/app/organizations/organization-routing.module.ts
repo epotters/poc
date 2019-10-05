@@ -5,7 +5,6 @@ import {OrganizationListComponent} from "./organization-list.component";
 import {OrganizationEditorComponent} from "./organization-editor.component";
 import {AuthGuardService} from "../lib/auth-module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
-import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
 
 
@@ -35,11 +34,6 @@ const routes: Routes = [
   {
     path: base + ':id',
     component: OrganizationEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'n-grid',
-    component: OrganizationListNGridComponent,
     canActivate: [AuthGuardService]
   },
   {

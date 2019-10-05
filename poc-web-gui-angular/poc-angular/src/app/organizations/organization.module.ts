@@ -7,7 +7,6 @@ import {OrganizationListComponent} from "./organization-list.component";
 import {OrganizationService} from "./organization.service";
 import {OrganizationRoutingModule} from "./organization-routing.module";
 import {OrganizationManagerComponent} from "./organization-manager.component";
-import {OrganizationListNGridComponent} from "./organization-list-n-grid.component";
 import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
 import {organizationMeta} from "./organization-meta";
 import {META, SERVICE} from "../lib/entity-module/entity-tokens";
@@ -25,7 +24,6 @@ import {EmploymentModule} from "../employments/employment.module";
     OrganizationListComponent,
     OrganizationEditorComponent,
     OrganizationEmployeesRelationComponent,
-    OrganizationListNGridComponent,
     OrganizationListOfCardsComponent
   ],
   entryComponents: [
@@ -33,7 +31,6 @@ import {EmploymentModule} from "../employments/employment.module";
     OrganizationListComponent,
     OrganizationEditorComponent,
     OrganizationEmployeesRelationComponent,
-    OrganizationListNGridComponent,
     OrganizationListOfCardsComponent
   ],
   exports: [

@@ -7,7 +7,6 @@ import {EntityMaterialModule} from "./common/entity-material.module";
 import {TableRowEditorModule} from "./table-row-editor/table-row-editor.module";
 import {DialogModule} from "./dialog/dialog.module";
 
-import {NGridModule} from "../../core/n-grid/n-grid.module";
 import {EntityComponentStyleOverrideDirective} from "./common/entity-component-style-override.directive";
 import {EntityLinkDirective} from "./common/entity-link.directive";
 
@@ -18,17 +17,13 @@ import {EntityLinkDirective} from "./common/entity-link.directive";
     EntityCommonModule,
     EntityMaterialModule,
     TableRowEditorModule,
-    DialogModule,
-
-    NGridModule
+    DialogModule
   ],
   exports: [
     EntityCommonModule,
     EntityMaterialModule,
     TableRowEditorModule,
-    DialogModule,
-
-    NGridModule
+    DialogModule
   ],
   declarations: [
     EntityComponentStyleOverrideDirective,

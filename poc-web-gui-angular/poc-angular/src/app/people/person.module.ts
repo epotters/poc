@@ -6,7 +6,6 @@ import {PersonService} from "./person.service";
 import {PersonEditorComponent, PersonEmployersRelationComponent} from "./person-editor.component";
 import {PersonListComponent} from "./person-list.component";
 import {PersonRoutingModule} from "./person-routing.module";
-import {PersonListNGridComponent} from "./person-list-n-grid.component";
 import {PersonManagerComponent} from "./person-manager.component";
 import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
 import {personMeta} from "./person-meta";
@@ -25,16 +24,14 @@ import {EmploymentModule} from "../employments/employment.module";
     PersonListComponent,
     PersonEditorComponent,
     PersonEmployersRelationComponent,
-    PersonListOfCardsComponent,
-    PersonListNGridComponent
+    PersonListOfCardsComponent
   ],
   entryComponents: [
     PersonManagerComponent,
     PersonListComponent,
     PersonEditorComponent,
     PersonEmployersRelationComponent,
-    PersonListOfCardsComponent,
-    PersonListNGridComponent
+    PersonListOfCardsComponent
   ],
   providers: [
     {provide: META, useValue: personMeta},
