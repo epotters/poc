@@ -31,7 +31,6 @@ export class Config {
   // API
   public static apiRoot = 'https://localhost:8002/poc/api';
 
-
   public static defaultSnackbarDuration: number = 3000;
 
 }

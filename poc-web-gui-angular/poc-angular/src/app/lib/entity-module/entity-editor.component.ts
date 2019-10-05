@@ -1,12 +1,12 @@
 import {Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {tap} from "rxjs/operators";
 
 import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
 import {EntityService} from "./entity.service";
-import {EntityMeta} from "./domain/entity-meta.model";
+import {EntityMeta, ValidatorDescriptor} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
 import {MatSnackBar} from "@angular/material";
 
@@ -15,10 +15,13 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   @Input() entityToLoad?: T;
   @Input() isManaged: boolean = false;
+  @Input() editorColumns: string[] = this.meta.displayedColumns;
 
   title: string;
   entityForm: FormGroup;
   entitySubject = new BehaviorSubject<T>(this.entityToLoad); // Used by the relations submodules
+
+  enableValidation: boolean = true;
 
   constructor(
     public meta: EntityMeta<T>,
@@ -30,7 +33,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     public snackbar: MatSnackBar
   ) {
     console.debug('Constructing the EntityEditorComponent for type ' + this.meta.displayName);
-    this.buildForm(formBuilder);
+    this.entityForm = this.buildForm(formBuilder);
   }
 
 
@@ -186,13 +189,42 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
 
-  // TODO: Create a gemeric version based upon EntityMeta
-  // Override this method
-  buildForm(formBuilder: FormBuilder): void {
-    this.entityForm = formBuilder.group({
-      id: new FormControl()
-    });
+  buildForm(formBuilder: FormBuilder): FormGroup {
+    let group = {};
+    for (let key in this.editorColumns) {
+      if (this.editorColumns.hasOwnProperty(key)) {
+        group[key] = new FormControl('', this.buildValidators(key));
+      }
+    }
+    return this.formBuilder.group(group);
   }
+
+
+  buildValidators(fieldName: string): any[] {
+    if (!this.enableValidation) {
+      return [];
+    }
+
+    if (fieldName.indexOf('.') > -1) {
+      fieldName = fieldName.split('.')[0];
+    }
+
+    const validators: any[] = [];
+    const validatorDescriptors = this.meta.columnConfigs[fieldName].validators;
+    if (validatorDescriptors) {
+      for (let key in validatorDescriptors) {
+        if (validatorDescriptors.hasOwnProperty(key)) {
+          let validatorDescriptor: ValidatorDescriptor = validatorDescriptors[key];
+          let validator = (validatorDescriptor.argument) ?
+            Validators[validatorDescriptor.type](validatorDescriptor.argument) :
+            Validators[validatorDescriptor.type];
+          validators.push(validator);
+        }
+      }
+    }
+    return validators;
+  }
+
 
   openConfirmationDialog(title: string, message: string) {
     const dialogConfig = new MatDialogConfig();

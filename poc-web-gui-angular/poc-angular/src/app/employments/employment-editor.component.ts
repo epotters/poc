@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog, MatSnackBar} from "@angular/material";
 
 import {EntityDataSource, EntityEditorComponent} from "../lib/entity-module";
@@ -68,8 +68,8 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
   }
 
 
-  buildForm(formBuilder: FormBuilder) {
-    this.entityForm = formBuilder.group({
+  buildForm(formBuilder: FormBuilder): FormGroup {
+    return formBuilder.group({
       id: new FormControl(),
       startDate: new FormControl(),
       endDate: new FormControl(),

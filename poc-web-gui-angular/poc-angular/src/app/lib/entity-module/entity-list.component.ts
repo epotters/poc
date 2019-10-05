@@ -343,6 +343,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   private showAndPositionEditor(targetElement: Element, idx: number) {
     this.editorVisible = true;
     this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
+    // console.debug(idx * this.rowHeight, this.editorViewState.rowElement.offsetTop,
+    //   this.editorViewState.rowElement.offsetWidth);
     this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
     this.editorViewState.rowElement.style.opacity = '0.5';
   }
@@ -363,7 +365,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
   private fieldNameFromCellElement(cellElement: Element): string {
     let classes: string[] = cellElement.getAttribute('class').split(' ');
-                                                  for (let idx in classes) {
+    for (let idx in classes) {
       let cls = classes[idx];
       if (cls.startsWith('mat-column-')) {
         return cls.split('-')[2];

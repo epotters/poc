@@ -36,7 +36,10 @@ export const organizationMeta: EntityMeta<Organization> = {
       }
     },
     name: {
-      label: 'Name'
+      label: 'Name',
+      validators: [
+        {type: 'required', message: 'Last name is required'}
+        ]
     },
 
     employees: {

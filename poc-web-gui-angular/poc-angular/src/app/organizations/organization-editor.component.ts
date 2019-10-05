@@ -1,18 +1,18 @@
 import {Component, ComponentFactoryResolver, Input} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog, MatSnackBar} from "@angular/material";
 
 import {BehaviorSubject} from "rxjs";
 
-import {EntityEditorComponent} from "../lib/entity-module";
 import {Employment, Organization, Person} from "../core/domain/";
 import {organizationMeta} from "./organization-meta";
-import {OrganizationService} from "./organization.service";
-import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
 import {employmentMeta} from "../employments/employment-meta";
 import {personMeta} from "../people/person-meta";
+import {OrganizationService} from "./organization.service";
 import {EmploymentListComponent} from "../employments/employments-list.component";
+import {EntityEditorComponent} from "../lib/entity-module";
+import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
 
 
 @Component({
@@ -33,8 +33,8 @@ export class OrganizationEditorComponent extends EntityEditorComponent<Organizat
     super(organizationMeta, service, router, route, formBuilder, dialog, snackbar);
   }
 
-  buildForm(formBuilder: FormBuilder) {
-    this.entityForm = formBuilder.group({
+  buildForm(formBuilder: FormBuilder): FormGroup {
+    return formBuilder.group({
       id: new FormControl(),
       name: new FormControl('', [
         Validators.required

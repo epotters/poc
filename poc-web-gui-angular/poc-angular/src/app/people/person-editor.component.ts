@@ -1,6 +1,6 @@
 import {Component, ComponentFactoryResolver, Input} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog, MatSnackBar} from "@angular/material";
 
 import {EntityEditorComponent} from "../lib/entity-module";
@@ -34,8 +34,8 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
     super(personMeta, service, router, route, formBuilder, dialog, snackbar);
   }
 
-  buildForm(formBuilder: FormBuilder) {
-    this.entityForm = formBuilder.group({
+  buildForm(formBuilder: FormBuilder): FormGroup {
+    return formBuilder.group({
       id: new FormControl(),
       firstName: new FormControl('', [
         Validators.required,

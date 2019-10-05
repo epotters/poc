@@ -59,7 +59,6 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
         this.loadingSubject.next(false);
 
         console.debug('Datasource', this.meta.displayNamePlural.toLowerCase(), 'processed result');
-
       });
   }
 

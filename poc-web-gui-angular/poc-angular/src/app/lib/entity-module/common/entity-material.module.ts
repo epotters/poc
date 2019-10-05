@@ -20,6 +20,10 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MAT_DATE_FORMATS} from "@angular/material/core";
+
+
+import {POC_DATE_FORMATS} from "../../../../config";
 
 
 @NgModule({
@@ -70,6 +74,9 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatSnackBarModule,
     MatProgressBarModule,
     MatTooltipModule
+  ],
+  providers: [
+    {provide: MAT_DATE_FORMATS, useValue: POC_DATE_FORMATS}
   ]
 })
 export class EntityMaterialModule {
