@@ -17,7 +17,7 @@
   <properties>
     <start-class>poc.web.api.PocWebApi</start-class>
 
-    <jib-plugin-version>1.0.2</jib-plugin-version>
+    <jib-plugin-version>1.6.1</jib-plugin-version>
     <registry-url>registry.hub.docker.com</registry-url>
     <registry-user>epotters</registry-user>
     <registry-password>B4rc3l0n4</registry-password>
@@ -171,6 +171,7 @@
                 <ports>
                   <port>8002</port>
                 </ports>
+                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
               </container>
             </configuration>
           </plugin>

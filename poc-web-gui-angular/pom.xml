@@ -27,92 +27,97 @@
     <angular.toolsDir>angular-build-tools</angular.toolsDir>
   </properties>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>com.github.eirslett</groupId>
-          <artifactId>frontend-maven-plugin</artifactId>
-          <version>${frontend-maven-plugin.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+  <profiles>
+    <profile>
+      <id>angular</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>com.github.eirslett</groupId>
+              <artifactId>frontend-maven-plugin</artifactId>
+              <version>${frontend-maven-plugin.version}</version>
+            </plugin>
+          </plugins>
+        </pluginManagement>
 
-    <plugins>
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
 
-        <configuration>
-          <workingDirectory>${angular.projectDir}</workingDirectory>
-          <installDirectory>${project.build.directory}/${angular.toolsDir}</installDirectory>
-        </configuration>
-
-        <executions>
-
-          <!-- Install nodejs and npm -->
-          <execution>
-            <id>install-node-and-npm</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>install-node-and-npm</goal>
-            </goals>
             <configuration>
-              <nodeVersion>${node.version}</nodeVersion>
-              <npmVersion>${npm.version}</npmVersion>
+              <workingDirectory>${angular.projectDir}</workingDirectory>
+              <installDirectory>${project.build.directory}/${angular.toolsDir}</installDirectory>
             </configuration>
-          </execution>
 
-          <!-- Execute command "npm install" -->
-          <execution>
-            <id>npm-install</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>install</arguments>
-            </configuration>
-          </execution>
+            <executions>
 
-          <!-- Execute command "npm run build" -->
-          <execution>
-            <id>npm-build</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>run ng -- build --prod</arguments>
-            </configuration>
-          </execution>
+              <!-- Install nodejs and npm -->
+              <execution>
+                <id>install-node-and-npm</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>install-node-and-npm</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>${node.version}</nodeVersion>
+                  <npmVersion>${npm.version}</npmVersion>
+                </configuration>
+              </execution>
 
-        </executions>
-      </plugin>
+              <!-- Execute command "npm install" -->
+              <execution>
+                <id>npm-install</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+
+              <!-- Execute command "npm run build" -->
+              <execution>
+                <id>npm-build</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>run ng -- build --prod</arguments>
+                </configuration>
+              </execution>
+
+            </executions>
+          </plugin>
 
 
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>${maven-resources-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${angular.projectDir}/${angular.targetDir}</directory>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>${maven-resources-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${angular.projectDir}/${angular.targetDir}</directory>
+                      <filtering>true</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
