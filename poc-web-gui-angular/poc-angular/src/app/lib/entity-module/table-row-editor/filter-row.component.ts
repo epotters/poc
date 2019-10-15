@@ -20,6 +20,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     console.debug('Constructing FilterRowComponent');
   }
 
+  getOutputValue(): FieldFilter[] {
+    return this.getFilters()
+  }
 
   public getFilters(): FieldFilter[] {
 
@@ -70,16 +73,12 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
   }
 
 
-  getOutputValue(): FieldFilter[] {
-    return this.getFilters()
-  }
-
-
   getColumns(): Record<string, FieldEditorConfig> {
     let editorColumns: Record<string, FieldEditorConfig> = {};
     for (let idx in this.columns) {
       let key: string = this.columns[idx];
       if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
+        console.debug('filter config found for field', key, ':', this.meta.columnConfigs[key].filter);
         editorColumns[key] = this.meta.columnConfigs[key].filter;
       } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
         editorColumns[key] = this.meta.columnConfigs[key].editor;
@@ -90,4 +89,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     return editorColumns;
   }
 
+  
+  getEditor(key: string): FieldEditorConfig {
+    return (this.editorColumns[key]) ? this.editorColumns[key] : this.defaultFieldEditorConfig;
+  }
+  
 }

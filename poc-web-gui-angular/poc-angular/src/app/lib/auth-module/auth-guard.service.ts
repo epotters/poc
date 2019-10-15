@@ -17,16 +17,27 @@ export class AuthGuardService implements CanActivate {
     }
 
     this.debugLog(route, state);
+    // console.debug('About to set the return url to ' + route.url.join('/'));
+    // this.authService.setReturnUrl(route.url.join('/'));
 
-    console.debug('About to set the return url to ' + route.url.join('/'));
-
-    this.authService.setReturnUrl(route.url.join('/'));
+    console.debug('About to set the return url to ' + state.url);
+    this.authService.setReturnUrl(state.url);
 
     console.debug('Return url was set to ' + this.authService.getReturnUrl());
 
-
     this.authService.startAuthentication();
+    return false;
+  }
 
+
+  private isRouteProtected(path: string): boolean {
+    for (let key in this.router.config) {
+      let config = this.router.config[key];
+      if (config.path == path && config.canActivate != null) {
+        console.debug(config);
+        return true;
+      }
+    }
     return false;
   }
 
@@ -44,17 +55,5 @@ export class AuthGuardService implements CanActivate {
 
     console.debug(state);
     console.debug('state.url: ' + state.url);
-  }
-
-
-  private isRouteProtected(path: string): boolean {
-    for (let key in this.router.config) {
-      let config = this.router.config[key];
-      if (config.path == path && config.canActivate != null) {
-        console.debug(config);
-        return true;
-      }
-    }
-    return false;
   }
 }

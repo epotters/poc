@@ -5,10 +5,14 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {PersonService} from "./person.service";
 import {personMeta as meta} from "./person-meta";
+import {EntityAnimations} from "../lib/entity-module/common/animations.animation";
 
 @Component({
   selector: 'person-list-card',
   templateUrl: '../lib/entity-module/entity-list.component.html',
+  animations: [
+    EntityAnimations.slideTo
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent extends EntityListComponent<Person> {

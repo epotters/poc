@@ -1,4 +1,4 @@
-import {Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
@@ -11,7 +11,7 @@ import {BehaviorSubject} from "rxjs";
 import {MatSnackBar} from "@angular/material";
 
 
-export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges {
+export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges, OnDestroy {
 
   @Input() entityToLoad?: T;
   @Input() isManaged: boolean = false;
@@ -42,8 +42,12 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
     const entityIdToLoad = this.getIdFromPath();
     if (entityIdToLoad) {
-      this.title = this.meta.displayName + ' Editor';
       this.loadEntity(entityIdToLoad);
+      this.title = this.meta.displayName + ' Editor';
+    } else if (this.entityToLoad != null) {
+      console.debug('Editor - entityToLoad has been set externally');
+      this.loadNewEntity(this.entityToLoad);
+      this.title = this.meta.displayName + ' Editor';
     } else {
       console.info('Editor for a new entity');
       this.title = 'New ' + this.meta.displayName;
@@ -53,11 +57,20 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.entityToLoad.currentValue &&
-      changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue) {
+    console.debug('Editor ngOnChanges', changes);
+    if (changes.entityToLoad.currentValue && !changes.entityToLoad.previousValue
+      ||
+      changes.entityToLoad.currentValue &&
+      changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue.id) {
+
       console.debug('EntityToLoad has changed. Loading...');
       this.loadNewEntity(changes.entityToLoad.currentValue);
     }
+  }
+
+  ngOnDestroy(): void {
+    console.log('Destroying EntityEditorComponent');
+    this.entitySubject.complete();
   }
 
   prefillFromQueryString() {
@@ -141,7 +154,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         console.debug("Dialog output:", data);
         if (data.confirmed) {
           console.info('User confirmed delete action, so it will be executed');
-          this.service.destroy(entity.id).subscribe((response) => {
+          this.service.delete(entity.id).subscribe((response) => {
             console.info('response ', response);
             let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
             console.info(msg);

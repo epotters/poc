@@ -21,10 +21,6 @@ export class AuthService implements OnInit {
     this.userManager = new UserManager(Config.userManagerSettings);
   }
 
-  private static capitalizeFirst(text: string): string {
-    return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
-  }
-
   ngOnInit(): void {
 
     this.userManager.getUser().then(user => {
@@ -49,6 +45,7 @@ export class AuthService implements OnInit {
   }
 
   public startAuthentication(): Promise<void> {
+    this.setReturnUrl(this.router.url);
     return this.userManager.signinRedirect();
   }
 
@@ -126,5 +123,9 @@ export class AuthService implements OnInit {
     this.userManager.events.addUserSignedOut(function () {
       console.info('User signed out');
     });
+  }
+
+  private static capitalizeFirst(text: string): string {
+    return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
   }
 }

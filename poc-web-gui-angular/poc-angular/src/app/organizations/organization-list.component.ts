@@ -5,12 +5,16 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {OrganizationService} from "./organization.service";
 import {organizationMeta as meta} from "./organization-meta";
+import {EntityAnimations} from "../lib/entity-module/common/animations.animation";
 
 
 @Component({
   selector: 'organization-list-card',
   templateUrl: '../lib/entity-module/entity-list.component.html',
   styleUrls: ['../lib/entity-module/entity-list.component.css'],
+  animations: [
+    EntityAnimations.slideTo
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationListComponent extends EntityListComponent<Organization> {

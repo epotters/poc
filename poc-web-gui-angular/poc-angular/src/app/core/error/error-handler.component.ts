@@ -1,5 +1,5 @@
 import {Component, Inject, InjectionToken} from "@angular/core";
-import {Config} from "../../lib/entity-module/common/config";
+import {EntityLibConfig} from "../../lib/entity-module/common/entity-lib-config";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 export const ERROR_INJECTOR_TOKEN: InjectionToken<any> = new InjectionToken('ErrorInjectorToken');
@@ -17,7 +17,7 @@ export class ErrorHandlerComponent {
 
   showError(msg: string): void {
     this.snackbar.open(msg, null, {
-      duration: Config.defaultSnackbarDuration
+      duration: EntityLibConfig.defaultSnackbarDuration
     });
   }
 

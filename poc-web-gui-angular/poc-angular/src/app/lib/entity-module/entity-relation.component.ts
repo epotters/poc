@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from "@angular/core";
+import {ComponentFactoryResolver, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
 import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
 import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
@@ -6,7 +6,8 @@ import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entr
 import {ListConfig} from "./entity-list.component";
 
 
-export abstract class EntityRelationComponent<T extends Identifiable, S extends Identifiable, R extends Identifiable> implements OnInit {
+export abstract class EntityRelationComponent<T extends Identifiable, S extends Identifiable, R extends Identifiable>
+  implements OnInit, OnDestroy {
 
   @Input() readonly ownerSubject: BehaviorSubject<S>;
 
@@ -28,6 +29,10 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   ngOnInit(): void {
     this.activateRelation();
+  }
+
+  ngOnDestroy(): void {
+    this.ownerSubject.complete();
   }
 
   private activateRelation(): void {

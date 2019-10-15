@@ -23,6 +23,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    let rethrowError: boolean = true;
     return next.handle(request)
       .pipe(
         retry(0),
@@ -39,7 +41,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               message: `Error Status: ${error.status}\nMessage: ${error.message}`
             };
 
-            if (error.status === 401) {
+            if (error.status === 404 && request.url.endsWith('poc-config.json')) {
+              console.debug('Redirecting to local copy of poc-config.json');
+              let requestModified: HttpRequest<any> = request.clone({
+                url: './assets/poc-config.json',
+                headers: request.headers.set('Content-Type', 'application/json')
+              });
+              rethrowError = false;
+              return next.handle(requestModified);
+
+            } else if (error.status === 401) {
               console.debug('Trying to reauthenticate the user');
               this.authService.startSilentAuthentication();
             }
@@ -47,7 +58,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
           this.errorSubject.next(pocError);
           console.debug(pocError);
-          return throwError(pocError.message);
+          if (rethrowError) {
+            return throwError(pocError.message);
+          } else {
+            return null;
+          }
         })
       )
   }

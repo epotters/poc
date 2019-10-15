@@ -7,30 +7,32 @@
 
   <button (click)="toggleListOfCards()" mat-button>{{(listOfCardsVisible) ? 'Hide' : 'Show'}} List of Cards</button>
 
-
   <button (click)="openDialogWithList()" mat-button>List in dialog</button>
   <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
 
 </mat-toolbar>
 
 <person-editor-card
-  *ngIf="editorVisible"
   [entityToLoad]="selectedEntity"
-  [isManaged]="true">
+  [isManaged]="true"
+  *ngIf="editorVisible"
+  [@fadeInOut]
+  (@fadeInOut.start)="onAnimationEvent($event)"
+  (@fadeInOut.done)="onAnimationEvent($event)">
+  >
 </person-editor-card>
 
 <person-list-card
   (entitySelector)="onEntitySelected($event)"
-  *ngIf="listVisible"
   [columns]="columns"
   [filterVisible]="false"
   [isManaged]="true"
   [title]="'Managed people list'"
->
+  *ngIf="listVisible"
+  [@fadeInOut]>
 </person-list-card>
 
-
 <person-list-of-cards
-  *ngIf="listOfCardsVisible">
-
+  *ngIf="listOfCardsVisible"
+  [@fadeInOut]>
 </person-list-of-cards>

@@ -5,11 +5,16 @@ import {MatDialog} from "@angular/material";
 import {EntityListOfCardsComponent} from "../lib/entity-module/entity-list-of-cards.component";
 import {PersonService} from "./person.service";
 import {personMeta} from "./person-meta";
+import {PocAnimations} from "../app-animations";
+
 
 @Component({
   selector: 'person-list-of-cards',
   templateUrl: './person-list-of-cards.component.html',
-  styleUrls: ['../lib/entity-module/entity-list.component.css']
+  styleUrls: ['../lib/entity-module/entity-list.component.css'],
+  animations: [
+    PocAnimations.slideInOut
+  ]
 })
 export class PersonListOfCardsComponent extends EntityListOfCardsComponent<Person> {
 

@@ -6,7 +6,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {EntityMeta} from "..";
 import {EntityService} from "../entity.service";
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog.component";
-import {Config} from "../common/config";
+import {EntityLibConfig} from "../common/entity-lib-config";
 
 
 export interface ActionResult<T> {
@@ -62,7 +62,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
           console.info(msg);
           this.snackbar.open(msg, null, {
-            duration: Config.defaultSnackbarDuration
+            duration: EntityLibConfig.defaultSnackbarDuration
           });
 
           console.debug('Before marking the form as pristine, is it dirty?', entityForm.dirty);
@@ -94,7 +94,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       console.info(msg);
 
       this.snackbar.open(msg, null, {
-        duration: Config.defaultSnackbarDuration
+        duration: EntityLibConfig.defaultSnackbarDuration
       });
       deleteEntitySubject.next({success: false, changes: false, msg: msg});
     }
@@ -109,13 +109,13 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
           console.info('User confirmed delete action, so it will be executed');
 
-          return this.service.destroy(('' + entity.id))
+          return this.service.delete(('' + entity.id))
             .subscribe(response => {
 
               let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
               console.info(msg);
               this.snackbar.open(msg, null, {
-                duration: Config.defaultSnackbarDuration
+                duration: EntityLibConfig.defaultSnackbarDuration
               });
               deleteEntitySubject.next({success: true, changes: true, msg: msg});
             });
@@ -143,7 +143,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       let msg = 'The editor row has unsaved changes';
       console.debug(msg);
 
-      if (Config.autoSave) {
+      if (EntityLibConfig.autoSave) {
 
         this.saveSilently(unsavedChangesSubject, entityForm, overlay);
 

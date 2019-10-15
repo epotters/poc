@@ -1,4 +1,9 @@
-<mat-sidenav-container *ngIf="visible" @fadeIn @fadeOut>
+<mat-sidenav-container
+  *ngIf="visible"
+  [@fadeInOut]
+  (@fadeInOut.start)="onAnimationEvent($event)"
+  (@fadeInOut.done)="onAnimationEvent($event)">
+
 
   <mat-sidenav #sidenav fixedInViewport="true" mode="over">
     <mat-card>

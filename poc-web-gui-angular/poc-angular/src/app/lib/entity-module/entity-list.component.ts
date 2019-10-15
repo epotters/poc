@@ -37,6 +37,14 @@ export interface EditorViewState {
   transform: string
 }
 
+export interface DataSourceState {
+  filter: FieldFilter[],
+  sort: string;
+  sortDirection: SortDirectionType,
+  page: number;
+  pageSize: number;
+}
+
 export interface Position {
   x: string,
   y: string
@@ -74,16 +82,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     transform: 'translateY(0)'
   };
 
-  rowHeight: number = 31; // Keep this in sync with the styling manually
 
   @ViewChild(EntityEditorActionsComponent, {static: false}) editorActions: EntityEditorActionsComponent<T>;
-
   @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
+
   @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild('contextMenuTrigger', {static: false}) contextMenuTrigger: MatMenuTrigger;
-  public;
 
   protected constructor(
     public meta: EntityMeta<T>,
@@ -106,19 +112,21 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
 
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
+
   }
 
-  ngAfterViewInit(): void {
+  private applyInitialDataState(): void {
 
     this.fieldFilters = this.applyOverlay(this.initialFilters);
     this.filterRow.setFilters(this.fieldFilters);
 
-    this.sort.active = this.initialSort || this.meta.defaultSortField;
-    this.sort.direction = this.initialSortDirection || this.meta.defaultSortDirection;
-
     this.paginator.pageIndex = this.startPage;
     this.paginator.pageSize = this.meta.defaultPageSize;
+  }
 
+  ngAfterViewInit(): void {
+
+    this.applyInitialDataState();
 
     // Reset the paginator after sorting
     this.sort.sortChange
@@ -184,6 +192,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
         }
       });
 
+  }
+
+  onKeyEnter(): void {
+    if (this.editorRow.rowEditorForm.dirty) {
+      this.saveEntity();
+    } else {
+      this.stopEditing().subscribe();
+    }
   }
 
   deleteEntity(entity: T): void {
@@ -343,9 +359,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   private showAndPositionEditor(targetElement: Element, idx: number) {
     this.editorVisible = true;
     this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
-    // console.debug(idx * this.rowHeight, this.editorViewState.rowElement.offsetTop,
-    //   this.editorViewState.rowElement.offsetWidth);
-    this.editorViewState.transform = 'translateY(' + (idx * this.rowHeight) + 'px)';
+    this.editorViewState.transform = 'translateY(' + (idx * this.editorViewState.rowElement.offsetHeight) + 'px)';
     this.editorViewState.rowElement.style.opacity = '0.5';
   }
 
@@ -392,5 +406,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       }
     }
     return newFieldFilters;
+  }
+
+
+  onAnimationEvent(event: AnimationEvent) {
+    console.debug('---> EntityListComponent - AnimationEvent', event);
   }
 }

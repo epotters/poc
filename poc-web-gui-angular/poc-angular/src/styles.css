@@ -338,6 +338,11 @@ TODO: Move to entity-list-of-cards.component.css
 }
 
 
+.row-of-cards {
+  justify-items: center;
+}
+
+
 /* Experimental */
 mat-header-row {
   position: sticky;
@@ -356,4 +361,8 @@ mat-header-row {
 filter-row {
   overflow: hidden;
   transition: all .3s;
+}
+
+person-editor-card {
+  opacity: 1;
 }

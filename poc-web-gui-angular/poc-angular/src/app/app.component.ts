@@ -5,7 +5,7 @@ import {MatSnackBar} from "@angular/material";
 import {Config} from '../config';
 import {AuthService} from "./lib/auth-module/";
 import {PocApiService} from "./core/service";
-import {Animations} from "./app-animations";
+import {PocAnimations} from "./app-animations";
 import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 import {ErrorHandlerService} from "./core/error/error-handler.service";
 
@@ -15,8 +15,7 @@ import {ErrorHandlerService} from "./core/error/error-handler.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
-    Animations.fadeIn,
-    Animations.fadeOut
+    PocAnimations.fadeInOut
   ]
 })
 export class AppComponent implements OnInit, AfterContentInit {
@@ -75,4 +74,8 @@ export class AppComponent implements OnInit, AfterContentInit {
     });
   }
 
+
+  onAnimationEvent(event: AnimationEvent) {
+    console.debug('---> AppComponent - AnimationEvent', event);
+  }
 }

@@ -61,7 +61,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     return editorColumns;
   }
 
-  // Only include fields that are in the form and add key suffix to field names
+  // Only include fields that are in the form
   private prepareEntity(entity: T): Partial<T> {
     let editorEntity: Partial<T> = {};
     Object.entries(entity).forEach(
@@ -69,7 +69,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
         if (this.rowEditorForm.contains(key)) {
           editorEntity[key] = entity[key];
         } else {
-          console.debug('Skipping property "' + key + '" because there is no control for it');
+          console.debug('Skipping field "', key, '" because there is no control for it');
         }
       }
     );

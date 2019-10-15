@@ -78,14 +78,15 @@
                 </configuration>
               </execution>
 
-              <!-- Execute command "npm run build" -->
               <execution>
-                <id>npm-build</id>
+                <id>npm run build</id>
                 <goals>
                   <goal>npm</goal>
                 </goals>
+                <phase>generate-resources</phase>
                 <configuration>
-                  <arguments>run ng -- build --prod</arguments>
+                  <arguments>-- run ng build --prod</arguments>
+                  <!--                  <arguments>run build-prod</arguments>-->
                 </configuration>
               </execution>
 

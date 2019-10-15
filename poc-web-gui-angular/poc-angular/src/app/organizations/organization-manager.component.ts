@@ -9,11 +9,16 @@ import {MatDialog} from "@angular/material/dialog";
 import {OrganizationListComponent} from "./organization-list.component";
 import {OrganizationEditorComponent} from "./organization-editor.component";
 import {organizationMeta} from "./organization-meta";
+import {PocAnimations} from "../app-animations";
 
 @Component({
   selector: 'organization-manager',
   templateUrl: './organization-manager.component.html',
-  styleUrls: []
+  styleUrls: [],
+  animations: [
+    PocAnimations.fadeInOut,
+    PocAnimations.slideInOut
+  ]
 })
 export class OrganizationManagerComponent extends EntityManagerComponent<Organization> {
 
@@ -35,8 +40,10 @@ export class OrganizationManagerComponent extends EntityManagerComponent<Organiz
   }
 
 
-  openDialogWithEditor() {
-    const entityEditorComponentDescriptor = new EntityComponentDescriptor(OrganizationEditorComponent, {});
+  openDialogWithEditor(entity?: Organization) {
+    const entityEditorComponentDescriptor = new EntityComponentDescriptor(OrganizationEditorComponent, {
+      entityToLoad: entity
+    });
     this.openDialogWithEntityComponent(entityEditorComponentDescriptor);
   }
 

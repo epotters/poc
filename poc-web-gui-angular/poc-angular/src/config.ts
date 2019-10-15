@@ -8,8 +8,11 @@ export class Config {
   public static applicationDisplayName = 'Proof of concept in Angular';
   public static applicationBasePath = '/poc/';
 
+  // API
+  public static apiRoot = 'https://localhost:8002/poc/api';
 
-  // OIDC
+
+  // OIDC authentication
   public static clientRoot = 'http://localhost:4200/poc';
 
   public static oidcProviderRoot = 'http://keycloak.localhost/auth/';
@@ -17,7 +20,7 @@ export class Config {
   public static accountUrl = Config.oidcProviderRoot + 'realms/' + Config.realm + '/account';
 
   public static userManagerSettings: UserManagerSettings = {
-    authority: 'http://keycloak.localhost/auth/realms/' + Config.realm,
+    authority: Config.oidcProviderRoot + 'realms/' + Config.realm,
     client_id: 'poc-gui',
     response_type: "code",
     scope: 'openid profile email',
@@ -28,8 +31,6 @@ export class Config {
     loadUserInfo: true
   };
 
-  // API
-  public static apiRoot = 'https://localhost:8002/poc/api';
 
   public static defaultSnackbarDuration: number = 3000;
 
@@ -46,3 +47,4 @@ export const POC_DATE_FORMATS = {
     monthYearA11yLabel: 'YYYY'
   }
 };
+

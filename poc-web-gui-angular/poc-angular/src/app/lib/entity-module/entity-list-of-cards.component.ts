@@ -50,7 +50,6 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
 
   ngAfterViewInit(): void {
-
     merge(this.paginator.page)
       .pipe(
         tap(() => {

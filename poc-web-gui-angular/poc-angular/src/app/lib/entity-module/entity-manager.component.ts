@@ -1,10 +1,13 @@
-import {ComponentFactoryResolver, OnInit} from '@angular/core';
+import {ComponentFactoryResolver, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
 import {ActivatedRoute} from "@angular/router";
 import {EntityComponentDescriptor, EntityComponentDialogComponent} from "./dialog/entity-component-dialog.component";
+import {EntityDataSource} from "./entity-data-source";
+import {EntityLibConfig} from "./common/entity-lib-config";
+import {DataSourceState} from "./entity-list.component";
 
 
 export abstract class EntityManagerComponent<T extends Identifiable> implements OnInit {
@@ -20,7 +23,11 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   listVisible: boolean = true;
   editorVisible: boolean = true;
 
-  defaultDialogWidth: string = '600px';
+
+  @Input() dataSourceState: DataSourceState;
+  @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
+
+  dataSource: EntityDataSource<T>;
 
   constructor(
     public meta: EntityMeta<T>,
@@ -31,7 +38,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   ) {
     console.debug('Constructing the EntityManagerComponent for type ' + this.meta.displayName);
     this.columns = meta[this.columnSetName] || meta.displayedColumns;
-    console.debug('Columns:', this.columns);
+    // console.debug('Columns:', this.columns);
   }
 
   ngOnInit() {
@@ -71,7 +78,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
 
   openDialogWithEntityComponent(componentToShow: EntityComponentDescriptor): void {
     const dialogRef = this.dialog.open(EntityComponentDialogComponent, {
-      width: this.defaultDialogWidth,
+      width: EntityLibConfig.defaultDialogWidth,
       data: {
         componentFactoryResolver: this.componentFactoryResolver,
         componentDescriptor: componentToShow,
@@ -85,6 +92,10 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
         this.dialogEntity = entity;
       }
     });
+  }
+
+  onAnimationEvent(event: AnimationEvent) {
+    console.debug('---> EntityManagerComponent - AnimationEvent', event);
   }
 
 

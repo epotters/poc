@@ -9,16 +9,21 @@ import {MatDialog} from "@angular/material/dialog";
 import {PersonListComponent} from "./person-list.component";
 import {PersonEditorComponent} from "./person-editor.component";
 import {FieldFilter} from "../lib/entity-module/domain/filter.model";
+import {PocAnimations} from "../app-animations";
+
 
 @Component({
   selector: 'person-manager',
   templateUrl: './person-manager.component.html',
-  styleUrls: []
+  styleUrls: [],
+  animations: [
+    PocAnimations.fadeInOut,
+    PocAnimations.slideInOut
+  ]
 })
 export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
   initialFilters: FieldFilter[];
-
   listOfCardsVisible: boolean = false;
 
   constructor(

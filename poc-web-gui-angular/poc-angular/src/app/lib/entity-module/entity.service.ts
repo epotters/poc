@@ -7,11 +7,10 @@ import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
 import {ApiService} from "./domain/api-service.model";
 import {Moment} from "moment";
+import {EntityLibConfig} from "./common/entity-lib-config";
 
 
 export class EntityService<T extends Identifiable> {
-
-  dateFormat: string = 'YYYY-MM-DD';
 
   constructor(
     public meta: EntityMeta<T>,
@@ -19,7 +18,6 @@ export class EntityService<T extends Identifiable> {
   ) {
     console.debug('Start constructing entity service for type', this.meta.displayName);
   }
-
 
   public list(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
@@ -36,7 +34,6 @@ export class EntityService<T extends Identifiable> {
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(
         map((response: Response) => {
-          console.debug(response);
           let result: EntityResult<T> = {
             entities: response["content"],
             total: response['totalElements']
@@ -46,38 +43,7 @@ export class EntityService<T extends Identifiable> {
       );
   }
 
-
-  public listEntitiesOnly(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 5): Observable<T[]> {
-
-    return this.list(filters, sortField, sortDirection, pageNumber, pageSize)
-      .pipe(
-        map((response) => {
-          return response.entities;
-        }));
-
-    //
-    // let params: HttpParams = new HttpParams()
-    //   .set('filters', this.buildFilterParams(filters))
-    //   .set('sort', sortField + ',' + sortDirection)
-    //   .set('page', pageNumber.toString())
-    //   .set('size', pageSize.toString());
-    //
-    // console.debug('Params for', this.meta.displayName.toLowerCase(), 'request:', params);
-    //
-    // return this.apiService.get(this.meta.apiBase, params)
-    //   .pipe(
-    //     map((response: Response) => {
-    //       console.debug(response);
-    //       return response;
-    //     })).pipe(
-    //     map(res => {
-    //       return res["content"];
-    //     })
-    //   );
-  }
-
-
-  get(id: string): Observable<any> {
+  public get(id: string): Observable<any> {
     console.debug('Get', this.meta.name, 'called for id', id);
     return this.apiService.get(this.meta.apiBase + id)
       .pipe(map((response: Response) => {
@@ -86,28 +52,20 @@ export class EntityService<T extends Identifiable> {
       }));
   }
 
+  public save(entity: T): Observable<T> {
 
-  save(entity: T): Observable<T> {
-
-    // Update existing
     console.debug('entity.service.save:', entity);
-
-    if (entity.id) {
-      return this.apiService.post(this.meta.apiBase + entity.id, entity)
-        .pipe(map(data => data));
-
-      // Create new
-    } else {
-      return this.apiService.put(this.meta.apiBase, entity)
-        .pipe(map(data => data));
+    if (entity.id) { // Update existing
+      return this.apiService.post(this.meta.apiBase + entity.id, entity);
+    } else { // Create new
+      return this.apiService.put(this.meta.apiBase, entity);
     }
   }
 
-  destroy(id: string): Observable<T> {
+  public delete(id: string): Observable<T> {
     console.debug('About to destroy', this.meta.displayName.toLowerCase(), 'with id', id);
     return this.apiService.delete(this.meta.apiBase + id);
   }
-
 
   private buildFilterParams(filters?: FieldFilter[]): string {
     let filterParams: string[] = [];
@@ -124,7 +82,7 @@ export class EntityService<T extends Identifiable> {
         operator = exactMatchOperator;
       } else if (editorType == 'date') {
         operator = exactMatchOperator;
-        value = (<Moment>(<any>filter.rawValue)).format(this.dateFormat);
+        value = (<Moment>(<any>filter.rawValue)).format(EntityLibConfig.dateFormat);
       } else if (editorType === 'autocomplete') {
         operator = exactMatchOperator;
       } else if (filter.name === 'id' || filter.name.endsWith('.id')) {
@@ -149,22 +107,9 @@ export class EntityService<T extends Identifiable> {
       console.debug('fieldName', this.meta.columnConfigs, fieldNameParts[0], columnConfig);
     }
 
-
     if (!columnConfig.editor) {
       return 'text';
     }
     return (columnConfig.editor.type ? columnConfig.editor.type : columnConfig.filter.type);
   }
-
-
-  // listRelationsByOwner(ownerNamePlural: string, ownerId: number, relatedNamePlural: string, sortFieldName: string): Observable<T[]> {
-  //
-  //   let params: HttpParams = new HttpParams()
-  //     .set('sort', sortFieldName + ',' + 'asc')
-  //     .set('page', '0')
-  //     .set('size', '25');
-  //
-  //   return this.apiService.get('/' + ownerNamePlural + '/' + ownerId + '/' + relatedNamePlural, params);
-  // }
-
 }
