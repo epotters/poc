@@ -32,15 +32,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public List<Person> getPersons() {
-
-    int pageNumber = 5;
-    int pageSize = 50;
-
-    Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "id"), new Sort.Order(Sort.Direction.DESC, "fullName"));
-    PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sort);
-
-    Page<Person> page = personRepository.findAll(pageRequest);
-    return page.getContent();
+    return personRepository.findAll();
   }
 
 
