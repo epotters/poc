@@ -1,17 +1,17 @@
 .root {
-    margin-top: 40px;
-    text-align: center;
-    border: 0px;
+  margin-top: 40px;
+  text-align: center;
+  border: 0px;
 }
 
 .root fieldset,
 .root label {
-    display: inline-block;
-    text-align: left;
+  display: inline-block;
+  text-align: left;
 }
 
 .root button {
-    margin-top: 10px;
-    display: inline-block;
-    width: 100%;
+  margin-top: 10px;
+  display: inline-block;
+  width: 100%;
 }

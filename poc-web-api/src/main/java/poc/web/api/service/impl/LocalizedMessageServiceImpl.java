@@ -21,14 +21,18 @@ import poc.web.api.service.LocalizedMessageService;
 @Component
 public class LocalizedMessageServiceImpl implements LocalizedMessageService {
 
-  private ResourcePatternResolver resourceResolver;
-  private MessageSource messageSource;
+  private final ResourcePatternResolver resourceResolver;
+  private final MessageSource messageSource;
 
 
   @Autowired
   public LocalizedMessageServiceImpl(ResourcePatternResolver resourceResolver, MessageSource messageSource) {
     this.resourceResolver = resourceResolver;
     this.messageSource = messageSource;
+
+    Locale locale = new Locale("en");
+    LocaleContextHolder.setLocale(locale);
+
   }
 
 

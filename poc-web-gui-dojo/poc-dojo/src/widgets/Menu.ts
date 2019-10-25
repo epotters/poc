@@ -1,61 +1,67 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {w} from '@dojo/framework/widget-core/d';
-import Link from '@dojo/framework/routing/ActiveLink';
-import Toolbar from '@dojo/widgets/toolbar';
+import {v, w} from "@dojo/framework/widget-core/d";
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import ActiveLink from "@dojo/framework/routing/ActiveLink";
 
-import * as css from './styles/Menu.m.css';
+import {applicationDisplayName} from '../../config';
+import {User} from "../interfaces";
 
-export default class Menu extends WidgetBase {
 
-	appDisplayName: 'Proof of Concept!';
+export interface MenuProperties {
+  currentUser: User;
+  isAuthenticated: boolean;
+}
 
-	protected render() {
-		return w(Toolbar, {heading: this.appDisplayName, collapseWidth: 600}, [
-			w(
-				Link,
-				{
-					to: 'home',
-					classes: [css.link],
-					activeClasses: [css.selected]
-				},
-				['Home']
-			),
-			w(
-				Link,
-				{
-					to: 'people',
-					classes: [css.link],
-					activeClasses: [css.selected]
-				},
-				['People']
-			),
-			w(
-				Link,
-				{
-					to: 'about',
-					classes: [css.link],
-					activeClasses: [css.selected]
-				},
-				['About']
-			),
-			w(
-				Link,
-				{
-					to: 'profile',
-					classes: [css.link],
-					activeClasses: [css.selected]
-				},
-				['Profile']
-			),
-			w(
-				Link,
-				{
-					to: 'login',
-					classes: [css.link],
-					activeClasses: [css.selected]
-				},
-				['Login']
-			)
-		]);
-	}
+export class Menu extends WidgetBase<MenuProperties> {
+
+  protected render() {
+
+    console.debug('Start rendering the menu');
+
+
+    return v('nav', {classes: ['navbar', 'navbar-expand-lg', 'navbar-light', 'bg-light']}, [
+      v('div', {classes: 'container'}, [
+        v('a', {classes: 'navbar-brand'}, [applicationDisplayName]),
+        this._leftMenu(),
+        this._rightMenu()
+      ])
+    ])
+  };
+
+  private _leftMenu() {
+
+    const {isAuthenticated} = this.properties;
+
+    return v('ul', {classes: ['nav', 'navbar-nav', 'mr-auto', 'navbar-left']}, [
+      v('li', {classes: 'nav-item'}, [
+        w(ActiveLink, {to: 'home', classes: ['nav-link'], activeClasses: ['active']}, ['Home']),
+      ]),
+      (isAuthenticated) ?
+        v('li', {key: 'people', classes: 'nav-item'}, [
+          w(ActiveLink, {to: 'people', classes: ['nav-link'], activeClasses: ['active']}, ['People'])
+        ]) : ''
+    ])
+  }
+
+  private _rightMenu() {
+
+    const {currentUser, isAuthenticated} = this.properties;
+    if (isAuthenticated) {
+      console.debug(currentUser);
+    }
+
+    return v('ul', {classes: ['nav', 'navbar-nav', 'navbar-right']}, [
+      (isAuthenticated) ?
+        v('li', {key: 'currentUser', classes: 'nav-item'}, [
+          w(ActiveLink, {to: 'currentUser', classes: ['nav-link'], activeClasses: ['active']}, [
+            (currentUser && currentUser.displayName) ? currentUser.displayName : currentUser.username])
+        ])
+        :
+        v('li', {key: 'sign-in', classes: 'nav-item'}, [
+          w(ActiveLink, {classes: ['nav-link'], activeClasses: ['active'], to: 'login'}, ['Sign In'])
+        ]),
+      v('li', {key: 'about', classes: 'nav-item'}, [
+        w(ActiveLink, {to: 'about', classes: ['nav-link'], activeClasses: ['active']}, ['About'])
+      ])
+    ])
+  }
 }

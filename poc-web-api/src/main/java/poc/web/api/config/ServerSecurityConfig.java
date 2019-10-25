@@ -1,24 +1,16 @@
 package poc.web.api.config;
 
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
+public class ServerSecurityConfig implements WebMvcConfigurer {
 
-  static final String SIGNING_KEY = "12345";
-
-
-  @Bean
   @Override
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**");
   }
-
 }

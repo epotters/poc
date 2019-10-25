@@ -1,0 +1,36 @@
+.organizationEditor {
+  width: 720px;
+  margin-bottom: 48px;
+  margin-top: 12px;
+  margin-left: 48px;
+  border: 1px solid silver;
+
+  text-align: left;
+}
+
+.organizationEditor fieldset,
+.organizationEditor .label {
+  display: inline-block;
+  text-align: left;
+  width: 100%;
+}
+
+.organizationEditor fieldset text {
+  display: inline-block;
+}
+
+.organizationEditor .label {
+  margin-right: 10px;
+}
+
+.organizationEditor .field {
+}
+
+.personButton {
+  padding: 5px 20px;
+}
+
+
+.editorToolbar {
+
+}

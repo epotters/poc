@@ -1,0 +1,53 @@
+<div [formGroup]="rowEditorForm" class="editor-row">
+  <div *ngFor="let key of columns" class="editor-cell mat-column-{{key}}">
+    <div [ngSwitch]="getEditor(key).type" class="editor-type-switch">
+
+      <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
+        <input formControlName="{{key}}" matInput readonly>
+      </mat-form-field>
+
+      <mat-form-field *ngSwitchCase="'text'" [floatLabel]="'never'">
+        <input [matTooltipDisabled]="hasErrors(key)" [matTooltip]="getErrorMessage(key)"
+               formControlName="{{key}}"
+               matInput
+               matTooltipClass="red-tooltip"
+        >
+      </mat-form-field>
+
+      <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="'never'">
+        <textarea [matTooltipDisabled]="hasErrors(key)" [matTooltip]="getErrorMessage(key)"
+                  formControlName="{{key}}"
+                  matInput
+                  matTooltipClass="red-tooltip"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">
+        <mat-select formControlName="{{key}}">
+          <mat-option [value]="">-</mat-option>
+          <mat-option *ngFor="let option of editorColumns[key].options"
+                      [value]="option.value">{{option.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngSwitchCase="'date'" [floatLabel]="'never'">
+        <input [matDatepicker]="datePicker" formControlName="{{key}}" matInput>
+        <mat-datepicker-toggle [for]="datePicker" matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngSwitchCase="'autocomplete'" [floatLabel]="'never'">
+        <input [matAutocomplete]="relatedEntitySelector" formControlName="{{key}}" matInput>
+        <mat-autocomplete #relatedEntitySelector="matAutocomplete"
+                          [displayWith]="editorColumns[key].relatedEntity.displayOption">
+          <mat-option
+            *ngFor="let relatedEntity of dataSources[editorColumns[key].relatedEntity.name].awaitEntities() | async"
+            [value]="relatedEntity">
+            {{editorColumns[key].relatedEntity.displayOption(relatedEntity)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+    </div>
+  </div>
+</div>

@@ -1,51 +1,80 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import {v, w} from '@dojo/framework/widget-core/d';
-import Button from '@dojo/widgets/button';
-import TextInput from '@dojo/widgets/text-input';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v, w} from "@dojo/framework/widget-core/d";
 
-import * as css from './styles/Login.m.css';
+import {Errors, LoginRequest, WithTarget} from '../interfaces';
+import {ErrorList} from './ErrorList';
+import {PartialLoginRequestPayload, RouteIdPayload} from '../processes/interfaces';
 
 
-export default class Login extends WidgetBase {
+export interface LoginProperties {
 
-    private _onSubmit(event: Event) {
-        event.preventDefault();
-        // ... to be continued
-    }
+  loginRequest: LoginRequest;
+  inProgress?: boolean;
+  errors?: Errors;
 
-    private _onEmailInput(email: string) {
-        // ... to be continued
-    }
+  onLoginRequestInput: (opts: PartialLoginRequestPayload) => void;
+  onLogin: (opts: RouteIdPayload) => void;
+}
 
-    private _onPasswordInput(password: string) {
-        // ... to be continued
-    }
+export class Login extends WidgetBase<LoginProperties> {
 
-    protected render() {
-        return v('div', { classes: css.root }, [
-            v('form', {
-                onsubmit: this._onSubmit
-            }, [
-                v('fieldset', { }, [
-                    w(TextInput, {
-                        key: 'email',
-                        label: 'Email',
-                        placeholder: 'Email',
-                        type: 'email',
-                        required: true,
-                        onInput: this._onEmailInput
-                    }),
-                    w(TextInput, {
-                        key: 'password',
-                        label: 'Password',
-                        placeholder: 'Password',
-                        type: 'password',
-                        required: true,
-                        onInput: this._onPasswordInput
-                    }),
-                    w(Button, { }, [ 'Login' ])
-                ]),
+  // prettier-ignore
+  protected render() {
+
+    const {loginRequest, inProgress = false, errors} = this.properties;
+
+    return v('div', {classes: ['container', 'page']}, [
+
+      v('h1', {}, ['Sign In']),
+
+      v('div', {classes: ['card', 'bg-light']}, [
+        v('div', {classes: ['card-body']}, [
+
+          errors ? w(ErrorList, {errors}) : null,
+
+          v('form', {onsubmit: this._onLogin}, [
+
+            v('div', {classes: ['form-group']}, [
+              v('input', {
+                classes: ['form-control'],
+                name: 'username',
+                type: 'username',
+                placeholder: 'Username',
+                oninput: this._onInput,
+                value: loginRequest.username
+              })
+            ]),
+            v('div', {classes: ['form-group']}, [
+              v('input', {
+                classes: ['form-control'],
+                name: 'password',
+                type: 'password',
+                placeholder: 'Password',
+                oninput: this._onInput,
+                value: loginRequest.password
+              })
+            ]),
+
+            v('div', {classes: 'btn-toolbar', role: 'toolbar'}, [
+              v('button', {
+                classes: ['btn', 'btn-primary', 'ml-auto'],
+                disabled: inProgress,
+                type: 'submit'
+              }, ['Sign In'])
             ])
-        ]);
-    }
+          ])
+        ])
+      ])
+    ]);
+  }
+
+
+  private _onInput({target: {name: fieldName, value: fieldValue}}: WithTarget) {
+    this.properties.onLoginRequestInput({loginRequest: {[fieldName]: fieldValue}});
+  }
+
+  private _onLogin(event: Event) {
+    event.preventDefault();
+    this.properties.onLogin({routeId: 'currentUser'});
+  }
 }

@@ -1,0 +1,27 @@
+<mat-card class="list-of-cards-card">
+
+  <mat-card-actions>
+    <mat-paginator
+      (page)="showEvent($event)"
+      [hidePageSize]="true"
+      [length]="dataSource.awaitTotal() | async"
+      [pageSize]="pageSize"
+      class="list-of-cards-paginator">
+    </mat-paginator>
+  </mat-card-actions>
+
+  <mat-card-content>
+
+    <div class="list-of-cards" fxFill fxLayout="column" fxLayoutAlign="space-between">
+      <div fxLayout="row wrap">
+        <ng-container *ngFor="let organization of dataSource.awaitEntities() | async">
+          <organization-editor-card
+            [entityToLoad]="organization"
+            [isManaged]="true">
+          </organization-editor-card>
+        </ng-container>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>

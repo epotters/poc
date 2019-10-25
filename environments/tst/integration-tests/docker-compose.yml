@@ -1,0 +1,39 @@
+version: "3.2"
+
+services:
+
+
+  poc-integration-tests:
+    image: maven:3.6-jdk-11-slim
+    volumes:
+      - ./maven-repo:/root/.m2
+      - ../../../../poc-tests:/usr/src/poc-tests
+      - ./output:/usr/src/poc-tests/target/cucumber-reports
+    networks:
+      - poc
+    environment:
+      ENVIRONMENT: "tst"
+
+      HOST: "poc-web-gui"
+      PROTOCOLL: "http"
+      PORT: 80
+      CONTEXT: "poc"
+
+      WEBDRIVER: "chromedriver"
+
+
+  poc-test-browser-chrome:
+    image: selenium/standalone-chrome
+    container_name: poc-integration-tests-tst
+    ports:
+      - 4444:4444
+    volumes:
+      - ./chrome/shm:/dev/shm
+    networks:
+      - poc
+    environment:
+      ENVIRONMENT: "tst"
+
+
+networks:
+  poc:

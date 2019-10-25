@@ -1,0 +1,6 @@
+spring:
+  # Data
+  datasource:
+    url: jdbc:mysql://localhost:13307/poc?useSSL=false&serverTimezone=Europe/Amsterdam
+    username: poc
+    password: b1vidh

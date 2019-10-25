@@ -1,0 +1,130 @@
+<mat-card class="form-card">
+
+  <editor-actions
+    [meta]="meta"
+    [service]="service"
+  ></editor-actions>
+
+  <mat-card-header>
+    <mat-card-title>{{title}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="entityForm" class="main-form">
+
+      <div class="form-row">
+
+        <!-- ID-->
+        <div>
+          <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input formControlName="id" matInput name="id" readonly>
+            <mat-hint>Generated id</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-row">
+
+        <!-- First name-->
+        <mat-form-field>
+          <mat-label>First Name</mat-label>
+          <input formControlName="firstName" matInput name="firstName" required>
+          <mat-error *ngFor="let validation of meta.columnConfigs['firstName'].validators">
+            <mat-error *ngIf="hasErrorOfType('firstName', validation.type)" class="error-message">
+              {{validation.message}}
+            </mat-error>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Prefix-->
+        <mat-form-field style="flex: 1">
+          <mat-label>Prefix</mat-label>
+          <input formControlName="prefix" matInput name="prefix">
+          <mat-hint>Like 'van der' or 'de la'</mat-hint>
+        </mat-form-field>
+
+        <!-- Last name-->
+        <mat-form-field style="flex: 3">
+          <mat-label>Last Name</mat-label>
+          <input formControlName="lastName" matInput name="lastName" required>
+          <mat-hint>Enter your family name here</mat-hint>
+          <mat-error *ngFor="let validation of meta.columnConfigs['lastName'].validators">
+            <mat-error *ngIf="hasErrorOfType('lastName', validation.type)" class="error-message">
+              {{validation.message}}
+            </mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+
+        <!-- Gender-->
+        <mat-form-field style="flex: 2">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender" name="gender" required>
+            <mat-option [value]="">-</mat-option>
+            <mat-option *ngFor="let option of meta.columnConfigs['gender'].editor.options" [id]="'gender-option-' + option.value.toLowerCase()"
+                        [value]="option.value">{{option.label}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div style="flex: 3"></div>
+
+      </div>
+
+
+      <div class="form-row">
+
+        <!-- Date of birth-->
+        <mat-form-field style="flex: 2">
+          <mat-label>Date of birth</mat-label>
+          <input [matDatepicker]="birthDatePicker" formControlName="birthDate" matInput>
+          <mat-datepicker-toggle [for]="birthDatePicker" matSuffix></mat-datepicker-toggle>
+          <mat-datepicker #birthDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Place of birth-->
+        <mat-form-field style="flex: 3">
+          <mat-label>Place of birth</mat-label>
+          <input formControlName="birthPlace" matInput name="birthPlace">
+          <mat-hint>Native place city</mat-hint>
+        </mat-form-field>
+
+        <!-- Country of birth-->
+        <mat-form-field style="flex: 1">
+          <mat-label></mat-label>
+          <input matInput name="birthCountryCode">
+          <mat-hint>Country code will be added soon</mat-hint>
+        </mat-form-field>
+
+      </div>
+
+    </form>
+
+    <div class="form-row">
+      <person-employers-relation [ownerSubject]="entitySubject" class="relation"></person-employers-relation>
+    </div>
+
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button (click)="goToList()" *ngIf="!isManaged" mat-icon-button matTooltip="Go to the list">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span class="fill-remaining-space"></span>
+
+    <button (click)="deleteEntity()" [disabled]="isNew()" mat-icon-button>
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-icon-button>
+      <mat-icon>keyboard_return</mat-icon>
+    </button>
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-icon-button>
+      <mat-icon>done</mat-icon>
+    </button>
+  </mat-card-actions>
+
+</mat-card>
+

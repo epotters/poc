@@ -1,33 +1,31 @@
 export default [
-	{
-		path: 'home',
-		outlet: 'home',
-		defaultRoute: true
-	},
-	{
-		path: 'people',
-		outlet: 'people'
-	},
-	{
-		path: 'person',
-		outlet: 'person'
-	},
-	{
-		path: 'about',
-		outlet: 'about'
-	},
-	{
-		path: 'profile',
-		outlet: 'profile'
-	},
-	{
-		path: 'login',
-		outlet: 'login'
-	}
+  {
+    path: 'home',
+    outlet: 'home',
+    defaultRoute: true
+  },
+  {
+    path: 'people',
+    outlet: 'people'
+  },
+  {
+    path: 'person/{personId}',
+    outlet: 'person'
+  },
+  {
+    path: 'new-person',
+    outlet: 'new-person'
+  },
+  {
+    path: 'about',
+    outlet: 'about'
+  },
+  {
+    path: 'login',
+    outlet: 'login'
+  },
+  {
+    path: 'currentUser',
+    outlet: 'currentUser'
+  }
 ];
-
-
-// export interface PersonProperties {
-// 	firstName?: string;
-// 	lastName?: string;
-// };

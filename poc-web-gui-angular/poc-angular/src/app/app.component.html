@@ -1,0 +1,111 @@
+<mat-sidenav-container
+  *ngIf="visible"
+  [@fadeInOut]
+  (@fadeInOut.start)="onAnimationEvent($event)"
+  (@fadeInOut.done)="onAnimationEvent($event)">
+
+
+  <mat-sidenav #sidenav fixedInViewport="true" mode="over">
+    <mat-card>
+      <h2>Developer info</h2>
+
+      <h3>Experimentele features</h3>
+
+      <div class="buttons-vertical">
+
+        <h4>People</h4>
+        <button mat-button routerLink="people/manager">
+          <span>People Manager</span>
+        </button>
+        <button mat-button routerLink="people/list-of-cards">
+          <span>People list of cards</span>
+        </button>
+
+
+        <h4>Organizations</h4>
+        <button mat-button routerLink="organizations/manager">
+          <span>Organizations Manager</span>
+        </button>
+        <button mat-button routerLink="organizations/list-of-cards">
+          <span>Organization list of cards</span>
+        </button>
+
+      </div>
+
+    </mat-card>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="page">
+
+    <header>
+      <mat-toolbar class="mat-elevation-z4" color="primary">
+
+        <button (click)="sidenav.toggle()" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <span>{{ Config.applicationDisplayName }}</span>
+
+        <button mat-icon-button routerLink="home" routerLinkActive="active">
+          <mat-icon>adjust</mat-icon>
+        </button>
+
+        <button mat-button routerLink="people" routerLinkActive="active">
+          <span>People</span>
+        </button>
+
+        <button mat-button routerLink="organizations" routerLinkActive="active">
+          <span>Organizations</span>
+        </button>
+
+        <button mat-button routerLink="employments">
+          <span>Employments</span>
+        </button>
+
+        <span class="fill-remaining-space"></span>
+
+
+        <button mat-button routerLink="info" routerLinkActive="active">
+          <span>Info</span>
+        </button>
+
+        <button [matMenuTriggerFor]="userMenu" mat-button>
+          <mat-icon *ngIf="!authService.isLoggedIn()">help</mat-icon>
+          <mat-icon *ngIf="authService.isLoggedIn()">account_circle</mat-icon>
+          <span
+            class="button-text-after-icon">{{(authService.isLoggedIn()) ? authService.getClaims().name : 'Unknown'}}</span>
+        </button>
+
+        <mat-menu #userMenu="matMenu">
+          <button [disabled]="authService.isLoggedIn()" mat-menu-item routerLink="auth-login">
+            <span>Login</span>
+          </button>
+          <button [disabled]="!authService.isLoggedIn()" mat-menu-item routerLink="auth-logout">
+            <span>Logout</span></button>
+          <button [disabled]="!authService.isLoggedIn()" mat-menu-item routerLink="account">
+            <span>Account</span>
+          </button>
+        </mat-menu>
+
+      </mat-toolbar>
+    </header>
+
+    <main class="mat-typography">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="mat-typography mat-small">
+      <span class="left">&copy; 2019, Eelko Potters</span>
+
+      <span class="fill-remaining-space"></span>
+
+      <span class="right">MIT License</span>
+
+    </footer>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+
+

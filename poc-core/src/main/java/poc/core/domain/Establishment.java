@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import java.io.Serializable;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "establishment")
 @Data
 @NoArgsConstructor
-class Establishment {
+class Establishment implements Addressable, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

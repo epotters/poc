@@ -1,0 +1,100 @@
+
+
+Towards a stable version, before any major refactorings
+
+
+
+Stlyling grid cells jump between div and input
+
+Ellipsis doesn't work on cells
+
+
+Filter on numbers
+Filter on exact values
+Filter on dates
+
+Look into custom controls in grids for dates numbers and selects for both filtering and cell editing
+
+Fix the grid updater: looks at editor.person, should just send the value
+
+Fix relative navigation for some border cases (moving to the next page of people for example)
+
+Add validations to the editor
+
+Show validation errors on or next to the fields
+
+Add dirty check to the editor Show an unsaved changes dialog
+
+
+Make batch delete work (frontend and backend)
+
+Make batch update work (frontend and backend). Needs some kind of popup editor. Consider starting with only one field at a time
+
+Look into further separating the confirmation process from the API processes
+
+Fix or remove organizations for now
+
+
+Fix flicker when moving to next or previous person (only load the data, do not reload the outlet)
+
+
+Add Total rows and Total found to the Grid Footer
+
+Change 'rows' in GridFooter to 'people/person'
+
+
+Remove redirect Home after refresh
+
+
+
+
+Preparation for Entity Manager
+
+Look into moving to a people manager with second level outputs
+
+Add person meta
+
+Consider splitting the toolbars to separate widgets: ListToolbar, EditorToolbar, EditorNavigationToolbar
+
+
+
+OIDC
+
+Move to using a separate library for authentication
+
+
+
+
+Done
+
+Downgrade Dojo to latest stable version
+
+
+
+Finish entity-meta
+EntityMeta
+	name
+	namePlural
+	displayName
+	displayNamePlural
+
+	fields: FieldMeta[]
+
+
+FieldMeta
+	name
+	label
+	type
+	helpText
+
+	options
+
+
+Option
+	label
+	value
+
+
+
+
+

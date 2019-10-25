@@ -1,0 +1,84 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:poc:core:domain:Person",
+  "properties" : {
+    "id" : {
+      "type" : "integer"
+    },
+    "firstName" : {
+      "type" : "string"
+    },
+    "prefix" : {
+      "type" : "string"
+    },
+    "lastName" : {
+      "type" : "string"
+    },
+    "gender" : {
+      "type" : "string",
+      "enum" : [ "MALE", "FEMALE" ]
+    },
+    "birthDate" : {
+      "type" : "string",
+      "format" : "date"
+    },
+    "birthPlace" : {
+      "type" : "string"
+    },
+    "birthCountry" : {
+      "type" : "string"
+    },
+    "household" : {
+      "type" : "object",
+      "id" : "urn:jsonschema:poc:core:domain:Household",
+      "properties" : {
+        "id" : {
+          "type" : "integer"
+        },
+        "displayName" : {
+          "type" : "string"
+        },
+        "members" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "$ref" : "urn:jsonschema:poc:core:domain:Person"
+          }
+        },
+        "address" : {
+          "type" : "object",
+          "id" : "urn:jsonschema:poc:core:domain:Address",
+          "properties" : {
+            "id" : {
+              "type" : "integer"
+            },
+            "addressLine" : {
+              "type" : "string"
+            },
+            "street" : {
+              "type" : "string"
+            },
+            "number" : {
+              "type" : "integer"
+            },
+            "numberAddition" : {
+              "type" : "string"
+            },
+            "postalCode" : {
+              "type" : "string"
+            },
+            "place" : {
+              "type" : "string"
+            },
+            "countryCode" : {
+              "type" : "string"
+            },
+            "country" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

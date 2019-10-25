@@ -1,16 +1,8 @@
-# Custom properties
-poc:
-  security-realm: POC Realm
-  oauth:
-    tokenTimeout: 2400
-
-
 # Embedded server
 server:
   servlet:
     contextPath: /poc
   port: 8002
-
 
 
 # Actuators
@@ -19,25 +11,23 @@ management:
     web:
       base-path: /actuator
 
-
 # REST
 spring:
-  profiles:
-    active: development
   data:
     rest:
       base-path: /api
   jackson:
-    date-format: "yyyy-MM-dd HH:mm:ss"
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   banner:
     location: classpath:banner.txt
 
 
-  # Persistence
-  datasource:
-    url: jdbc:mysql://localhost:3306/poc?serverTimezone=Europe/Amsterdam
-    username: poc
-    password: b1vidh
+  #  # Persistence: DB will be provided externally, see: docker-compose.yml
+  #  datasource:
+  #    url: jdbc:mysql://localhost:3306/poc?serverTimezone=Europe/Amsterdam
+  #    username: poc
+  #    password: b1vidh
 
   jpa:
     properties:
@@ -49,12 +39,20 @@ spring:
       ddl-auto: validate
     show-sql: true
 
+  # OAuth Resource server
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+#          issuer-uri: http://keycloak.localhost/auth/realms/epo
+          jwk-set-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/certs
+
 
 
 # Logging
 logging:
   level:
     org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
     org.hibernate: INFO
-
 

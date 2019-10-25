@@ -8,12 +8,17 @@
   <artifactId>poc-web-gui-dojo</artifactId>
   <name>POC Web GUI in Dojo 2+</name>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
 
   <properties>
+    <!-- Text encoding -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
 
-    <frontend-maven-plugin.version>1.7.5</frontend-maven-plugin.version>
+    <frontend-maven-plugin.version>1.8.0</frontend-maven-plugin.version>
     <node.version>v11.10.1</node.version>
     <npm.version>6.9.0</npm.version>
 
@@ -22,91 +27,100 @@
     <dojo.toolsDir>dojo-build-tools</dojo.toolsDir>
   </properties>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <version>${frontend-maven-plugin.version}</version>
-      </plugin>
-    </plugins>
-  </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
 
-        <configuration>
-          <workingDirectory>${dojo.projectDir}</workingDirectory>
-          <installDirectory>${project.build.directory}/${dojo.toolsDir}</installDirectory>
-        </configuration>
+  <profiles>
+    <profile>
+      <id>dojo</id>
 
-        <executions>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>com.github.eirslett</groupId>
+              <artifactId>frontend-maven-plugin</artifactId>
+              <version>${frontend-maven-plugin.version}</version>
+            </plugin>
+          </plugins>
+        </pluginManagement>
 
-          <!-- Install nodejs and npm -->
-          <execution>
-            <id>install-node-and-npm</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>install-node-and-npm</goal>
-            </goals>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+
             <configuration>
-              <nodeVersion>${node.version}</nodeVersion>
-              <npmVersion>${npm.version}</npmVersion>
+              <workingDirectory>${dojo.projectDir}</workingDirectory>
+              <installDirectory>${project.build.directory}/${dojo.toolsDir}</installDirectory>
             </configuration>
-          </execution>
 
-          <!-- Execute command "npm install" -->
-          <execution>
-            <id>npm-install</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>install</arguments>
-            </configuration>
-          </execution>
+            <executions>
 
-          <!-- Execute command "npm build" -->
-          <execution>
-            <id>npm-build</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <arguments>build</arguments>
-            </configuration>
-          </execution>
+              <!-- Install nodejs and npm -->
+              <execution>
+                <id>install-node-and-npm</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>install-node-and-npm</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>${node.version}</nodeVersion>
+                  <npmVersion>${npm.version}</npmVersion>
+                </configuration>
+              </execution>
 
-        </executions>
-      </plugin>
+              <!-- Execute command "npm install" -->
+              <execution>
+                <id>npm-install</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+
+              <!-- Execute command "npm build" -->
+              <execution>
+                <id>npm-build</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>build</arguments>
+                </configuration>
+              </execution>
+
+            </executions>
+          </plugin>
 
 
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>${maven-resources-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${dojo.projectDir}/${dojo.targetDir}</directory>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>${maven-resources-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>../environments/dev/poc-web-gui/app-dojo</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${dojo.projectDir}/${dojo.targetDir}</directory>
+                      <filtering>true</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 
 </project>

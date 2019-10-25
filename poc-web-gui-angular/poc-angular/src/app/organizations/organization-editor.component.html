@@ -1,0 +1,49 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>{{title}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <form [formGroup]="entityForm" class="main-form">
+
+      <!-- ID-->
+      <div>
+        <mat-form-field>
+          <mat-label>ID</mat-label>
+          <input formControlName="id" matInput name="id" readonly>
+        </mat-form-field>
+      </div>
+
+      <!-- Name -->
+      <div>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input formControlName="name" matInput name="name">
+        </mat-form-field>
+      </div>
+
+    </form>
+
+    <organization-employees-relation [ownerSubject]="entitySubject" class="relation"></organization-employees-relation>
+
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button (click)="goToList()" *ngIf="!isManaged" mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span class="fill-remaining-space"></span>
+
+    <button (click)="deleteEntity()" [disabled]="isNew()" mat-icon-button>
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+    <button (click)="revert()" [disabled]="!entityForm.dirty" mat-icon-button>
+      <mat-icon>keyboard_return</mat-icon>
+    </button>
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-icon-button>
+      <mat-icon>done</mat-icon>
+    </button>
+  </mat-card-actions>
+
+</mat-card>

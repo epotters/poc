@@ -1,0 +1,137 @@
+<div class="entity-list" component-style="entity-list">
+
+  <div class="progress" class.progress-visible="dataSource.loading$ | async">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <editor-actions
+    [meta]="meta"
+    [service]="service"
+  ></editor-actions>
+
+  <mat-toolbar class="list-toolbar-top">
+
+    <h4>{{title}}</h4>
+
+    <span class="fill-remaining-space"></span>
+
+    <button #batchActionsMenuTrigger [matMenuTriggerFor]="titlebarMenu" mat-button>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #titlebarMenu="matMenu">
+
+      <button (click)="toggleFilter()" mat-menu-item>
+        <span>{{this.filterVisible ? 'Hide' : 'Show'}} filter</span>
+      </button>
+      <button (click)="filterRow.clear()" mat-menu-item>
+        <span>Clear filter</span>
+      </button>
+      <mat-divider></mat-divider>
+
+      <button (click)="toggleEditor()" mat-menu-item>
+        <span>{{this.editorVisible ? 'Hide editor' : 'New ' + this.meta.displayName.toLowerCase()}}</span>
+      </button>
+      <button (click)="editorRow.clear()" mat-menu-item>
+        <span>Clear editor</span>
+      </button>
+      <mat-divider></mat-divider>
+
+      <button (click)="newEntity()" mat-menu-item>
+        <span>New {{meta.name}}</span>
+      </button>
+      <button (click)="goToManager()" mat-menu-item>
+        <span>{{meta.displayName}} Manager</span>
+      </button>
+      <mat-divider></mat-divider>
+
+      <button (click)="deleteEntities()" mat-menu-item>
+        <span>Delete {{meta.namePlural}}</span>
+      </button>
+      <button (click)="updateEntities()" mat-menu-item>
+        <span>Update {{meta.namePlural}}</span>
+      </button>
+    </mat-menu>
+
+  </mat-toolbar>
+
+
+  <mat-table [dataSource]="dataSource" matSort
+             matSortActive="{{this.initialSort || this.meta.defaultSortField}}"
+             matSortDirection="{{this.initialSortDirection || this.meta.defaultSortDirection}}"
+             matSortDisableClear>
+
+    <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
+      <mat-header-cell *matHeaderCellDef>
+        <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{getCellDisplayValue(row, column)}}</mat-cell>
+    </ng-container>
+
+    <ng-container *matHeaderRowDef="columns">
+      <mat-header-row [class.hidden]="!headerVisible"></mat-header-row>
+
+      <filter-row (editorChange)="onFilterChanged($event)"
+                  [class.editor-inline]="true"
+                  [columns]="columns"
+                  [hidden]="!filterVisible"
+                  [meta]="meta">
+      </filter-row>
+
+      <editor-row (keydown.enter)="onKeyEnter()"
+                  (keydown.escape)="stopEditing()"
+                  [class.editor-inline]="true"
+                  [class.editor-moved]="editorViewState.rowElement"
+                  [columns]="columns"
+                  [hidden]="!editorVisible"
+                  [meta]="meta"
+                  [style.transform]="editorViewState.transform"
+                  [@slideTo]
+                  (@slideTo.start)="onAnimationEvent($event)"
+                  (@slideTo.done)="onAnimationEvent($event)">>
+      </editor-row>
+
+    </ng-container>
+
+    <mat-row (click)="onShiftClick($event, row)"
+             (contextmenu)="onContextMenu($event, row, idx)"
+             (dblclick)="onDblClick($event, row, idx)"
+             *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
+
+    <ng-container matColumnDef="paginator">
+      <mat-footer-cell *matFooterCellDef>
+        <mat-paginator
+          [length]="dataSource.awaitTotal() | async"
+          [pageSize]="meta.defaultPageSize">
+        </mat-paginator>
+      </mat-footer-cell>
+    </ng-container>
+
+    <mat-footer-row *matFooterRowDef="['paginator']" [class.hidden]="!paginatorVisible"></mat-footer-row>
+
+  </mat-table>
+
+</div>
+
+
+<!-- Context menu -->
+<div #contextMenuTrigger="matMenuTrigger"
+     [matMenuTriggerFor]="contextMenu"
+     [style.left]="contextMenuPosition.x"
+     [style.top]="contextMenuPosition.y"
+     style="visibility: hidden; position: fixed">
+</div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template let-entity="entity" let-idx="dataIndex" let-related="relatedEntity" let-target="targetElement"
+               matMenuContent>
+
+    <button (click)="goToRelatedEntity(related, entity[related])" *ngIf="related" mat-menu-item>Go to entity</button>
+    <mat-divider *ngIf="related"></mat-divider>
+
+    <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit
+      this {{meta.displayName.toLowerCase()}}</button>
+    <button (click)="stopEditing().subscribe()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
+    <button (click)="selectEntity(entity)" mat-menu-item>Edit</button>
+    <button (click)="deleteEntity(entity)" mat-menu-item>Delete</button>
+  </ng-template>
+</mat-menu>

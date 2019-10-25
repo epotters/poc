@@ -1,9 +1,6 @@
 package poc.core.domain;
 
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,9 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 @Entity
@@ -39,13 +37,15 @@ public class Person implements Serializable {
   @Column(columnDefinition = "DATE")
   private LocalDate birthDate;
   private String birthPlace;
+  private String birthCountry;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "household_id")
   private Household household;
 
 
-  public Person() {}
+  public Person() {
+  }
 
 
   public Person(String firstName, String lastName) {
@@ -60,5 +60,13 @@ public class Person implements Serializable {
     setGender(gender);
     setBirthDate(birthDate);
   }
+
+
+//  @OneToMany(
+//      mappedBy = "employee",
+//      fetch = FetchType.LAZY,
+//      cascade = CascadeType.ALL
+//  )
+//  private List<Employment> employers;
 
 }

@@ -18,6 +18,7 @@
   <properties>
     <app.name>poc</app.name>
     <project.parent.version>0.1-SNAPSHOT</project.parent.version>
+
     <cordova.version>4.2.0</cordova.version>
 
     <keystore.location>C:\workspace\ongeval-support\trunk\documents\android\mobielschademelden.keystore
@@ -33,13 +34,14 @@
 
 
   <dependencies>
-    <dependency>
-      <groupId>nl.xs4all.epotters.poc</groupId>
-      <artifactId>poc-web</artifactId>
-      <version>0.1-SNAPSHOT</version>
-      <classifier>cordova</classifier>
-      <type>war</type>
-    </dependency>
+
+<!--    <dependency>-->
+<!--      <groupId>nl.xs4all.epotters.poc</groupId>-->
+<!--      <artifactId>poc-web</artifactId>-->
+<!--      <version>0.1-SNAPSHOT</version>-->
+<!--      <classifier>cordova</classifier>-->
+<!--      <type>war</type>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>

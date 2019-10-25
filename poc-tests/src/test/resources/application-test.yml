@@ -1,14 +1,38 @@
-# General
+it:
+  remote:
+    host: "localhost"
+    protocoll: "http"
+    port: 8002
+
 spring:
   profiles:
     active: integration-tests
   banner:
     location: classpath:banner-test.txt
-  security:
-    user:
-      name: epo
-      password: 12345
 
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-name: poc
+            client-id: poc-api
+            client-secret: 134931f4-6585-4eba-8fa4-564aa5ac27ca
+            authorization-grant-type: authorization_code
+            redirect-uri-template: '{baseUrl}/login/oauth2/code/{registrationId}'
+#           redirect-uri-template: '{baseUrl}/authorize/oauth2/code/{registrationId}'
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          keycloak:
+            authorization-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/auth
+            token-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/token
+            user-info-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/userinfo
+            jwk-set-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
 
 
 # Logging
@@ -25,8 +49,4 @@ logging:
     org.hibernateSQL: WARN
 
 
-it:
-  remote:
-    host: "localhost"
-    protocoll: "http"
-    port:
+

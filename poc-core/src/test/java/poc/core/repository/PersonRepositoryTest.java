@@ -57,7 +57,6 @@ public class PersonRepositoryTest {
     listPeople(peopleFound, "Person found with findByLastName('Bauer')");
     Assert.assertEquals("There should be 2 search results", 2, peopleFound.size());
 
-
   }
 
 

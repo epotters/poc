@@ -1,10 +1,25 @@
-import WidgetBase from '@dojo/framework/widget-core/WidgetBase';
-import { v } from '@dojo/framework/widget-core/d';
 
-import * as css from './styles/Home.m.css';
+import WidgetBase from "@dojo/framework/widget-core/WidgetBase";
+import {v} from "@dojo/framework/widget-core/d";
+import {User} from "../interfaces";
 
-export default class Home extends WidgetBase {
-	protected render() {
-		return v('h1', { classes: [css.root] }, ['Home Page']);
-	}
+
+export interface HomeProperties {
+  currentUser: User;
+  isAuthenticated: boolean;
+  welcomeMessage: string;
+}
+
+export default class Home extends WidgetBase<HomeProperties> {
+
+  protected render() {
+
+    const {welcomeMessage} = this.properties;
+
+    return v('div', {classes: ['container', 'page']}, [
+      v('h1', {}, ['Home']),
+      v('div', {classes: 'jumbotron'}, [welcomeMessage])
+    ]);
+  }
+
 }
