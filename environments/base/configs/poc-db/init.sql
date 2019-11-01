@@ -5,5 +5,4 @@ CREATE USER 'poc'@'%' IDENTIFIED BY 'b1vidh';
 CREATE DATABASE IF NOT EXISTS poc;
 
 
-GRANT ALL ON poc_dev.* TO 'poc'@'%';
-
+GRANT ALL ON poc.* TO 'poc'@'%';
