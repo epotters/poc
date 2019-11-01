@@ -86,7 +86,6 @@
                 <phase>generate-resources</phase>
                 <configuration>
                   <arguments>-- run ng build --prod</arguments>
-                  <!--                  <arguments>run build-prod</arguments>-->
                 </configuration>
               </execution>
 
@@ -105,7 +104,7 @@
                   <goal>copy-resources</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>../environments/dev/poc-web-gui/app</outputDirectory>
+                  <outputDirectory>../environments/dev/poc/poc-web-gui/app</outputDirectory>
                   <resources>
                     <resource>
                       <directory>${angular.projectDir}/${angular.targetDir}</directory>
