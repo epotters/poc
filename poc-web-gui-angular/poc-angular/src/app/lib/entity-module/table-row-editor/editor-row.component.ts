@@ -52,7 +52,10 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     let editorColumns: Record<string, FieldEditorConfig> = {};
     for (let idx in this.columns) {
       let key: string = this.columns[idx];
-      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
+      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].rowEditor) {
+        console.debug('rowEditor config found for field', key, ':', this.meta.columnConfigs[key].rowEditor);
+        editorColumns[key] = this.meta.columnConfigs[key].rowEditor;
+      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
         editorColumns[key] = this.meta.columnConfigs[key].editor;
       } else {
         editorColumns[key] = this.defaultFieldEditorConfig;

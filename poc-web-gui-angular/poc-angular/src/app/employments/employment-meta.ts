@@ -91,7 +91,7 @@ export const employmentMeta: EntityMeta<Employment> = {
       editor: {
         type: 'textarea'
       },
-      filter: {
+      rowEditor: {
         type: 'text'
       }
     }

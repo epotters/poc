@@ -3,6 +3,7 @@ export interface ColumnConfig {
   helpText?: string;
   renderer?: (entity: any, value: string) => string;
   editor?: FieldEditorConfig;
+  rowEditor?: FieldEditorConfig;
   filter?: FieldEditorConfig;
   validators?: ValidatorDescriptor[]
 }
