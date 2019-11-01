@@ -1,4 +1,4 @@
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
+import {DataSource} from "@angular/cdk/collections";
 
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
@@ -23,12 +23,12 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
     console.debug('Creating EntityDataSource for type', this.meta.displayName);
   }
 
-  public connect(collectionViewer: CollectionViewer): Observable<T[]> {
+  public connect(): Observable<T[]> {
     console.debug('Connecting the', this.meta.displayNamePlural.toLowerCase(), 'datasource...');
     return this.entitiesSubject.asObservable();
   }
 
-  public disconnect(collectionViewer: CollectionViewer): void {
+  public disconnect(): void {
     console.debug('Disconnecting the', this.meta.displayNamePlural.toLowerCase(), 'datasource...');
     this.entitiesSubject.complete();
     this.totalSubject.complete();
@@ -64,6 +64,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   public awaitEntities(): Observable<T[]> {
     console.debug('Inside awaitEntities', this.meta.displayNamePlural, '...');
+    // console.debug('Method was called by:', this.awaitEntities.caller);
     return this.entitiesSubject.asObservable();
   }
 
