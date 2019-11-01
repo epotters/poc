@@ -1,4 +1,4 @@
-import {AfterViewInit, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
@@ -50,7 +50,7 @@ export interface Position {
   y: string
 }
 
-export abstract class EntityListComponent<T extends Identifiable> implements OnChanges, OnInit, AfterViewInit {
+export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
 
@@ -104,15 +104,9 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.debug('EntityListComponent -', 'Input changed:', changes);
-  }
-
   ngOnInit() {
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
-
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
-
   }
 
   private applyInitialDataState(): void {
@@ -210,7 +204,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
           console.debug('Entity deleted');
           this.loadEntitiesPage();
         }
-
       });
     }
   }
@@ -282,15 +275,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
   }
 
 // Filters
-  toggleFilter()
-    :
-    void {
+  toggleFilter(): void {
     this.filterVisible = !this.filterVisible;
   }
 
-  onFilterChanged($event)
-    :
-    void {
+  onFilterChanged($event): void {
     console.debug('onFilterChanged', $event);
     this.fieldFilters = this.applyOverlay($event);
     console.debug('onFilterChanged, after appyOverlay', this.overlay, this.fieldFilters);
