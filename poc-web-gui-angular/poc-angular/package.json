@@ -30,7 +30,6 @@
     "oidc-client": "^1.9.1",
     "resize-observer-polyfill": "^1.5.1",
     "rxjs": "^6.5.3",
-    "rxjs-compat": "^6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
