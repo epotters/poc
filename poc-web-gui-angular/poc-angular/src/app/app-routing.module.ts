@@ -43,9 +43,6 @@ export class AppRoutingModule {
 
     this.router.events.subscribe(async routerEvent => {
 
-      // console.debug('Router event on the next line');
-      // console.debug(routerEvent);
-
       if (routerEvent instanceof RouteConfigLoadEnd) {
         console.info('Module loaded lazily from path', routerEvent.route.path);
       }

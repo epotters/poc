@@ -12,6 +12,9 @@ import {DataSourceState} from "./entity-list.component";
 
 export abstract class EntityManagerComponent<T extends Identifiable> implements OnInit {
 
+  @Input() dataSourceState: DataSourceState;
+  @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
+
   title: string = this.meta.displayName + ' manager';
   dialogEntity: T;
 
@@ -22,10 +25,6 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
 
   listVisible: boolean = true;
   editorVisible: boolean = true;
-
-
-  @Input() dataSourceState: DataSourceState;
-  @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
 
   dataSource: EntityDataSource<T>;
 
