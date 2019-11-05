@@ -32,7 +32,8 @@ export class AppComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-
+    var consoleStyle = ['background: black', 'color: white', 'display: block', 'padding: 3px', 'font-weight: bold', 'font-size: 15px'].join(";");
+    console.log('%c☯ ' + Config.applicationDisplayName + ' ☯', consoleStyle);
   }
 
   ngAfterContentInit() {
