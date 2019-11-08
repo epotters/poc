@@ -30,7 +30,10 @@ services:
       - poc
     restart: always
     depends_on:
-      - poc-db
+      - "traefik.enable=true"
+      - "traefik.http.routers.poc-web-api.rule=Host(`poc.localhost`)"
+      - "traefik.http.routers.poc-web-api.entrypoints=web"
+#      - "traefik.http.routers.poc-web-api.middlewares=traefik-forward-auth@file"
     environment:
       ENVIRONMENT: "dev"
       SPRING_PROFILES_ACTIVE: development
@@ -41,13 +44,11 @@ services:
 
 
   poc-web-gui:
-    image: nginx:alpine
+    image: epotters/poc-web-gui-angular:1.0-SNAPSHOT
     container_name: poc-web-gui-dev
     ports:
     - 4200:80 # Can not be run together with ng serve (same port)
     volumes:
-    - ./poc-web-gui/app:/usr/share/nginx/html:ro
-    - ./poc-web-gui/config/default.conf:/etc/nginx/conf.d/default.conf
     - ./poc-web-gui/app-config:/usr/share/nginx/app-config
     networks:
       - poc
