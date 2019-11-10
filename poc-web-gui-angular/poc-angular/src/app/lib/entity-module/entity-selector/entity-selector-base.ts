@@ -28,7 +28,6 @@ interface SearchResult {
 // Base class with which to create an observable auto complete. This doesn't
 // have any connection to how the result is rendered in the Dom, with what
 // component set, and so on
-
 export class EntitySelectorBase<T> implements ControlValueAccessor, OnDestroy {
   @Input() debounceTime = 75;
 
@@ -160,7 +159,6 @@ export class EntitySelectorBase<T> implements ControlValueAccessor, OnDestroy {
     )
       .subscribe(value => this.searchControl.setValue(value));
   }
-
 
 
   // Implement ControlValueAccessor

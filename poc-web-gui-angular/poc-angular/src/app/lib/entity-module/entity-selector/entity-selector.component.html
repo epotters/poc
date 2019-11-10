@@ -1,0 +1,22 @@
+<mat-form-field>
+
+  <i class="obs-no-matches" *ngIf="emptyText && empty | async">{{emptyText}}</i>
+
+  <input
+    type="text"
+    spellcheck="false"
+    matInput
+    [formControl]="searchControl"
+    #input
+    (blur)="blur()"
+    (focus)="input.select(); focus()"
+    [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith"
+                    [autoActiveFirstOption]="autoActiveFirstOption">
+    <mat-option *ngFor="let option of list | async"
+                [value]="option">
+      {{ option.display }}
+    </mat-option>
+  </mat-autocomplete>
+  <b>{{ errorMessage | async }}</b>
+</mat-form-field>
