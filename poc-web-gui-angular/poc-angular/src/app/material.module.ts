@@ -26,8 +26,8 @@ import {
   MatGridListModule,
   MatSnackBarModule
 } from "@angular/material";
-import {POC_DATE_FORMATS} from "../config";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {POC_DATE_FORMATS} from '../environments/';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({

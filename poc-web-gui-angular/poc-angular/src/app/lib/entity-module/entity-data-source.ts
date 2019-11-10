@@ -64,7 +64,6 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   public awaitEntities(): Observable<T[]> {
     console.debug('Inside awaitEntities', this.meta.displayNamePlural, '...');
-    // console.debug('Method was called by:', this.awaitEntities.caller);
     return this.entitiesSubject.asObservable();
   }
 

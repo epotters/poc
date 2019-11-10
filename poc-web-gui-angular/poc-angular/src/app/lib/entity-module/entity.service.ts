@@ -23,7 +23,7 @@ export class EntityService<T extends Identifiable> {
 
   public list(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
-    console.debug('@EntityService <' + this.meta.displayName + '>.list - this.buildFilterParams(filters): ', this.filterBuilder.buildFilterParams(filters));
+    console.debug('@EntityService<' + this.meta.displayName + '>.list - this.filterBuilder.buildFilterParams(filters): ', this.filterBuilder.buildFilterParams(filters));
 
     let params: HttpParams = new HttpParams()
       .set('filters', this.filterBuilder.buildFilterParams(filters))
@@ -31,7 +31,7 @@ export class EntityService<T extends Identifiable> {
       .set('page', pageNumber.toString())
       .set('size', pageSize.toString());
 
-    console.debug('@EntityService <' + this.meta.displayName + '>.list - HttpParams:', params);
+    console.debug('@EntityService<' + this.meta.displayName + '>.list - HttpParams:', params);
 
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(
@@ -49,7 +49,7 @@ export class EntityService<T extends Identifiable> {
     console.debug('Get', this.meta.name, 'called for id', id);
     return this.apiService.get(this.meta.apiBase + id)
       .pipe(map((response: Response) => {
-        console.debug('@EntityService <' + this.meta.displayName + '>.get - Response: ', response);
+        console.debug('@EntityService<' + this.meta.displayName + '>.get - Response: ', response);
         return response;
       }));
   }
