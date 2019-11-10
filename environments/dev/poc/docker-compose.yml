@@ -30,6 +30,8 @@ services:
       - poc
     restart: always
     depends_on:
+      - poc-db
+    labels:
       - "traefik.enable=true"
       - "traefik.http.routers.poc-web-api.rule=Host(`poc.localhost`)"
       - "traefik.http.routers.poc-web-api.entrypoints=web"
