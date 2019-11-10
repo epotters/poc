@@ -1,5 +1,1 @@
-{
-  "clientRoot": "http://localhost:4200/poc",
-  "apiRoot": "https://localhost:8002/poc/api",
-  "oidcProviderRoot": "http://keycloak.localhost/auth/"
-}
+{}

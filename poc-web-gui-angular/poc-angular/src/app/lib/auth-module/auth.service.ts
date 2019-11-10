@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User, UserManager} from 'oidc-client';
-import {Config} from '../../../config';
+import {ConfigService} from "../../app-config.service";
 
 export {User};
 
@@ -17,16 +17,15 @@ export class AuthService implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute) {
-    this.userManager = new UserManager(Config.userManagerSettings);
+    private route: ActivatedRoute,
+    private config: ConfigService) {
+    this.userManager = new UserManager(config.userManagerSettings);
   }
 
   ngOnInit(): void {
-
     this.userManager.getUser().then(user => {
       this.user = user;
     });
-
     this.registerEventlisteners();
   }
 
@@ -128,4 +127,5 @@ export class AuthService implements OnInit {
   private static capitalizeFirst(text: string): string {
     return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
   }
+
 }
