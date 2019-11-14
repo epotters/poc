@@ -11,6 +11,8 @@ import {UserManagerSettings} from "oidc-client";
 export interface AppConfig {
   production: boolean;
 
+  externalConfig: string;
+
   timezone: string;
   locale: string;
 
@@ -39,7 +41,11 @@ export interface AppConfig {
 })
 export class ConfigService implements AppConfig {
 
+  private configKey: string = 'config';
+
   production: boolean;
+
+  externalConfig: string;
 
   timezone: string;
   locale: string;
@@ -59,7 +65,7 @@ export class ConfigService implements AppConfig {
   defaultSnackbarDuration: number;
 
   constructor() {
-    console.info('Costructing ConfigService');
+    console.info('Constructing ConfigService');
     this.loadConfig(CommonEnvironment);
     this.loadConfig(Environment);
   }
@@ -87,27 +93,42 @@ export class ConfigService implements AppConfig {
       loadUserInfo: true
     };
   }
+
+
+
+  public isConfigStored(): boolean {
+    return !!sessionStorage.sessionStorage.getItem(this.configKey);
+  }
+
+  private readConfig(): void {
+    let config: AppConfig = JSON.parse(sessionStorage.getItem(this.configKey));
+    this.loadConfig(config);
+  }
+
+  private storeConfig() {
+    sessionStorage.setItem(this.configKey, JSON.stringify(this as AppConfig));
+  }
+
 }
 
 
 // Source: https://davembush.github.io/where-to-store-angular-configurations/
 export function initApp(http: HttpClient, configService: ConfigService): (() => Promise<boolean>) {
 
-  const jsonUrl: string = './poc/config/poc-config.json';
   console.info('Loading the external application configuration before the app starts');
 
   return (): Promise<boolean> => {
     return new Promise<boolean>((resolve: (a: boolean) => void): void => {
-      http.get(jsonUrl)
+      http.get(configService.externalConfig)
         .pipe(
           map((jsonConfig: Partial<AppConfig>) => {
-            console.debug('Received poc-config.json', jsonConfig);
+            console.debug('Received external configuration', jsonConfig);
             configService.loadConfig(jsonConfig);
             resolve(true);
           }),
           catchError((error: { status: number }, caught: Observable<void>): ObservableInput<{}> => {
             if (error.status === 404) {
-              console.debug('Configuration file poc-config.json was not found');
+              console.debug('Configuration file was not found');
               resolve(false);
             }
             resolve(true);

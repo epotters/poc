@@ -5,5 +5,5 @@ export const Environment: Partial<AppConfig> = {
 
   apiRoot: 'http://localhost:18002/poc/api',
   clientRoot: 'http://localhost:4200/poc',
-  oidcProviderRoot: 'http://keycloak.localhost/auth/',
+  oidcProviderRoot: 'http://keycloak.localhost/auth/'
 };
