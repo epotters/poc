@@ -101,7 +101,7 @@ export function initApp(http: HttpClient, configService: ConfigService): (() => 
       http.get(jsonUrl)
         .pipe(
           map((jsonConfig: Partial<AppConfig>) => {
-            console.debug('Received poc.json', jsonConfig);
+            console.debug('Received poc-config.json', jsonConfig);
             configService.loadConfig(jsonConfig);
             resolve(true);
           }),
