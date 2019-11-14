@@ -43,8 +43,8 @@ export class AuthService implements OnInit {
     return AuthService.capitalizeFirst(this.user.token_type) + ' ' + this.user.access_token;
   }
 
-  public startAuthentication(): Promise<void> {
-    this.setReturnUrl(this.router.url);
+  public startAuthentication(returnUrl: string): Promise<void> {
+    this.setReturnUrl(returnUrl);
     return this.userManager.signinRedirect();
   }
 
@@ -64,7 +64,8 @@ export class AuthService implements OnInit {
   public completeSilentAuthentication(): Promise<void> {
     return this.userManager.signinSilentCallback().then(user => {
       this.user = user;
-      this.returnToUrl();
+      console.debug('completeSilentAuthentication: User set. Is returnToUrl needed here or is the callback page loaded in the iframe?');
+      // this.returnToUrl();
     });
   }
 
@@ -74,7 +75,6 @@ export class AuthService implements OnInit {
       console.log('About to set return url for logout to: ' + url.join('/'));
       this.setReturnUrl(url.join('/'));
       console.debug('Return url was set to ' + this.getReturnUrl());
-
     });
     return this.userManager.signoutRedirect();
   }
@@ -106,6 +106,7 @@ export class AuthService implements OnInit {
     }
   }
 
+
   private registerEventlisteners() {
     this.userManager.events.addUserLoaded(function () {
       console.info('User loaded');
@@ -113,6 +114,10 @@ export class AuthService implements OnInit {
 
     this.userManager.events.addUserUnloaded(function () {
       console.info('User unloaded');
+    });
+
+    this.userManager.events.addAccessTokenExpired(function () {
+      console.info('Your access token has expired');
     });
 
     this.userManager.events.addSilentRenewError(function () {
