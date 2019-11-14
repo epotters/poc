@@ -29,8 +29,8 @@ export class PocApiService implements ApiService {
 
     return this.http.get(
       `${this.config.apiRoot}${path}`,
-      {params, headers: this.getHeaders()})
-      .pipe(catchError(this.handleError));
+      {params, headers: this.getHeaders()});
+      // .pipe(catchError(this.handleError));
   }
 
 
@@ -41,7 +41,8 @@ export class PocApiService implements ApiService {
     return this.http.put(
       `${this.config.apiRoot}${path}`,
       JSON.stringify(body), {headers: headers}
-    ).pipe(catchError(this.handleError));
+    );
+      // .pipe(catchError(this.handleError));
   }
 
 
@@ -52,7 +53,8 @@ export class PocApiService implements ApiService {
     return this.http.post(
       `${this.config.apiRoot}${path}`,
       JSON.stringify(body), {headers: headers}
-    ).pipe(catchError(this.handleError));
+    );
+      // .pipe(catchError(this.handleError));
   }
 
 
@@ -63,26 +65,8 @@ export class PocApiService implements ApiService {
     return this.http.delete(
       `${this.config.apiRoot}${path}`,
       {headers: this.getHeaders()}
-    ).pipe(catchError(this.handleError));
-  }
-
-  public awaitErrors(): Observable<any> {
-    return this.errorsSubject.asObservable();
-  }
-
-  public handleError(error: any): Observable<never> {
-
-    console.error('An error occurred: ' + error.status + ' ' + error.message);
-    console.error('An error occurred:', error);
-
-    // this.errorsSubject.next(error);
-
-    if (error.status === 401) {
-      console.info('Unauthorized, token probably expired');
-    }
-    console.error(error);
-
-    return throwError(error.error);
+    );
+      // .pipe(catchError(this.handleError));
   }
 
   private getHeaders(): HttpHeaders {
@@ -92,5 +76,25 @@ export class PocApiService implements ApiService {
       'Authorization': this.authService.getAuthorizationHeaderValue()
     });
   }
+
+  // public awaitErrors(): Observable<any> {
+  //   return this.errorsSubject.asObservable();
+  // }
+  //
+  // public handleError(error: any): Observable<never> {
+  //
+  //   console.error('An error occurred: ' + error.status + ' ' + error.message);
+  //   console.error('An error occurred:', error);
+  //
+  //   // this.errorsSubject.next(error);
+  //
+  //   if (error.status === 401) {
+  //     console.info('Unauthorized, token probably expired');
+  //   }
+  //   console.error(error);
+  //
+  //   return throwError(error.error);
+  // }
+
 
 }

@@ -13,7 +13,7 @@ import {EntityServicesModule} from "./core/service/entity-services.module";
 
 import {HomeModule} from "./home/home.module";
 import {InfoModule} from "./info/info.module";
-import {ErrorHandlerModule} from "./core/error/error-handler.module";
+import {ErrorModule} from "./core/error/error.module";
 import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 
 
@@ -27,7 +27,7 @@ import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 
     MaterialModule,
     AppRoutingModule,
-    ErrorHandlerModule.forRoot(),
+    ErrorModule.forRoot(),
     AuthModule,
     EntityServicesModule,
 
