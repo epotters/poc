@@ -1,5 +1,5 @@
 {
   "clientRoot": "http://localhost:4200/poc",
-  "apiRoot": "https://localhost:18002/poc/api",
+  "apiRoot": "http://localhost:18002/poc/api",
   "oidcProviderRoot": "http://keycloak.localhost/auth/"
 }
