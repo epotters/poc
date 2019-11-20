@@ -17,7 +17,6 @@
   <properties>
     <start-class>poc.web.api.PocWebApi</start-class>
 
-    <jib-plugin-version>1.6.1</jib-plugin-version>
     <registry-url>registry.hub.docker.com</registry-url>
     <registry-user>epotters</registry-user>
     <registry-password>B4rc3l0n4</registry-password>
@@ -137,7 +136,7 @@
           <plugin>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-maven-plugin</artifactId>
-            <version>${jib-plugin-version}</version>
+            <version>${jib-maven-plugin.version}</version>
             <configuration>
               <from>
                 <image>azul/zulu-openjdk-alpine:11</image>

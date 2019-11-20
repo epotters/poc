@@ -3,7 +3,7 @@ version: "3.2"
 services:
 
   poc-db:
-    image: mysql/mysql-server:8.0.15
+    image: mysql/mysql-server:8.0.18
     container_name: poc-db-dev
     ports:
       - 13307:3306
@@ -15,6 +15,8 @@ services:
     restart: always
     environment:
       ENVIRONMENT: "dev"
+      MYSQL_ROOT_PASSWORD: "root"
+
       MYSQL_ROOT_HOST: "%"
       MYSQL_DATABASE: "poc"
       MYSQL_USER: "poc"
@@ -28,6 +30,7 @@ services:
       - 18002:8002
     networks:
       - poc
+      - epo-external-dev
     restart: always
     depends_on:
       - poc-db
@@ -38,10 +41,10 @@ services:
 #      - "traefik.http.routers.poc-web-api.middlewares=traefik-forward-auth@file"
     environment:
       ENVIRONMENT: "dev"
-      SPRING_PROFILES_ACTIVE: development
+      SPRING_PROFILES_ACTIVE: "development"
       SPRING_DATASOURCE_URL: "jdbc:mysql://poc-db:3306/poc?useSSL=false&serverTimezone=Europe/Amsterdam"
-      SPRING_DATASOURCE_USERNAME: poc
-      SPRING_DATASOURCE_PASSWORD: b1vidh
+      SPRING_DATASOURCE_USERNAME: "poc"
+      SPRING_DATASOURCE_PASSWORD: "b1vidh"
       SPRING_APPLICATION_JSON: "{\"spring.jpa.hibernate.ddl-auto\": \"create\"}"
 
 
@@ -54,6 +57,7 @@ services:
     - ./poc-web-gui/app-config:/usr/share/nginx/app-config
     networks:
       - poc
+      - epo-external-dev
     restart: always
     environment:
       ENVIRONMENT: "dev"
@@ -65,3 +69,5 @@ volumes:
 
 networks:
   poc:
+  epo-external-dev:
+    external: true
