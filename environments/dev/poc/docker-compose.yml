@@ -15,9 +15,10 @@ services:
     restart: always
     environment:
       ENVIRONMENT: "dev"
-      MYSQL_ROOT_PASSWORD: "root"
 
+      MYSQL_ROOT_PASSWORD: "root"
       MYSQL_ROOT_HOST: "%"
+
       MYSQL_DATABASE: "poc"
       MYSQL_USER: "poc"
       MYSQL_PASSWORD: "b1vidh"
@@ -59,6 +60,8 @@ services:
       - poc
       - epo-external-dev
     restart: always
+    depends_on:
+      - poc-api
     environment:
       ENVIRONMENT: "dev"
 
