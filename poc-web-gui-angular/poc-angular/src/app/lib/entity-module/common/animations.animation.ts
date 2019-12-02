@@ -4,15 +4,12 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 export const EntityAnimations = {
   slideTo: trigger(
     'slideTo', [
-      state('invisible', style({transform: 'translateY(0)', visibility: 'hidden'})),
-      state('*', style({transform: '*', visibility: 'visible'})),
+      state('invisible', style({transform: 'translateY(0)', height: 0, opacity: 0})),
+      state('*', style({transform: '*', height: '*', opacity: 1})),
 
-      transition("invisible => *", animate('200ms')),
-      transition("* => *",
-        animate('{{ duration }}', style({transform: 'translateY({{y}}px)'})),
-        {params: {duration: '1s', y: 0}}
-      ),
-      transition("* => invisible", animate('200ms'))
+      transition("invisible => *", animate('200ms ease-in', style({height: '*', opacity: 1}))),
+      transition("* => *", animate('500ms')),
+      transition("* => invisible", animate('200ms ease-out', style({height: 0, opacity: 0})))
     ]
   )
 };

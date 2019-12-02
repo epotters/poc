@@ -8,7 +8,7 @@ import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/ma
 export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 1000,
   hideDelay: 1000,
-  touchendHideDelay: 1000,
+  touchendHideDelay: 1000
 };
 
 

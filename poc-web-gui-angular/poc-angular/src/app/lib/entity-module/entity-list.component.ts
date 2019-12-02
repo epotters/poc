@@ -54,7 +54,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   @Input() isManaged: boolean = false;
 
-  @Input() title: string = this.meta.displayName;
+  @Input() title: string = this.meta.displayNamePlural;
   @Input() columns: string[] = this.meta.displayedColumns;
   @Input() overlay: any = {};
 
@@ -101,21 +101,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
 
     this.title = meta.displayNamePlural;
-
   }
 
   ngOnInit() {
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
-  }
-
-  private applyInitialDataState(): void {
-
-    this.fieldFilters = this.applyOverlay(this.initialFilters);
-    this.filterRow.setFilters(this.fieldFilters);
-
-    this.paginator.pageIndex = this.startPage;
-    this.paginator.pageSize = this.meta.defaultPageSize;
   }
 
   ngAfterViewInit(): void {
@@ -143,6 +133,15 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       ).subscribe(() => {
       }
     );
+  }
+
+  private applyInitialDataState(): void {
+
+    this.fieldFilters = this.applyOverlay(this.initialFilters);
+    this.filterRow.setFilters(this.fieldFilters);
+
+    this.paginator.pageIndex = this.startPage;
+    this.paginator.pageSize = this.meta.defaultPageSize;
   }
 
   // CRUD
@@ -185,7 +184,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
           this.loadEntitiesPage();
         }
       });
-
   }
 
   onKeyEnter(): void {
@@ -216,7 +214,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   // Editor
-
   deleteEntities() {
     if (this.editorActions) {
       this.editorActions.deleteEntities();
@@ -274,7 +271,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     );
   }
 
-// Filters
+  // Filters
   toggleFilter(): void {
     this.filterVisible = !this.filterVisible;
   }
@@ -285,7 +282,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     console.debug('onFilterChanged, after appyOverlay', this.overlay, this.fieldFilters);
   }
 
-// User actions
+  // User actions
   onShiftClick(event: MouseEvent, entity: T) {
     if (event.shiftKey) {
       this.selectEntity(entity);
