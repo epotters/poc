@@ -19,6 +19,7 @@ export class AuthService implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private config: ConfigService) {
+    console.info('Constructing the AuthService');
     this.userManager = new UserManager(config.userManagerSettings);
   }
 
@@ -32,6 +33,10 @@ export class AuthService implements OnInit {
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
   public isLoggedIn(): boolean {
     return this.user != null && !this.user.expired;
+  }
+
+  public isExpired(): boolean {
+    return this.user && this.user.expired;
   }
 
   public getClaims(): any {
@@ -55,9 +60,9 @@ export class AuthService implements OnInit {
     });
   }
 
-  public startSilentAuthentication(): Promise<User> {
-    console.debug('Silent authentication - About to set return url to ' + this.router.url);
-    this.setReturnUrl(this.router.url);
+  public startSilentAuthentication(returnUrl?: string): Promise<User> {
+    console.debug('Silent authentication - About to set return url to ' + returnUrl || this.router.url);
+    this.setReturnUrl(returnUrl || this.router.url);
     return this.userManager.signinSilent();
   }
 

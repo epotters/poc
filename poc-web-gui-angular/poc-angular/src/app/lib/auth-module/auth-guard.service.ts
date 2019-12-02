@@ -14,11 +14,12 @@ export class AuthGuardService implements CanActivate {
   }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
     if (this.authService.isLoggedIn()) {
       return true;
+    } else if (this.authService.isExpired()) {
+      this.authService.startSilentAuthentication(state.url);
+      return false;
     }
-
     this.authService.startAuthentication(state.url);
     return false;
   }

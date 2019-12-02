@@ -15,10 +15,6 @@ import 'zone.js/dist/zone-error'; // Included with Angular CLI.
 
 
 export const Environment: Partial<AppConfig> = {
-  production: false,
-
-  apiRoot: 'http://localhost:8002/poc/api',
-  clientRoot: 'http://localhost:4200/poc',
-  oidcProviderRoot: 'http://keycloak.localhost/auth/'
+  production: false
 };
 
