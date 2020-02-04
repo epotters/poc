@@ -23,6 +23,9 @@
 
     <maven.test.skip>true</maven.test.skip>
     <skip.it>true</skip.it>
+
+    <docker-port>8002</docker-port>
+    <war-start-class>poc.web.api.config.WebInitializer</war-start-class>
   </properties>
 
   <dependencyManagement>
@@ -129,10 +132,8 @@
 
     <profile>
       <id>docker</id>
-
       <build>
         <plugins>
-
           <plugin>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-maven-plugin</artifactId>
@@ -155,7 +156,7 @@
               <container>
                 <mainClass>${start-class}</mainClass>
                 <ports>
-                  <port>8002</port>
+                  <port>${docker-port}</port>
                 </ports>
                 <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
               </container>
@@ -176,7 +177,7 @@
     <profile>
       <id>war</id>
       <properties>
-        <start-class>poc.web.api.config.WebInitializer</start-class>
+        <start-class>${war-start-class}</start-class>
         <packaging.type>war</packaging.type>
       </properties>
       <dependencies>
