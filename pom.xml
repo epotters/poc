@@ -30,10 +30,7 @@
     <module>poc-jobs</module>
     <module>poc-tests</module>
 
-
     <module>poc-evernote</module>
-
-
 <!--    <module>poc-cordova</module>-->
 
   </modules>
@@ -147,6 +144,7 @@
         <configuration>
           <runOnlyOnce>true</runOnlyOnce>
           <skipPoms>false</skipPoms>
+          <offline>true</offline>
         </configuration>
       </plugin>
       <plugin>
