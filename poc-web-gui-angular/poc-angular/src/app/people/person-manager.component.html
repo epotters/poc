@@ -39,5 +39,11 @@
 </person-list-of-cards>
 
 
-<entity-selector>
-</entity-selector>
+<form [formGroup]="entityForm">
+  <entity-selector
+    formControlName="entitySelector"
+    [autoActiveFirstOption]=true
+    [dataSource]="dataSource"
+  >
+  </entity-selector>
+</form>
