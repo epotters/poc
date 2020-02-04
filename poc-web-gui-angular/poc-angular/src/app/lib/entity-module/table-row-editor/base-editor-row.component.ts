@@ -1,9 +1,16 @@
 import {AfterContentInit, EventEmitter, Injector, Input, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Subject} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import {debounceTime} from "rxjs/operators";
 import {EntityDataSource} from "../entity-data-source";
 import {EntityMeta, FieldEditorConfig, ValidatorDescriptor} from "..";
+
+
+export interface RelatedEntityEditor<S extends Identifiable> {
+  active: boolean;
+  dataSource: EntityDataSource<S>;
+  filteredEntities?: S[];
+}
 
 
 export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
@@ -15,15 +22,18 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   editorColumns: Record<string, FieldEditorConfig>;
   rowEditorForm: FormGroup;
-  dataSources: Record<string, any> = {};
-  debounceTime: number = 300;
-  autoCompletePageSize: number = 20;
+
   defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
   enableValidation: boolean = false;
   debouncer: Subject<string> = new Subject<string>();
   visible: boolean = true;
 
+  subscription: Subscription;
   firstChangeEvent: boolean = true;
+
+  autocompletes: Record<string, RelatedEntityEditor<any>> = {};
+  debounceTime: number = 300;
+  autoCompletePageSize: number = 20;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -33,7 +43,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   ngAfterContentInit() {
     this.editorColumns = this.getColumns();
-    this.prepareAutoCompletes();
     this.rowEditorForm = this.buildFormGroup();
     this.activateAutoCompletes();
     this.debouncer.pipe(debounceTime(this.debounceTime))
@@ -59,6 +68,21 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.rowEditorForm.valueChanges.subscribe(entityData => {
       this.debouncer.next(entityData);
     });
+  }
+
+  onDestroy() {
+    this.disconnectDataSurces();
+
+  }
+
+  private disconnectDataSurces() {
+    for (let key in this.editorColumns) {
+      if (this.editorColumns.hasOwnProperty(key)) {
+        let editorConfig: FieldEditorConfig = this.getEditor(key);
+
+
+      }
+    }
   }
 
   buildValidators(fieldName: string): any[] {
@@ -128,65 +152,71 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   }
 
 
-  private prepareAutoCompletes(): void {
-    for (let key in this.editorColumns) {
-      let editorConfig: FieldEditorConfig = this.getEditor(key);
-      if (editorConfig.type == 'autocomplete' && editorConfig.relatedEntity) {
-        if (!this.dataSources[editorConfig.relatedEntity.name]) {
-          let service = this.injector.get(editorConfig.relatedEntity.serviceName);
-          this.dataSources[editorConfig.relatedEntity.name] = new EntityDataSource<T>(service.meta, service);
-        }
-      }
-    }
-  }
-
   private activateAutoCompletes(): void {
     for (let key in this.editorColumns) {
       if (this.editorColumns.hasOwnProperty(key)) {
         let editorConfig: FieldEditorConfig = this.getEditor(key);
         if (editorConfig.type == 'autocomplete') {
+          let service = this.injector.get(editorConfig.relatedEntity.serviceName);
+
+          this.autocompletes[key] = {
+            dataSource: new EntityDataSource<T>(service.meta, service),
+            active: false
+          };
+
           this.activateAutocomplete(key, editorConfig);
         }
       }
     }
   }
 
-  // private activateAutocomplete(fieldName: string, editorConfig: FieldEditorConfig): void {
-  //   this.rowEditorForm
-  //     .get(fieldName).valueChanges.subscribe((value) => {
-  //     console.debug('The value of field', fieldName, 'changed to', value);
-  //     if (value) {
-  //       console.debug('About to load new related entities for autocomplete. Filter ', value);
-  //       const service = this.injector.get(editorConfig.relatedEntity.serviceName);
-  //       const datasource = new EntityDataSource<T>(service.meta, service);
-  //
-  //       datasource.loadEntities(
-  //         [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
-  //         editorConfig.relatedEntity.displayField,
-  //         'asc',
-  //         0,
-  //         this.autoCompletePageSize
-  //       );
-  //     }
-  //   });
-  // }
 
   private activateAutocomplete(fieldName: string, editorConfig: FieldEditorConfig): void {
-    this.rowEditorForm
-      .get(fieldName).valueChanges.subscribe((value) => {
-      console.debug('The value of field', fieldName, 'changed to', value);
-      if (value) {
-        console.debug('About to load new related entities for autocomplete. Filter ', value);
-        this.dataSources[editorConfig.relatedEntity.name].loadEntities(
-          [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
-          editorConfig.relatedEntity.displayField,
-          'asc',
-          0,
-          this.autoCompletePageSize
-        );
-      }
+
+    this.subscription = this.autocompletes[fieldName].dataSource.awaitEntities().subscribe(entities => {
+      console.debug('New entities received for field', fieldName);
+      this.autocompletes[fieldName].filteredEntities = entities;
     });
+
+    this.rowEditorForm
+      .get(fieldName).valueChanges
+      .subscribe((value) => {
+        console.debug('The value of field', fieldName, 'changed to', value);
+        if (value) {
+          console.debug('About to load new related entities for autocomplete. Filter ', value);
+
+          this.autocompletes[fieldName].dataSource.loadEntities(
+            [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
+            editorConfig.relatedEntity.displayField,
+            'asc',
+            0,
+            this.autoCompletePageSize
+          );
+        }
+      });
+
+    // this.rowEditorForm
+    //   .get(fieldName)
+    //   .valueChanges
+    //   .pipe(
+    //     debounceTime(300),
+    //     switchMap(value => {
+    //   console.debug('The value of field', fieldName, 'changed to', value);
+    //   if (value) {
+    //     console.debug('About to load new related entities for autocomplete. Filter ', value);
+    //
+    //     this.autocompletes[fieldName].dataSource.loadEntities(
+    //       [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
+    //       editorConfig.relatedEntity.displayField,
+    //       'asc',
+    //       0,
+    //       this.autoCompletePageSize
+    //     );
+    //   }
+    // }));
   }
+
+
 
 }
 

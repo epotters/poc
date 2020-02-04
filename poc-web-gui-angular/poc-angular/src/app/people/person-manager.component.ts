@@ -2,7 +2,7 @@ import {Component, ComponentFactoryResolver} from "@angular/core";
 import {Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {PersonService} from "./person.service";
-import {EntityManagerComponent} from "../lib/entity-module";
+import {EntityDataSource, EntityManagerComponent} from "../lib/entity-module";
 import {ActivatedRoute} from "@angular/router";
 import {EntityComponentDescriptor} from "../lib/entity-module/dialog/entity-component-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -10,6 +10,7 @@ import {PersonListComponent} from "./person-list.component";
 import {PersonEditorComponent} from "./person-editor.component";
 import {FieldFilter} from "../lib/entity-module/domain/filter.model";
 import {PocAnimations} from "../app-animations";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 
 @Component({
@@ -26,11 +27,15 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   initialFilters: FieldFilter[];
   listOfCardsVisible: boolean = false;
 
+  entityForm: FormGroup;
+  dataSource: EntityDataSource<Person>;
+
   constructor(
     public service: PersonService,
     public route: ActivatedRoute,
     public componentFactoryResolver: ComponentFactoryResolver,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private formBuilder: FormBuilder
   ) {
     super(personMeta, service, route, componentFactoryResolver, dialog);
 
@@ -40,7 +45,18 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
     this.editorVisible = false;
     this.listVisible = false;
+
+    this.entityForm = this.buildSelectDemoForm(formBuilder);
+
   }
+
+
+  buildSelectDemoForm(formBuilder: FormBuilder): FormGroup {
+    let group = {};
+    group['entitySelector'] = new FormControl('');
+    return formBuilder.group(group);
+  }
+
 
   toggleListOfCards() {
     this.listOfCardsVisible = !this.listOfCardsVisible;

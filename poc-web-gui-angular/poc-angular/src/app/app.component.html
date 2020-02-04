@@ -44,7 +44,7 @@
           <mat-icon>menu</mat-icon>
         </button>
 
-        <span>{{ Config.applicationDisplayName }}</span>
+        <span>{{ configService.applicationDisplayName }}</span>
 
         <button mat-icon-button routerLink="home" routerLinkActive="active">
           <mat-icon>adjust</mat-icon>
@@ -100,6 +100,8 @@
       <span class="fill-remaining-space"></span>
 
       <span class="right">MIT License</span>
+
+      <global-error-handler></global-error-handler>
 
     </footer>
 

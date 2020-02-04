@@ -7,25 +7,20 @@ import {AuthService} from "./auth.service";
 export class AuthGuardService implements CanActivate {
 
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router) {
+    console.info('Constructing the AuthGuardService');
   }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
     if (this.authService.isLoggedIn()) {
       return true;
+    } else if (this.authService.isExpired()) {
+      this.authService.startSilentAuthentication(state.url);
+      return false;
     }
-
-    this.debugLog(route, state);
-    // console.debug('About to set the return url to ' + route.url.join('/'));
-    // this.authService.setReturnUrl(route.url.join('/'));
-
-    console.debug('About to set the return url to ' + state.url);
-    this.authService.setReturnUrl(state.url);
-
-    console.debug('Return url was set to ' + this.authService.getReturnUrl());
-
-    this.authService.startAuthentication();
+    this.authService.startAuthentication(state.url);
     return false;
   }
 

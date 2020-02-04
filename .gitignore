@@ -18,4 +18,5 @@ node/
 
 
 # Custom
-environments/dev/poc-web-gui/app/
+environments/dev/poc/poc-web-gui/app/
+environments/dev/poc/poc-web-gui/app-dojo/

@@ -1,7 +1,7 @@
 import {Injectable, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User, UserManager} from 'oidc-client';
-import {Config} from '../../../config';
+import {ConfigService} from "../../app-config.service";
 
 export {User};
 
@@ -17,22 +17,26 @@ export class AuthService implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute) {
-    this.userManager = new UserManager(Config.userManagerSettings);
+    private route: ActivatedRoute,
+    private config: ConfigService) {
+    console.info('Constructing the AuthService');
+    this.userManager = new UserManager(config.userManagerSettings);
   }
 
   ngOnInit(): void {
-
     this.userManager.getUser().then(user => {
       this.user = user;
     });
-
     this.registerEventlisteners();
   }
 
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
   public isLoggedIn(): boolean {
     return this.user != null && !this.user.expired;
+  }
+
+  public isExpired(): boolean {
+    return this.user && this.user.expired;
   }
 
   public getClaims(): any {
@@ -44,8 +48,8 @@ export class AuthService implements OnInit {
     return AuthService.capitalizeFirst(this.user.token_type) + ' ' + this.user.access_token;
   }
 
-  public startAuthentication(): Promise<void> {
-    this.setReturnUrl(this.router.url);
+  public startAuthentication(returnUrl: string): Promise<void> {
+    this.setReturnUrl(returnUrl);
     return this.userManager.signinRedirect();
   }
 
@@ -56,16 +60,17 @@ export class AuthService implements OnInit {
     });
   }
 
-  public startSilentAuthentication(): Promise<User> {
-    console.debug('Silent authentication - About to set return url to ' + this.router.url);
-    this.setReturnUrl(this.router.url);
+  public startSilentAuthentication(returnUrl?: string): Promise<User> {
+    console.debug('Silent authentication - About to set return url to ' + returnUrl || this.router.url);
+    this.setReturnUrl(returnUrl || this.router.url);
     return this.userManager.signinSilent();
   }
 
   public completeSilentAuthentication(): Promise<void> {
     return this.userManager.signinSilentCallback().then(user => {
       this.user = user;
-      this.returnToUrl();
+      console.debug('completeSilentAuthentication: User set. Is returnToUrl needed here or is the callback page loaded in the iframe?');
+      // this.returnToUrl();
     });
   }
 
@@ -75,7 +80,6 @@ export class AuthService implements OnInit {
       console.log('About to set return url for logout to: ' + url.join('/'));
       this.setReturnUrl(url.join('/'));
       console.debug('Return url was set to ' + this.getReturnUrl());
-
     });
     return this.userManager.signoutRedirect();
   }
@@ -107,6 +111,7 @@ export class AuthService implements OnInit {
     }
   }
 
+
   private registerEventlisteners() {
     this.userManager.events.addUserLoaded(function () {
       console.info('User loaded');
@@ -114,6 +119,10 @@ export class AuthService implements OnInit {
 
     this.userManager.events.addUserUnloaded(function () {
       console.info('User unloaded');
+    });
+
+    this.userManager.events.addAccessTokenExpired(function () {
+      console.info('Your access token has expired');
     });
 
     this.userManager.events.addSilentRenewError(function () {
@@ -128,4 +137,5 @@ export class AuthService implements OnInit {
   private static capitalizeFirst(text: string): string {
     return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
   }
+
 }

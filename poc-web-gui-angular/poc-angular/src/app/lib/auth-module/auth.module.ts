@@ -11,6 +11,7 @@ import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
 
 import {AuthGuardService} from "./auth-guard.service";
 import {AuthService} from "./auth.service";
+import {ConfigService} from "../../app-config.service";
 
 @NgModule({
   imports: [AuthRoutingModule],
@@ -31,10 +32,16 @@ import {AuthService} from "./auth.service";
   providers: [
     AuthGuardService,
     AuthService, {
-      provide: 'externalUrlRedirectResolver',
-      useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-
-        let routeData = (route.data as any);
+      provide: 'accountUrlRedirectResolver',
+      deps: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        let routeData = {
+          externalUrl: config.accountUrl,
+          queryParams: {
+            referer: config.clientRoot,
+            referrer_uri: config.clientRoot + config.applicationBasePath
+          }
+        };
         let url = routeData.externalUrl;
         if (routeData.queryParams) {
           let isFirst = true;

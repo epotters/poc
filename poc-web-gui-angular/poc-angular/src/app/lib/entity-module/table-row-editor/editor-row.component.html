@@ -37,16 +37,28 @@
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'autocomplete'" [floatLabel]="'never'">
-        <input [matAutocomplete]="relatedEntitySelector" formControlName="{{key}}" matInput>
+        <input [matAutocomplete]="relatedEntitySelector"
+               formControlName="{{key}}"
+               (focus)="autocompletes[key].active = true"
+               (blur)="autocompletes[key].active = false"
+               matInput>
         <mat-autocomplete #relatedEntitySelector="matAutocomplete"
                           [displayWith]="editorColumns[key].relatedEntity.displayOption">
-          <mat-option
-            *ngFor="let relatedEntity of dataSources[editorColumns[key].relatedEntity.name].awaitEntities() | async"
-            [value]="relatedEntity">
-            {{editorColumns[key].relatedEntity.displayOption(relatedEntity)}}
-          </mat-option>
+          <ng-container *ngIf="autocompletes[key].active">
+            <mat-option
+              *ngFor="let relatedEntity of autocompletes[key].filteredEntities"
+              [value]="relatedEntity">
+              {{editorColumns[key].relatedEntity.displayOption(relatedEntity)}}
+            </mat-option>
+          </ng-container>
         </mat-autocomplete>
       </mat-form-field>
+
+
+
+      <!--               (blur)="autocompletes[key].active = false"-->
+      <!--              *ngFor="let relatedEntity of autocompletes[key].dataSource.awaitEntities() | async"-->
+
 
     </div>
   </div>

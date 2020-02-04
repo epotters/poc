@@ -80,6 +80,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
       if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
         console.debug('filter config found for field', key, ':', this.meta.columnConfigs[key].filter);
         editorColumns[key] = this.meta.columnConfigs[key].filter;
+      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].rowEditor) {
+        console.debug('rowEditor config found for field', key, ':', this.meta.columnConfigs[key].rowEditor);
+        editorColumns[key] = this.meta.columnConfigs[key].rowEditor;
       } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
         editorColumns[key] = this.meta.columnConfigs[key].editor;
       } else {

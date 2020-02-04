@@ -15,23 +15,28 @@
 
     <span class="fill-remaining-space"></span>
 
+    <button (click)="toggleEditor()" color="primary" mat-icon-button>
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <button (click)="toggleFilter()" color="primary" mat-icon-button>
+      <mat-icon>search</mat-icon>
+    </button>
+
+
     <button #batchActionsMenuTrigger [matMenuTriggerFor]="titlebarMenu" mat-button>
       <mat-icon>more_vert</mat-icon>
     </button>
 
     <mat-menu #titlebarMenu="matMenu">
 
-      <button (click)="toggleFilter()" mat-menu-item>
-        <span>{{this.filterVisible ? 'Hide' : 'Show'}} filter</span>
-      </button>
+
       <button (click)="filterRow.clear()" mat-menu-item>
         <span>Clear filter</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button (click)="toggleEditor()" mat-menu-item>
-        <span>{{this.editorVisible ? 'Hide editor' : 'New ' + this.meta.displayName.toLowerCase()}}</span>
-      </button>
+
       <button (click)="editorRow.clear()" mat-menu-item>
         <span>Clear editor</span>
       </button>
@@ -81,15 +86,17 @@
       <editor-row (keydown.enter)="onKeyEnter()"
                   (keydown.escape)="stopEditing()"
                   [class.editor-inline]="true"
-                  [class.editor-moved]="editorViewState.rowElement"
+                  [class.editor-moved]="!!editorViewState.rowElement"
                   [columns]="columns"
                   [hidden]="!editorVisible"
                   [meta]="meta"
                   [style.transform]="editorViewState.transform"
-                  [@slideTo]
+                  [@slideTo]="editorVisible ? '*' : 'invisible'"
                   (@slideTo.start)="onAnimationEvent($event)"
-                  (@slideTo.done)="onAnimationEvent($event)">>
+                  (@slideTo.done)="onAnimationEvent($event)">
       </editor-row>
+
+      <!--                  [hidden]="!editorVisible"-->
 
     </ng-container>
 

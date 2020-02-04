@@ -1,4 +1,4 @@
-import {AfterViewInit, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
@@ -50,11 +50,11 @@ export interface Position {
   y: string
 }
 
-export abstract class EntityListComponent<T extends Identifiable> implements OnChanges, OnInit, AfterViewInit {
+export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
 
-  @Input() title: string = this.meta.displayName;
+  @Input() title: string = this.meta.displayNamePlural;
   @Input() columns: string[] = this.meta.displayedColumns;
   @Input() overlay: any = {};
 
@@ -101,27 +101,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
 
     this.title = meta.displayNamePlural;
-
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.debug('EntityListComponent -', 'Input changed:', changes);
   }
 
   ngOnInit() {
     console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
-
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
-
-  }
-
-  private applyInitialDataState(): void {
-
-    this.fieldFilters = this.applyOverlay(this.initialFilters);
-    this.filterRow.setFilters(this.fieldFilters);
-
-    this.paginator.pageIndex = this.startPage;
-    this.paginator.pageSize = this.meta.defaultPageSize;
   }
 
   ngAfterViewInit(): void {
@@ -149,6 +133,15 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
       ).subscribe(() => {
       }
     );
+  }
+
+  private applyInitialDataState(): void {
+
+    this.fieldFilters = this.applyOverlay(this.initialFilters);
+    this.filterRow.setFilters(this.fieldFilters);
+
+    this.paginator.pageIndex = this.startPage;
+    this.paginator.pageSize = this.meta.defaultPageSize;
   }
 
   // CRUD
@@ -191,7 +184,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
           this.loadEntitiesPage();
         }
       });
-
   }
 
   onKeyEnter(): void {
@@ -210,7 +202,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
           console.debug('Entity deleted');
           this.loadEntitiesPage();
         }
-
       });
     }
   }
@@ -223,7 +214,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
 
 
   // Editor
-
   deleteEntities() {
     if (this.editorActions) {
       this.editorActions.deleteEntities();
@@ -281,22 +271,18 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnC
     );
   }
 
-// Filters
-  toggleFilter()
-    :
-    void {
+  // Filters
+  toggleFilter(): void {
     this.filterVisible = !this.filterVisible;
   }
 
-  onFilterChanged($event)
-    :
-    void {
+  onFilterChanged($event): void {
     console.debug('onFilterChanged', $event);
     this.fieldFilters = this.applyOverlay($event);
     console.debug('onFilterChanged, after appyOverlay', this.overlay, this.fieldFilters);
   }
 
-// User actions
+  // User actions
   onShiftClick(event: MouseEvent, entity: T) {
     if (event.shiftKey) {
       this.selectEntity(entity);

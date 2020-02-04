@@ -2,12 +2,10 @@ import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {MatSnackBar} from "@angular/material";
 
-import {Config} from '../config';
 import {AuthService} from "./lib/auth-module/";
-import {PocApiService} from "./core/service";
 import {PocAnimations} from "./app-animations";
-import {HttpErrorInterceptor} from "./core/error/error.interceptor";
-import {ErrorHandlerService} from "./core/error/error-handler.service";
+import {ErrorService} from "./core/error/error.service";
+import {ConfigService} from "./app-config.service";
 
 
 @Component({
@@ -20,46 +18,25 @@ import {ErrorHandlerService} from "./core/error/error-handler.service";
 })
 export class AppComponent implements OnInit, AfterContentInit {
 
-  Config: any = Config;
   visible: boolean = false;
 
   constructor(
     private titleService: Title,
+    public configService: ConfigService,
     public authService: AuthService,
-    public snackBar: MatSnackBar,
-    public apiService: PocApiService,
-    public errorInterceptor: HttpErrorInterceptor,
-    public errorHandlerService: ErrorHandlerService
+    public errorHandlerService: ErrorService,
+    public snackBar: MatSnackBar
   ) {
-    console.debug('Constructing the AppComponent "' + Config.applicationDisplayName + '"');
-    this.titleService.setTitle(Config.applicationDisplayName);
+    console.debug('Constructing the AppComponent "' + configService.applicationDisplayName + '"');
+    this.titleService.setTitle(configService.applicationDisplayName);
   }
 
   ngOnInit() {
-
-
-    // this.errorInterceptor.awaitErrors().subscribe((error) => {
-    //     if (error != null) {
-    //       console.log('Received error with code ' + error.code);
-    //       this.openSnackBar(error.message, 'Close');
-    //     }
-    //   }
-    // );
-    //
-    //
-    // this.apiService.awaitErrors().subscribe((error) => {
-    //     if (error != null) {
-    //       console.log('Received error with status ' + error.status);
-    //       this.openSnackBar(error, 'Close');
-    //     }
-    //   }
-    // );
-  }
-
-  ngAfterContentInit() {
-    this.visible = true;
+    let consoleStyle = ['display: block', 'padding: 2px', 'font-weight: bold', 'font-size: 14px'].join(";");
+    console.log('%c☯ ' + this.configService.applicationDisplayName + ' ☯', consoleStyle);
 
     this.errorHandlerService.awaitErrors().subscribe((error) => {
+        console.debug('Inside subscription to awaitErrors');
         if (error != null) {
           console.log('Received error with code ' + error.code);
           this.openSnackBar(error.message, 'Close');
@@ -68,12 +45,15 @@ export class AppComponent implements OnInit, AfterContentInit {
     );
   }
 
+  ngAfterContentInit() {
+    this.visible = true;
+  }
+
   openSnackBar(message: string, action?: string) {
     this.snackBar.open(message, action, {
       duration: 2000
     });
   }
-
 
   onAnimationEvent(event: AnimationEvent) {
     console.debug('---> AppComponent - AnimationEvent', event);

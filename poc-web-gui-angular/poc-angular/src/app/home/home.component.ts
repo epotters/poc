@@ -1,8 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {AppConfig} from '../app-config.service';
-import {Config} from '../../config';
-
+import {ConfigService} from "../app-config.service";
 
 
 @Component({
@@ -11,8 +9,9 @@ import {Config} from '../../config';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  config: AppConfig = Config;
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    public config: ConfigService) {
     console.debug('Constructing the HomeComponent');
   }
 }

@@ -18,7 +18,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   errorSubject: Subject<PocError> = new Subject<PocError>();
 
   constructor(
-    public authService: AuthService) {
+    // public authService: AuthService
+  ) {
+    console.debug('Constructing the HttpErrorInterceptor');
   }
 
 
@@ -51,8 +53,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               return next.handle(requestModified);
 
             } else if (error.status === 401) {
-              console.debug('Trying to reauthenticate the user');
-              this.authService.startSilentAuthentication();
+              console.debug('Trying to reauthenticate the user.',
+                'Disabled because it makes the AuthService load before the external config, which it needs');
+              // this.authService.startSilentAuthentication();
             }
 
           }
@@ -68,7 +71,30 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   }
 
   awaitErrors(): Observable<PocError> {
+    console.debug('Inside ErrorInterceptor.awaitErrors');
     return this.errorSubject.asObservable();
   }
 
 }
+
+//
+// export class HttpErrorInterceptor implements HttpInterceptor {
+//   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+//     return next.handle(request)
+//       .pipe(
+//         retry(1),
+//         catchError((error: HttpErrorResponse) => {
+//           let errorMessage = '';
+//           if (error.error instanceof ErrorEvent) {
+//             // client-side error
+//             errorMessage = `Error: ${error.error.message}`;
+//           } else {
+//             // server-side error
+//             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+//           }
+//           window.alert(errorMessage);
+//           return throwError(errorMessage);
+//         })
+//       )
+//   }
+// }

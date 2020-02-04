@@ -1,4 +1,4 @@
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
+import {DataSource} from "@angular/cdk/collections";
 
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
@@ -6,6 +6,7 @@ import {catchError, finalize} from "rxjs/operators";
 import {FieldFilter} from "./domain/filter.model";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
+import {OptionEntry} from "./entity-selector/types";
 
 
 export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
@@ -23,12 +24,12 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
     console.debug('Creating EntityDataSource for type', this.meta.displayName);
   }
 
-  public connect(collectionViewer: CollectionViewer): Observable<T[]> {
+  public connect(): Observable<T[]> {
     console.debug('Connecting the', this.meta.displayNamePlural.toLowerCase(), 'datasource...');
     return this.entitiesSubject.asObservable();
   }
 
-  public disconnect(collectionViewer: CollectionViewer): void {
+  public disconnect(): void {
     console.debug('Disconnecting the', this.meta.displayNamePlural.toLowerCase(), 'datasource...');
     this.entitiesSubject.complete();
     this.totalSubject.complete();
@@ -70,4 +71,43 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   public awaitTotal(): Observable<number> {
     return this.totalSubject.asObservable();
   }
+
+
+
+  // Temp implementation of DataSource interface
+  // displayValue(value: any): Observable<OptionEntry | null> {
+  //   console.log('finding display value for', value);
+  //   if (typeof value === 'string') {
+  //     value = parseInt(value, 10);
+  //   }
+  //   if (typeof value !== 'number') {
+  //     return of(null);
+  //   }
+  //
+  //   return http.get<Employee>(apiURL + '/' + value).pipe(
+  //     map(e => ({
+  //       value: e.id,
+  //       display: `${e.first_name} ${e.last_name} (${e.email})`,
+  //       details: {}
+  //     }))
+  //   );
+  // }
+
+
+  // search(term: string): Observable<OptionEntry[]> {
+  //   console.log('searching for', term);
+  //   return http.get<Employee[]>(apiURL, {
+  //     params: {
+  //       q: term || '',
+  //       _sort: 'last_name,first_name'
+  //     }
+  //   }).pipe(
+  //     map(list => list.map(e => ({
+  //       value: e.id,
+  //       display: `${e.first_name} ${e.last_name} (${e.email})`,
+  //       details: {}
+  //     }))));
+  // }
+
+
 }

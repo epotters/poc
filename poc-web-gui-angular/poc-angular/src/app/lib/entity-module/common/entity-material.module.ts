@@ -23,7 +23,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MAT_DATE_FORMATS} from "@angular/material/core";
 
 
-import {POC_DATE_FORMATS} from "../../../../config";
+import {POC_DATE_FORMATS} from "../../../../environments/common-environment";
 
 
 @NgModule({

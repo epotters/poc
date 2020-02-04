@@ -106,7 +106,7 @@
                   <goal>copy-resources</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>../environments/dev/poc-web-gui/app-dojo</outputDirectory>
+                  <outputDirectory>../environments/dev/poc/poc-web-gui/app-dojo</outputDirectory>
                   <resources>
                     <resource>
                       <directory>${dojo.projectDir}/${dojo.targetDir}</directory>

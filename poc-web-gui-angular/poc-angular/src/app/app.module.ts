@@ -8,13 +8,12 @@ import {AuthGuardService, AuthModule, AuthService} from "./lib/auth-module/";
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {Config} from "../config";
 import {ConfigService, initApp} from "./app-config.service";
 import {EntityServicesModule} from "./core/service/entity-services.module";
 
 import {HomeModule} from "./home/home.module";
 import {InfoModule} from "./info/info.module";
-import {ErrorHandlerModule} from "./core/error/error-handler.module";
+import {ErrorModule} from "./core/error/error.module";
 import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 
 
@@ -28,7 +27,7 @@ import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 
     MaterialModule,
     AppRoutingModule,
-    ErrorHandlerModule.forRoot(),
+    ErrorModule.forRoot(),
     AuthModule,
     EntityServicesModule,
 
@@ -39,14 +38,19 @@ import {HttpErrorInterceptor} from "./core/error/error.interceptor";
     {
       provide: APP_INITIALIZER,
       useFactory: initApp,
-      deps: [
-        HttpClient,
-        ConfigService
-      ], multi: true
+      deps: [HttpClient, ConfigService],
+      multi: true
     },
-
-    {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
-    {provide: APP_BASE_HREF, useValue: Config.applicationBasePath},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: APP_BASE_HREF,
+      deps: [ConfigService],
+      useFactory: (config: ConfigService) => config.applicationBasePath
+    },
     AuthGuardService,
     AuthService
   ],
@@ -54,3 +58,4 @@ import {HttpErrorInterceptor} from "./core/error/error.interceptor";
 })
 export class AppModule {
 }
+

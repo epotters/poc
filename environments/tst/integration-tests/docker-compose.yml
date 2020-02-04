@@ -1,10 +1,10 @@
-version: "3.2"
+version: "3"
 
 services:
 
-
   poc-integration-tests:
     image: maven:3.6-jdk-11-slim
+    container_name: poc-integration-tests-tst
     volumes:
       - ./maven-repo:/root/.m2
       - ../../../../poc-tests:/usr/src/poc-tests
@@ -24,7 +24,7 @@ services:
 
   poc-test-browser-chrome:
     image: selenium/standalone-chrome
-    container_name: poc-integration-tests-tst
+    container_name: poc-test-browser-chrome-tst
     ports:
       - 4444:4444
     volumes:

@@ -9,6 +9,7 @@ import {DialogModule} from "./dialog/dialog.module";
 
 import {EntityComponentStyleOverrideDirective} from "./common/entity-component-style-override.directive";
 import {EntityLinkDirective} from "./common/entity-link.directive";
+import {EntitySelectorModule} from "./entity-selector/entity-selector.module";
 
 
 @NgModule({
@@ -17,12 +18,14 @@ import {EntityLinkDirective} from "./common/entity-link.directive";
     EntityCommonModule,
     EntityMaterialModule,
     TableRowEditorModule,
+    EntitySelectorModule,
     DialogModule
   ],
   exports: [
     EntityCommonModule,
     EntityMaterialModule,
     TableRowEditorModule,
+    EntitySelectorModule,
     DialogModule
   ],
   declarations: [
