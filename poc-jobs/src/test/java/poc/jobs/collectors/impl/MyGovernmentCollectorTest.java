@@ -32,7 +32,6 @@ public class MyGovernmentCollectorTest extends BaseDataCollectorTest {
   @Ignore
   @Test
   public void collectData() throws Exception {
-
     LOG.debug("About to collect data from collector");
     collector.collect();
   }
