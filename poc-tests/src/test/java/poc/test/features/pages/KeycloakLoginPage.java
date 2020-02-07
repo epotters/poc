@@ -14,7 +14,7 @@ import static poc.test.features.DriverHooks.DRIVER;
 public class KeycloakLoginPage extends BasePage {
 
 
-  private String host = "keycloak.localhost";
+  private String host = "keycloak.localhost.lab";
   private String realm = "EPO";
   private String pageTitle = "Log in to " + realm + " Realm";
 

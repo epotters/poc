@@ -28,10 +28,10 @@ spring:
               - email
         provider:
           keycloak:
-            authorization-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/auth
-            token-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/token
-            user-info-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/userinfo
-            jwk-set-uri: http://keycloak.localhost/auth/realms/epo/protocol/openid-connect/certs
+            authorization-uri: http://keycloak.localhost.lab/auth/realms/epo/protocol/openid-connect/auth
+            token-uri: http://keycloak.localhost.lab/auth/realms/epo/protocol/openid-connect/token
+            user-info-uri: http://keycloak.localhost.lab/auth/realms/epo/protocol/openid-connect/userinfo
+            jwk-set-uri: http://keycloak.localhost.lab/auth/realms/epo/protocol/openid-connect/certs
             user-name-attribute: preferred_username
 
 

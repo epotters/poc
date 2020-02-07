@@ -3,7 +3,7 @@ import {UserManagerSettings} from "oidc-client";
 
 export function getClientSettings(): UserManagerSettings {
   return {
-    authority: 'http://keycloak.localhost',
+    authority: 'http://keycloak.localhost.lab',
     client_id: 'poc-api',
     redirect_uri: 'http://localhost:4200/auth-callback',
     post_logout_redirect_uri: 'http://localhost:4200/',

@@ -27,7 +27,7 @@ public class ServiceChecker {
     final List<RequiredService> localServices = Arrays.asList(
 
         new RequiredService(
-            "keycloak.localhost",
+            "keycloak.localhost.lab",
             80
         ),
 
