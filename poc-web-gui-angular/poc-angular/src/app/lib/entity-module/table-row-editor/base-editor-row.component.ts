@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subject, Subscription} from "rxjs";
 import {debounceTime} from "rxjs/operators";
 import {EntityDataSource} from "../entity-data-source";
-import {EntityMeta, FieldEditorConfig, ValidatorDescriptor} from "..";
+import {EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from ".";
 
 
 export interface RelatedEntityEditor<S extends Identifiable> {

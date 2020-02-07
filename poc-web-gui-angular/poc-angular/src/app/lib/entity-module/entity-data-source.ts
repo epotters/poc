@@ -6,7 +6,7 @@ import {catchError, finalize} from "rxjs/operators";
 import {FieldFilter} from "./domain/filter.model";
 import {EntityService} from "./entity.service";
 import {EntityMeta} from "./domain/entity-meta.model";
-import {OptionEntry} from "./entity-selector/types";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
@@ -71,7 +71,6 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   public awaitTotal(): Observable<number> {
     return this.totalSubject.asObservable();
   }
-
 
 
   // Temp implementation of DataSource interface

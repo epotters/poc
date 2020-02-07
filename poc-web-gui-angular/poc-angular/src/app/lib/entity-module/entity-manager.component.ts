@@ -8,6 +8,7 @@ import {EntityComponentDescriptor, EntityComponentDialogComponent} from "./dialo
 import {EntityDataSource} from "./entity-data-source";
 import {EntityLibConfig} from "./common/entity-lib-config";
 import {DataSourceState} from "./entity-list.component";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 @Directive()

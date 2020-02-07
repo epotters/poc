@@ -1,3 +1,5 @@
+import {Identifiable} from "../../lib/entity-module";
+
 export class Person implements Identifiable {
   id: number;
   firstName: string;

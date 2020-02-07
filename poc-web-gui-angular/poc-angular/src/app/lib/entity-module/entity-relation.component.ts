@@ -4,6 +4,7 @@ import {BehaviorSubject} from "rxjs";
 import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
 import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entrypoint.directive";
 import {ListConfig} from "./entity-list.component";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 @Directive()

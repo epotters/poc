@@ -9,6 +9,7 @@ import {EntityService} from "./entity.service";
 import {EntityMeta, ValidatorDescriptor} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 @Directive()

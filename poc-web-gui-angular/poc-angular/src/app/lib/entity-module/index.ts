@@ -1,6 +1,7 @@
 export * from './domain/entity-meta.model';
 export * from './domain/entity-result.model';
 export * from './domain/api-service.model';
+export * from './domain/identifiable.model';
 
 export * from './entity.service';
 export * from './entity-data-source';

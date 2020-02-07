@@ -9,6 +9,7 @@ import {tap} from "rxjs/operators";
 import {EntityMeta, SortDirectionType} from "./domain/entity-meta.model";
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 @Directive()

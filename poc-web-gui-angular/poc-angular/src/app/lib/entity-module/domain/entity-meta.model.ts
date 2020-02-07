@@ -1,3 +1,5 @@
+import {Identifiable} from "./identifiable.model";
+
 export interface ColumnConfig {
   label: string;
   helpText?: string;

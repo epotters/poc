@@ -1,6 +1,6 @@
 import {Component, Injector} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import {FieldEditorConfig} from "..";
+import {FieldEditorConfig, Identifiable} from ".";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {FieldFilter} from "../domain/filter.model";
 
@@ -92,9 +92,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     return editorColumns;
   }
 
-  
+
   getEditor(key: string): FieldEditorConfig {
     return (this.editorColumns[key]) ? this.editorColumns[key] : this.defaultFieldEditorConfig;
   }
-  
+
 }

@@ -1,7 +1,7 @@
 import {FieldFilter} from "../domain/filter.model";
 import {Moment} from "moment";
 import {EntityLibConfig} from "./entity-lib-config";
-import {ColumnConfig, EntityMeta} from "..";
+import {ColumnConfig, EntityMeta, Identifiable} from "..";
 
 export class FilterBuilder<T extends Identifiable>{
 
@@ -56,5 +56,4 @@ export class FilterBuilder<T extends Identifiable>{
     }
     return (columnConfig.editor.type ? columnConfig.editor.type : columnConfig.filter.type);
   }
-
 }

@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Input} from '@angular/core';
-import {EntityMeta} from "..";
+import {EntityMeta, Identifiable} from "..";
 
 @Directive({
   selector: '[entity-link]',

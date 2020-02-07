@@ -1,8 +1,9 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import {FieldEditorConfig} from "..";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/material/tooltip";
+import {FieldEditorConfig, Identifiable} from ".";
+
 
 
 export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {

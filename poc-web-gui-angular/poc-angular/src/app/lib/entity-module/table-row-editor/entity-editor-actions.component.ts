@@ -3,10 +3,11 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {BehaviorSubject, Observable} from "rxjs";
-import {EntityMeta} from "..";
 import {EntityService} from "../entity.service";
 import {ConfirmationDialogComponent} from "../dialog/confirmation-dialog.component";
 import {EntityLibConfig} from "../common/entity-lib-config";
+import {EntityMeta, Identifiable} from ".";
+
 
 
 export interface ActionResult<T> {

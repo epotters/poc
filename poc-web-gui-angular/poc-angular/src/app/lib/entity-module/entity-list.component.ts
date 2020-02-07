@@ -16,6 +16,7 @@ import {EntityDataSource} from "./entity-data-source";
 import {EditorRowComponent} from "./table-row-editor/editor-row.component";
 import {FilterRowComponent} from "./table-row-editor/filter-row.component";
 import {ActionResult, EntityEditorActionsComponent} from "./table-row-editor/entity-editor-actions.component";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 export interface ListConfig<T> {

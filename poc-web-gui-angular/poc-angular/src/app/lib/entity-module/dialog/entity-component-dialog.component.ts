@@ -1,6 +1,7 @@
 import {Component, ComponentFactoryResolver, Inject, OnInit, Type, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {EntityComponentEntryPointDirective} from "./entity-component-entrypoint.directive";
+import {Identifiable} from "..";
 
 
 export class EntityComponentDescriptor {

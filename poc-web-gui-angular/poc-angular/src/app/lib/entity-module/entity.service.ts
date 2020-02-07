@@ -7,6 +7,7 @@ import {EntityMeta} from "./domain/entity-meta.model";
 import {EntityResult} from "./domain/entity-result.model";
 import {ApiService} from "./domain/api-service.model";
 import {FilterBuilder} from "./common/filter-builder";
+import {Identifiable} from "./domain/identifiable.model";
 
 
 export class EntityService<T extends Identifiable> {
