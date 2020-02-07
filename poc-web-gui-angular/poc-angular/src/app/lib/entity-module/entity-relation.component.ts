@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
+import { ComponentFactoryResolver, Input, OnDestroy, OnInit, Type, ViewChild, Directive } from "@angular/core";
 import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
 import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
@@ -6,6 +6,7 @@ import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entr
 import {ListConfig} from "./entity-list.component";
 
 
+@Directive()
 export abstract class EntityRelationComponent<T extends Identifiable, S extends Identifiable, R extends Identifiable>
   implements OnInit, OnDestroy {
 

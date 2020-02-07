@@ -1,4 +1,4 @@
-import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild, Directive } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
@@ -11,6 +11,7 @@ import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
 
 
+@Directive()
 export abstract class EntityListOfCardsComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();

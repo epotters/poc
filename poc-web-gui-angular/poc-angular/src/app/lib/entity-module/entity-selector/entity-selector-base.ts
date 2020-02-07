@@ -1,5 +1,5 @@
 // Source: https://github.com/OasisDigital/angular-material-search-select/blob/master/src/app/search-select/base.ts
-import {Input, OnDestroy} from '@angular/core';
+import { Input, OnDestroy, Directive } from '@angular/core';
 import {ControlValueAccessor, FormControl} from '@angular/forms';
 import {BehaviorSubject, combineLatest, EMPTY, Observable, of, Subject, Subscription, timer} from 'rxjs';
 import {
@@ -28,6 +28,7 @@ interface SearchResult {
 // Base class with which to create an observable auto complete. This doesn't
 // have any connection to how the result is rendered in the Dom, with what
 // component set, and so on
+@Directive()
 export class EntitySelectorBase<T> implements ControlValueAccessor, OnDestroy {
   @Input() debounceTime = 75;
 

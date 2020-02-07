@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 
 import {EntityService} from "./entity.service";
@@ -10,6 +10,7 @@ import {EntityLibConfig} from "./common/entity-lib-config";
 import {DataSourceState} from "./entity-list.component";
 
 
+@Directive()
 export abstract class EntityManagerComponent<T extends Identifiable> implements OnInit {
 
   @Input() dataSourceState: DataSourceState;

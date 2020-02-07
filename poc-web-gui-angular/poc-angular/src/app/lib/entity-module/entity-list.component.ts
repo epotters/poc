@@ -1,4 +1,4 @@
-import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild, Directive } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
@@ -50,6 +50,7 @@ export interface Position {
   y: string
 }
 
+@Directive()
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
   @Input() isManaged: boolean = false;
@@ -83,13 +84,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   };
 
 
-  @ViewChild(EntityEditorActionsComponent, {static: false}) editorActions: EntityEditorActionsComponent<T>;
-  @ViewChild(EditorRowComponent, {static: false}) editorRow: EditorRowComponent<T>;
+  @ViewChild(EntityEditorActionsComponent) editorActions: EntityEditorActionsComponent<T>;
+  @ViewChild(EditorRowComponent) editorRow: EditorRowComponent<T>;
 
-  @ViewChild(FilterRowComponent, {static: false}) filterRow: FilterRowComponent<T>;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild('contextMenuTrigger', {static: false}) contextMenuTrigger: MatMenuTrigger;
+  @ViewChild(FilterRowComponent) filterRow: FilterRowComponent<T>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('contextMenuTrigger') contextMenuTrigger: MatMenuTrigger;
 
   protected constructor(
     public meta: EntityMeta<T>,

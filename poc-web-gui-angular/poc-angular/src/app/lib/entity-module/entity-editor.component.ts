@@ -1,4 +1,4 @@
-import {Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import { Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Directive } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
@@ -11,6 +11,7 @@ import {BehaviorSubject} from "rxjs";
 import {MatSnackBar} from "@angular/material";
 
 
+@Directive()
 export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges, OnDestroy {
 
   @Input() entityToLoad?: T;

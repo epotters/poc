@@ -18,7 +18,7 @@ import {ErrorHandlerComponent} from './error-handler.component';
   entryComponents: [ErrorHandlerComponent]
 })
 export class ErrorModule {
-  public static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders<ErrorModule> {
     return {
       ngModule: ErrorModule,
       providers: [

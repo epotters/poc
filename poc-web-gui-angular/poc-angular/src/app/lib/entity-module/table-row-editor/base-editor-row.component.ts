@@ -1,4 +1,4 @@
-import {AfterContentInit, EventEmitter, Injector, Input, Output} from '@angular/core';
+import { AfterContentInit, EventEmitter, Injector, Input, Output, Directive } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subject, Subscription} from "rxjs";
 import {debounceTime} from "rxjs/operators";
@@ -13,6 +13,7 @@ export interface RelatedEntityEditor<S extends Identifiable> {
 }
 
 
+@Directive()
 export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
 
   @Input() readonly meta: EntityMeta<T>;
