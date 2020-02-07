@@ -8,7 +8,7 @@ import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.componen
 import {EntityService} from "./entity.service";
 import {EntityMeta, ValidatorDescriptor} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
-import {MatSnackBar} from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 
 @Directive()

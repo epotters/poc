@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 
-import {MatAutocompleteModule, MatGridListModule, MatSnackBarModule} from "@angular/material";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';

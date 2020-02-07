@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 
 import {EntityListComponent} from "../lib/entity-module";
 import {employmentMeta as meta} from "./employment-meta";

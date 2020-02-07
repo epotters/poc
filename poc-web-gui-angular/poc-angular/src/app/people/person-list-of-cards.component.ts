@@ -1,7 +1,7 @@
 import {Person} from "../core/domain/";
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import {EntityListOfCardsComponent} from "../lib/entity-module/entity-list-of-cards.component";
 import {PersonService} from "./person.service";
 import {personMeta} from "./person-meta";

@@ -1,6 +1,6 @@
 import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {Title} from "@angular/platform-browser";
-import {MatSnackBar} from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import {AuthService} from "./lib/auth-module/";
 import {PocAnimations} from "./app-animations";

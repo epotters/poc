@@ -1,7 +1,8 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialog, MatSnackBar} from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 import {EntityDataSource, EntityEditorComponent} from "../lib/entity-module";
 import {EmploymentService} from "./employment.service";
