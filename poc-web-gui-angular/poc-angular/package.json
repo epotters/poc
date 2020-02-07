@@ -29,7 +29,7 @@
     "moment": "^2.24.0",
     "oidc-client": "^1.10.1",
     "resize-observer-polyfill": "^1.5.1",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
@@ -48,7 +48,7 @@
     "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "protractor": "~5.4.0",
+    "protractor": "^5.4.3",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.7.5"
