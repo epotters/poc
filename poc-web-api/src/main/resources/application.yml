@@ -47,6 +47,10 @@ spring:
           jwk-set-uri: http://keycloak.localhost.lab/auth/realms/epo/protocol/openid-connect/certs
 
 
+cors:
+  allowed-origins:
+    - http://localhost:4200
+
 
 # Logging
 logging:
