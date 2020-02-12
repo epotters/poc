@@ -1,4 +1,4 @@
-import { AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild, Directive } from '@angular/core';
+import {AfterViewInit, Directive, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {MatPaginator} from "@angular/material/paginator";
@@ -231,10 +231,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   public startEditing(entity: T, targetElement: Element, idx: number) {
-
     console.debug('Are we currently editing? ' + this.isEditing());
-    console.debug('rowEditorForm value', this.editorRow.rowEditorForm.getRawValue());
-
     if (this.isEditing()) {
       this.stopEditing().subscribe((result: ActionResult<T>) => {
         if (result.success) {
@@ -249,6 +246,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         }
       });
     } else {
+      console.debug('Not editing yet, start at row ' + idx);
       this.showAndPositionEditor(targetElement, idx);
       this.editorRow.loadEntity(entity);
     }
@@ -268,8 +266,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   isEditing(): boolean {
     const form = this.editorRow.rowEditorForm;
     return (form.dirty ||
-      (this.editorViewState.rowElement &&
-        form.getRawValue() && form.getRawValue()['id'] && form.getRawValue()['id'] != null)
+      (!!this.editorViewState.rowElement &&
+        !!form.getRawValue() && !!form.getRawValue()['id'] && form.getRawValue()['id'] != null)
     );
   }
 
@@ -303,7 +301,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     event.preventDefault();
     const targetElement: Element = ((event.target || event.currentTarget) as Element);
 
-    let fieldName: string = this.fieldNameFromCellElement(targetElement);
+    let fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
 
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
@@ -365,7 +363,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     return (config.editor && !!config.editor.relatedEntity);
   }
 
-  private fieldNameFromCellElement(cellElement: Element): string {
+  private static fieldNameFromCellElement(cellElement: Element): string {
     let classes: string[] = cellElement.getAttribute('class').split(' ');
     for (let idx in classes) {
       let cls = classes[idx];
@@ -398,6 +396,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
 
   onAnimationEvent(event: AnimationEvent) {
-    console.debug('---> EntityListComponent - AnimationEvent', event);
+    // console.debug('---> EntityListComponent - AnimationEvent', event);
   }
 }

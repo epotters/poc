@@ -90,10 +90,12 @@
                   [columns]="columns"
                   [hidden]="!editorVisible"
                   [meta]="meta"
-                  [style.transform]="editorViewState.transform"
-                  [@slideTo]="editorVisible ? '*' : 'invisible'"
-                  (@slideTo.start)="onAnimationEvent($event)"
-                  (@slideTo.done)="onAnimationEvent($event)">
+                  [style.transform]="editorViewState.transform">
+
+<!-- These animations cause the initial row editor positioning to fail -->
+<!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
+<!--                  (@slideTo.start)="onAnimationEvent($event)"-->
+<!--                  (@slideTo.done)="onAnimationEvent($event)"-->
       </editor-row>
 
       <!--                  [hidden]="!editorVisible"-->
