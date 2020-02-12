@@ -56,9 +56,9 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
         .subscribe((savedEntity) => {
           let msg: string;
           if (entity.id) {
-            msg = this.meta.displayName + ' with id ' + entity.id + ' is updated successfully';
+            msg = this.meta.displayName + ' named "' + this.meta.displayNameRenderer(entity) + '" is updated successfully';
           } else {
-            msg = this.meta.displayName + ' is created successfully with id ' + savedEntity.id;
+            msg = this.meta.displayName + ' named "' + this.meta.displayNameRenderer(savedEntity) + '" is created successfully with id ' + savedEntity.id;
           }
 
           console.info(msg);
@@ -100,8 +100,8 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       deleteEntitySubject.next({success: false, changes: false, msg: msg});
     }
 
-    const dialogRef = this.openConfirmationDialog('Confirm delete',
-      'Are you sure you want to delete this ' + this.meta.displayName + '?');
+    const dialogRef = this.openConfirmationDialog('Confirm delete ' + this.meta.displayName.toLowerCase(),
+      'Are you sure you want to delete "' + this.meta.displayNameRenderer(entity) + '"?');
 
     dialogRef.afterClosed().subscribe(
       data => {
@@ -113,7 +113,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
           return this.service.delete(('' + entity.id))
             .subscribe(response => {
 
-              let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
+              let msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' was deleted successfully';
               console.info(msg);
               this.snackbar.open(msg, null, {
                 duration: EntityLibConfig.defaultSnackbarDuration

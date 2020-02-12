@@ -149,7 +149,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
     let entity = this.entityForm.getRawValue();
     const dialogRef = this.openConfirmationDialog('Confirm delete',
-      'Are you sure you want to delete this ' + this.meta.displayName + '?');
+      'Are you sure you want to delete ' + this.meta.displayName.toLowerCase() + ' named ' + this.meta.displayNameRenderer(entity) + '?');
 
     dialogRef.afterClosed().subscribe(
       data => {
@@ -158,7 +158,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
           console.info('User confirmed delete action, so it will be executed');
           this.service.delete(entity.id).subscribe((response) => {
             console.info('response ', response);
-            let msg = this.meta.displayName + ' with id ' + entity.id + ' is deleted successfully';
+            let msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' is deleted successfully';
             console.info(msg);
             this.snackbar.open(msg, null, {
               duration: 2000
