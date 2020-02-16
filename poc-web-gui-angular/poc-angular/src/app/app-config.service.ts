@@ -73,7 +73,7 @@ export class ConfigService implements AppConfig {
 
   public loadConfig(partialConfig: Partial<AppConfig>): void {
     for (let [key, value] of Object.entries(partialConfig)) {
-        this[key] = value;
+      this[key] = value;
     }
     this.accountUrl = this.oidcProviderRoot + 'realms/' + this.realm + '/account';
     this.userManagerSettings = this.buildUserManagerSettings();
@@ -95,7 +95,6 @@ export class ConfigService implements AppConfig {
   }
 
 
-
   public isConfigStored(): boolean {
     return !!sessionStorage.sessionStorage.getItem(this.configKey);
   }
@@ -108,7 +107,6 @@ export class ConfigService implements AppConfig {
   private storeConfig() {
     sessionStorage.setItem(this.configKey, JSON.stringify(this as AppConfig));
   }
-
 }
 
 

@@ -1,5 +1,8 @@
 import {Identifiable} from "./identifiable.model";
 
+export declare type EditorType = 'none' | 'text' | 'textarea' | 'select' | 'date' | 'entity-selector' | 'relation';
+export declare type SortDirectionType = 'asc' | 'desc';
+
 export interface ColumnConfig {
   label: string;
   helpText?: string;
@@ -9,11 +12,6 @@ export interface ColumnConfig {
   filter?: FieldEditorConfig;
   validators?: ValidatorDescriptor[]
 }
-
-
-export declare type EditorType = 'none' | 'text' | 'textarea' | 'select' | 'date' | 'autocomplete' | 'relation';
-export declare type SortDirectionType = 'asc' | 'desc';
-
 
 export interface FieldEditorConfig {
   type: EditorType;

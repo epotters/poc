@@ -15,13 +15,6 @@ export class ErrorService implements ErrorHandler {
 
   handleError(error: any) {
     console.debug('Inside ErrorHandlerService.handleError');
-
-    console.debug('config:', this.config);
-
-    // Try out
-    // this.createInjector(error);
-    /////
-
     this.errorSubject.next({code: 'GENERAL_ERROR', message: error.message});
     console.error(error);
   }
@@ -29,17 +22,4 @@ export class ErrorService implements ErrorHandler {
   awaitErrors(): Observable<PocError> {
     return this.errorSubject.asObservable();
   }
-
-
-  /////
-
-
-  // private createInjector(error: any): void {
-  //
-  //   const injectorTokens = new WeakMap<any, any>([
-  //     [ERROR_INJECTOR_TOKEN, error]
-  //   ]);
-  //
-  //   // return new PortalInjector(this.injector, injectorTokens);
-  // }
 }

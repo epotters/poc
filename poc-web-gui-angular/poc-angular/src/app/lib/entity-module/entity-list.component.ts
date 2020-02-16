@@ -87,7 +87,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   @ViewChild(EntityEditorActionsComponent) editorActions: EntityEditorActionsComponent<T>;
   @ViewChild(EditorRowComponent) editorRow: EditorRowComponent<T>;
-
   @ViewChild(FilterRowComponent) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -56,6 +56,6 @@ export class AppComponent implements OnInit, AfterContentInit {
   }
 
   onAnimationEvent(event: AnimationEvent) {
-    console.debug('---> AppComponent - AnimationEvent', event);
+    // console.debug('---> AppComponent - AnimationEvent', event);
   }
 }
