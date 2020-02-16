@@ -1,22 +1,22 @@
-<mat-form-field>
+<input
+  type="text"
+  [formControl]="searchControl"
+  [matAutocomplete]="auto"
+  (blur)="blur()"
+  (focus)="focus()"
+  spellcheck="false"
+  matInput>
 
-  <i class="obs-no-matches" *ngIf="emptyText && empty | async">{{emptyText}}</i>
+<mat-autocomplete
+  #auto="matAutocomplete"
+  [displayWith]="displayWith.bind(this)">
+  <mat-option
+    *ngFor="let entity of dataSource.entities$ | async"
+    [value]="entity"
+    (onSelectionChange)="optionSelected($event)">
+    {{ entity ? meta.displayNameRenderer(entity) : '' }}
+  </mat-option>
+</mat-autocomplete>
 
-  <input
-    type="text"
-    spellcheck="false"
-    matInput
-    [formControl]="searchControl"
-    #input
-    (blur)="blur()"
-    (focus)="input.select(); focus()"
-    [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith"
-                    [autoActiveFirstOption]="autoActiveFirstOption">
-    <mat-option *ngFor="let option of list | async"
-                [value]="option">
-      {{ option.display }}
-    </mat-option>
-  </mat-autocomplete>
-  <b>{{ errorMessage | async }}</b>
-</mat-form-field>
+<i class="obs-no-matches" *ngIf="emptyText && emptyObs | async">{{emptyText}}</i>
+<!--<b>{{ errorMessage | async }}</b>-->

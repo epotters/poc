@@ -32,7 +32,7 @@ public class Employment {
   @JoinColumn(name = "employer_id")
   private Organization employer;
 
-  private String descrption;
+  private String description;
 
   private LocalDate startDate;
 
