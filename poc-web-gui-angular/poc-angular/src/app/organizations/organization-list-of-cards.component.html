@@ -14,7 +14,7 @@
 
     <div class="list-of-cards" fxFill fxLayout="column" fxLayoutAlign="space-between">
       <div fxLayout="row wrap">
-        <ng-container *ngFor="let organization of dataSource.awaitEntities() | async">
+        <ng-container *ngFor="let organization of dataSource.entities$ | async">
           <organization-editor-card
             [entityToLoad]="organization"
             [isManaged]="true">

@@ -15,7 +15,9 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
   private totalSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public loading$ = this.loadingSubject.asObservable();
+  public entities$: Observable<T[]> = this.entitiesSubject.asObservable();
+  public total$: Observable<number> = this.totalSubject.asObservable();
+  public loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
   constructor(
     public meta: EntityMeta<T>,
@@ -65,48 +67,14 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   public awaitEntities(): Observable<T[]> {
     console.debug('Inside awaitEntities', this.meta.displayNamePlural, '...');
-    return this.entitiesSubject.asObservable();
+    return this.entities$;
   }
 
   public awaitTotal(): Observable<number> {
-    return this.totalSubject.asObservable();
+    return this.total$;
   }
 
-
-  // Temp implementation of DataSource interface
-  // displayValue(value: any): Observable<OptionEntry | null> {
-  //   console.log('finding display value for', value);
-  //   if (typeof value === 'string') {
-  //     value = parseInt(value, 10);
-  //   }
-  //   if (typeof value !== 'number') {
-  //     return of(null);
-  //   }
-  //
-  //   return http.get<Employee>(apiURL + '/' + value).pipe(
-  //     map(e => ({
-  //       value: e.id,
-  //       display: `${e.first_name} ${e.last_name} (${e.email})`,
-  //       details: {}
-  //     }))
-  //   );
-  // }
-
-
-  // search(term: string): Observable<OptionEntry[]> {
-  //   console.log('searching for', term);
-  //   return http.get<Employee[]>(apiURL, {
-  //     params: {
-  //       q: term || '',
-  //       _sort: 'last_name,first_name'
-  //     }
-  //   }).pipe(
-  //     map(list => list.map(e => ({
-  //       value: e.id,
-  //       display: `${e.first_name} ${e.last_name} (${e.email})`,
-  //       details: {}
-  //     }))));
-  // }
-
-
+  public clearEntities() {
+    this.entitiesSubject.next([]);
+  }
 }
