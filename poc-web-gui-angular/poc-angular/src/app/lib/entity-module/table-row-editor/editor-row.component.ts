@@ -5,7 +5,6 @@ import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/ma
 import {FieldEditorConfig, Identifiable} from ".";
 
 
-
 export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 1000,
   hideDelay: 1000,

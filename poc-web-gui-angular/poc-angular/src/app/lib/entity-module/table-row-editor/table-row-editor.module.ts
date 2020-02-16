@@ -4,12 +4,14 @@ import {FilterRowComponent} from "./filter-row.component";
 import {EntityCommonModule} from "../common/entity-common.module";
 import {EntityMaterialModule} from "../common/entity-material.module";
 import {EntityEditorActionsComponent} from "./entity-editor-actions.component";
+import {EntitySelectorModule} from "../entity-selector/entity-selector.module";
 
 
 @NgModule({
   imports: [
     EntityCommonModule,
-    EntityMaterialModule
+    EntityMaterialModule,
+    EntitySelectorModule
   ],
   declarations: [
     EditorRowComponent,

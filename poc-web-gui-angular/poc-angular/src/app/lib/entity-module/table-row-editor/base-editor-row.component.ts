@@ -1,16 +1,10 @@
-import { AfterContentInit, EventEmitter, Injector, Input, Output, Directive } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subject, Subscription} from "rxjs";
 import {debounceTime} from "rxjs/operators";
-import {EntityDataSource} from "../entity-data-source";
+
+import {AfterContentInit, Directive, EventEmitter, Injector, Input, OnDestroy, Output} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+
 import {EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from ".";
-
-
-export interface RelatedEntityEditor<S extends Identifiable> {
-  active: boolean;
-  dataSource: EntityDataSource<S>;
-  filteredEntities?: S[];
-}
 
 
 @Directive()
@@ -19,7 +13,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   @Input() readonly meta: EntityMeta<T>;
   @Input() readonly columns: string[];
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
-
 
   editorColumns: Record<string, FieldEditorConfig>;
   rowEditorForm: FormGroup;
@@ -32,9 +25,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   subscription: Subscription;
   firstChangeEvent: boolean = true;
 
-  autocompletes: Record<string, RelatedEntityEditor<any>> = {};
   debounceTime: number = 300;
-  autoCompletePageSize: number = 20;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -45,7 +36,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   ngAfterContentInit() {
     this.editorColumns = this.getColumns();
     this.rowEditorForm = this.buildFormGroup();
-    this.activateAutoCompletes();
     this.debouncer.pipe(debounceTime(this.debounceTime))
       .subscribe(() => {
         if (this.firstChangeEvent) {
@@ -57,33 +47,18 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.onChanges();
   }
 
-  getOutputValue() {
-    return this.rowEditorForm.getRawValue();
-  }
-
-  public clear() {
-    this.rowEditorForm.reset();
-  }
-
   onChanges(): void {
     this.rowEditorForm.valueChanges.subscribe(entityData => {
       this.debouncer.next(entityData);
     });
   }
 
-  onDestroy() {
-    this.disconnectDataSurces();
-
+  getOutputValue(): any {
+    return this.rowEditorForm.getRawValue();
   }
 
-  private disconnectDataSurces() {
-    for (let key in this.editorColumns) {
-      if (this.editorColumns.hasOwnProperty(key)) {
-        let editorConfig: FieldEditorConfig = this.getEditor(key);
-
-
-      }
-    }
+  public clear(): void {
+    this.rowEditorForm.reset();
   }
 
   buildValidators(fieldName: string): any[] {
@@ -141,7 +116,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
   }
 
-
   private buildFormGroup(): FormGroup {
     let group = {};
     for (let key in this.editorColumns) {
@@ -151,73 +125,4 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     }
     return this.formBuilder.group(group);
   }
-
-
-  private activateAutoCompletes(): void {
-    for (let key in this.editorColumns) {
-      if (this.editorColumns.hasOwnProperty(key)) {
-        let editorConfig: FieldEditorConfig = this.getEditor(key);
-        if (editorConfig.type == 'autocomplete') {
-          let service = this.injector.get(editorConfig.relatedEntity.serviceName);
-
-          this.autocompletes[key] = {
-            dataSource: new EntityDataSource<T>(service.meta, service),
-            active: false
-          };
-
-          this.activateAutocomplete(key, editorConfig);
-        }
-      }
-    }
-  }
-
-
-  private activateAutocomplete(fieldName: string, editorConfig: FieldEditorConfig): void {
-
-    this.subscription = this.autocompletes[fieldName].dataSource.awaitEntities().subscribe(entities => {
-      console.debug('New entities received for field', fieldName);
-      this.autocompletes[fieldName].filteredEntities = entities;
-    });
-
-    this.rowEditorForm
-      .get(fieldName).valueChanges
-      .subscribe((value) => {
-        console.debug('The value of field', fieldName, 'changed to', value);
-        if (value) {
-          console.debug('About to load new related entities for autocomplete. Filter ', value);
-
-          this.autocompletes[fieldName].dataSource.loadEntities(
-            [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
-            editorConfig.relatedEntity.displayField,
-            'asc',
-            0,
-            this.autoCompletePageSize
-          );
-        }
-      });
-
-    // this.rowEditorForm
-    //   .get(fieldName)
-    //   .valueChanges
-    //   .pipe(
-    //     debounceTime(300),
-    //     switchMap(value => {
-    //   console.debug('The value of field', fieldName, 'changed to', value);
-    //   if (value) {
-    //     console.debug('About to load new related entities for autocomplete. Filter ', value);
-    //
-    //     this.autocompletes[fieldName].dataSource.loadEntities(
-    //       [{name: editorConfig.relatedEntity.displayField, rawValue: value}],
-    //       editorConfig.relatedEntity.displayField,
-    //       'asc',
-    //       0,
-    //       this.autoCompletePageSize
-    //     );
-    //   }
-    // }));
-  }
-
-
-
 }
-

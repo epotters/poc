@@ -9,7 +9,6 @@ import {EntityLibConfig} from "../common/entity-lib-config";
 import {EntityMeta, Identifiable} from ".";
 
 
-
 export interface ActionResult<T> {
   success: boolean;
   changes: boolean;
@@ -26,7 +25,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
-
 
   constructor(
     public dialog: MatDialog,
@@ -123,7 +121,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
         } else {
           let msg = 'User canceled delete action';
-          console.info();
+          console.info(msg);
           deleteEntitySubject.next({success: false, changes: false, msg: msg});
         }
       }

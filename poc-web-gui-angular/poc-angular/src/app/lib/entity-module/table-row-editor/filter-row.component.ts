@@ -1,6 +1,6 @@
 import {Component, Injector} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import {FieldEditorConfig, Identifiable} from ".";
+import {ColumnConfig, FieldEditorConfig, Identifiable} from ".";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {FieldFilter} from "../domain/filter.model";
 
@@ -77,14 +77,15 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     let editorColumns: Record<string, FieldEditorConfig> = {};
     for (let idx in this.columns) {
       let key: string = this.columns[idx];
-      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].filter) {
-        console.debug('filter config found for field', key, ':', this.meta.columnConfigs[key].filter);
-        editorColumns[key] = this.meta.columnConfigs[key].filter;
-      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].rowEditor) {
-        console.debug('rowEditor config found for field', key, ':', this.meta.columnConfigs[key].rowEditor);
-        editorColumns[key] = this.meta.columnConfigs[key].rowEditor;
-      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
-        editorColumns[key] = this.meta.columnConfigs[key].editor;
+      let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+      if (columnConfig && columnConfig.filter) {
+        console.debug('filter config found for field', key, ':', columnConfig.filter);
+        editorColumns[key] = columnConfig.filter;
+      } else if (columnConfig && columnConfig.rowEditor) {
+        console.debug('rowEditor config found for field', key, ':', columnConfig.rowEditor);
+        editorColumns[key] = columnConfig.rowEditor;
+      } else if (columnConfig && columnConfig.editor) {
+        editorColumns[key] = columnConfig.editor;
       } else {
         editorColumns[key] = this.defaultFieldEditorConfig;
       }
