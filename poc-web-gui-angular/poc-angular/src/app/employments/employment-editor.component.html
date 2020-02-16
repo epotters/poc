@@ -8,15 +8,20 @@
 
     <form [formGroup]="entityForm" class="main-form">
 
-      <!-- ID-->
-      <div>
+
+      <div class="form-row" style="flex: 1">
+
+        <!-- ID -->
         <mat-form-field>
           <mat-label>ID</mat-label>
           <input formControlName="id" matInput name="id" readonly>
         </mat-form-field>
+
+        <div style="flex: 6"></div>
       </div>
 
       <div class="form-row">
+
         <!-- Start date -->
         <mat-form-field style="flex: 2">
           <mat-label>Start date</mat-label>
@@ -34,36 +39,36 @@
         </mat-form-field>
 
         <div style="flex: 3"></div>
-
       </div>
 
       <div class="form-row">
 
         <!-- Employer -->
         <mat-form-field style="flex: 2">
-
           <mat-label>Employer</mat-label>
-          <input [matAutocomplete]="organizationSelector" formControlName="employer" matInput name="employer">
-
-          <mat-autocomplete #organizationSelector="matAutocomplete" [displayWith]="displayOptionOrganization">
-            <mat-option *ngFor="let organization of organizationsDataSource.awaitEntities() | async"
-                        [value]="organization">
-              {{organization.name}}
-            </mat-option>
-          </mat-autocomplete>
-
+          <entity-selector
+            formControlName="employer"
+            [meta]="organizationService.meta"
+            [service]="organizationService"
+            [autoActiveFirstOption]=true
+            required>
+          </entity-selector>
+          <mat-hint>Choose an employer</mat-hint>
+          <mat-error>Employer is required</mat-error>
         </mat-form-field>
 
         <!-- Employee -->
         <mat-form-field style="flex: 2">
-          <mat-label>Employee</mat-label>
-          <input [matAutocomplete]="personSelector" formControlName="employee" matInput name="employee">
-          <mat-autocomplete #personSelector="matAutocomplete" [displayWith]="displayOptionPerson">
-            <mat-option *ngFor="let person of peopleDataSource.awaitEntities() | async" [value]="person">
-              {{person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName}}
-            </mat-option>
-          </mat-autocomplete>
-
+            <mat-label>Employee</mat-label>
+            <entity-selector
+              formControlName="employee"
+              [meta]="personService.meta"
+              [service]="personService"
+              [autoActiveFirstOption]=true
+              required>
+            </entity-selector>
+            <mat-hint>Choose an employee</mat-hint>
+            <mat-error>Employee is required</mat-error>
         </mat-form-field>
       </div>
 
@@ -98,25 +103,3 @@
   </mat-card-actions>
 
 </mat-card>
-
-<!--
-<employment-list-card
-  *ngIf="showRelations"
-  [title]="'Employers'"
-  [isManaged]="true"
-  [columns]="personColumns"
-  [initialFilters]="personFilters"
-  [filterVisible]="false"
-></employment-list-card>
-
-
-<employment-list-card
-  *ngIf="showRelations"
-  [title]="'Employees'"
-  [isManaged]="true"
-  [columns]="organizationColumns"
-  [initialFilters]="organizationFilters"
-  [filterVisible]="false"
-></employment-list-card>
-
--->

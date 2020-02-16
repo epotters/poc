@@ -22,7 +22,7 @@ export const employmentMeta: EntityMeta<Employment> = {
   defaultSortField: 'id',
   defaultSortDirection: 'asc',
 
-  displayedColumns: ['id', 'startDate', 'employer', 'employee', 'description'],
+  displayedColumns: ['id', 'startDate', 'endDate', 'employer', 'employee', 'description'],
 
 
   columnConfigs: {
@@ -45,7 +45,7 @@ export const employmentMeta: EntityMeta<Employment> = {
         return entity.employer.name;
       },
       editor: {
-        type: 'autocomplete',
+        type: 'entity-selector',
         relatedEntity: {
           name: 'organization',
           namePlural: 'organizations',
@@ -68,7 +68,7 @@ export const employmentMeta: EntityMeta<Employment> = {
         return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
       },
       editor: {
-        type: 'autocomplete',
+        type: 'entity-selector',
         relatedEntity: {
           name: 'person',
           namePlural: 'people',

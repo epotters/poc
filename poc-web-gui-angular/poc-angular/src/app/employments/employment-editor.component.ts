@@ -4,14 +4,12 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
-import {EntityDataSource, EntityEditorComponent} from "../lib/entity-module";
+import {EntityEditorComponent} from "../lib/entity-module";
 import {EmploymentService} from "./employment.service";
 import {PersonService} from "../people/person.service";
 import {OrganizationService} from "../organizations/organization.service";
-import {Employment, Organization, Person} from "../core/domain";
+import {Employment} from "../core/domain";
 import {employmentMeta} from "./employment-meta";
-import {organizationMeta} from "../organizations/organization-meta";
-import {personMeta} from "../people/person-meta";
 import {FieldFilter} from "../lib/entity-module/domain/filter.model";
 
 
@@ -21,19 +19,6 @@ import {FieldFilter} from "../lib/entity-module/domain/filter.model";
   styleUrls: ['../lib/entity-module/entity-editor.component.css']
 })
 export class EmploymentEditorComponent extends EntityEditorComponent<Employment> {
-
-  organizationsDataSource: EntityDataSource<Organization>;
-  peopleDataSource: EntityDataSource<Person>;
-
-  autoCompletePageSize: number = 25;
-
-
-  // Experimental
-  showRelations: boolean = false;
-  personColumns: string[] = ['id'];
-  personFilters: FieldFilter[] = [];
-  organizationColumns: string[] = ['id'];
-  organizationFilters: FieldFilter[] = [];
 
 
   constructor(
@@ -47,25 +32,15 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     public snackbar: MatSnackBar
   ) {
     super(employmentMeta, service, router, route, formBuilder, dialog, snackbar);
-
-    this.organizationsDataSource = new EntityDataSource<Organization>(organizationMeta, this.organizationService);
-    this.peopleDataSource = new EntityDataSource<Person>(personMeta, this.personService);
   }
 
 
   ngOnInit() {
     super.ngOnInit();
-
     if (this.isNew()) {
       this.prefillFromParameters();
     }
-
-    this.activateEmployerControl();
-
-    this.activateEmployeeControl();
-
     this.activateExperimentalRelatedEntityList();
-
   }
 
 
@@ -84,10 +59,9 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     });
   }
 
+
   prefillFromParameters(): void {
-
     this.route.queryParams.subscribe(params => {
-
       if (params['employee.id']) {
         const personId = params['employee.id'];
         this.personService.get(personId)
@@ -95,7 +69,6 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
             this.entityForm.patchValue({employee: person}, {emitEvent: false});
           });
       }
-
       if (params['employer.id']) {
         const employerId = params['employer.id'];
         this.organizationService.get(employerId)
@@ -106,17 +79,14 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     });
   }
 
-  displayOptionOrganization(organization?: Organization): string | undefined {
-    return organization.name;
-  }
 
-  displayOptionPerson(person?: Person): string | undefined {
-    if (person) {
-      return (person.firstName + ' ' + ((person.prefix) ? person.prefix + ' ' : '') + person.lastName);
-    } else {
-      return undefined;
-    }
-  }
+  // Experimental
+  showRelations: boolean = false;
+  personColumns: string[] = ['id'];
+  personFilters: FieldFilter[] = [];
+  organizationColumns: string[] = ['id'];
+  organizationFilters: FieldFilter[] = [];
+
 
   private activateExperimentalRelatedEntityList(): void {
     this.entitySubject.asObservable().subscribe(owner => {
@@ -127,8 +97,6 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
           this.personColumns = ['id', 'startDate', 'endDate', 'employer'];
           this.organizationColumns = ['id', 'startDate', 'endDate', 'employee'];
 
-
-          // [ownerSubject]="entitySubject"
           this.personFilters = [{name: 'employee.id', rawValue: '' + owner.employee.id}];
           this.organizationFilters = [{name: 'employer.id', rawValue: '' + owner.employer.id}];
 
@@ -140,43 +108,4 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
       }
     );
   }
-
-  private activateEmployeeControl(): void {
-    this.entityForm
-      .get('employee')
-      .valueChanges
-      .subscribe((value) => {
-        console.debug('About to load new people for autocomplete. Filter ' + value);
-        this.peopleDataSource.loadEntities(
-          [{name: 'lastName', rawValue: value}],
-          'lastName',
-          'asc',
-          0,
-          this.autoCompletePageSize
-        );
-      });
-  }
-
-  private activateEmployerControl(): void {
-    this.entityForm
-      .get('employer')
-      .valueChanges
-      .subscribe((value) => {
-
-        console.debug('About to load new organizations for autocomplete. Filter ' + value);
-
-        this.organizationsDataSource.loadEntities(
-          [{name: 'name', rawValue: value}],
-          'name',
-          'asc',
-          0,
-          this.autoCompletePageSize
-        );
-      });
-  }
-
-
-  // Experimental
-
-
 }
