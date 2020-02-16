@@ -11,6 +11,7 @@ import {PersonEditorComponent} from "./person-editor.component";
 import {FieldFilter} from "../lib/entity-module/domain/filter.model";
 import {PocAnimations} from "../app-animations";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {Observable, Subject} from "rxjs";
 
 
 @Component({
@@ -28,7 +29,10 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   listOfCardsVisible: boolean = false;
 
   entityForm: FormGroup;
+
   dataSource: EntityDataSource<Person>;
+  peopleObservable: Observable<Person[]>;
+  personSearch$ = new Subject<string>();
 
   constructor(
     public service: PersonService,
@@ -51,9 +55,22 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   }
 
 
+  ngOnInit() {
+    console.debug('ng-select - Initializing datasource for type ' + this.meta.displayNamePlural);
+
+    this.dataSource = new EntityDataSource<Person>(this.meta, this.service);
+    this.peopleObservable = this.dataSource.connect();
+    this.personSearch$.subscribe((term: string) => {
+      this.dataSource.loadEntities([{name: 'lastName', rawValue: term}],
+        'lastName', 'asc', 0, 50);
+    });
+  }
+
+
   buildSelectDemoForm(formBuilder: FormBuilder): FormGroup {
     let group = {};
     group['entitySelector'] = new FormControl('');
+    group['personSelector'] = new FormControl('');
     return formBuilder.group(group);
   }
 
