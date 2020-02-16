@@ -37,10 +37,10 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
 
   ngOnInit() {
     super.ngOnInit();
-    if (this.isNew()) {
-      this.prefillFromParameters();
-    }
-    this.activateExperimentalRelatedEntityList();
+    // if (this.isNew()) {
+    //   this.prefillFromParameters();
+    // }
+    // this.activateExperimentalRelatedEntityList();
   }
 
 
