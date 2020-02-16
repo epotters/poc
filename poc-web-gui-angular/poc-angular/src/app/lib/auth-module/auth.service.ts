@@ -68,6 +68,7 @@ export class AuthService implements OnInit {
 
   public completeSilentAuthentication(): Promise<void> {
     return this.userManager.signinSilentCallback().then(user => {
+      console.debug('user:', user);
       this.user = user;
       console.debug('completeSilentAuthentication: User set. Is returnToUrl needed here or is the callback page loaded in the iframe?');
       // this.returnToUrl();
