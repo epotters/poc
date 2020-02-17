@@ -45,8 +45,7 @@
           formControlName="{{key}}"
           [meta]="injector.get(editorColumns[key].relatedEntity.serviceName).meta"
           [service]="injector.get(editorColumns[key].relatedEntity.serviceName)"
-          [autoActiveFirstOption]=true
-          required>
+          [autoActiveFirstOption]=true>
         </entity-selector>
       </mat-form-field>
 
