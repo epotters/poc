@@ -57,6 +57,9 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   emptyObs: Observable<boolean>;
   errorMessage: Observable<string | undefined>;
 
+  skipFirstChange: boolean = true;
+  firstChange: boolean = true;
+
 
   constructor(
     _elementRef: ElementRef<HTMLElement>,
@@ -104,6 +107,12 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
     this.searchControl.valueChanges.subscribe(controlValue => {
+      if (this.skipFirstChange && this.firstChange) {
+        console.debug('Skip the first change');
+        this.touched = false;
+        this.firstChange = false;
+        return;
+      }
       if (controlValue) {
         if (typeof controlValue === 'string') {
           console.debug('The control value is a search string. Search for entities containing it', controlValue);
@@ -117,7 +126,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
           console.debug('Control value not recognized: "' + controlValue + '". This should not happen.');
         }
       } else {
-        console.debug('No control value provided. Clearing the current value.');
+        console.debug('No control value provided. Doing nothing.');
         // this.value = null;
       }
     })
