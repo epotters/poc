@@ -126,7 +126,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         switchMap(() => {
           this.stopEditing().subscribe();
           this.loadEntitiesPage();
-          return this.dataSource.awaitEntities();
+          return this.dataSource.entities$;
         }),
         catchError(() => {
           return observableOf([]);
