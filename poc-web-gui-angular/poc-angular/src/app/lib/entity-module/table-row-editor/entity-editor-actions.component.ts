@@ -69,13 +69,13 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
           entityForm.markAsUntouched();
 
           console.debug('After marking the form as pristine, is it still dirty?', entityForm.dirty);
-
           savedEntitySubject.next({success: true, changes: true, msg: msg, entity: savedEntity});
         });
     } else {
       let msg = 'Not a valid ' + this.meta.displayName.toLowerCase() + '. Please correct the errors before saving';
       console.info(msg);
       console.debug('Validation errors', entityForm.errors);
+      this.listInvalidFields(entityForm);
       savedEntitySubject.next({success: false, changes: false, msg: msg});
     }
     return savedEntitySubject.asObservable();
@@ -132,24 +132,16 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
 
   public handleUnsavedChanges(entityForm: FormGroup, overlay?: any): Observable<ActionResult<T>> {
-
     let unsavedChangesSubject: BehaviorSubject<ActionResult<T>> = new BehaviorSubject<ActionResult<T>>(
       {success: false, changes: false, msg: 'BehaviorSubject for unsaved changes created'}
     );
-
     if (entityForm.dirty) {
-
       let msg = 'The editor row has unsaved changes';
       console.debug(msg);
-
       if (EntityLibConfig.autoSave) {
-
         this.saveSilently(unsavedChangesSubject, entityForm, overlay);
-
       } else {
-
         const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
-
         dialogRef.afterClosed().subscribe(
           data => {
             if (data.confirmed) {
@@ -169,14 +161,12 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       console.debug(msg);
       unsavedChangesSubject.next({success: true, changes: false, msg: msg});
     }
-
     return unsavedChangesSubject.asObservable();
   }
 
   updateEntities() {
     const dialogRef = this.openConfirmationDialog('Confirm batch update',
       'Are you sure you want to update all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
-
     dialogRef.afterClosed().subscribe(
       data => {
         if (data.confirmed) {
@@ -216,7 +206,6 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
   }
 
   private saveSilently(unsavedChangesSubject: BehaviorSubject<ActionResult<T>>, entityForm: FormGroup, overlay?: any) {
-
     this.saveEntity(entityForm, overlay)
       .subscribe((result: ActionResult<T>) => {
         let msg = 'Entity saved, no more unsaved changes';
@@ -224,5 +213,16 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
         unsavedChangesSubject.next(result);
       });
   }
+
+
+  private listInvalidFields(entityForm: FormGroup) {
+    const controls = entityForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        console.debug('Field "' + name + '" is invalid', controls[name].value, controls[name].errors);
+      }
+    }
+  }
+
 
 }
