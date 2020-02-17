@@ -70,7 +70,8 @@ export class AuthService implements OnInit {
     return this.userManager.signinSilentCallback().then(user => {
       console.debug('user:', user);
       this.user = user;
-      console.debug('completeSilentAuthentication: User set. Is returnToUrl needed here or is the callback page loaded in the iframe?');
+      console.info('Silent Authentication completed: User set to "' + ((!!this.user) ? this.user.profile.name : 'unknown') + '"');
+      console.debug('Is returnToUrl needed here or is the callback page loaded in the iframe?');
       // this.returnToUrl();
     });
   }
