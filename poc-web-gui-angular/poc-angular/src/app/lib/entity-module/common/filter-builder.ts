@@ -27,7 +27,7 @@ export class FilterBuilder<T extends Identifiable>{
       } else if (editorType == 'date') {
         operator = this.exactMatchOperator;
         value = (<Moment>(<any>filter.rawValue)).format(EntityLibConfig.dateFormat);
-      } else if (editorType === 'autocomplete') {
+      } else if (editorType === 'entity-selector') {
         operator = this.exactMatchOperator;
       } else if (filter.name === 'id' || filter.name.endsWith('.id')) {
         operator = this.exactMatchOperator;
