@@ -49,13 +49,13 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
 
   set value(value: T | null) {
     if (value !== this.value) {
-      console.debug('Value changed from', this.value, 'to', value);
+      console.debug('Set Value to "' + value + '" (was "' + this.value +'")');
       this._value = value;
       this.setValue(value);
       this.onChange(value);
       this.stateChanges.next();
     } else {
-      console.debug('New value and current value are the same. Do nothing', this.value, value);
+      console.debug('New value and current value are the same. Do nothing');
     }
   }
 
@@ -123,7 +123,7 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
   }
 
 
-  // Implement Angular phase handlers
+  // Implement Angular Lifecycle Hooks
 
   ngOnInit(): void {
 
@@ -152,11 +152,7 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
   // Implement ControlValueAccessor
 
   writeValue(value: T | null): void {
-    console.debug('@writeValue About to write value', value);
-    // Angular sometimes writes a value that didn't change
-    if (this.value !== value) {
-      this.value = value;
-    }
+    this.value = value;
   }
 
 
