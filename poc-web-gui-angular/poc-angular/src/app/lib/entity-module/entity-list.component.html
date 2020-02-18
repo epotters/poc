@@ -6,8 +6,8 @@
 
   <editor-actions
     [meta]="meta"
-    [service]="service"
-  ></editor-actions>
+    [service]="service">
+  </editor-actions>
 
   <mat-toolbar class="list-toolbar-top">
 
@@ -15,8 +15,9 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="saveEntity()" [disabled]="!isEditing.bind(this)" color="primary" mat-icon-button>
+    <button (click)="saveEntity()" [disabled]="true" color="primary" mat-icon-button>
       <mat-icon>done</mat-icon>
+<!--      editorRow.rowEditorForm.dirty || editorRow.rowEditorForm.invalid-->
     </button>
 
     <button (click)="toggleEditor()" color="primary" mat-icon-button>
