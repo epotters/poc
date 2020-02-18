@@ -1,10 +1,10 @@
 import {Subject, Subscription} from "rxjs";
 import {debounceTime} from "rxjs/operators";
 
-import {AfterContentInit, Directive, EventEmitter, Injector, Input, OnDestroy, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AfterContentInit, Directive, EventEmitter, Injector, Input, Output} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
-import {EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from ".";
+import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from ".";
 
 
 @Directive()
@@ -93,7 +93,8 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   }
 
   hasErrors(key: string): boolean {
-    return (this.enableValidation) ? this.rowEditorForm.get(key).valid : false;
+    let control: AbstractControl | null = this.rowEditorForm.get(key);
+    return (this.enableValidation) ? ((!!control) ? control.valid : false) : false;
   }
 
   getErrorMessage(key: string): string {
@@ -101,8 +102,9 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
       return '';
     }
     const errorMessages: string[] = [];
-    if (this.meta.columnConfigs[key].validators && this.meta.columnConfigs[key].validators.length > 0) {
-      for (let validation of this.meta.columnConfigs[key].validators) {
+    const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+    if (!!columnConfig.validators && columnConfig.validators.length > 0) {
+      for (let validation of columnConfig.validators) {
         if (this.hasErrorOfType(key, validation.type)) {
           errorMessages.push(validation.message);
         }
@@ -113,16 +115,22 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   hasErrorOfType(fieldName: string, validationType: string): boolean {
     const formControl = this.rowEditorForm.get(fieldName);
-    return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
+    if (!!formControl) {
+      return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
+    } else {
+      return false;
+    }
   }
 
   private buildFormGroup(): FormGroup {
-    let group = {};
+    let group: {[key: string]: any} = {};
     for (let key in this.editorColumns) {
       if (this.editorColumns.hasOwnProperty(key)) {
         group[key] = new FormControl('', this.buildValidators(key));
       }
     }
+
+
     return this.formBuilder.group(group);
   }
 }

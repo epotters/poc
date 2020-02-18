@@ -44,7 +44,8 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       let entity: T = entityForm.getRawValue();
 
       for (let idx in Reflect.ownKeys(overlay)) {
-        let key = Reflect.ownKeys(overlay)[idx];
+        let key = Reflect.ownKeys(overlay)[idx] as string;
+        // @ts-ignore
         entity[key] = overlay[key];
         console.debug('Apply overlay before saving', key, overlay[key]);
       }
@@ -60,7 +61,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
           }
 
           console.info(msg);
-          this.snackbar.open(msg, null, {
+          this.snackbar.open(msg, undefined, {
             duration: EntityLibConfig.defaultSnackbarDuration
           });
 
@@ -75,7 +76,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       let msg = 'Not a valid ' + this.meta.displayName.toLowerCase() + '. Please correct the errors before saving';
       console.info(msg);
       console.debug('Validation errors', entityForm.errors);
-      this.listInvalidFields(entityForm);
+      EntityEditorActionsComponent.listInvalidFields(entityForm);
       savedEntitySubject.next({success: false, changes: false, msg: msg});
     }
     return savedEntitySubject.asObservable();
@@ -92,7 +93,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
       let msg: string = 'This entity is either not available or not yet created and therefore cannot be deleted';
       console.info(msg);
 
-      this.snackbar.open(msg, null, {
+      this.snackbar.open(msg, undefined, {
         duration: EntityLibConfig.defaultSnackbarDuration
       });
       deleteEntitySubject.next({success: false, changes: false, msg: msg});
@@ -113,7 +114,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
 
               let msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' was deleted successfully';
               console.info(msg);
-              this.snackbar.open(msg, null, {
+              this.snackbar.open(msg, undefined, {
                 duration: EntityLibConfig.defaultSnackbarDuration
               });
               deleteEntitySubject.next({success: true, changes: true, msg: msg});
@@ -215,7 +216,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> {
   }
 
 
-  private listInvalidFields(entityForm: FormGroup) {
+  private static listInvalidFields(entityForm: FormGroup) {
     const controls = entityForm.controls;
     for (const name in controls) {
       if (controls[name].invalid) {

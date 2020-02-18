@@ -2,7 +2,7 @@ import {Component, Injector, OnInit} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/material/tooltip";
-import {FieldEditorConfig, Identifiable} from ".";
+import {ColumnConfig, FieldEditorConfig, Identifiable} from ".";
 
 
 export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
@@ -28,7 +28,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     public formBuilder: FormBuilder,
     injector: Injector) {
     super(formBuilder, injector);
-    console.debug('Constructing EditorRowComponent');
+    console.debug('Creating EditorRowComponent');
     this.enableValidation = true;
   }
 
@@ -58,11 +58,12 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     let editorColumns: Record<string, FieldEditorConfig> = {};
     for (let idx in this.columns) {
       let key: string = this.columns[idx];
-      if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].rowEditor) {
-        console.debug('rowEditor config found for field', key, ':', this.meta.columnConfigs[key].rowEditor);
-        editorColumns[key] = this.meta.columnConfigs[key].rowEditor;
-      } else if (this.meta.columnConfigs[key] && this.meta.columnConfigs[key].editor) {
-        editorColumns[key] = this.meta.columnConfigs[key].editor;
+      let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+      if (columnConfig && columnConfig.rowEditor) {
+        console.debug('rowEditor config found for field', key, ':', columnConfig.rowEditor);
+        editorColumns[key] = columnConfig.rowEditor;
+      } else if (columnConfig && columnConfig.editor) {
+        editorColumns[key] = columnConfig.editor;
       } else {
         editorColumns[key] = this.defaultFieldEditorConfig;
       }
@@ -76,9 +77,10 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     Object.entries(entity).forEach(
       ([key, value]) => {
         if (this.rowEditorForm.contains(key)) {
+          // @ts-ignore
           editorEntity[key] = entity[key];
         } else {
-          console.debug('Skipping field "', key, '" because there is no control for it');
+          console.debug('Skipping field "' + key + '" because there is no control for it');
         }
       }
     );

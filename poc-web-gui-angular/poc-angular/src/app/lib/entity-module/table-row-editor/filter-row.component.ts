@@ -1,5 +1,5 @@
 import {Component, Injector} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {AbstractControl, FormBuilder} from "@angular/forms";
 import {ColumnConfig, FieldEditorConfig, Identifiable} from ".";
 import {BaseEditorRowComponent} from "./base-editor-row.component";
 import {FieldFilter} from "../domain/filter.model";
@@ -17,7 +17,7 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     injector: Injector) {
     super(formBuilder, injector);
 
-    console.debug('Constructing FilterRowComponent');
+    console.debug('Creating FilterRowComponent');
   }
 
   getOutputValue(): FieldFilter[] {
@@ -33,17 +33,17 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     Object.entries(entityFilter).forEach(
       ([key, value]) => {
 
-        if (value && value !== '') {
+        if (!!value && value !== '') {
           let fieldName: string = key;
           let type: any = this.getEditor(key).type;
 
           if (type == 'entity-selector') {
-            if (!value['id']) {
+            if (!(value as Identifiable)['id']) {
               console.debug('No related entity to search for selected yet. Skipping.');
               return;
             }
             fieldName = fieldName + '.id';
-            value = value['id'];
+            value = (value as Identifiable)['id'];
             console.debug('Selected entity converted to id only for filter {', fieldName, ': ', value, '}');
           }
 
@@ -63,8 +63,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     this.rowEditorForm.reset();
     for (let idx in fieldFilters) {
       let fieldFilter: FieldFilter = fieldFilters[idx];
-      if (this.rowEditorForm.get(fieldFilter.name)) {
-        this.rowEditorForm.get(fieldFilter.name).setValue(fieldFilter.rawValue, {emitEvent: false});
+      let formControl: AbstractControl | null = this.rowEditorForm.get(fieldFilter.name);
+      if (!!formControl) {
+        formControl.setValue(fieldFilter.rawValue, {emitEvent: false});
         console.debug('---> fieldFilter', fieldFilter.name, 'set to', fieldFilter.rawValue);
       } else {
         console.debug('---> No field control for', fieldFilter.name);
