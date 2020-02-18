@@ -1,6 +1,6 @@
 import {Injectable, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {User, UserManager} from 'oidc-client';
+import {Profile, User, UserManager} from 'oidc-client';
 import {ConfigService} from "../../app-config.service";
 
 export {User};
@@ -10,9 +10,9 @@ export {User};
 })
 export class AuthService implements OnInit {
 
-  private userManager: UserManager;
-  private user: User;
-  private returnUrlKey: string = 'auth:redirect';
+  private readonly userManager: UserManager;
+  private user: User | null = null;
+  private readonly returnUrlKey: string = 'auth:redirect';
 
 
   constructor(
@@ -32,20 +32,28 @@ export class AuthService implements OnInit {
 
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
   public isLoggedIn(): boolean {
-    return this.user != null && !this.user.expired;
+    return !!this.user && !this.user.expired;
   }
 
   public isExpired(): boolean {
-    return this.user && this.user.expired;
+    return !!this.user && this.user.expired;
   }
 
   public getClaims(): any {
-    return this.user.profile;
+    if (!!this.user && !!this.user.profile) {
+      return this.user.profile;
+    } else {
+      return null;
+    }
   }
 
-  public getAuthorizationHeaderValue(): string {
-    // Bearer is case sensitive, token_type is lowercase, doesn't work
-    return AuthService.capitalizeFirst(this.user.token_type) + ' ' + this.user.access_token;
+  public getAuthorizationHeaderValue(): string | null {
+    if (!!this.user) {
+      // Bearer is case sensitive, token_type is lowercase, doesn't work
+      return AuthService.capitalizeFirst(this.user.token_type) + ' ' + this.user.access_token;
+    } else {
+      return null;
+    }
   }
 
   public startAuthentication(returnUrl: string): Promise<void> {
@@ -69,9 +77,9 @@ export class AuthService implements OnInit {
   public completeSilentAuthentication(): Promise<void> {
     return this.userManager.signinSilentCallback().then(user => {
       console.debug('user:', user);
-      this.user = user;
+      this.user = (!!user) ? user : null;
       console.info('Silent Authentication completed: User set to "' + ((!!this.user) ? this.user.profile.name : 'unknown') + '"');
-      console.debug('Is returnToUrl needed here or is the callback page loaded in the iframe?');
+      // console.debug('Is returnToUrl needed here or is the callback page loaded in the iframe?');
       // this.returnToUrl();
     });
   }
@@ -98,13 +106,13 @@ export class AuthService implements OnInit {
     sessionStorage.setItem(this.returnUrlKey, returnUrl);
   }
 
-  public getReturnUrl(): string {
+  public getReturnUrl(): string | null {
     return sessionStorage.getItem(this.returnUrlKey);
   }
 
   public returnToUrl(): void {
-    var returnUrl = this.getReturnUrl();
-    if (returnUrl) {
+    const returnUrl: string | null = this.getReturnUrl();
+    if (!!returnUrl) {
       console.debug('Returning to URL ' + returnUrl);
       sessionStorage.removeItem(this.returnUrlKey);
       this.router.navigate([returnUrl]);
