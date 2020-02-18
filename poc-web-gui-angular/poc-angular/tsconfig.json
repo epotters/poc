@@ -4,6 +4,8 @@
     "baseUrl": "./",
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
+//    "strict": true,
+//    "strictPropertyInitialization": false,
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",
