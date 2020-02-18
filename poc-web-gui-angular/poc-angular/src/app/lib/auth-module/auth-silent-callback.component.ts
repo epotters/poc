@@ -8,7 +8,7 @@ import {AuthService} from "./auth.service";
 })
 export class AuthSilentCallbackComponent implements OnInit {
 
-  message: string = 'Auth Silent Refresh Page';
+  message: string = 'Initializing Authentication Silent Callback Page';
 
   constructor(private authService: AuthService) {
   }
@@ -16,7 +16,8 @@ export class AuthSilentCallbackComponent implements OnInit {
   ngOnInit() {
     console.debug(this.message);
     this.authService.completeSilentAuthentication()
-      .then(() => console.info('Silent refresh completed successfully'));
+      .then(() => console.info('Silent refresh completed successfully. Is user logged in? ' + this.authService.isLoggedIn()))
+      .catch((errorMessage: string) => console.error('Error while completing silent authentication: ' + errorMessage));
   }
 
 }

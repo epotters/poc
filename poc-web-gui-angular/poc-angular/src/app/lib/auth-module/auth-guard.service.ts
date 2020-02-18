@@ -46,7 +46,7 @@ export class AuthGuardService implements CanActivate {
 
     console.debug(route);
     console.debug('route.url: ' + route.url.join('/'));
-    console.debug('Is route protected?: ' + (route.routeConfig.canActivate != null));
+    console.debug('Is route protected?: ' + (!!route.routeConfig && route.routeConfig.canActivate != null));
 
     console.debug(state);
     console.debug('state.url: ' + state.url);

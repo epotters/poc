@@ -13,6 +13,18 @@ import {AuthGuardService} from "./auth-guard.service";
 import {AuthService} from "./auth.service";
 import {ConfigService} from "../../app-config.service";
 
+
+export interface RouteData {
+  externalUrl: string;
+  queryParams: QueryParams;
+}
+
+export interface QueryParams {
+  [index: string]: any;
+  referer: string;
+  referrer_uri: string;
+}
+
 @NgModule({
   imports: [AuthRoutingModule],
   declarations: [
@@ -35,7 +47,7 @@ import {ConfigService} from "../../app-config.service";
       provide: 'accountUrlRedirectResolver',
       deps: [ConfigService],
       useFactory: (config: ConfigService) => {
-        let routeData = {
+        let routeData: RouteData = {
           externalUrl: config.accountUrl,
           queryParams: {
             referer: config.clientRoot,
@@ -46,9 +58,11 @@ import {ConfigService} from "../../app-config.service";
         if (routeData.queryParams) {
           let isFirst = true;
           for (let key in routeData.queryParams) {
-            let value = routeData.queryParams[key];
-            url += ((isFirst) ? '?' : '&') + key + '=' + value;
-            isFirst = false;
+            if (routeData.queryParams.hasOwnProperty(key)) {
+              let value = routeData.queryParams[key];
+              url += ((isFirst) ? '?' : '&') + key + '=' + value;
+              isFirst = false;
+            }
           }
         }
         window.location.href = url;
