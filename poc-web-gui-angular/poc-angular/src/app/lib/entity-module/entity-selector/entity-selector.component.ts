@@ -127,8 +127,8 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
           console.debug('Control value not recognized: "' + controlValue + '". This should not happen.');
         }
       } else {
-        console.debug('No control value provided. Doing nothing.');
-        // this.value = null;
+        console.debug('No control value provided. Clearing the value');
+        this.value = null;
       }
     });
   }
