@@ -41,28 +41,23 @@ export interface AppConfig {
 })
 export class ConfigService implements AppConfig {
 
-  private configKey: string = 'config';
+  [index: string]: any;
 
-  production: boolean;
+  production!: boolean;
+  externalConfig!: string;
+  timezone!: string;
+  locale!: string;
+  applicationDisplayName!: string;
+  applicationBasePath!: string;
+  clientRoot!: string;
+  apiRoot!: string;
+  oidcProviderRoot!: string;
+  realm!: string;
+  clientId!: string;
+  accountUrl!: string;
+  userManagerSettings!: UserManagerSettings;
+  defaultSnackbarDuration!: number;
 
-  externalConfig: string;
-
-  timezone: string;
-  locale: string;
-
-  applicationDisplayName: string;
-  applicationBasePath: string;
-  clientRoot: string;
-
-  apiRoot: string;
-
-  oidcProviderRoot: string;
-  realm: string;
-  clientId: string;
-  accountUrl: string;
-  userManagerSettings: UserManagerSettings;
-
-  defaultSnackbarDuration: number;
 
   constructor() {
     console.info('Constructing ConfigService');
@@ -95,18 +90,34 @@ export class ConfigService implements AppConfig {
   }
 
 
+  // TODO: use code to enable config caching
+  private readonly configKey: string = 'config';
+
   public isConfigStored(): boolean {
     return !!sessionStorage.sessionStorage.getItem(this.configKey);
   }
 
+
   private readConfig(): void {
-    let config: AppConfig = JSON.parse(sessionStorage.getItem(this.configKey));
-    this.loadConfig(config);
+    let json: string | null = sessionStorage.getItem(this.configKey);
+    if (!!json) {
+      try {
+        let config: AppConfig = JSON.parse(json);
+        this.loadConfig(config);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          console.error(error.name);
+        } else {
+          console.error(error.message);
+        }
+      }
+    }
   }
 
   private storeConfig() {
     sessionStorage.setItem(this.configKey, JSON.stringify(this as AppConfig));
   }
+
 }
 
 
