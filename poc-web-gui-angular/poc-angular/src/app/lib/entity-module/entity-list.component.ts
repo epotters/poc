@@ -146,7 +146,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   // CRUD
-  loadEntitiesPage() {
+  loadEntitiesPage(): void {
     this.dataSource.loadEntities(
       this.fieldFilters,
       this.sort.active,
@@ -256,6 +256,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       .pipe(map((result: ActionResult<T>) => {
         if (result.success) {
           this.editorRow.rowEditorForm.reset();
+          this.editorRow.rowEditorForm.markAsPristine();
           this.hideAndResetEditor();
         }
         return result;

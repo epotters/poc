@@ -18,7 +18,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   rowEditorForm: FormGroup;
 
   defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
-  enableValidation: boolean = true;
+  enableValidation: boolean = false;
   debouncer: Subject<string> = new Subject<string>();
   visible: boolean = true;
 

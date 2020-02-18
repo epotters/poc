@@ -16,7 +16,6 @@ import {FocusMonitor} from "@angular/cdk/a11y";
 import {EntityDataSource} from "../entity-data-source";
 import {EntityMeta, EntityService, Identifiable} from "..";
 import {MatInput} from "@angular/material/input";
-import {MatAutocomplete} from "@angular/material/autocomplete";
 import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
 
 
@@ -49,7 +48,6 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   @Input() emptyText = '';
 
   @ViewChild('input') searchInput: MatInput;
-  @ViewChild('autocomplete') autocomplete: MatAutocomplete;
 
   dataSource: EntityDataSource<T>;
 
@@ -57,7 +55,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   emptyObs: Observable<boolean>;
   errorMessage: Observable<string | undefined>;
 
-  skipFirstChange: boolean = true;
+  skipFirstChange: boolean = false;
   firstChange: boolean = true;
 
 
@@ -66,7 +64,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     public injector: Injector,
     _focusMonitor: FocusMonitor
   ) {
-    super(_elementRef, injector, _focusMonitor);
+    super(_elementRef, injector, _focusMonitor, 'entity-selector');
   }
 
 
@@ -75,13 +73,11 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     this.focused = true;
   }
 
-
   blur() {
     console.debug('blur. current value:', this.value);
     this.onTouched();
     this.focused = false;
   }
-
 
   optionSelected(event) {
     console.debug('The user selected an option:', event.source.value);
@@ -119,9 +115,14 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
           this.dataSource.loadEntities([{name: this.meta.defaultSortField, rawValue: controlValue}],
             this.meta.defaultSortField, this.meta.defaultSortDirection, 0, this.meta.defaultPageSize);
         } else if (controlValue.id) {
-          console.debug('The control value is an entity. Look it up by its id');
-          this.dataSource.loadEntities([{name: 'id', rawValue: controlValue.id}],
-            this.meta.defaultSortField, this.meta.defaultSortDirection, 0, this.meta.defaultPageSize);
+
+          console.debug('The control value is an entity. Set the value directly');
+          this.value = controlValue;
+
+          // console.debug('The control value is an entity. Look it up by its id');
+          // this.dataSource.loadEntities([{name: 'id', rawValue: controlValue.id}],
+          //   this.meta.defaultSortField, this.meta.defaultSortDirection, 0, this.meta.defaultPageSize);
+          //
         } else {
           console.debug('Control value not recognized: "' + controlValue + '". This should not happen.');
         }
@@ -129,13 +130,15 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
         console.debug('No control value provided. Doing nothing.');
         // this.value = null;
       }
-    })
+    });
   }
 
 
   // Custom methods
   setValue(value: T) {
-    this.searchControl.setValue(value);
+    if (this.searchControl.value !== value) {
+      this.searchControl.setValue(value);
+    }
   }
 
   isEmpty() {
@@ -153,6 +156,5 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   setUpControl(): void {
     this.activateControl();
   }
-
 
 }

@@ -17,6 +17,3 @@
     {{ entity ? meta.displayNameRenderer(entity) : '' }}
   </mat-option>
 </mat-autocomplete>
-
-<i class="obs-no-matches" *ngIf="emptyText && emptyObs | async">{{emptyText}}</i>
-<!--<b>{{ errorMessage | async }}</b>-->

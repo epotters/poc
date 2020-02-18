@@ -29,7 +29,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     injector: Injector) {
     super(formBuilder, injector);
     console.debug('Constructing EditorRowComponent');
-    this.enableValidation = false;
+    this.enableValidation = true;
   }
 
   ngOnInit(): void {

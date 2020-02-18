@@ -15,6 +15,10 @@
 
     <span class="fill-remaining-space"></span>
 
+    <button (click)="saveEntity()" [disabled]="!isEditing.bind(this)" color="primary" mat-icon-button>
+      <mat-icon>done</mat-icon>
+    </button>
+
     <button (click)="toggleEditor()" color="primary" mat-icon-button>
       <mat-icon>add</mat-icon>
     </button>
@@ -29,7 +33,6 @@
     </button>
 
     <mat-menu #titlebarMenu="matMenu">
-
 
       <button (click)="filterRow.clear()" mat-menu-item>
         <span>Clear filter</span>
@@ -92,10 +95,10 @@
                   [meta]="meta"
                   [style.transform]="editorViewState.transform">
 
-<!-- These animations cause the initial row editor positioning to fail -->
-<!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
-<!--                  (@slideTo.start)="onAnimationEvent($event)"-->
-<!--                  (@slideTo.done)="onAnimationEvent($event)"-->
+        <!-- These animations cause the initial row editor positioning to fail -->
+        <!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
+        <!--                  (@slideTo.start)="onAnimationEvent($event)"-->
+        <!--                  (@slideTo.done)="onAnimationEvent($event)"-->
       </editor-row>
 
       <!--                  [hidden]="!editorVisible"-->

@@ -37,7 +37,7 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
           let fieldName: string = key;
           let type: any = this.getEditor(key).type;
 
-          if (type == 'autocomplete') {
+          if (type == 'entity-selector') {
             if (!value['id']) {
               console.debug('No related entity to search for selected yet. Skipping.');
               return;

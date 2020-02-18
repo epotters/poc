@@ -13,9 +13,12 @@ import {Identifiable} from "..";
 export abstract class AbstractMatFormFieldControl<T extends Identifiable> implements OnInit, OnDestroy, DoCheck, ControlValueAccessor, MatFormFieldControl<T> {
 
   constructor(
-    private _elementRef: ElementRef<HTMLElement>,
+    public _elementRef: ElementRef<HTMLElement>,
     public injector: Injector,
-    private _focusMonitor: FocusMonitor) {
+    private _focusMonitor: FocusMonitor,
+    controlType: string) {
+
+    this.controlType = controlType;
 
     _focusMonitor.monitor(_elementRef, true).subscribe(origin => {
       if (this.focused && !origin) {
@@ -32,7 +35,7 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
   stateChanges = new Subject<void>();
 
   ngControl: any;
-  controlType: string = 'abstract-mat-form-field-control';
+  controlType: string;
 
   errorState = false;
   touched: boolean = false;
@@ -47,19 +50,26 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
     return this._value;
   }
 
-  set value(value: T | null) {
-    if (value !== this.value) {
-      console.debug('Set Value to "' + value + '" (was "' + this.value +'")');
-      this._value = value;
-      this.setValue(value);
-      this.onChange(value);
+  set value(newValue: T | null) {
+
+    // Hacky solution for empty strings. The signature shouldn't allow them but does.
+    if (!newValue && newValue !== null) {
+      console.log('Trying to set empty string to null' + ' "' + newValue + '"');
+      newValue = null;
+    }
+
+    if (newValue !== this.value) {
+      console.debug('Set value to "' + newValue + '" (was "' + this.value + '")');
+      this._value = newValue;
+      this.setValue(newValue);
+      this.onChange(newValue);
       this.stateChanges.next();
     } else {
-      console.debug('New value and current value are the same. Do nothing');
+      console.debug('New value and current value are the same ("' + this.value + '"). Do nothing');
     }
   }
 
-  _value: T;
+  _value: T | null = null;
 
 
   get empty() {
@@ -108,7 +118,6 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
   private _disabled = false;
 
 
-  // describedBy = '';
   @HostBinding('attr.aria-describedby') describedBy = '';
 
   setDescribedByIds(ids: string[]) {
@@ -117,9 +126,7 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
 
   onContainerClick(event: MouseEvent) {
     console.debug('Container clicked');
-    if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this._elementRef.nativeElement.querySelector('input')!.focus();
-    }
+    this.focus();
   }
 
 
@@ -134,6 +141,8 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
     }
 
     this.setUpControl();
+
+    console.debug('Initialized ' + this.controlType + ' named "' + this.ngControl.name + '"');
   }
 
   ngDoCheck(): void {
