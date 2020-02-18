@@ -19,7 +19,7 @@ export class ErrorHandlerComponent {
   }
 
   showError(msg: string): void {
-    this.snackbar.open(msg, null, {
+    this.snackbar.open(msg, undefined, {
       duration: EntityLibConfig.defaultSnackbarDuration
     });
   }
