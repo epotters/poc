@@ -56,9 +56,10 @@ export class PocApiService implements ApiService {
 
 
   private getHeaders(): HttpHeaders {
+    const authorizationHeader: string | null = this.authService.getAuthorizationHeaderValue();
     return new HttpHeaders({
       'Accept': 'application/json',
-      'Authorization': this.authService.getAuthorizationHeaderValue()
+      'Authorization': (!!authorizationHeader) ? authorizationHeader : ''
     });
   }
 }

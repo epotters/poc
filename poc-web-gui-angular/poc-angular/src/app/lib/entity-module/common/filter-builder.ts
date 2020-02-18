@@ -3,7 +3,7 @@ import {Moment} from "moment";
 import {EntityLibConfig} from "./entity-lib-config";
 import {ColumnConfig, EntityMeta, Identifiable} from "..";
 
-export class FilterBuilder<T extends Identifiable>{
+export class FilterBuilder<T extends Identifiable> {
 
   exactMatchOperator = ':';
   likeOperator = '~';

@@ -123,7 +123,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         }
         console.info(msg);
 
-        this.snackbar.open(msg, null, {
+        this.snackbar.open(msg, undefined, {
           duration: 3000
         });
 
@@ -160,7 +160,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
             console.info('response ', response);
             let msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' is deleted successfully';
             console.info(msg);
-            this.snackbar.open(msg, null, {
+            this.snackbar.open(msg, undefined, {
               duration: 2000
             });
             // Redirect to the list view
