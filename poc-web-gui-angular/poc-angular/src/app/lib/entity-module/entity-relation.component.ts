@@ -1,5 +1,5 @@
-import { ComponentFactoryResolver, Input, OnDestroy, OnInit, Type, ViewChild, Directive } from "@angular/core";
-import {ColumnConfig, EntityMeta} from "./domain/entity-meta.model";
+import {ComponentFactoryResolver, Directive, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
+import {ColumnConfig, EntityMeta, RelationEntity} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
 import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
 import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entrypoint.directive";
@@ -19,7 +19,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
 
-  constructor(
+  protected constructor(
     public meta: EntityMeta<T>,
     public ownerMeta: EntityMeta<S>,
     public relatedMeta: EntityMeta<R>,
@@ -57,16 +57,24 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
     const columnConfig: ColumnConfig = this.ownerMeta.columnConfigs[this.fieldName];
     const relationOverlay = {};
 
-    relationOverlay[columnConfig.editor.relationEntity.owner] = owner;
+
+    if (!columnConfig.editor || !columnConfig.editor.relationEntity) {
+      console.debug('Either the editor or the editor\'s relationEntity is not set. Stopping.');
+      return;
+    }
+
+    const relationEntity: RelationEntity = columnConfig.editor.relationEntity;
+
+    relationOverlay[relationEntity.owner] = owner;
 
     console.debug('loadRelationList: ', owner, relationOverlay, this.ownerMeta, this.fieldName, columnConfig);
 
     const listConfig: ListConfig<T> = {
       title: columnConfig.label,
-      columns: columnConfig.editor.relationEntity.columns,
+      columns: relationEntity.columns,
       overlay: relationOverlay,
-      initialSort: columnConfig.editor.relationEntity.sort,
-      initialSortDirection: columnConfig.editor.relationEntity.sortDirection,
+      initialSort: relationEntity.sort,
+      initialSortDirection: relationEntity.sortDirection,
       headerVisible: false,
       paginatorVisible: false,
       filterVisible: false,

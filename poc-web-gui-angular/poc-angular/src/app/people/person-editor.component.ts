@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import {EntityEditorComponent} from "../lib/entity-module";
+import {EntityEditorComponent, SelectOption} from "../lib/entity-module";
 import {Employment, Organization, Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {employmentMeta} from "../employments/employment-meta";
@@ -23,6 +23,7 @@ import {EmploymentListComponent} from "../employments/employments-list.component
 export class PersonEditorComponent extends EntityEditorComponent<Person> {
 
   personNamePattern: string = '[a-zA-Z -]*';
+  genderOptions: SelectOption[];
 
   constructor(
     public service: PersonService,
@@ -33,6 +34,9 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
     public snackbar: MatSnackBar
   ) {
     super(personMeta, service, router, route, formBuilder, dialog, snackbar);
+
+    this.genderOptions = ((!!personMeta.columnConfigs['gender'].editor &&!!personMeta.columnConfigs['gender'].editor.options) ?
+        personMeta.columnConfigs['gender'].editor.options : []);
   }
 
   buildForm(formBuilder: FormBuilder): FormGroup {

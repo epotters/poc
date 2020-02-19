@@ -30,7 +30,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
 
   dataSource: EntityDataSource<T>;
 
-  constructor(
+  protected constructor(
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
     public route: ActivatedRoute,

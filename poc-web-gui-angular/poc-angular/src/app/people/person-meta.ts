@@ -70,7 +70,7 @@ export const personMeta: EntityMeta<Person> = {
     },
     gender: {
       label: 'M/F',
-      renderer: (entity, value) => {
+      renderer: (entity: Person, value) => {
         for (let option of genderOptions) {
           if (option.value === value) {
             return option.label;

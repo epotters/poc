@@ -27,7 +27,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   debounceTime: number = 300;
 
-  constructor(
+  protected constructor(
     public formBuilder: FormBuilder,
     public injector: Injector
   ) {

@@ -27,7 +27,7 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(
+  protected constructor(
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
     public router: Router,
@@ -46,7 +46,7 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
-    this.dataSource.loadEntities(null, this.meta.defaultSortField, this.meta.defaultSortDirection,
+    this.dataSource.loadEntities([], this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.pageSize);
   }
 
@@ -64,7 +64,7 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
   loadEntitiesPage() {
     this.dataSource.loadEntities(
-      null,
+      [],
       this.activeSort,
       this.sortDirection,
       this.paginator.pageIndex,

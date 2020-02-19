@@ -1,5 +1,5 @@
-import { Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Directive } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {tap} from "rxjs/operators";
@@ -8,7 +8,7 @@ import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.componen
 import {EntityService} from "./entity.service";
 import {EntityMeta, ValidatorDescriptor} from "./domain/entity-meta.model";
 import {BehaviorSubject} from "rxjs";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {Identifiable} from "./domain/identifiable.model";
 
 
@@ -21,11 +21,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   title: string;
   entityForm: FormGroup;
-  entitySubject = new BehaviorSubject<T>(this.entityToLoad); // Used by the relations submodules
+  entitySubject: BehaviorSubject<T> = new BehaviorSubject<T>({} as T); // Used by the relations submodules
 
   enableValidation: boolean = true;
 
-  constructor(
+  protected constructor(
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
     public router: Router,
@@ -78,19 +78,22 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   prefillFromQueryString() {
     this.route.queryParams.subscribe(params => {
       for (let key in params) {
-        if (params.hasOwnProperty(key) && this.entityForm.get(key)) {
-          this.entityForm.get(key).setValue(params[key]);
+        if (params.hasOwnProperty(key) && this.entityForm.hasOwnProperty(key)) {
+          let formControl: AbstractControl | null = this.entityForm.get(key);
+          if (!!formControl && params.hasOwnProperty(key)) {
+            formControl.setValue(params[key]);
+          }
         }
       }
     });
   }
 
 
-  loadNewEntity(entity: T) {
+  loadNewEntity(entity: T | null) {
     if (entity !== null) {
       this.loadEntity(entity.id);
     } else {
-      this.entityToLoad = null;
+      this.entityToLoad = undefined;
       this.clearEditor();
     }
   }
@@ -193,14 +196,10 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     return (!entity || !entity.id);
   }
 
-  getValidators(fieldName: string) {
-    return this.meta.columnConfigs[fieldName].validators;
-  }
-
 
   hasErrorOfType(fieldName: string, validationType: string): boolean {
-    const formControl = this.entityForm.get(fieldName);
-    return (formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
+    const formControl: AbstractControl | null = this.entityForm.get(fieldName);
+    return (!!formControl && formControl.hasError(validationType) && (formControl.dirty || formControl.touched));
   }
 
 
@@ -254,7 +253,8 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
 
   getIdFromPath(): number | null {
-    return parseInt(this.route.snapshot.paramMap.get('id'));
+    const idTxt: string | null = this.route.snapshot.paramMap.get('id');
+    return (!!idTxt) ? parseInt(idTxt) : null;
   }
 
   goToList() {

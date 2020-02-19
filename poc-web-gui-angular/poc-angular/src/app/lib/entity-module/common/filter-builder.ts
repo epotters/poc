@@ -21,7 +21,7 @@ export class FilterBuilder<T extends Identifiable> {
     for (let filter of filters) {
       let operator: string = this.likeOperator;
       let value: string = filter.rawValue;
-      let editorType: string = this.getEditorType(filter.name);
+      let editorType: string | null = this.getEditorType(filter.name);
       if (editorType == 'select') {
         operator = this.exactMatchOperator;
       } else if (editorType == 'date') {
@@ -37,7 +37,7 @@ export class FilterBuilder<T extends Identifiable> {
     return filterParams.join(',');
   }
 
-  private getEditorType(fieldName: string): string {
+  private getEditorType(fieldName: string): string | null {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     if (fieldName.includes('.')) {
       console.debug('Processing nested field', fieldName, this.meta.displayName);
@@ -54,6 +54,6 @@ export class FilterBuilder<T extends Identifiable> {
     if (!columnConfig.editor) {
       return 'text';
     }
-    return (columnConfig.editor.type ? columnConfig.editor.type : columnConfig.filter.type);
+    return (columnConfig.editor.type ? columnConfig.editor.type : (!!columnConfig.filter) ? columnConfig.filter.type : null);
   }
 }

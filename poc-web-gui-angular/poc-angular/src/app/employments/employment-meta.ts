@@ -41,7 +41,7 @@ export const employmentMeta: EntityMeta<Employment> = {
     },
     employer: {
       label: 'Employer',
-      renderer: (entity, value) => {
+      renderer: (entity: Employment, value) => {
         return entity.employer.name;
       },
       editor: {

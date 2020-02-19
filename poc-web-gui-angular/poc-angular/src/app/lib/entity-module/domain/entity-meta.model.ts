@@ -32,7 +32,7 @@ export interface RelatedEntity {
   serviceName: string;
   displayField: string;
 
-  displayOption?(entity?: any): string | undefined;
+  displayOption?(entity?: any): string | null;
 }
 
 export interface RelationEntity {

@@ -12,7 +12,7 @@ import {Identifiable} from "..";
 @Directive()
 export abstract class AbstractMatFormFieldControl<T extends Identifiable> implements OnInit, OnDestroy, DoCheck, ControlValueAccessor, MatFormFieldControl<T> {
 
-  constructor(
+  protected constructor(
     public _elementRef: ElementRef<HTMLElement>,
     public injector: Injector,
     private _focusMonitor: FocusMonitor,

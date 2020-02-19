@@ -4,8 +4,15 @@
     "baseUrl": "./",
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
-//    "strict": true,
-//    "strictPropertyInitialization": false,
+
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "strictBindCallApply": false,
+    "strictFunctionTypes": false,
+
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",

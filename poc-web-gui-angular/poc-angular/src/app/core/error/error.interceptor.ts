@@ -27,10 +27,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     let rethrowError: boolean = true;
+
     return next.handle(request)
       .pipe(
         retry(0),
-        catchError((error: HttpErrorResponse) => {
+        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
           let pocError: PocError;
           if (error.error instanceof ErrorEvent) {
             pocError = {
@@ -61,11 +62,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
           this.errorSubject.next(pocError);
           console.debug(pocError);
-          if (rethrowError) {
-            return throwError(pocError.message);
-          } else {
-            return null;
-          }
+          return throwError(pocError.message);
+          // Observable.throwError(error.statusText);
+          // if (rethrowError) {
+          //   return throwError(pocError.message);
+          // } else {
+          //   return null;
+          // }
         })
       )
   }

@@ -9,7 +9,7 @@ import {merge, Observable, of as observableOf} from "rxjs";
 import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
 
 import {FieldFilter} from "./domain/filter.model";
-import {ColumnConfig, EntityMeta, SortDirectionType} from "./domain/entity-meta.model";
+import {ColumnConfig, EntityMeta, RelatedEntity, SortDirectionType} from "./domain/entity-meta.model";
 
 import {EntityService} from "./entity.service";
 import {EntityDataSource} from "./entity-data-source";
@@ -33,8 +33,8 @@ export interface ListConfig<T> {
 }
 
 export interface EditorViewState {
-  rowElement: HTMLElement,
-  rowIndex: number,
+  rowElement?: HTMLElement,
+  rowIndex?: number,
   transform: string
 }
 
@@ -79,8 +79,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   contextMenuPosition: Position = {x: '0px', y: '0px'};
 
   editorViewState: EditorViewState = {
-    rowElement: null,
-    rowIndex: null,
+    rowElement: undefined,
+    rowIndex: undefined,
     transform: 'translateY(0)'
   };
 
@@ -156,18 +156,18 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     );
   }
 
-  selectEntity(entity: T): void {
+  selectEntity(entity?: T): void {
     console.info(this.meta.displayName + ' selected: ', entity);
     if (this.isManaged) {
       this.entitySelector.emit(entity);
-    } else {
+    } else if (!!entity) {
       this.router.navigate([this.meta.namePlural + '/' + entity.id]);
     }
   }
 
   public newEntity() {
     if (this.isManaged) {
-      this.selectEntity(null);
+      this.selectEntity(undefined);
     } else {
       this.router.navigate([this.meta.apiBase + '/new']);
     }
@@ -323,17 +323,24 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   goToRelatedEntity(fieldName: string, entity: Identifiable) {
-    this.router.navigate([this.meta.columnConfigs[fieldName].editor.relatedEntity.namePlural, entity.id]);
+    const columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
+    const relatedEntity: RelatedEntity | undefined = (!!columnConfig && !!columnConfig.editor) ? columnConfig.editor.relatedEntity : undefined;
+    if (!!relatedEntity) {
+      this.router.navigate([relatedEntity.namePlural, entity.id]);
+    }
   }
 
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     let value = entity[fieldName];
     if (fieldName.indexOf('.')) {
-      let fieldNameParts = fieldName.split('.');
-      value = entity[fieldNameParts.shift()];
-      for (let fieldNamePart of fieldNameParts) {
-        value = value[fieldNamePart];
+      let fieldNameParts: string[] = fieldName.split('.');
+      let key: string | undefined = fieldNameParts.shift();
+      if (!!key) {
+        value = entity[key];
+        for (let fieldNamePart of fieldNameParts) {
+          value = value[fieldNamePart];
+        }
       }
     }
     if (columnConfig.renderer) {
@@ -353,22 +360,25 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     this.editorVisible = false;
     if (this.editorViewState.rowElement) {
       this.editorViewState.rowElement.style.opacity = '1';
-      this.editorViewState.rowElement = null;
+      this.editorViewState.rowElement = undefined;
     }
     this.editorViewState.transform = 'translateY(0)';
   }
 
   private isFieldRelatedEntity(fieldName: string): boolean {
     let config = this.meta.columnConfigs[fieldName];
-    return (config.editor && !!config.editor.relatedEntity);
+    return (!!config.editor && !!config.editor.relatedEntity);
   }
 
   private static fieldNameFromCellElement(cellElement: Element): string {
-    let classes: string[] = cellElement.getAttribute('class').split(' ');
-    for (let idx in classes) {
-      let cls = classes[idx];
-      if (cls.startsWith('mat-column-')) {
-        return cls.split('-')[2];
+    let allClasses: string | null = cellElement.getAttribute('class');
+    if (!!allClasses) {
+      let classes: string[] = allClasses.split(' ');
+      for (let idx in classes) {
+        let cls = classes[idx];
+        if (cls.startsWith('mat-column-')) {
+          return cls.split('-')[2];
+        }
       }
     }
     return '';
