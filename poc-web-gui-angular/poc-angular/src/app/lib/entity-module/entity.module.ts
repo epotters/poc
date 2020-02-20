@@ -11,7 +11,6 @@ import {DialogModule} from "./dialog/dialog.module";
 import {EntityComponentStyleOverrideDirective} from "./common/entity-component-style-override.directive";
 import {EntityLinkDirective} from "./common/entity-link.directive";
 
-import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -21,18 +20,14 @@ import {NgSelectModule} from "@ng-select/ng-select";
     EntityMaterialModule,
     TableRowEditorModule,
     EntitySelectorModule,
-    DialogModule,
-
-    NgSelectModule
+    DialogModule
   ],
   exports: [
     EntityCommonModule,
     EntityMaterialModule,
     TableRowEditorModule,
     EntitySelectorModule,
-    DialogModule,
-
-    NgSelectModule
+    DialogModule
   ],
   declarations: [
     EntityComponentStyleOverrideDirective,

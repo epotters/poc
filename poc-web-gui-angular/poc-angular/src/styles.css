@@ -2,8 +2,6 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'app/people/person-list.component.css';
 
-@import "~@ng-select/ng-select/themes/material.theme.css";
-
 /*
 * You can add global styles to this file, and also import other style files
 */
@@ -106,8 +104,6 @@ footer .right {
 }
 
 
-
-
 /*
 Editor Forms
 TODO: Move to entity-editor.component.css
@@ -132,9 +128,9 @@ TODO: Move to entity-editor.component.css
 }
 
 
-  /*
-  List Table and Editor rows
-  */
+/*
+List Table and Editor rows
+*/
 
 
 .entity-list {
@@ -208,7 +204,6 @@ mat-footer-cell {
 .form-card .mat-form-field-infix {
   width: auto;
 }
-
 
 
 /* Editor moved to a specific row */

@@ -63,20 +63,8 @@
         </mat-form-field>
       </div>
 
-      <div class="form-group">
-
-        <mat-label>Employee (ng-select)</mat-label>
-
-        <ng-select
-          [items]="peopleObservable | async"
-          formControlName="personSelector"
-          bindLabel="lastName"
-          labelForId="person-selector"
-          [typeahead]="personSearch$"
-          autofocus>
-        </ng-select>
-
-        <br/>Selected: {{entityForm.value | json}}
+      <div class="form-row">
+        Selected: {{entityForm.value | json}}
       </div>
     </form>
 
