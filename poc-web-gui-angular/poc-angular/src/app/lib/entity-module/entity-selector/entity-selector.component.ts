@@ -84,7 +84,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     this.value = event.source.value;
   }
 
-  displayWith(controlValue?: T | string | null): string {
+  public displayWith(controlValue?: T | string | null): string {
     console.debug('controlValue to display:', controlValue);
     if (controlValue == null) {
       return '';
