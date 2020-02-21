@@ -52,9 +52,9 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
 
   set value(newValue: T | null) {
 
-    // Hacky solution for empty strings. The signature shouldn't allow them but does.
+    // Hacky solution to avoid empty strings. The signature T | null shouldn't allow them but does.
     if (!newValue && newValue !== null) {
-      console.log('Trying to set empty string to null' + ' "' + newValue + '"');
+      console.debug('New value is an empty string, changing value to null');
       newValue = null;
     }
 
@@ -65,7 +65,7 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
       this.onChange(newValue);
       this.stateChanges.next();
     } else {
-      console.debug('New value and current value are the same ("' + this.value + '"). Do nothing');
+      console.debug('New value and current value are the same ("' + this.value + '"). Do nothing.');
     }
   }
 

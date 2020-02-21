@@ -64,6 +64,10 @@ export class AuthService implements OnInit {
   public completeAuthentication(): Promise<void> {
     return this.userManager.signinRedirectCallback().then(user => {
       this.user = user;
+
+      // Source: https://stackoverflow.com/questions/48446485/retrieving-state-data-with-oidc-client/48447631#48447631
+      // TODO: Check whether this can replace the storing of the returnUrl
+      console.debug('user state:', user.state);
       this.returnToUrl();
     });
   }
