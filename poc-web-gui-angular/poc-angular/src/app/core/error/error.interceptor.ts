@@ -1,8 +1,7 @@
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, Subject, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
 import {Injectable} from "@angular/core";
-import {AuthService} from "../../lib/auth-module";
 
 
 export interface PocError {
@@ -17,9 +16,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
   errorSubject: Subject<PocError> = new Subject<PocError>();
 
-  constructor(
-    // public authService: AuthService
-  ) {
+  constructor() {
     console.debug('Constructing the HttpErrorInterceptor');
   }
 
@@ -56,7 +53,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             } else if (error.status === 401) {
               console.debug('Trying to reauthenticate the user.',
                 'Disabled because it makes the AuthService load before the external config, which it needs');
-              // this.authService.startSilentAuthentication();
+
+            } else if (error.status === 400 && request.url.endsWith('token')) {
+              console.debug('Refreshing the access token failed. Refresh token probably expired.');
+              console.debug('Error:', error);
+
+            } else if (error.message.contains('Error: invalid_grant')) {
+              console.debug('Invalid grant detected. Probably a failed reauthentication...');
             }
 
           }
