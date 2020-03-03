@@ -1,10 +1,10 @@
+import {BehaviorSubject} from "rxjs";
 import {ComponentFactoryResolver, Directive, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
 import {ColumnConfig, EntityMeta, RelationEntity} from "./domain/entity-meta.model";
-import {BehaviorSubject} from "rxjs";
+import {Identifiable} from "./domain/identifiable.model";
 import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
 import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entrypoint.directive";
 import {ListConfig} from "./entity-list.component";
-import {Identifiable} from "./domain/identifiable.model";
 
 
 @Directive()
@@ -39,11 +39,12 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   private activateRelation(): void {
     this.ownerSubject.asObservable().subscribe(owner => {
-        if (owner) {
-          console.debug('Owner loaded, about to build relation', this.fieldName);
+        if (!!owner && !!owner.id) {
+          console.debug('Owner loaded, about to build relation ' + this.fieldName);
           this.visible = true;
           this.loadRelationList(owner);
         } else {
+          this.visible = false;
           console.debug('No owner loaded yet');
         }
       }
@@ -57,16 +58,13 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
     const columnConfig: ColumnConfig = this.ownerMeta.columnConfigs[this.fieldName];
     const relationOverlay = {};
 
-
     if (!columnConfig.editor || !columnConfig.editor.relationEntity) {
       console.debug('Either the editor or the editor\'s relationEntity is not set. Stopping.');
       return;
     }
 
     const relationEntity: RelationEntity = columnConfig.editor.relationEntity;
-
     relationOverlay[relationEntity.owner] = owner;
-
     console.debug('loadRelationList: ', owner, relationOverlay, this.ownerMeta, this.fieldName, columnConfig);
 
     const listConfig: ListConfig<T> = {
