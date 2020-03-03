@@ -82,6 +82,7 @@ export class ConfigService implements AppConfig {
       response_type: "code",
       scope: 'openid profile email',
       redirect_uri: this.clientRoot + '/auth-callback',
+      automaticSilentRenew: true, // Advised against by the authors of oidc-client
       silent_redirect_uri: this.clientRoot + '/auth-silent-callback',
       post_logout_redirect_uri: this.clientRoot + '/auth-logout-callback',
       filterProtocolClaims: true,
