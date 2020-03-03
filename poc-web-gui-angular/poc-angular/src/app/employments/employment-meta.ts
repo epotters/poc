@@ -57,6 +57,7 @@ export const employmentMeta: EntityMeta<Employment> = {
           }
         }
       },
+      filter: {type: 'text'},
       validators: [
         {type: 'required', message: 'Employer is required'}
       ]
@@ -82,6 +83,7 @@ export const employmentMeta: EntityMeta<Employment> = {
           }
         }
       },
+      filter: {type: 'text'},
       validators: [
         {type: 'required', message: 'Employee is required'}
       ]

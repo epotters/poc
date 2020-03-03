@@ -36,17 +36,19 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
         if (!!value && value !== '') {
           let fieldName: string = key;
           let type: any = this.getEditor(key).type;
-
+          let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
           if (type == 'entity-selector') {
             if (!(value as Identifiable)['id']) {
-              console.debug('No related entity to search for selected yet. Skipping.');
+              console.debug('No related entity to search for selected yet. Skipping. ' + value);
               return;
             }
             fieldName = fieldName + '.id';
             value = (value as Identifiable)['id'];
             console.debug('Selected entity converted to id only for filter {', fieldName, ': ', value, '}');
+          } else if (type == 'text' && !!columnConfig.editor && !!columnConfig.editor.relatedEntity) {
+            console.debug('Searching related field ' + fieldName + ' as text');
+            fieldName = fieldName + '.' + columnConfig.editor.relatedEntity.displayField;
           }
-
           fieldFilters.push({
             name: fieldName,
             rawValue: (value as string)
