@@ -10,7 +10,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Observable} from 'rxjs';
 import {MatFormFieldControl} from "@angular/material/form-field";
 import {FocusMonitor} from "@angular/cdk/a11y";
 import {EntityDataSource} from "../entity-data-source";
@@ -39,32 +38,31 @@ import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
 })
 export class EntitySelectorComponent<T extends Identifiable> extends AbstractMatFormFieldControl<T> {
 
-  @Input() debounceTime = 100;
+  static controlType: string = 'entity-selector';
 
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
 
-  @Input() autoActiveFirstOption = false;
-  @Input() emptyText = '';
+  @Input() autoActiveFirstOption: boolean = false;
+  @Input() emptyText: string = '';
+  @Input() debounceTime: number = 100;
+
+  @Input() showClearButton: boolean = true;
 
   @ViewChild('input') searchInput: MatInput;
 
   dataSource: EntityDataSource<T>;
-
-  searchControl = new FormControl();
-  emptyObs: Observable<boolean>;
-  errorMessage: Observable<string | undefined>;
+  searchControl: FormControl = new FormControl();
 
   skipFirstChange: boolean = false;
   firstChange: boolean = true;
-
 
   constructor(
     _elementRef: ElementRef<HTMLElement>,
     public injector: Injector,
     _focusMonitor: FocusMonitor
   ) {
-    super(_elementRef, injector, _focusMonitor, 'entity-selector');
+    super(_elementRef, injector, _focusMonitor, EntitySelectorComponent.controlType);
   }
 
 
@@ -85,7 +83,6 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   }
 
   public displayWith(controlValue?: T | string | null): string {
-    console.debug('controlValue to display:', controlValue);
     if (controlValue == null) {
       return '';
     } else if (typeof controlValue === 'string') {
@@ -115,19 +112,14 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
           this.dataSource.loadEntities([{name: this.meta.defaultSortField, rawValue: controlValue}],
             this.meta.defaultSortField, this.meta.defaultSortDirection, 0, this.meta.defaultPageSize);
         } else if (controlValue.id) {
-
           console.debug('The control value is an entity. Set the value directly');
           this.value = controlValue;
-
-          // console.debug('The control value is an entity. Look it up by its id');
-          // this.dataSource.loadEntities([{name: 'id', rawValue: controlValue.id}],
-          //   this.meta.defaultSortField, this.meta.defaultSortDirection, 0, this.meta.defaultPageSize);
-          //
         } else {
           console.debug('Control value not recognized: "' + controlValue + '". This should not happen.');
         }
       } else {
         console.debug('No control value provided. Clearing the value');
+        this.dataSource.clearEntities();
         this.value = null;
       }
     });

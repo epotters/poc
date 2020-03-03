@@ -343,6 +343,40 @@ mat-header-row {
 }
 
 
+/* Entity Selector */
+
+entity-selector {
+}
+
+entity-selector .mat-input-element {
+  margin-right: -1.6em;
+}
+
+entity-selector .mat-icon-button {
+  width: 16px;
+  height: 16px;
+  line-height: 1em;
+  font-size: 15px;
+}
+
+.mat-form-field entity-selector {
+  line-height: 1em;
+}
+
+entity-selector .mat-icon-button .mat-icon {
+  line-height: 1em;
+}
+
+entity-selector .material-icons {
+  font-size: 15px;
+}
+
+entity-selector .mat-input-element,
+entity-selector .mat-icon-button {
+  display: inline-block;
+}
+
+
 /* Not for production */
 
 .buttons-vertical button {
