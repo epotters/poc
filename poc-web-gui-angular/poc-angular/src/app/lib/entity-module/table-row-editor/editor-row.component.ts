@@ -60,7 +60,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
       let key: string = this.columns[idx];
       let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
       if (columnConfig && columnConfig.rowEditor) {
-        console.debug('rowEditor config found for field', key, ':', columnConfig.rowEditor);
+        // console.debug('rowEditor config found for field', key, ':', columnConfig.rowEditor);
         editorColumns[key] = columnConfig.rowEditor;
       } else if (columnConfig && columnConfig.editor) {
         editorColumns[key] = columnConfig.editor;

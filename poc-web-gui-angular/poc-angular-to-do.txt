@@ -50,6 +50,7 @@ Make a clean separation between read only browsing and editing.
 Enable searching for compound display names like the full name for a person (now only searches for the last name). Requires backend changes.
 Enable searching for years, months and ranges in Date fields
 
+Yin-yang animatie not showing right in Safari
 
 Implement a selection model for the list
 
@@ -105,7 +106,10 @@ Bug: Expression changed error in the beginning when loading an entity list
 
 Bug: Make the autocompletes in the inline-editor lazy loading. Now they load also when there is no need.
 
-Externalize configuration so it can be changed without rebuilding (WIP). Fix error 404 on startup
+Externalize configuration so it can be changed without rebuilding (WIP)
+
+Bug: In the entity-selector, when the autocomplete popup is visible and the user deletes all text in the search box then the popup should disappear but doesn't
+
 
 
 
