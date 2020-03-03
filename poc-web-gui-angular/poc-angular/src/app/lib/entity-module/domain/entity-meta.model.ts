@@ -25,13 +25,11 @@ export interface SelectOption {
   value: string
 }
 
-
 export interface RelatedEntity {
   name: string;
   namePlural: string;
   serviceName: string;
   displayField: string;
-
   displayOption?(entity?: any): string | null;
 }
 
@@ -42,7 +40,6 @@ export interface RelationEntity {
   sort?: string;
   sortDirection?: SortDirectionType;
 }
-
 
 export interface ValidatorDescriptor {
   type: 'required' | 'pattern' | 'maxLength',

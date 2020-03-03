@@ -1,18 +1,18 @@
+import {BehaviorSubject} from "rxjs";
 import {Component, ComponentFactoryResolver, Input} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 import {EntityEditorComponent, SelectOption} from "../lib/entity-module";
+import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
+
 import {Employment, Organization, Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {employmentMeta} from "../employments/employment-meta";
 import {organizationMeta} from "../organizations/organization-meta";
-
 import {PersonService} from "./person.service";
-import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
-import {BehaviorSubject} from "rxjs";
 import {EmploymentListComponent} from "../employments/employments-list.component";
 
 
@@ -35,8 +35,8 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
   ) {
     super(personMeta, service, router, route, formBuilder, dialog, snackbar);
 
-    this.genderOptions = ((!!personMeta.columnConfigs['gender'].editor &&!!personMeta.columnConfigs['gender'].editor.options) ?
-        personMeta.columnConfigs['gender'].editor.options : []);
+    this.genderOptions = ((!!personMeta.columnConfigs['gender'].editor && !!personMeta.columnConfigs['gender'].editor.options) ?
+      personMeta.columnConfigs['gender'].editor.options : []);
   }
 
   buildForm(formBuilder: FormBuilder): FormGroup {
