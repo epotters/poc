@@ -137,10 +137,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   private applyInitialDataState(): void {
-
     this.fieldFilters = this.applyOverlay(this.initialFilters);
     this.filterRow.setFilters(this.fieldFilters);
-
     this.paginator.pageIndex = this.startPage;
     this.paginator.pageSize = this.meta.defaultPageSize;
   }
@@ -187,12 +185,25 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       });
   }
 
-  onKeyEnter(): void {
+  isSaveable() {
+    if (!!this.editorRow && !!this.editorRow.rowEditorForm) {
+      // console.debug('isEditing:', this.isEditing(), 'dirty:', this.editorRow.rowEditorForm.dirty, 'invalid:', this.editorRow.rowEditorForm.invalid);
+      return (this.isEditing() && this.editorRow.rowEditorForm.dirty && !this.editorRow.rowEditorForm.invalid);
+    } else {
+      return false;
+    }
+  }
+
+  checkAndSave(): void {
     if (this.editorRow.rowEditorForm.dirty) {
       this.saveEntity();
     } else {
       this.stopEditing().subscribe();
     }
+  }
+
+  onKeyEnter(): void {
+    this.checkAndSave();
   }
 
   deleteEntity(entity: T): void {

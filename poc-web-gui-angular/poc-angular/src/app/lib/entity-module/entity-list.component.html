@@ -15,9 +15,8 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="saveEntity()" [disabled]="true" color="primary" mat-icon-button>
+    <button (click)="checkAndSave()" [disabled]="!isSaveable()" color="primary" mat-icon-button>
       <mat-icon>done</mat-icon>
-<!--      editorRow.rowEditorForm.dirty || editorRow.rowEditorForm.invalid-->
     </button>
 
     <button (click)="toggleEditor()" color="primary" mat-icon-button>
@@ -141,10 +140,9 @@
     <button (click)="goToRelatedEntity(related, entity[related])" *ngIf="related" mat-menu-item>Go to entity</button>
     <mat-divider *ngIf="related"></mat-divider>
 
-    <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit
-      this {{meta.displayName.toLowerCase()}}</button>
+    <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit inline</button>
     <button (click)="stopEditing().subscribe()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
-    <button (click)="selectEntity(entity)" mat-menu-item>Edit</button>
+    <button (click)="selectEntity(entity)" mat-menu-item>Edit in Editor</button>
     <button (click)="deleteEntity(entity)" mat-menu-item>Delete</button>
   </ng-template>
 </mat-menu>
