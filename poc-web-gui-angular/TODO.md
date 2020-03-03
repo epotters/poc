@@ -1,0 +1,70 @@
+## TO DO ##
+* Possibility to create entities from the entity selector when the entity is not available. Start with text types, create a link directly, maybe use a popup editor
+* Fix required validation for related entities, to actually require an entity, not just text in the input field
+* Add readonly view to list and editor, turning the last one into a detail view
+* Create a common baseclass for inline and full EntityEditor
+* Add unit and e2e tests (using Karma, Protractor)
+* Split off the entity and auth libraries to their own projects
+* Maybe add Angular Schematics to create a basic implementation for an entity type from the cli
+* Small improvement: Sorting should not hide the editor when editing a new entity
+* Sorting by related entities does not work right
+* To consider: Maybe just send the id of related entities instead of the whole entity by changing the value option of the autocompletes
+* Add error styling (red) to validation error tooltips
+* Figure out another way to pass constants to the EntityMaterialModule (not sure this is still a problem)
+* Bug: Redirect to returnUrl after (re)authentication (often) does not work when using lazy module loading
+* Add a table variety of the autocomplete. Example: https://github.com/OasisDigital/angular-material-search-select
+* Add animations to the entity library, to start with animating showing, hiding and moving editor and filter row
+* Clean up the top icons for Editor and Filter. Add possibility to hide it or move it to a menu. Add control icons for show, hide and clear filter and editor
+* Add CardView with paginator to Editor and Detail View
+* Add User Roles
+* Add User Groups
+* Add User Settings
+* Add Detail View and plumbing to switch to it
+* Add State to all components (View, Edit, Search)
+* Swithch to the right state based upon role
+* Make a clean separation between read only browsing and editing.
+* Enable searching for compound display names like the full name for a person (now only searches for the last name). Requires backend changes.
+* Enable searching for years, months and ranges in Date fields
+* Yin-yang animatie not showing right in Safari
+* Implement a selection model for the list
+* Implement batch updates and deletes (either currently found entities or selection)
+* Decide whether to use the EntityManager as the main entrypoint per entity
+* To consider: Make all entity components imolement a common interface with some methods like show and hide
+* To consider: Add displayName to entities (interface Identifiable?, add interface Displayable?)...
+* Fix error when sending oidc post message to iframe on startup
+* Material Theme for Keycloak: same styling as the rest of the application, add the styling to the project
+* Decide what to do with the sidenav, it is no being used right now
+* Fix the links to experimental features in the sidenav: manager, list of cards
+* Refactor: Move the Configuration Service to core
+* Bug: Reloading the page makes the App Component load three times
+* Create a matching Angular Material layout for the Keycloak login screens
+* Move this list to GitLab
+
+
+## DONE ##
+* Loading... smaller. Replaced by yin-yang spinner
+* Styling: search fields without space for a label
+* Bug: ExpressionChangedAfterItHasBeenCheckedError in employments
+* Feature: Show the menu in outline on the startup screen
+* Remove person list styling from EntityListComponent
+* Show lists and editors in dialogs
+* Backend: Search for non-strings, dates and enums
+* Add autocompletes to the editor row.
+* Styling search fields to the same height as table rows
+* Overlay a table row with an editor
+* Bug: Error deleting an organization that has related people. Probably vise versa also.
+* Bug: autocomplete shows options using displayname instead of the function
+* Replace the list plus field in related entity component with an EntityListComponent so more fields can be shown
+* Make EntityListComponent configurable so that columns, visibility of header, paginator, editor and filter are configurable from outside the component
+* sortable, pageable, filterable, editable
+* Bug: stopEditing returns nothing in some cases
+* Remove n-grid
+* Bug: Fix the displayed date format in date fields... again
+* Full Editor: disable and grayout uneditable fields, most notably the id fields
+* Bug: When saving an entity from a list showing only a few fields, the fields that are not included are cleared. They should be left untouched.
+* Bug: Textareas in th inline editor are displayed too large. Use inputs here with proper cutting off content
+* Inline row editor: only save if the form is dirty when pressing enter
+* Bug: Expression changed error in the beginning when loading an entity list
+* Bug: Make the autocompletes in the inline-editor lazy loading. Now they load also when there is no need.
+* Externalize configuration so it can be changed without rebuilding (WIP)
+* Bug: In the entity-selector, when the autocomplete popup is visible and the user deletes all text in the search box then the popup should disappear but doesn't
