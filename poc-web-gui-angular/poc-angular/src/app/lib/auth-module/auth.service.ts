@@ -1,6 +1,6 @@
 import {Injectable, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Profile, User, UserManager} from 'oidc-client';
+import {User, UserManager} from 'oidc-client';
 import {ConfigService} from "../../app-config.service";
 
 export {User};
@@ -64,10 +64,6 @@ export class AuthService implements OnInit {
   public completeAuthentication(): Promise<void> {
     return this.userManager.signinRedirectCallback().then(user => {
       this.user = user;
-
-      // Source: https://stackoverflow.com/questions/48446485/retrieving-state-data-with-oidc-client/48447631#48447631
-      // TODO: Check whether this can replace the storing of the returnUrl
-      console.debug('user state:', user.state);
       this.returnToUrl();
     });
   }
@@ -80,11 +76,7 @@ export class AuthService implements OnInit {
 
   public completeSilentAuthentication(): Promise<void> {
     return this.userManager.signinSilentCallback().then(user => {
-      console.debug('user:', user);
-      this.user = (!!user) ? user : null;
-      console.info('Silent Authentication completed: User set to "' + ((!!this.user) ? this.user.profile.name : 'unknown') + '"');
-      // console.debug('Is returnToUrl needed here or is the callback page loaded in the iframe?');
-      // this.returnToUrl();
+      console.info('Silent Authentication completed');
     });
   }
 
@@ -127,8 +119,12 @@ export class AuthService implements OnInit {
 
 
   private registerEventlisteners() {
-    this.userManager.events.addUserLoaded(function () {
-      console.info('User loaded');
+    this.userManager.events.addUserLoaded(() => {
+      console.debug('User loaded');
+      this.userManager.getUser().then(user => {
+        this.user = user;
+        console.info('User ' + ((!!user) ? user.profile.name : 'unknown') + ' loaded');
+      });
     });
 
     this.userManager.events.addUserUnloaded(function () {
