@@ -76,5 +76,7 @@ export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
   public clearEntities() {
     this.entitiesSubject.next([]);
+    this.totalSubject.next(0);
+    this.loadingSubject.next(false);
   }
 }
