@@ -127,6 +127,10 @@ TODO: Move to entity-editor.component.css
   height: 2.4em !important;
 }
 
+.editor-type-none .mat-form-field-underline .mat-form-field-ripple {
+  display: none;
+}
+
 
 /*
 List Table and Editor rows
@@ -214,20 +218,11 @@ mat-footer-cell {
   width: 100%;
   z-index: 50;
   transform: translateY(0);
-  max-width: 960px; /* Keep in sync with .entity-list max-width*/
-
-  /*box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);*/
-  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
+  max-width: 960px; /* Keep in sync with .entity-list max-width */
 }
 
 
 /* Editor inline */
-
-/* debug */
-/*.editor-inline {*/
-/*  background-color: orange;*/
-/*  opacity: 0.6;*/
-/*}*/
 
 .editor-inline .mat-form-field-infix {
   border-top: 0;
