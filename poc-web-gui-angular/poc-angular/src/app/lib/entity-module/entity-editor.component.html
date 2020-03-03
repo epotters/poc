@@ -16,7 +16,7 @@
 
       <!-- ID-->
       <div>
-        <mat-form-field>
+        <mat-form-field class="editor-type-none">
           <mat-label>ID</mat-label>
           <input formControlName="id" matInput name="id" readonly>
         </mat-form-field>
@@ -30,8 +30,7 @@
   <mat-card-actions align="end">
     <button (click)="deleteEntity()" [disabled]="isNew()" mat-button>Delete</button>
     <button (click)="revert()" [disabled]="!entityForm.dirty" mat-button>Revert</button>
-    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary"
-            mat-button>Save
+    <button (click)="saveEntity()" [disabled]="!entityForm.dirty || entityForm.invalid" color="primary" mat-button>Save
     </button>
   </mat-card-actions>
 
