@@ -4,7 +4,7 @@
     <mat-paginator
       (page)="showEvent($event)"
       [hidePageSize]="true"
-      [length]="dataSource.awaitTotal() | async"
+      [length]="dataSource.total$ | async"
       [pageSize]="pageSize"
       class="list-of-cards-paginator">
     </mat-paginator>
