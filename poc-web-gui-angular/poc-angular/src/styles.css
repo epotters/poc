@@ -353,8 +353,10 @@ entity-selector .mat-input-element {
 }
 
 entity-selector .mat-icon-button {
-  width: 16px;
-  height: 16px;
+  margin-top: -12px;
+  margin-bottom: -6px;
+  width: 1.6em;
+  height: 1.6em;
   line-height: 1em;
   font-size: 15px;
 }
