@@ -4,7 +4,7 @@ import {ColumnConfig, EntityMeta, RelationEntity} from "./domain/entity-meta.mod
 import {Identifiable} from "./domain/identifiable.model";
 import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
 import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entrypoint.directive";
-import {ListConfig} from "./entity-list.component";
+import {EditableListConfig} from "./entity-list.component";
 
 
 @Directive()
@@ -67,7 +67,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
     relationOverlay[relationEntity.owner] = owner;
     console.debug('loadRelationList: ', owner, relationOverlay, this.ownerMeta, this.fieldName, columnConfig);
 
-    const listConfig: ListConfig<T> = {
+    const listConfig: EditableListConfig<T> = {
       title: columnConfig.label,
       columns: relationEntity.columns,
       overlay: relationOverlay,

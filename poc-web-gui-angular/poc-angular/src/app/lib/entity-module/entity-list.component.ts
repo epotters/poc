@@ -29,13 +29,7 @@ export interface ListConfig<T> {
   headerVisible?: boolean;
   paginatorVisible?: boolean;
   filterVisible?: boolean;
-  editorVisible?: boolean;
-}
 
-export interface EditorViewState {
-  rowElement?: HTMLElement,
-  rowIndex?: number,
-  transform: string
 }
 
 export interface DataSourceState {
@@ -49,6 +43,17 @@ export interface DataSourceState {
 export interface Position {
   x: string,
   y: string
+}
+
+
+export interface EditableListConfig<T> extends ListConfig<T>{
+  editorVisible?: boolean;
+}
+
+export interface EditorViewState {
+  rowElement?: HTMLElement,
+  rowIndex?: number,
+  transform: string
 }
 
 @Directive()
@@ -67,9 +72,10 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   @Input() headerVisible: boolean = true;
   @Input() paginatorVisible: boolean = true;
   @Input() filterVisible: boolean = true;
+
   @Input() editorVisible: boolean = false;
 
-  @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
+  @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
 
 
   dataSource: EntityDataSource<T>;
@@ -77,6 +83,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   startPage: number = 0;
 
   contextMenuPosition: Position = {x: '0px', y: '0px'};
+
+  editable: boolean = true;
 
   editorViewState: EditorViewState = {
     rowElement: undefined,
@@ -87,6 +95,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   @ViewChild(EntityEditorActionsComponent) editorActions: EntityEditorActionsComponent<T>;
   @ViewChild(EditorRowComponent) editorRow: EditorRowComponent<T>;
+
   @ViewChild(FilterRowComponent) filterRow: FilterRowComponent<T>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -124,7 +133,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         startWith({}),
         delay(200), // Workarond for "Expression has changed" error
         switchMap(() => {
-          this.stopEditing().subscribe();
+          this.stopEditing().subscribe(); // editable only
           this.loadEntitiesPage();
           return this.dataSource.entities$;
         }),
@@ -143,7 +152,16 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     this.paginator.pageSize = this.meta.defaultPageSize;
   }
 
-  // CRUD
+  selectEntity(entity?: T): void {
+    console.info(this.meta.displayName + ' selected: ', entity);
+    if (this.isManaged) {
+      this.selectedEntity.emit(entity);
+    } else if (!!entity) {
+      this.router.navigate([this.meta.namePlural + '/' + entity.id]);
+    }
+  }
+
+
   loadEntitiesPage(): void {
     this.dataSource.loadEntities(
       this.fieldFilters,
@@ -154,133 +172,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     );
   }
 
-  selectEntity(entity?: T): void {
-    console.info(this.meta.displayName + ' selected: ', entity);
-    if (this.isManaged) {
-      this.entitySelector.emit(entity);
-    } else if (!!entity) {
-      this.router.navigate([this.meta.namePlural + '/' + entity.id]);
-    }
-  }
-
-  public newEntity() {
-    if (this.isManaged) {
-      this.selectEntity(undefined);
-    } else {
-      this.router.navigate([this.meta.apiBase + '/new']);
-    }
-  }
-
-  saveEntity(): void {
-    console.debug('Save this ' + this.meta.displayName.toLowerCase());
-
-    this.editorActions.saveEntity(this.editorRow.rowEditorForm, this.overlay)
-      .subscribe((result: ActionResult<T>) => {
-        if (result.success) {
-          this.stopEditing().subscribe(result => {
-            console.info(result.msg);
-          });
-          this.loadEntitiesPage();
-        }
-      });
-  }
-
-  isSaveable() {
-    if (!!this.editorRow && !!this.editorRow.rowEditorForm) {
-      // console.debug('isEditing:', this.isEditing(), 'dirty:', this.editorRow.rowEditorForm.dirty, 'invalid:', this.editorRow.rowEditorForm.invalid);
-      return (this.isEditing() && this.editorRow.rowEditorForm.dirty && !this.editorRow.rowEditorForm.invalid);
-    } else {
-      return false;
-    }
-  }
-
-  checkAndSave(): void {
-    if (this.editorRow.rowEditorForm.dirty) {
-      this.saveEntity();
-    } else {
-      this.stopEditing().subscribe();
-    }
-  }
-
-  onKeyEnter(): void {
-    this.checkAndSave();
-  }
-
-  deleteEntity(entity: T): void {
-    console.debug('Delete ' + this.meta.displayName);
-    if (this.editorActions) {
-      this.editorActions.deleteEntity(entity).subscribe((result: ActionResult<T>) => {
-        if (result.success) {
-          console.debug('Entity deleted');
-          this.loadEntitiesPage();
-        }
-      });
-    }
-  }
-
-  updateEntities() {
-    if (this.editorActions) {
-      this.editorActions.updateEntities();
-    }
-  }
-
-
-  // Editor
-  deleteEntities() {
-    if (this.editorActions) {
-      this.editorActions.deleteEntities();
-    }
-  }
-
-  toggleEditor(): void {
-    if (this.editorVisible) {
-      this.stopEditing().subscribe();
-    } else {
-      this.editorVisible = true;
-    }
-  }
-
-  public startEditing(entity: T, targetElement: Element, idx: number) {
-    console.debug('Are we currently editing? ' + this.isEditing());
-    if (this.isEditing()) {
-      this.stopEditing().subscribe((result: ActionResult<T>) => {
-        if (result.success) {
-          console.debug('Start editing...');
-          this.showAndPositionEditor(targetElement, idx);
-          this.editorRow.loadEntity(entity);
-          if (result.changes) {
-            this.loadEntitiesPage();
-          }
-        } else {
-          console.debug('Failed to stop editing...', result.msg);
-        }
-      });
-    } else {
-      console.debug('Not editing yet, start at row ' + idx);
-      this.showAndPositionEditor(targetElement, idx);
-      this.editorRow.loadEntity(entity);
-    }
-  }
-
-  public stopEditing(): Observable<ActionResult<T>> {
-    return this.editorActions.handleUnsavedChanges(this.editorRow.rowEditorForm, this.overlay)
-      .pipe(map((result: ActionResult<T>) => {
-        if (result.success) {
-          this.editorRow.rowEditorForm.reset();
-          this.editorRow.rowEditorForm.markAsPristine();
-          this.hideAndResetEditor();
-        }
-        return result;
-      }));
-  }
-
-  isEditing(): boolean {
-    const form = this.editorRow.rowEditorForm;
-    return (form.dirty ||
-      (!!this.editorViewState.rowElement &&
-        !!form.getRawValue() && !!form.getRawValue()['id'] && form.getRawValue()['id'] != null)
-    );
-  }
 
   // Filters
   toggleFilter(): void {
@@ -298,13 +189,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (event.shiftKey) {
       this.selectEntity(entity);
     }
-  }
-
-  onDblClick(event: MouseEvent, entity: T, idx: number) {
-    console.debug('Double click on entity ', entity);
-    event.preventDefault();
-    const targetElement: Element = ((event.target || event.currentTarget) as Element);
-    this.startEditing(entity, targetElement, idx);
   }
 
   onContextMenu(event: MouseEvent, entity: T, idx: number) {
@@ -360,22 +244,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     return value;
   }
 
-  private showAndPositionEditor(targetElement: Element, idx: number) {
-    this.editorVisible = true;
-    this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
-    this.editorViewState.transform = 'translateY(' + (idx * this.editorViewState.rowElement.offsetHeight) + 'px)';
-    this.editorViewState.rowElement.style.opacity = '0.5';
-  }
-
-  private hideAndResetEditor() {
-    this.editorVisible = false;
-    if (this.editorViewState.rowElement) {
-      this.editorViewState.rowElement.style.opacity = '1';
-      this.editorViewState.rowElement = undefined;
-    }
-    this.editorViewState.transform = 'translateY(0)';
-  }
-
   private isFieldRelatedEntity(fieldName: string): boolean {
     let config = this.meta.columnConfigs[fieldName];
     return (!!config.editor && !!config.editor.relatedEntity);
@@ -419,4 +287,151 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   onAnimationEvent(event: AnimationEvent) {
     // console.debug('---> EntityListComponent - AnimationEvent', event);
   }
+
+
+
+  // From here: Editable mode only
+
+  public newEntity() {
+    if (this.isManaged) {
+      this.selectEntity(undefined);
+    } else {
+      this.router.navigate([this.meta.apiBase + '/new']);
+    }
+  }
+
+  saveEntity(): void {
+    console.debug('Save this ' + this.meta.displayName.toLowerCase());
+
+    this.editorActions.saveEntity(this.editorRow.rowEditorForm, this.overlay)
+      .subscribe((result: ActionResult<T>) => {
+        if (result.success) {
+          this.stopEditing().subscribe(result => {
+            console.info(result.msg);
+          });
+          this.loadEntitiesPage();
+        }
+      });
+  }
+
+  isSaveable() {
+    if (!!this.editorRow && !!this.editorRow.rowEditorForm) {
+      // console.debug('isEditing:', this.isEditing(), 'dirty:', this.editorRow.rowEditorForm.dirty, 'invalid:', this.editorRow.rowEditorForm.invalid);
+      return (this.isEditing() && this.editorRow.rowEditorForm.dirty && !this.editorRow.rowEditorForm.invalid);
+    } else {
+      return false;
+    }
+  }
+
+  checkAndSave(): void {
+    if (this.editorRow.rowEditorForm.dirty) {
+      this.saveEntity();
+    } else {
+      this.stopEditing().subscribe();
+    }
+  }
+
+  deleteEntity(entity: T): void {
+    console.debug('Delete ' + this.meta.displayName);
+    if (this.editorActions) {
+      this.editorActions.deleteEntity(entity).subscribe((result: ActionResult<T>) => {
+        if (result.success) {
+          console.debug('Entity deleted');
+          this.loadEntitiesPage();
+        }
+      });
+    }
+  }
+
+  updateEntities() {
+    if (this.editorActions) {
+      this.editorActions.updateEntities();
+    }
+  }
+
+  deleteEntities() {
+    if (this.editorActions) {
+      this.editorActions.deleteEntities();
+    }
+  }
+
+  // Editor Row
+
+  toggleEditor(): void {
+    if (this.editorVisible) {
+      this.stopEditing().subscribe();
+    } else {
+      this.editorVisible = true;
+    }
+  }
+
+  public startEditing(entity: T, targetElement: Element, idx: number) {
+    console.debug('Are we currently editing? ' + this.isEditing());
+    if (this.isEditing()) {
+      this.stopEditing().subscribe((result: ActionResult<T>) => {
+        if (result.success) {
+          console.debug('Start editing...');
+          this.showAndPositionEditor(targetElement, idx);
+          this.editorRow.loadEntity(entity);
+          if (result.changes) {
+            this.loadEntitiesPage();
+          }
+        } else {
+          console.debug('Failed to stop editing...', result.msg);
+        }
+      });
+    } else {
+      console.debug('Not editing yet, start at row ' + idx);
+      this.showAndPositionEditor(targetElement, idx);
+      this.editorRow.loadEntity(entity);
+    }
+  }
+
+  public stopEditing(): Observable<ActionResult<T>> {
+    return this.editorActions.handleUnsavedChanges(this.editorRow.rowEditorForm, this.overlay)
+      .pipe(map((result: ActionResult<T>) => {
+        if (result.success) {
+          this.editorRow.rowEditorForm.reset();
+          this.editorRow.rowEditorForm.markAsPristine();
+          this.hideAndResetEditor();
+        }
+        return result;
+      }));
+  }
+
+  isEditing(): boolean {
+    const form = this.editorRow.rowEditorForm;
+    return (form.dirty ||
+      (!!this.editorViewState.rowElement &&
+        !!form.getRawValue() && !!form.getRawValue()['id'] && form.getRawValue()['id'] != null)
+    );
+  }
+
+  onKeyEnter(): void {
+    this.checkAndSave();
+  }
+
+  onDblClick(event: MouseEvent, entity: T, idx: number) {
+    console.debug('Double click on entity ', entity);
+    event.preventDefault();
+    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+    this.startEditing(entity, targetElement, idx);
+  }
+
+  private showAndPositionEditor(targetElement: Element, idx: number) {
+    this.editorVisible = true;
+    this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
+    this.editorViewState.transform = 'translateY(' + (idx * this.editorViewState.rowElement.offsetHeight) + 'px)';
+    this.editorViewState.rowElement.style.opacity = '0.5';
+  }
+
+  private hideAndResetEditor() {
+    this.editorVisible = false;
+    if (this.editorViewState.rowElement) {
+      this.editorViewState.rowElement.style.opacity = '1';
+      this.editorViewState.rowElement = undefined;
+    }
+    this.editorViewState.transform = 'translateY(0)';
+  }
+
 }

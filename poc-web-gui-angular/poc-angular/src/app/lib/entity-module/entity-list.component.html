@@ -15,20 +15,23 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="checkAndSave()" [disabled]="!isSaveable()" color="primary" mat-icon-button>
+    <button (click)="checkAndSave()" [disabled]="!isSaveable()"  *ngIf="editable"
+            color="primary" matTooltip="Save {{meta.displayName.toLowerCase()}}" mat-icon-button>
       <mat-icon>done</mat-icon>
     </button>
 
-    <button (click)="toggleEditor()" color="primary" mat-icon-button>
+    <button (click)="toggleEditor()" color="primary" *ngIf="editable"
+            matTooltip="{{(editorVisible) ? 'Hide' : 'Show'}} a new {{meta.displayName.toLowerCase()}} editor"  mat-icon-button>
       <mat-icon>add</mat-icon>
     </button>
 
-    <button (click)="toggleFilter()" color="primary" mat-icon-button>
+    <button (click)="toggleFilter()"
+            matTooltip="{{(filterVisible) ? 'Hide' : 'Show'}} the filter" color="primary" mat-icon-button>
       <mat-icon>search</mat-icon>
     </button>
 
 
-    <button #batchActionsMenuTrigger [matMenuTriggerFor]="titlebarMenu" mat-button>
+    <button #batchActionsMenuTrigger [matMenuTriggerFor]="titlebarMenu" mat-icon-button>
       <mat-icon>more_vert</mat-icon>
     </button>
 
@@ -40,23 +43,23 @@
       <mat-divider></mat-divider>
 
 
-      <button (click)="editorRow.clear()" mat-menu-item>
+      <button (click)="editorRow.clear()" *ngIf="editable" mat-menu-item>
         <span>Clear editor</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button (click)="newEntity()" mat-menu-item>
+      <button (click)="newEntity()"  *ngIf="editable" mat-menu-item>
         <span>New {{meta.name}}</span>
       </button>
-      <button (click)="goToManager()" mat-menu-item>
+      <button (click)="goToManager()"  *ngIf="editable" mat-menu-item>
         <span>{{meta.displayName}} Manager</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button (click)="deleteEntities()" mat-menu-item>
+      <button (click)="deleteEntities()"  *ngIf="editable" mat-menu-item>
         <span>Delete {{meta.namePlural}}</span>
       </button>
-      <button (click)="updateEntities()" mat-menu-item>
+      <button (click)="updateEntities()"  *ngIf="editable" mat-menu-item>
         <span>Update {{meta.namePlural}}</span>
       </button>
     </mat-menu>
@@ -93,7 +96,8 @@
                   [columns]="columns"
                   [hidden]="!editorVisible"
                   [meta]="meta"
-                  [style.transform]="editorViewState.transform">
+                  [style.transform]="editorViewState.transform"
+                  [floatLabel]="true">
 
         <!-- These animations cause the initial row editor positioning to fail -->
         <!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
@@ -113,7 +117,7 @@
     <ng-container matColumnDef="paginator">
       <mat-footer-cell *matFooterCellDef>
         <mat-paginator
-          [length]="dataSource.awaitTotal() | async"
+          [length]="dataSource.total$ | async"
           [pageSize]="meta.defaultPageSize">
         </mat-paginator>
       </mat-footer-cell>
@@ -142,7 +146,7 @@
 
     <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit inline</button>
     <button (click)="stopEditing().subscribe()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
-    <button (click)="selectEntity(entity)" mat-menu-item>Edit in Editor</button>
+    <button (click)="selectEntity(entity)" mat-menu-item>Edit in editor</button>
     <button (click)="deleteEntity(entity)" mat-menu-item>Delete</button>
   </ng-template>
 </mat-menu>
