@@ -35,15 +35,6 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
   }
 
 
-  ngOnInit() {
-    super.ngOnInit();
-    // if (this.isNew()) {
-    //   this.prefillFromParameters();
-    // }
-    // this.activateExperimentalRelatedEntityList();
-  }
-
-
   buildForm(formBuilder: FormBuilder): FormGroup {
     return formBuilder.group({
       id: new FormControl(),
