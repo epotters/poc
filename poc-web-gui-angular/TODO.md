@@ -21,15 +21,15 @@
 * Add User Settings
 * Add Detail View and plumbing to switch to it
 * Add State to all components (View, Edit, Search)
-* Swithch to the right state based upon role
+* Switch to the right state based upon role
 * Make a clean separation between read only browsing and editing.
 * Enable searching for compound display names like the full name for a person (now only searches for the last name). Requires backend changes.
 * Enable searching for years, months and ranges in Date fields
-* Yin-yang animatie not showing right in Safari
+* Yin-yang animation not showing right in Safari
 * Implement a selection model for the list
 * Implement batch updates and deletes (either currently found entities or selection)
 * Decide whether to use the EntityManager as the main entrypoint per entity
-* To consider: Make all entity components imolement a common interface with some methods like show and hide
+* To consider: Make all entity components implement a common interface with some methods like show and hide
 * To consider: Add displayName to entities (interface Identifiable?, add interface Displayable?)...
 * Fix error when sending oidc post message to iframe on startup
 * Material Theme for Keycloak: same styling as the rest of the application, add the styling to the project
