@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, Directive } from '@angular/core';
+import {ComponentFactoryResolver, Directive, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 
 import {EntityService} from "./entity.service";
@@ -39,28 +39,16 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   ) {
     console.debug('Constructing the EntityManagerComponent for type ' + this.meta.displayName);
     this.columns = meta[this.columnSetName] || meta.displayedColumns;
-    // console.debug('Columns:', this.columns);
   }
 
   ngOnInit() {
     console.debug('Initializing the EntityManagerComponent for type ' + this.meta.displayName);
   }
 
-  entityFromRoute() {
-    let entityId = this.route.snapshot.paramMap.get('id');
-
-    if (entityId) {
-      // this.loadEntity(entityId);
-    } else {
-      console.info('Editor for a new entity');
-    }
-  }
-
   onEntitySelected($event) {
     console.debug('EntitySelected event received', $event);
     this.selectedEntity = $event;
     this.openDialogWithEditor($event);
-
   }
 
   toggleList() {
@@ -71,11 +59,9 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     this.editorVisible = !this.editorVisible;
   }
 
-
   abstract openDialogWithList();
 
   abstract openDialogWithEditor(entity?: T);
-
 
   openDialogWithEntityComponent(componentToShow: EntityComponentDescriptor): void {
     const dialogRef = this.dialog.open(EntityComponentDialogComponent, {
@@ -98,6 +84,4 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   onAnimationEvent(event: AnimationEvent) {
     console.debug('---> EntityManagerComponent - AnimationEvent', event);
   }
-
-
 }
