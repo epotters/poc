@@ -7,7 +7,7 @@
   spellcheck="false"
   matInput>
 
-<button mat-button *ngIf="showClearButton && !!searchControl.value" (click)="value = null"
+<button *ngIf="showClearButton && !!searchControl.value" (click)="value = null"
         class="clear-button" mat-icon-button aria-label="Clear" matSuffix>
   <mat-icon>close</mat-icon>
 </button>
@@ -21,4 +21,8 @@
     (onSelectionChange)="optionSelected($event)">
     {{ entity ? meta.displayNameRenderer(entity) : '' }}
   </mat-option>
+  <mat-option *ngIf="createButtonVisible" style="display: none"></mat-option>
+  <mat-divider *ngIf="createButtonVisible"></mat-divider>
+  <button (click)="createNew()" *ngIf="createButtonVisible" mat-menu-item>Create
+    new {{meta.displayName.toLowerCase()}}</button>
 </mat-autocomplete>

@@ -6,7 +6,6 @@ import {
   forwardRef,
   Injector,
   Input,
-  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import {FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
@@ -14,8 +13,8 @@ import {MatFormFieldControl} from "@angular/material/form-field";
 import {FocusMonitor} from "@angular/cdk/a11y";
 import {EntityDataSource} from "../entity-data-source";
 import {EntityMeta, EntityService, Identifiable} from "..";
-import {MatInput} from "@angular/material/input";
 import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
+import {Params, Router} from "@angular/router";
 
 
 @Component({
@@ -42,17 +41,15 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
 
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
-
   @Input() autoActiveFirstOption: boolean = false;
-  @Input() emptyText: string = '';
-  @Input() debounceTime: number = 100;
-
   @Input() showClearButton: boolean = true;
-
-  @ViewChild('input') searchInput: MatInput;
+  @Input() emptyText: string = 'Create new entity';
 
   dataSource: EntityDataSource<T>;
   searchControl: FormControl = new FormControl();
+
+  createButtonVisible: boolean = false;
+  lengthToShowCreate: number = 2;
 
   skipFirstChange: boolean = false;
   firstChange: boolean = true;
@@ -60,7 +57,8 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   constructor(
     _elementRef: ElementRef<HTMLElement>,
     public injector: Injector,
-    _focusMonitor: FocusMonitor
+    _focusMonitor: FocusMonitor,
+    public router: Router
   ) {
     super(_elementRef, injector, _focusMonitor, EntitySelectorComponent.controlType);
   }
@@ -90,7 +88,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     } else if (!!controlValue.id) {
       return this.meta.displayNameRenderer(controlValue);
     } else {
-      console.debug('Unrecognized control value', controlValue);
+      console.warn('Unrecognized control value', controlValue);
       return '';
     }
   }
@@ -115,7 +113,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
           console.debug('The control value is an entity. Set the value directly');
           this.value = controlValue;
         } else {
-          console.debug('Control value not recognized: "' + controlValue + '". This should not happen.');
+          console.warn('Control value not recognized: "' + controlValue + '". This should not happen.');
         }
       } else {
         console.debug('No control value provided. Clearing the value');
@@ -123,6 +121,22 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
         this.value = null;
       }
     });
+
+
+    this.dataSource.total$.subscribe(total => {
+      if (total == 0 && typeof this.searchControl.value === 'string' && this.searchControl.value.length > this.lengthToShowCreate) {
+        this.createButtonVisible = true;
+      } else {
+        this.createButtonVisible = false;
+      }
+    });
+  }
+
+
+  createNew() {
+    console.debug(`Create a new ${this.meta.displayName.toLowerCase()}  with value ${this.searchControl.value}`);
+    const queryParams: Params = {[this.meta.defaultSortField]: this.searchControl.value};
+    this.router.navigate([this.meta.apiBase + '/new'], {queryParams: queryParams});
   }
 
 

@@ -78,13 +78,16 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   prefillFromQueryString() {
     this.route.queryParams.subscribe(params => {
       for (let key in params) {
-        if (params.hasOwnProperty(key) && this.entityForm.hasOwnProperty(key)) {
-          let formControl: AbstractControl | null = this.entityForm.get(key);
+        if (params.hasOwnProperty(key) && this.entityForm.controls.hasOwnProperty(key)) {
+          const formControl: AbstractControl | null = this.entityForm.get(key);
           if (!!formControl && params.hasOwnProperty(key)) {
+            console.debug(`Set field ${key} to value ${params[key]}`);
             formControl.setValue(params[key]);
+            formControl.markAsDirty();
           }
         }
       }
+
     });
   }
 
@@ -104,7 +107,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
       tap(entity => {
         console.debug('About to patch the entity loaded');
         this.entityForm.patchValue(entity);
-        console.info(this.meta.displayName + ' loaded in the editor');
+        console.info(`${this.meta.displayName} loaded in the editor`);
         this.entitySubject.next(entity);
       })
     ).subscribe();
