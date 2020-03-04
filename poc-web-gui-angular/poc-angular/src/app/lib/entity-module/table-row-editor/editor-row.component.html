@@ -2,7 +2,7 @@
   <div *ngFor="let key of columns" class="editor-cell mat-column-{{key}}">
     <div [ngSwitch]="getEditor(key).type" class="editor-type-switch">
 
-      <mat-form-field *ngSwitchCase="'none'" [floatLabel]="'never'">
+      <mat-form-field *ngSwitchCase="'none'" [floatLabel]="floatLabel">
         <input formControlName="{{key}}" matInput readonly>
       </mat-form-field>
 
@@ -16,7 +16,7 @@
         >
       </mat-form-field>
 
-      <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="'never'">
+      <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="floatLabel">
         <textarea
           [matTooltipDisabled]="hasErrors(key)" [matTooltip]="getErrorMessage(key)"
           formControlName="{{key}}"
@@ -25,7 +25,7 @@
         ></textarea>
       </mat-form-field>
 
-      <mat-form-field *ngSwitchCase="'select'" [floatLabel]="'never'">
+      <mat-form-field *ngSwitchCase="'select'" [floatLabel]="floatLabel">
         <mat-select formControlName="{{key}}">
           <mat-option [value]="">-</mat-option>
           <mat-option
@@ -34,7 +34,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field *ngSwitchCase="'date'" [floatLabel]="'never'">
+      <mat-form-field *ngSwitchCase="'date'" [floatLabel]="floatLabel">
         <input [matDatepicker]="datePicker" formControlName="{{key}}" matInput>
         <mat-datepicker-toggle [for]="datePicker" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #datePicker></mat-datepicker>

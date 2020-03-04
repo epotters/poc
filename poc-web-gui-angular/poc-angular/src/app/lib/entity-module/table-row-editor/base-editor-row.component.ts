@@ -12,6 +12,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   @Input() readonly meta: EntityMeta<T>;
   @Input() readonly columns: string[];
+  @Input() readonly floatLabel: string = 'never';
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
   editorColumns: Record<string, FieldEditorConfig>;
@@ -129,8 +130,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
         group[key] = new FormControl('', this.buildValidators(key));
       }
     }
-
-
     return this.formBuilder.group(group);
   }
 }
