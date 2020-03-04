@@ -2,16 +2,13 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/com
 import {Observable, Subject, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
 import {Injectable} from "@angular/core";
-
-
-export interface PocError {
-  code: string;
-  message: string;
-}
+import {PocError} from "./errors";
 
 
 // Source: https://scotch.io/bar-talk/error-handling-with-angular-6-tips-and-best-practices192
-@Injectable({providedIn: 'root'})
+@Injectable({
+  providedIn: 'root'
+})
 export class HttpErrorInterceptor implements HttpInterceptor {
 
   errorSubject: Subject<PocError> = new Subject<PocError>();

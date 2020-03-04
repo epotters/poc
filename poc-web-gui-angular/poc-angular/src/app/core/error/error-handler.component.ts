@@ -14,7 +14,6 @@ export class ErrorHandlerComponent {
   constructor(
     // @Inject(ERROR_INJECTOR_TOKEN) public error,
     public snackbar: MatSnackBar) {
-
     console.debug('Constructing the ErrorHandlerComponent');
   }
 
