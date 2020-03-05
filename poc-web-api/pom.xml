@@ -143,7 +143,7 @@
             <version>${jib-maven-plugin.version}</version>
             <configuration>
               <from>
-                <image>azul/zulu-openjdk-alpine:11</image>
+                <image>azul/zulu-openjdk-alpine:11.0.6</image>
                 <auth>
                   <username>${registry-user}</username>
                   <password>${registry-password}</password>
