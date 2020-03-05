@@ -15,6 +15,7 @@
   <name>POC Jobs</name>
 
   <properties>
+    <jackson.version>2.10.3</jackson.version>
     <gedcom4j.version>RELEASE</gedcom4j.version>
   </properties>
 
@@ -54,17 +55,18 @@
       <artifactId>gedcom4j</artifactId>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-yaml</artifactId>
-      <version>2.9.8</version>
+      <version>${jackson.version}</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.8</version>
+      <version>${jackson.version}</version>
     </dependency>
 
   </dependencies>
