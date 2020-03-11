@@ -1,5 +1,3 @@
-import {Observable, Subject} from "rxjs";
-
 import {Component, ComponentFactoryResolver} from "@angular/core";
 import {EntityManagerComponent} from "../lib/entity-module";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
@@ -32,12 +30,10 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
   initialFilters: FieldFilter[];
   listOfCardsVisible: boolean = false;
+  demoFormVisible: boolean = false;
 
   entityForm: FormGroup;
 
-  // dataSource: EntityDataSource<Person>;
-  peopleObservable: Observable<Person[]>;
-  personSearch$ = new Subject<string>();
 
   constructor(
     public service: PersonService,
@@ -56,17 +52,6 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     this.listVisible = false;
 
     this.entityForm = this.buildSelectDemoForm(formBuilder);
-
-  }
-
-
-  ngOnInit() {
-    // this.dataSource = new EntityDataSource<Person>(this.meta, this.service);
-    // this.peopleObservable = this.dataSource.connect();
-    // this.personSearch$.subscribe((term: string) => {
-    //   this.dataSource.loadEntities([{name: 'lastName', rawValue: term}],
-    //     'lastName', 'asc', 0, 50);
-    // });
   }
 
 
@@ -79,6 +64,10 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
   toggleListOfCards() {
     this.listOfCardsVisible = !this.listOfCardsVisible;
+  }
+
+  toggleDemoForm() {
+    this.demoFormVisible = !this.demoFormVisible;
   }
 
 

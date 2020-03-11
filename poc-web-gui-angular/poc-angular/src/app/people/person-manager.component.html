@@ -6,6 +6,7 @@
   <button (click)="toggleEditor()" mat-button>{{(editorVisible) ? 'Hide' : 'Show'}} Editor</button>
 
   <button (click)="toggleListOfCards()" mat-button>{{(listOfCardsVisible) ? 'Hide' : 'Show'}} List of Cards</button>
+  <button (click)="toggleDemoForm()" mat-button>{{(demoFormVisible) ? 'Hide' : 'Show'}} Custom controls</button>
 
   <button (click)="openDialogWithList()" mat-button>List in dialog</button>
   <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
@@ -39,17 +40,18 @@
 </person-list-of-cards>
 
 
-<mat-card class="form-card">
+<mat-card class="form-card" *ngIf="demoFormVisible">
   <mat-card-header>
-    <mat-card-title>Demo form selectors</mat-card-title>
+    <mat-card-title>Custom form controls</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form [formGroup]="entityForm">
 
+      <h4>Entity Selector</h4>
       <div class="form-row">
 
         <mat-form-field>
-          <mat-label>Employee (entity-selector)</mat-label>
+          <mat-label>Employee</mat-label>
           <entity-selector
             formControlName="entitySelector"
             [meta]="meta"
@@ -57,10 +59,10 @@
             [autoActiveFirstOption]=true
             required>
           </entity-selector>
-
           <mat-hint>Choose an employee</mat-hint>
           <mat-error>This field cannot be empty!</mat-error>
         </mat-form-field>
+
       </div>
 
       <div class="form-row">

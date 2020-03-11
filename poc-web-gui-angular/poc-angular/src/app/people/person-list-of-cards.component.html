@@ -1,29 +1,24 @@
 <mat-card class="list-of-cards-card">
 
-  <mat-card-actions>
+  <mat-card-content>
+
     <mat-paginator
       [hidePageSize]="true"
       [length]="dataSource.total$ | async"
       [pageSize]="pageSize"
       class="list-of-cards-paginator">
     </mat-paginator>
-  </mat-card-actions>
 
-
-  <mat-card-content>
-
-    <div class="list-of-cards" fxFill fxLayout="column" fxLayoutAlign="space-between">
-      <div fxLayout="row wrap" class="row-of-cards">
-        <ng-container *ngFor="let person of dataSource.entities$ | async">
-          <person-editor-card
-            [entityToLoad]="person"
-            [isManaged]="true"
-            *ngIf="!(dataSource.loading$ | async)"
-            [@slideInOut]>
-          </person-editor-card>
-        </ng-container>
-      </div>
-    </div>
+    <mat-grid-list cols="2" rowHeight="fit" style="height: 480px">
+      <mat-grid-tile *ngFor="let person of dataSource.entities$ | async">
+        <person-editor-card
+          [entityToLoad]="person"
+          [isManaged]="true"
+          *ngIf="!(dataSource.loading$ | async)"
+          [@slideInOut]>
+        </person-editor-card>
+      </mat-grid-tile>
+    </mat-grid-list>
 
   </mat-card-content>
 
