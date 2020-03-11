@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Silent Refresh page</title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.10.1/oidc-client.min.js"></script>
+<script>
+
+  (new Oidc.UserManager()).signinSilentCallback()
+    .then((user) => {
+      console.info('User was refreshed silently');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+</script>
+</body>
+</html>

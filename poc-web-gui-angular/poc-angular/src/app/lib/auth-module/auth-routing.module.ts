@@ -5,7 +5,6 @@ import {AuthLoginComponent} from "./auth-login.component";
 import {AuthLogoutComponent} from "./auth-logout.component";
 
 import {AuthLoginCallbackComponent} from "./auth-login-callback.component";
-import {AuthSilentCallbackComponent} from "./auth-silent-callback.component";
 import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
 import {AuthGuardService} from "./auth-guard.service";
 
@@ -30,10 +29,6 @@ const routes: Routes = [
   {
     path: 'auth-callback',
     component: AuthLoginCallbackComponent
-  },
-  {
-    path: 'auth-silent-callback',
-    component: AuthSilentCallbackComponent
   },
   {
     path: 'auth-logout-callback',

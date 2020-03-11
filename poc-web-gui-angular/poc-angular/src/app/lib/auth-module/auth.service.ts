@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User, UserManager} from 'oidc-client';
 import {ConfigService} from "../../app-config.service";
@@ -8,7 +8,7 @@ export {User};
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements OnInit {
+export class AuthService {
 
   private readonly userManager: UserManager;
   private user: User | null = null;
@@ -21,13 +21,12 @@ export class AuthService implements OnInit {
     private config: ConfigService) {
     console.info('Constructing the AuthService');
     this.userManager = new UserManager(config.userManagerSettings);
-  }
 
-  ngOnInit(): void {
-    this.userManager.getUser().then(user => {
-      this.user = user;
-    });
     this.registerEventlisteners();
+    // this.userManager.getUser().then(user => {
+    //   console.info(`User "${(user) ? user.profile.name : 'Unknown'}" loaded into application`);
+    //   this.user = user;
+    // });
   }
 
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
@@ -64,6 +63,7 @@ export class AuthService implements OnInit {
   public completeAuthentication(): Promise<void> {
     return this.userManager.signinRedirectCallback().then(user => {
       this.user = user;
+      console.debug('Authentication completed');
       this.returnToUrl();
     });
   }
@@ -119,11 +119,11 @@ export class AuthService implements OnInit {
 
 
   private registerEventlisteners() {
+
     this.userManager.events.addUserLoaded(() => {
-      console.debug('User loaded');
       this.userManager.getUser().then(user => {
         this.user = user;
-        console.info('User ' + ((!!user) ? user.profile.name : 'unknown') + ' loaded');
+        console.info(`User ${((!!user) ? user.profile.name : 'unknown')} loaded`);
       });
     });
 
@@ -132,7 +132,7 @@ export class AuthService implements OnInit {
     });
 
     this.userManager.events.addAccessTokenExpired(function () {
-      console.info('Your access token has expired');
+      console.info('Access token has expired');
     });
 
     this.userManager.events.addSilentRenewError(function () {

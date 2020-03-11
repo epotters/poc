@@ -77,14 +77,14 @@ export class ConfigService implements AppConfig {
 
   private buildUserManagerSettings(): UserManagerSettings {
     return {
-      authority: this.oidcProviderRoot + 'realms/' + this.realm,
+      authority: `${this.oidcProviderRoot}realms/${this.realm}`,
       client_id: this.clientId,
       response_type: "code",
       scope: 'openid profile email',
-      redirect_uri: this.clientRoot + '/auth-callback',
+      redirect_uri: `${this.clientRoot}/auth-callback`,
       automaticSilentRenew: true, // Advised against by the authors of oidc-client
-      silent_redirect_uri: this.clientRoot + '/auth-silent-callback',
-      post_logout_redirect_uri: this.clientRoot + '/auth-logout-callback',
+      silent_redirect_uri: `${location.protocol}//${location.host}/assets/auth-silent-callback.html`,
+      post_logout_redirect_uri: `${this.clientRoot}/auth-logout-callback`,
       filterProtocolClaims: true,
       loadUserInfo: true
     };

@@ -6,4 +6,3 @@ export * from './auth-login.component';
 export * from './auth-login-callback.component';
 export * from './auth-logout.component';
 export * from './auth-logout-callback.component';
-export * from './auth-silent-callback.component';

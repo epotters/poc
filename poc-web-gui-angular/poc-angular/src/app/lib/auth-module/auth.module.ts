@@ -1,12 +1,10 @@
 import {NgModule} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 
 import {AuthRoutingModule} from "./auth-routing.module";
 
 import {AuthLoginComponent} from "./auth-login.component";
 import {AuthLogoutComponent} from "./auth-logout.component";
 import {AuthLoginCallbackComponent} from "./auth-login-callback.component";
-import {AuthSilentCallbackComponent} from "./auth-silent-callback.component";
 import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
 
 import {AuthGuardService} from "./auth-guard.service";
@@ -21,6 +19,7 @@ export interface RouteData {
 
 export interface QueryParams {
   [index: string]: any;
+
   referer: string;
   referrer_uri: string;
 }
@@ -31,14 +30,12 @@ export interface QueryParams {
     AuthLoginComponent,
     AuthLogoutComponent,
     AuthLoginCallbackComponent,
-    AuthSilentCallbackComponent,
     AuthLogoutCallbackComponent
   ],
   entryComponents: [
     AuthLoginComponent,
     AuthLogoutComponent,
     AuthLoginCallbackComponent,
-    AuthSilentCallbackComponent,
     AuthLogoutCallbackComponent
   ],
   providers: [
@@ -67,7 +64,8 @@ export interface QueryParams {
         }
         window.location.href = url;
       }
-    }]
+    }
+  ]
 
 })
 export class AuthModule {
