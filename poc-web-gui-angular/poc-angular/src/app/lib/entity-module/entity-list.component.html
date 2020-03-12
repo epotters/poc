@@ -15,13 +15,14 @@
 
     <span class="fill-remaining-space"></span>
 
-    <button (click)="checkAndSave()" [disabled]="!isSaveable()"  *ngIf="editable"
+    <button (click)="checkAndSave()" [disabled]="!isSaveable()" *ngIf="editable"
             color="primary" matTooltip="Save {{meta.displayName.toLowerCase()}}" mat-icon-button>
       <mat-icon>done</mat-icon>
     </button>
 
     <button (click)="toggleEditor()" color="primary" *ngIf="editable"
-            matTooltip="{{(editorVisible) ? 'Hide' : 'Show'}} a new {{meta.displayName.toLowerCase()}} editor"  mat-icon-button>
+            matTooltip="{{(editorVisible) ? 'Hide' : 'Show'}} a new {{meta.displayName.toLowerCase()}} editor"
+            mat-icon-button>
       <mat-icon>add</mat-icon>
     </button>
 
@@ -48,18 +49,18 @@
       </button>
       <mat-divider></mat-divider>
 
-      <button (click)="newEntity()"  *ngIf="editable" mat-menu-item>
+      <button (click)="newEntity()" *ngIf="editable" mat-menu-item>
         <span>New {{meta.name}}</span>
       </button>
-      <button (click)="goToManager()"  *ngIf="editable" mat-menu-item>
+      <button (click)="goToManager()" *ngIf="editable" mat-menu-item>
         <span>{{meta.displayName}} Manager</span>
       </button>
       <mat-divider></mat-divider>
 
-      <button (click)="deleteEntities()"  *ngIf="editable" mat-menu-item>
+      <button (click)="deleteEntities()" *ngIf="editable" mat-menu-item>
         <span>Delete {{meta.namePlural}}</span>
       </button>
-      <button (click)="updateEntities()"  *ngIf="editable" mat-menu-item>
+      <button (click)="updateEntities()" *ngIf="editable" mat-menu-item>
         <span>Update {{meta.namePlural}}</span>
       </button>
     </mat-menu>
@@ -67,10 +68,11 @@
   </mat-toolbar>
 
 
-  <mat-table [dataSource]="dataSource" matSort
-             matSortActive="{{this.initialSort || this.meta.defaultSortField}}"
-             matSortDirection="{{this.initialSortDirection || this.meta.defaultSortDirection}}"
-             matSortDisableClear>
+  <mat-table
+    [dataSource]="dataSource" matSort
+    matSortActive="{{this.initialSort || this.meta.defaultSortField}}"
+    matSortDirection="{{this.initialSortDirection || this.meta.defaultSortDirection}}"
+    matSortDisableClear>
 
     <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
       <mat-header-cell *matHeaderCellDef>
@@ -82,22 +84,24 @@
     <ng-container *matHeaderRowDef="columns">
       <mat-header-row [class.hidden]="!headerVisible"></mat-header-row>
 
-      <filter-row (editorChange)="onFilterChanged($event)"
-                  [class.editor-inline]="true"
-                  [columns]="columns"
-                  [hidden]="!filterVisible"
-                  [meta]="meta">
+      <filter-row
+        (editorChange)="onFilterChanged($event)"
+        [class.editor-inline]="true"
+        [columns]="columns"
+        [hidden]="!filterVisible"
+        [meta]="meta">
       </filter-row>
 
-      <editor-row (keydown.enter)="onKeyEnter()"
-                  (keydown.escape)="stopEditing()"
-                  [class.editor-inline]="true"
-                  [class.editor-moved]="!!editorViewState.rowElement"
-                  [columns]="columns"
-                  [hidden]="!editorVisible"
-                  [meta]="meta"
-                  [style.transform]="editorViewState.transform"
-                  [floatLabel]="true">
+      <editor-row
+        (keydown.enter)="onKeyEnter()"
+        (keydown.escape)="stopEditing()"
+        [class.editor-inline]="true"
+        [class.editor-moved]="!!editorViewState.rowElement"
+        [columns]="columns"
+        [hidden]="!editorVisible"
+        [meta]="meta"
+        [style.transform]="editorViewState.transform"
+        [floatLabel]="true">
 
         <!-- These animations cause the initial row editor positioning to fail -->
         <!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
@@ -109,10 +113,13 @@
 
     </ng-container>
 
-    <mat-row (click)="onShiftClick($event, row)"
-             (contextmenu)="onContextMenu($event, row, idx)"
-             (dblclick)="onDblClick($event, row, idx)"
-             *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
+    <mat-row
+      (click)="onClick($event, row)"
+      (contextmenu)="onContextMenu($event, row, idx)"
+      (dblclick)="onDblClick($event, row, idx)"
+      (mouseenter)="onMouseEnter($event, row)"
+      (mouseleave)="onMouseLeave($event, row)"
+      *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
 
     <ng-container matColumnDef="paginator">
       <mat-footer-cell *matFooterCellDef>

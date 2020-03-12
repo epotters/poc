@@ -46,7 +46,7 @@ export interface Position {
 }
 
 
-export interface EditableListConfig<T> extends ListConfig<T>{
+export interface EditableListConfig<T> extends ListConfig<T> {
   editorVisible?: boolean;
 }
 
@@ -77,6 +77,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
 
+  selectedClass: string = 'selected';
 
   dataSource: EntityDataSource<T>;
   fieldFilters: FieldFilter[] = [];
@@ -91,7 +92,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     rowIndex: undefined,
     transform: 'translateY(0)'
   };
-
 
   @ViewChild(EntityEditorActionsComponent) editorActions: EntityEditorActionsComponent<T>;
   @ViewChild(EditorRowComponent) editorRow: EditorRowComponent<T>;
@@ -153,7 +153,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   selectEntity(entity?: T): void {
-    console.info(this.meta.displayName + ' selected: ', entity);
+    console.info(`${this.meta.displayName} selected: `, entity);
     if (this.isManaged) {
       this.selectedEntity.emit(entity);
     } else if (!!entity) {
@@ -185,8 +185,28 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   // User actions
-  onShiftClick(event: MouseEvent, entity: T) {
+  onClick(event: MouseEvent, entity: T) {
+
+    let targetElement: Element = ((event.target || event.currentTarget) as Element);
+    let row: Element | null = targetElement.parentElement;
+    if (!!row) {
+      let table: Element | null = row.parentElement;
+      if (!!table) {
+        let previousRow: Element | null = table.querySelector('.' + this.selectedClass);
+        if (!!previousRow) {
+          previousRow.classList.remove(this.selectedClass);
+        }
+      }
+      row.classList.add(this.selectedClass);
+    }
+
+    let fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
+    if (this.isFieldRelatedEntity(fieldName)) {
+      this.goToRelatedEntity(fieldName, entity[fieldName]);
+    }
+
     if (event.shiftKey) {
+      console.debug('onShiftClick');
       this.selectEntity(entity);
     }
   }
@@ -211,6 +231,17 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
 
     this.contextMenuTrigger.openMenu();
+  }
+
+
+  onMouseEnter(event: MouseEvent, entity: T) {
+    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+    targetElement.classList.add('related-entity-link');
+  }
+
+  onMouseLeave(event: MouseEvent, entity: T) {
+    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+    targetElement.classList.remove('related-entity-link');
   }
 
   goToManager() {
@@ -250,17 +281,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   private static fieldNameFromCellElement(cellElement: Element): string {
-    let allClasses: string | null = cellElement.getAttribute('class');
-    if (!!allClasses) {
-      let classes: string[] = allClasses.split(' ');
-      for (let idx in classes) {
-        let cls = classes[idx];
-        if (cls.startsWith('mat-column-')) {
-          return cls.split('-')[2];
-        }
+    let fieldName: string = '';
+    cellElement.classList.forEach((className) => {
+      if (className.startsWith('mat-column-')) {
+        fieldName = className.split('-')[2];
       }
-    }
-    return '';
+    });
+    return fieldName;
   }
 
   private applyOverlay(filters: FieldFilter[]): FieldFilter[] {
@@ -287,7 +314,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   onAnimationEvent(event: AnimationEvent) {
     // console.debug('---> EntityListComponent - AnimationEvent', event);
   }
-
 
 
   // From here: Editable mode only

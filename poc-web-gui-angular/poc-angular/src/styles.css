@@ -192,6 +192,14 @@ mat-row {
   cursor: pointer;
 }
 
+mat-cell.related-entity-link {
+  text-decoration: underline;
+}
+
+mat-row.selected {
+  /*border-bottom-color: rgba(0,0,0,.30);*/
+}
+
 mat-footer-row, mat-row {
   min-height: 30px !important;
 }
