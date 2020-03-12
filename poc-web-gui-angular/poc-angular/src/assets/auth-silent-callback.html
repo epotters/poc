@@ -10,6 +10,9 @@
 
   (new Oidc.UserManager()).signinSilentCallback()
     .then((user) => {
+      if (location.search.indexOf('error=login_required') > 0) {
+        console.debug('Login is required');
+      }
       console.info('User was refreshed silently');
     })
     .catch((err) => {

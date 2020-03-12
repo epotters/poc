@@ -19,9 +19,10 @@ export class AuthGuardService implements CanActivate {
     } else if (this.authService.isExpired()) {
       this.authService.startSilentAuthentication(state.url);
       return false;
+    } else {
+      this.authService.startAuthentication(state.url);
+      return false;
     }
-    this.authService.startAuthentication(state.url);
-    return false;
   }
 
 

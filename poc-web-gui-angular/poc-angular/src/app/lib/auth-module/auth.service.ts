@@ -23,10 +23,6 @@ export class AuthService {
     this.userManager = new UserManager(config.userManagerSettings);
 
     this.registerEventlisteners();
-    // this.userManager.getUser().then(user => {
-    //   console.info(`User "${(user) ? user.profile.name : 'Unknown'}" loaded into application`);
-    //   this.user = user;
-    // });
   }
 
   // Source: https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client
@@ -72,12 +68,6 @@ export class AuthService {
     console.debug('Silent authentication - About to set return url to ' + returnUrl || this.router.url);
     this.setReturnUrl(returnUrl || this.router.url);
     return this.userManager.signinSilent();
-  }
-
-  public completeSilentAuthentication(): Promise<void> {
-    return this.userManager.signinSilentCallback().then(user => {
-      console.info('Silent Authentication completed');
-    });
   }
 
   public startLogout(): Promise<void> {
