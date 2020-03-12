@@ -13,16 +13,6 @@
 
 </mat-toolbar>
 
-<person-list-card
-  (selectedEntity)="onEntitySelected($event)"
-  [columns]="meta.displayedColumns"
-  [filterVisible]="false"
-  [isManaged]="true"
-  [title]="'Managed people list'"
-  *ngIf="listVisible"
-  [@fadeInOut]>
-</person-list-card>
-
 
 <person-editor-card
   [entityToLoad]="selectedEntity"
@@ -32,6 +22,17 @@
   (@fadeInOut.start)="onAnimationEvent($event)"
   (@fadeInOut.done)="onAnimationEvent($event)">
 </person-editor-card>
+
+
+<person-list-card
+  (selectedEntity)="onEntitySelected($event)"
+  [columns]="meta.displayedColumns"
+  [filterVisible]="false"
+  [isManaged]="true"
+  [title]="'Managed people list'"
+  *ngIf="listVisible"
+  [@fadeInOut]>
+</person-list-card>
 
 
 <person-list-of-cards
