@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver} from "@angular/core";
+import {Component, ComponentFactoryResolver, Type} from "@angular/core";
 import {EntityManagerComponent} from "../lib/entity-module";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
@@ -34,6 +34,8 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
   entityForm: FormGroup;
 
+  listComponent: Type<any> = PersonListComponent;
+  editorComponent: Type<any> = PersonEditorComponent;
 
   constructor(
     public service: PersonService,
@@ -58,6 +60,7 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   buildSelectDemoForm(formBuilder: FormBuilder): FormGroup {
     let group = {};
     group['entitySelector'] = new FormControl('');
+    group['entitySelectorList'] = new FormControl('');
     return formBuilder.group(group);
   }
 
@@ -72,7 +75,7 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
 
   openDialogWithList() {
-    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent,
+    const entityListComponentDescriptor = new EntityComponentDescriptor(this.listComponent,
       {
         columns: this.meta.displayedColumnsDialog,
         title: 'Minimal list with all features hidden',
@@ -87,7 +90,7 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
 
   openDialogWithEditor(entity?: Person) {
-    const entityEditorComponentDescriptor = new EntityComponentDescriptor(PersonEditorComponent, {
+    const entityEditorComponentDescriptor = new EntityComponentDescriptor(this.editorComponent, {
       entityToLoad: entity
     });
     this.openDialogWithEntityComponent(entityEditorComponentDescriptor);

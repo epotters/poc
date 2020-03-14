@@ -29,7 +29,7 @@ export class EntityComponentDialogComponent<T extends Identifiable> implements O
     public dialogRef: MatDialogRef<EntityComponentDialogComponent<T>>,
     @Inject(MAT_DIALOG_DATA) public dialogData: DialogData) {
 
-    console.debug(dialogData);
+    console.debug('Constructing EntityComponentDialog with data: ', dialogData);
   }
 
   ngOnInit() {

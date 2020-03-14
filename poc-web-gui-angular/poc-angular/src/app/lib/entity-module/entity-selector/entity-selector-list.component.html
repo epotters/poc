@@ -1,0 +1,17 @@
+
+
+<input
+  type="text"
+  [formControl]="searchControl"
+  [matAutocomplete]="auto"
+  (blur)="blur()"
+  (focus)="focus()"
+  spellcheck="false"
+  matInput>
+
+<mat-autocomplete
+  #auto="matAutocomplete"
+  [panelWidth]="panelWidth">
+  <mat-option style="display: none"></mat-option>
+  <ng-template entity-component-entrypoint></ng-template>
+</mat-autocomplete>

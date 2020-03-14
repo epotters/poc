@@ -29,7 +29,6 @@ export interface ListConfig<T> {
   headerVisible?: boolean;
   paginatorVisible?: boolean;
   filterVisible?: boolean;
-
 }
 
 export interface DataSourceState {

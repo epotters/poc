@@ -64,6 +64,20 @@
           <mat-error>This field cannot be empty!</mat-error>
         </mat-form-field>
 
+        <mat-form-field>
+          <mat-label>Employee from List</mat-label>
+          <entity-selector-list
+            formControlName="entitySelectorList"
+            [meta]="meta"
+            [service]="service"
+            [listComponent]="listComponent"
+            [panelWidth]="'450px'"
+            required>
+          </entity-selector-list>
+          <mat-hint>Choose an employee</mat-hint>
+          <mat-error>This field cannot be empty!</mat-error>
+        </mat-form-field>
+
       </div>
 
       <div class="form-row">
@@ -73,3 +87,4 @@
 
   </mat-card-content>
 </mat-card>
+
