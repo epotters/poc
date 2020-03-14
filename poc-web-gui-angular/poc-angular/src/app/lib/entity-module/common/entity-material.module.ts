@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -24,8 +24,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MAT_DATE_FORMATS} from "@angular/material/core";
 
+import {ENTITY_DATE_FORMATS} from "./entity-lib-config";
 
-import {POC_DATE_FORMATS} from "../../../../environments/common-environment";
+
 
 
 @NgModule({
@@ -78,7 +79,7 @@ import {POC_DATE_FORMATS} from "../../../../environments/common-environment";
     MatTooltipModule
   ],
   providers: [
-    {provide: MAT_DATE_FORMATS, useValue: POC_DATE_FORMATS}
+    {provide: MAT_DATE_FORMATS, useValue: ENTITY_DATE_FORMATS}
   ]
 })
 export class EntityMaterialModule {

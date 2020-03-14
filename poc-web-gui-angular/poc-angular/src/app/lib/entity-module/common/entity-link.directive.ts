@@ -9,7 +9,7 @@ export class EntityLinkDirective<T extends Identifiable> {
   @Input() meta: EntityMeta<T>;
 
   constructor(public element: ElementRef) {
-    let url: string = this.meta.namePlural + '/' + this.entity.id;
-    element.nativeElement.innerHtml = '<a href="' + url + '">' + this.meta.displayNameRenderer(this.entity) + '</a>';
+    let url: string = `${this.meta.namePlural}/${this.entity.id}`;
+    element.nativeElement.innerHtml = `<a href="${url}">${this.meta.displayNameRenderer(this.entity)}</a>`;
   }
 }
