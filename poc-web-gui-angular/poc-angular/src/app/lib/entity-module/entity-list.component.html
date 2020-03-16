@@ -9,7 +9,7 @@
     [service]="service">
   </editor-actions>
 
-  <mat-toolbar class="list-toolbar-top">
+  <mat-toolbar class="list-toolbar-top" *ngIf="toolbarVisible">
 
     <h4>{{title}}</h4>
 
@@ -42,7 +42,6 @@
         <span>Clear filter</span>
       </button>
       <mat-divider></mat-divider>
-
 
       <button (click)="editorRow.clear()" *ngIf="editable" mat-menu-item>
         <span>Clear editor</span>
@@ -100,8 +99,7 @@
         [columns]="columns"
         [hidden]="!editorVisible"
         [meta]="meta"
-        [style.transform]="editorViewState.transform"
-        [floatLabel]="true">
+        [style.transform]="editorViewState.transform">
 
         <!-- These animations cause the initial row editor positioning to fail -->
         <!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
@@ -117,8 +115,6 @@
       (click)="onClick($event, row)"
       (contextmenu)="onContextMenu($event, row, idx)"
       (dblclick)="onDblClick($event, row, idx)"
-      (mouseenter)="onMouseEnter($event, row)"
-      (mouseleave)="onMouseLeave($event, row)"
       *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
 
     <ng-container matColumnDef="paginator">

@@ -26,9 +26,11 @@ export interface ListConfig<T> {
   initialFilters?: FieldFilter[];
   initialSort?: string;
   initialSortDirection?: SortDirectionType;
+  toolbarVisible?: boolean;
   headerVisible?: boolean;
   paginatorVisible?: boolean;
   filterVisible?: boolean;
+  isManaged?: boolean;
 }
 
 export interface DataSourceState {
@@ -58,8 +60,6 @@ export interface EditorViewState {
 @Directive()
 export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
 
-  @Input() isManaged: boolean = false;
-
   @Input() title: string = this.meta.displayNamePlural;
   @Input() columns: string[] = this.meta.displayedColumns;
   @Input() overlay: any = {};
@@ -68,14 +68,15 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   @Input() initialSortDirection?: SortDirectionType = this.meta.defaultSortDirection || 'asc';
   @Input() initialFilters: FieldFilter[] = [];
 
+  @Input() toolbarVisible: boolean = true;
   @Input() headerVisible: boolean = true;
   @Input() paginatorVisible: boolean = true;
   @Input() filterVisible: boolean = true;
-
   @Input() editorVisible: boolean = false;
 
-  @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
+  @Input() isManaged: boolean = false;
 
+  @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
   selectedClass: string = 'selected';
 
   dataSource: EntityDataSource<T>;
@@ -156,7 +157,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (this.isManaged) {
       this.selectedEntity.emit(entity);
     } else if (!!entity) {
-      this.router.navigate([this.meta.namePlural + '/' + entity.id]);
+      this.goToEntityEditor(entity);
     }
   }
 
@@ -186,18 +187,9 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   // User actions
   onClick(event: MouseEvent, entity: T) {
 
-    let targetElement: Element = ((event.target || event.currentTarget) as Element);
-    let row: Element | null = targetElement.parentElement;
-    if (!!row) {
-      let table: Element | null = row.parentElement;
-      if (!!table) {
-        let previousRow: Element | null = table.querySelector('.' + this.selectedClass);
-        if (!!previousRow) {
-          previousRow.classList.remove(this.selectedClass);
-        }
-      }
-      row.classList.add(this.selectedClass);
-    }
+    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+
+    this.markRow(targetElement);
 
     let fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
     if (this.isFieldRelatedEntity(fieldName)) {
@@ -210,13 +202,26 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
+  private markRow(targetElement: Element) {
+    let row: Element | null = targetElement.parentElement;
+    if (!!row) {
+      let table: Element | null = row.parentElement;
+      if (!!table) {
+        let previousRow: Element | null = table.querySelector('.' + this.selectedClass);
+        if (!!previousRow) {
+          previousRow.classList.remove(this.selectedClass);
+        }
+      }
+      row.classList.add(this.selectedClass);
+    }
+  }
+
+
   onContextMenu(event: MouseEvent, entity: T, idx: number) {
     console.debug('Context menu for entity ', entity, 'idx: ' + idx);
     event.preventDefault();
     const targetElement: Element = ((event.target || event.currentTarget) as Element);
-
     let fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
-
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
       entity: entity,
@@ -224,23 +229,19 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       dataIndex: idx,
       columnConfig: this.meta.columnConfigs[fieldName]
     };
-
     if (this.isFieldRelatedEntity(fieldName)) {
       this.contextMenuTrigger.menuData.relatedEntity = fieldName;
     }
-
     this.contextMenuTrigger.openMenu();
   }
 
-
-  onMouseEnter(event: MouseEvent, entity: T) {
-    const targetElement: Element = ((event.target || event.currentTarget) as Element);
-    targetElement.classList.add('related-entity-link');
+  // Navigation
+  goToEntityEditor(entity: T) {
+    this.router.navigate([this.meta.namePlural + '/' + entity.id]);
   }
 
-  onMouseLeave(event: MouseEvent, entity: T) {
-    const targetElement: Element = ((event.target || event.currentTarget) as Element);
-    targetElement.classList.remove('related-entity-link');
+  goToEmptyEditor() {
+    this.router.navigate([this.meta.apiBase + '/new']);
   }
 
   goToManager() {
@@ -254,6 +255,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       this.router.navigate([relatedEntity.namePlural, entity.id]);
     }
   }
+
+  //
 
   getCellDisplayValue(entity: T, fieldName: string): string {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
@@ -321,7 +324,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (this.isManaged) {
       this.selectEntity(undefined);
     } else {
-      this.router.navigate([this.meta.apiBase + '/new']);
+      this.goToEmptyEditor();
     }
   }
 

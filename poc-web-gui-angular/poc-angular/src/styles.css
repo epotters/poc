@@ -140,12 +140,18 @@ List Table and Editor rows
 .entity-list {
   width: 100%;
   max-width: 960px;
-  /* border: 1px solid green; */ /* debug */
-
   margin-left: auto;
   margin-right: auto;
 }
 
+mat-row {
+  cursor: pointer;
+}
+
+mat-table mat-row:hover,
+mat-table mat-row:focus {
+  background: rgba(0, 0, 0, .04);
+}
 
 .entity-list .progress {
   opacity: 0;
@@ -155,20 +161,17 @@ List Table and Editor rows
   opacity: 1;
 }
 
-
 .mat-cell,
 .mat-header-cell,
 .mat-footer-cell,
 .editor-cell,
 .filter-cell {
   flex: 3;
-  /* border-right: 1px solid red; */ /* debug */
 }
 
 .mat-footer-cell {
   justify-content: flex-end;
 }
-
 
 .mat-cell,
 .mat-footer-cell,
@@ -188,16 +191,12 @@ input.mat-input-element,
 }
 
 
-mat-row {
-  cursor: pointer;
-}
-
 mat-cell.related-entity-link {
   text-decoration: underline;
 }
 
 mat-row.selected {
-  /*border-bottom-color: rgba(0,0,0,.30);*/
+  /* border-bottom-color: rgba(0,0,0,.30); */
 }
 
 mat-footer-row, mat-row {
@@ -211,7 +210,6 @@ mat-footer-row, mat-row {
 mat-footer-cell {
   text-align: right;
 }
-
 
 .form-card .mat-form-field-infix {
   width: auto;
@@ -242,7 +240,9 @@ mat-footer-cell {
   height: 1.6em;
 }
 
-.editor-row.editor-inline {
+.editor-row.editor-inline,
+.editor-moved,
+.editor-row {
   min-height: 30px !important;
 }
 
@@ -356,35 +356,48 @@ mat-header-row {
 entity-selector {
 }
 
-entity-selector .mat-input-element {
+entity-selector .mat-input-element,
+entity-selector-list .mat-input-element {
   margin-right: -1.6em;
 }
 
-entity-selector .mat-icon-button {
+entity-selector .mat-icon-button,
+entity-selector-list .mat-icon-button {
   margin-top: -12px;
-  margin-bottom: -6px;
+  margin-bottom: -4px;
   width: 1.6em;
   height: 1.6em;
   line-height: 1em;
   font-size: 15px;
 }
 
-.mat-form-field entity-selector {
+.mat-form-field entity-selector,
+.mat-form-field-list entity-selector {
   line-height: 1em;
 }
 
-entity-selector .mat-icon-button .mat-icon {
+entity-selector .mat-icon-button .mat-icon,
+entity-selector-list .mat-icon-button .mat-icon {
   line-height: 1em;
 }
 
-entity-selector .material-icons {
+entity-selector .material-icons,
+entity-selector-list .material-icons {
   font-size: 15px;
 }
 
 entity-selector .mat-input-element,
-entity-selector .mat-icon-button {
+entity-selector .mat-icon-button,
+entity-selector-list .mat-input-element,
+entity-selector-list .mat-icon-button {
   display: inline-block;
 }
+
+.mat-autocomplete-panel mat-table mat-row:hover,
+.mat-autocomplete-panel mat-table mat-row:focus {
+  background: rgba(0, 0, 0, .04);
+}
+
 
 
 /* Not for production */

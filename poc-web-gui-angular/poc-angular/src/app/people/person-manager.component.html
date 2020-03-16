@@ -57,7 +57,7 @@
             formControlName="entitySelector"
             [meta]="meta"
             [service]="service"
-            [autoActiveFirstOption]=true
+            [autoActiveFirstOption]="true"
             required>
           </entity-selector>
           <mat-hint>Choose an employee</mat-hint>
@@ -70,6 +70,7 @@
             formControlName="entitySelectorList"
             [meta]="meta"
             [service]="service"
+            [columns]="meta.displayedColumnsDialog"
             [listComponent]="listComponent"
             [panelWidth]="'450px'"
             required>

@@ -31,7 +31,7 @@ mat-cell.mat-column-id {
 
 [component-style='entity-list'] .mat-column-firstName,
 [component-style='entity-list'] .editor-cell.mat-column-firstName {
-  flex: 2;
+  flex: 3;
 }
 
 [component-style='entity-list'] .mat-column-prefix,
@@ -46,7 +46,7 @@ mat-cell.mat-column-id {
 
 [component-style='entity-list'] .mat-column-birthDate,
 [component-style='entity-list'] .editor-cell.mat-column-birthDate {
-  flex: 2;
+  flex: 3;
 }
 
 
