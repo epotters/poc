@@ -2,24 +2,26 @@ import {
   ChangeDetectionStrategy,
   Component,
   ComponentFactoryResolver,
+  ComponentRef,
   ElementRef,
   forwardRef,
   Injector,
   Input,
-  OnInit,
+  OnDestroy,
   Type,
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
 import {MatFormFieldControl} from "@angular/material/form-field";
 import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {EntityMeta, EntityService, Identifiable} from "..";
+import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Identifiable, ListConfig} from "..";
 import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
 import {FocusMonitor} from "@angular/cdk/a11y";
 import {Router} from "@angular/router";
 import {EntityComponentEntryPointDirective} from "../dialog/entity-component-entrypoint.directive";
 import {EntityComponentDescriptor} from "../dialog/entity-component-dialog.component";
 import {PersonListComponent} from "../../../people/person-list.component";
+import {MatAutocompleteTrigger} from "@angular/material/autocomplete";
 
 
 @Component({
@@ -40,21 +42,25 @@ import {PersonListComponent} from "../../../people/person-list.component";
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EntitySelectorListComponent<T extends Identifiable> extends AbstractMatFormFieldControl<T> implements OnInit {
+export class EntitySelectorListComponent<T extends Identifiable> extends AbstractMatFormFieldControl<T>
+  implements OnDestroy {
 
   static controlType: string = 'entity-selector-list';
 
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
+  @Input() showClearButton: boolean = true;
   @Input() listComponent: Type<any>;
   @Input() panelWidth: string = '300px';
+  @Input() columns: string[] = [];
 
   initialFilters: any = [];
 
   searchControl: FormControl = new FormControl();
+  listComponentRef: ComponentRef<EntityListComponent<T>>;
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
-
+  @ViewChild(MatAutocompleteTrigger, {static: true}) autocompleteTrigger: MatAutocompleteTrigger;
 
   constructor(
     _elementRef: ElementRef<HTMLElement>,
@@ -64,71 +70,106 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
     private componentFactoryResolver: ComponentFactoryResolver
   ) {
     super(_elementRef, injector, _focusMonitor, EntitySelectorListComponent.controlType);
-
     console.debug('Constructing a EntitySelectorListComponent');
   }
 
 
-  ngOnInit(): void {
-    super.ngOnInit();
-    console.debug('Initializing a EntitySelectorListComponent');
-    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent,
-      {
-        columns: this.meta.displayedColumnsDialog,
-        title: 'Selector list',
-        headerVisible: false,
-        paginatorVisible: false,
-        filterVisible: false,
-        editorVisible: false,
-        initialFilters: this.initialFilters
-      });
-    this.loadListComponent(entityListComponentDescriptor);
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.listComponentRef.destroy();
   }
 
-// (selectedEntity)="onEntitySelected($event)"
+
+  private activateControl() {
+
+    const listConfig: EditableListConfig<T> = {
+      columns: this.columns,
+      title: 'Selector list',
+      toolbarVisible: false,
+      headerVisible: false,
+      paginatorVisible: false,
+      filterVisible: true,
+      editorVisible: false,
+      initialFilters: this.initialFilters,
+      isManaged: true
+    };
+
+    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent, listConfig);
+    this.loadListComponent(entityListComponentDescriptor);
+  }
 
 
   private loadListComponent(componentDescriptor: EntityComponentDescriptor) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentDescriptor.component);
     this.componentEntrypoint.viewContainerRef.clear();
-    const componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
+    this.listComponentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
+    // Copy the configuration
     for (let key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
         console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
-        (<EntityComponentDescriptor>componentRef.instance as any)[key] = componentDescriptor.data[key];
+        this.listComponentRef.instance[key] = componentDescriptor.data[key];
       }
     }
 
-    componentRef.instance.selectedEntity.subscribe(entity => {
-      console.log('Entity selected', entity);
+    // Override the list's onclick method
+    this.listComponentRef.instance.onClick = function (event: MouseEvent, entity: T) {
+      this.selectEntity(entity);
+    };
+
+    // Listen for selected entities
+    this.listComponentRef.instance.selectedEntity.subscribe(entity => {
+      console.debug('Entity selected', entity);
+      this.value = entity;
     });
   }
 
-  onEntitySelected($event) {
-    console.debug('Inside onEntitySelected');
+
+  public displayWith(controlValue?: T | string | null): string {
+    if (controlValue == null) {
+      return '';
+    } else if (typeof controlValue === 'string') {
+      return controlValue;
+    } else if (!!controlValue.id) {
+      return this.meta.displayNameRenderer(controlValue);
+    } else {
+      console.warn('Unrecognized control value', controlValue);
+      return '';
+    }
   }
 
 
   // Implementations
-  blur(): void {
+  focus() {
+    this.focused = true;
   }
 
-  focus(): void {
+  blur() {
+    this.onTouched();
+    this.focused = false;
   }
 
   isEmpty(): boolean {
-    return false;
+    return !this.searchControl.value && !this.value;
   }
 
   setControlDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.searchControl.disable();
+    } else {
+      this.searchControl.enable();
+    }
   }
 
   setUpControl(): void {
+    this.activateControl();
   }
 
-  setValue(value): void {
+  setValue(value: T) {
+    if (this.searchControl.value !== value) {
+      this.searchControl.setValue(value);
+      this.autocompleteTrigger.closePanel();
+    }
   }
-
 
 }

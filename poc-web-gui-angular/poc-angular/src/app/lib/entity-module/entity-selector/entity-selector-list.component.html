@@ -9,9 +9,15 @@
   spellcheck="false"
   matInput>
 
+<button *ngIf="showClearButton && !!searchControl.value" (click)="value = null"
+        class="clear-button" mat-icon-button aria-label="Clear" matSuffix>
+  <mat-icon>close</mat-icon>
+</button>
+
 <mat-autocomplete
   #auto="matAutocomplete"
-  [panelWidth]="panelWidth">
+  [panelWidth]="panelWidth"
+  [displayWith]="displayWith.bind(this)">
   <mat-option style="display: none"></mat-option>
   <ng-template entity-component-entrypoint></ng-template>
 </mat-autocomplete>
