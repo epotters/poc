@@ -36,7 +36,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   private static final Pattern YEAR_PATTERN = Pattern.compile("^((19|2[0-9])[0-9]{2})$");
   private static final Pattern YEAR_MONTH_PATTERN = Pattern.compile("^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])$");
-
+  private static final Pattern MONTH_DAY_PATTERN = Pattern.compile("^(0[1-9]|1[012])-([0123][0-9])$");
 
   public QuerystringFilterTranslator(Class<T> genericType) {
     this.genericType = genericType;
@@ -73,7 +73,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
           String[] fieldNames = fieldName.split("\\.");
           if (fieldNames.length > 2) {
-            log.warn("Only one level of nesting is supported");
+            log.warn("Only one level of nesting is supported. Skipping \"" + fieldName + "\"");
           }
 
           try {
@@ -129,6 +129,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
       log.debug("Match on a partial date (year) " + year);
       builder.with(fieldName, ">", LocalDate.of(year, 1, 1).minusDays(1));
       builder.with(fieldName, "<", LocalDate.of(year, 12, 31).plusDays(1));
+
       return true;
     }
 
@@ -141,6 +142,15 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
       builder.with(fieldName, ">", ym.atDay(1).minusDays(1));
       builder.with(fieldName, "<", ym.atEndOfMonth().plusDays(1));
 
+      return true;
+    }
+
+    if (MONTH_DAY_PATTERN.matcher(rawValue).matches()) {
+      String[] parts = rawValue.split("-");
+      int month = Integer.parseInt(parts[0]);
+      int day = Integer.parseInt(parts[1]);
+      LocalDate tst = LocalDate.of(2004, month, day);
+      log.debug("Match on a partial date (month-day combination) " + rawValue + ". Unimplemented, skipping");
       return true;
     }
     return false;

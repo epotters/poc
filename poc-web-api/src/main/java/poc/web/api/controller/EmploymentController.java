@@ -43,6 +43,7 @@ public class EmploymentController {
       @RequestParam(value = "filters", required = false) final String filters) throws IOException {
 
     if (filters != null & !"".equals(filters)) {
+      log.debug("Filters to translate " + filters);
       Specification<Employment> spec = employmentFilterTanslator.translate(filters);
       return employmentRepository.findAll(spec, pageable);
     } else {

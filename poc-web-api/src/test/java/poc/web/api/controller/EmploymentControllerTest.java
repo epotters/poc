@@ -23,16 +23,16 @@ import poc.web.api.config.TestRestConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestRestConfiguration.class)
-@WebMvcTest(controllers = OrganizationController.class)
-public class OrganizationControllerTest {
+@WebMvcTest(controllers = EmploymentController.class)
+public class EmploymentControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
 
   @MockBean
   private PersonRepository personRepository;
@@ -49,10 +49,25 @@ public class OrganizationControllerTest {
   @MockBean
   PlatformTransactionManager transactionManager;
 
+  @Autowired
+  private MockMvc mockMvc;
+
   @Test
+  @WithMockUser(value = "testuser")
   public void contexLoads() throws Exception {
     assertThat(mockMvc).isNotNull();
-    assertThat(organizationRepository).isNotNull();
+    assertThat(employmentRepository).isNotNull();
+  }
+
+
+  @Test
+  @WithMockUser(value = "testuser")
+  public void filterByPartialDate() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders
+        .get("/api/employments/?filters=startDate:2020")
+        .accept(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
   }
 
 
@@ -60,7 +75,7 @@ public class OrganizationControllerTest {
   @WithMockUser(value = "testuser")
   public void getSchema() throws Exception {
 
-    String uri = "/api/organizations/schema";
+    String uri = "/api/employments/schema";
 
     assert (mockMvc != null);
 

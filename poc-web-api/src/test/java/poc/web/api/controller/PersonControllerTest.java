@@ -7,13 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.PlatformTransactionManager;
+import poc.core.repository.EmploymentRepository;
+import poc.core.repository.OrganizationRepository;
 import poc.core.repository.PersonRepository;
+import poc.web.api.PocWebApi;
 import poc.web.api.config.TestRestConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,8 +28,8 @@ import static org.junit.Assert.assertEquals;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestRestConfiguration.class)
-@WebMvcTest(PersonController.class)
+@ContextConfiguration(classes = {TestRestConfiguration.class, PocWebApi.class})
+@WebMvcTest(controllers = PersonController.class)
 public class PersonControllerTest {
 
   @Autowired
@@ -32,14 +38,26 @@ public class PersonControllerTest {
   @MockBean
   private PersonRepository personRepository;
 
+  @MockBean
+  private OrganizationRepository organizationRepository;
+
+  @MockBean
+  private EmploymentRepository employmentRepository;
+
+  @MockBean
+  private JwtDecoder jwtDecoder;
+
+  @MockBean
+  PlatformTransactionManager transactionManager;
+
   @Test
   public void contexLoads() throws Exception {
     assertThat(mockMvc).isNotNull();
     assertThat(personRepository).isNotNull();
   }
 
-
   @Test
+  @WithMockUser(value = "testuser")
   public void getSchema() throws Exception {
 
     String uri = "/api/people/schema";

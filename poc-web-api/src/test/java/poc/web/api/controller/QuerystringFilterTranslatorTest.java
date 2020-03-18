@@ -44,9 +44,28 @@ public class QuerystringFilterTranslatorTest {
     spec = filterTanslator.translate(queryString);
     Assert.assertNotNull(spec);
 
+    queryString = "birthDate:12-05";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNull(spec);
+
     queryString = "gender:blah";
     spec = filterTanslator.translate(queryString);
     Assert.assertNull(spec);
+  }
+
+
+  @Test
+  public void translateEmployments() {
+
+    QuerystringFilterTranslator<Employment> filterTanslator = new QuerystringFilterTranslator<>(Employment.class);
+
+    String queryString = "startDate:2020";
+    Specification<Employment> spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+
+    queryString = "endDate:1995-12";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
   }
 
 
@@ -72,6 +91,15 @@ public class QuerystringFilterTranslatorTest {
   }
 
 
+  @Test
+  public void translateListOfFilters() {
+    QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>(Person.class);
+    List<String> filters = Arrays.asList("firstName~eel,lastName~pot", "firstName~jaco,lastName~bijk", "gender=FEMALE", "age>25,city:Utrecht");
+    Specification<Person> spec = filterTanslator.translate(filters);
+    Assert.assertNotNull(spec);
+  }
+
+
   private void conversionTest(QuerystringFilterTranslator<Person> filterTanslator, String fieldName, String rawValue, Class expectedClass) {
     try {
       Object typedValue = filterTanslator.mapStringValueToObject(fieldName, rawValue);
@@ -81,15 +109,6 @@ public class QuerystringFilterTranslatorTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-
-  @Test
-  public void translateListOfFilters() {
-    QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>(Person.class);
-    List<String> filters = Arrays.asList("firstName~eel,lastName~pot", "firstName~jaco,lastName~bijk", "gender=FEMALE", "age>25,city:Utrecht");
-    Specification<Person> spec = filterTanslator.translate(filters);
-    Assert.assertNotNull(spec);
   }
 
 }
