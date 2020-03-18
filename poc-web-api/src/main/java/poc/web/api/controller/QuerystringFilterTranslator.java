@@ -34,8 +34,8 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   private static final SearchCriteria ALWAYS_TRUE_CRITERIA = new SearchCriteria("1", SearchOperation.EQUALITY, "1");
 
-  private static final Pattern YEAR_PATTERN = Pattern.compile("^((19|2[0-9])[0-9]{2})$");
-  private static final Pattern YEAR_MONTH_PATTERN = Pattern.compile("^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])$");
+  private static final Pattern YEAR_PATTERN = Pattern.compile("^([012][0-9]{3})$");
+  private static final Pattern YEAR_MONTH_PATTERN = Pattern.compile("^([012][0-9]{3})-(0[1-9]|1[012])$");
   private static final Pattern MONTH_DAY_PATTERN = Pattern.compile("^(0[1-9]|1[012])-([0123][0-9])$");
 
   public QuerystringFilterTranslator(Class<T> genericType) {
