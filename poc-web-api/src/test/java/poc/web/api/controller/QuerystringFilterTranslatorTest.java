@@ -66,6 +66,10 @@ public class QuerystringFilterTranslatorTest {
     queryString = "endDate:1995-12";
     spec = filterTanslator.translate(queryString);
     Assert.assertNotNull(spec);
+
+    queryString = "employer.id:4,startDate:1980";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
   }
 
 
