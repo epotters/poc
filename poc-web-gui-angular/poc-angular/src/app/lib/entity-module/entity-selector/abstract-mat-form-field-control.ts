@@ -13,14 +13,14 @@ import {Identifiable} from "..";
 export abstract class AbstractMatFormFieldControl<T extends Identifiable> implements OnInit, OnDestroy, DoCheck, ControlValueAccessor, MatFormFieldControl<T> {
 
   protected constructor(
-    public _elementRef: ElementRef<HTMLElement>,
+    public elementRef: ElementRef<HTMLElement>,
+    private focusMonitor: FocusMonitor,
     public injector: Injector,
-    private _focusMonitor: FocusMonitor,
     controlType: string) {
 
     this.controlType = controlType;
 
-    _focusMonitor.monitor(_elementRef, true).subscribe(origin => {
+    focusMonitor.monitor(elementRef, true).subscribe(origin => {
       if (this.focused && !origin) {
         this.onTouched();
       }
@@ -154,7 +154,7 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
 
   ngOnDestroy() {
     this.stateChanges.complete();
-    this._focusMonitor.stopMonitoring(this._elementRef);
+    this.focusMonitor.stopMonitoring(this.elementRef);
   }
 
 

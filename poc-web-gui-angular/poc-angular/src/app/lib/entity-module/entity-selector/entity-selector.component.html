@@ -7,7 +7,7 @@
   spellcheck="false"
   matInput>
 
-<button *ngIf="showClearButton && !!searchControl.value" (click)="value = null"
+<button *ngIf="showClearButton && !!searchControl.value" (click)="clearValue()"
         class="clear-button" mat-icon-button aria-label="Clear" matSuffix>
   <mat-icon>close</mat-icon>
 </button>

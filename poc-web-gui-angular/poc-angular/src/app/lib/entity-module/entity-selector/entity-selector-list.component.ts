@@ -12,16 +12,21 @@ import {
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
-import {MatFormFieldControl} from "@angular/material/form-field";
+
 import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Identifiable, ListConfig} from "..";
-import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
-import {FocusMonitor} from "@angular/cdk/a11y";
-import {Router} from "@angular/router";
-import {EntityComponentEntryPointDirective} from "../dialog/entity-component-entrypoint.directive";
-import {EntityComponentDescriptor} from "../dialog/entity-component-dialog.component";
-import {PersonListComponent} from "../../../people/person-list.component";
+import {MatFormFieldControl} from "@angular/material/form-field";
 import {MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {Router} from "@angular/router";
+import {FocusMonitor} from "@angular/cdk/a11y"
+
+import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
+import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Identifiable} from "..";
+import {
+  EntityComponentDescriptor,
+  EntityComponentEntryPointDirective
+} from "../common/entity-component-entrypoint.directive";
+
+
 
 
 @Component({
@@ -50,26 +55,26 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
   @Input() showClearButton: boolean = true;
+
   @Input() listComponent: Type<any>;
   @Input() panelWidth: string = '300px';
   @Input() columns: string[] = [];
 
-  initialFilters: any = [];
-
   searchControl: FormControl = new FormControl();
   listComponentRef: ComponentRef<EntityListComponent<T>>;
+  initialFilters: any = [];
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
   @ViewChild(MatAutocompleteTrigger, {static: true}) autocompleteTrigger: MatAutocompleteTrigger;
 
   constructor(
-    _elementRef: ElementRef<HTMLElement>,
+    elementRef: ElementRef<HTMLElement>,
+    focusMonitor: FocusMonitor,
     public injector: Injector,
-    _focusMonitor: FocusMonitor,
     public router: Router,
     private componentFactoryResolver: ComponentFactoryResolver
   ) {
-    super(_elementRef, injector, _focusMonitor, EntitySelectorListComponent.controlType);
+    super(elementRef, focusMonitor, injector, EntitySelectorListComponent.controlType);
     console.debug('Constructing a EntitySelectorListComponent');
   }
 
@@ -78,7 +83,6 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
     super.ngOnDestroy();
     this.listComponentRef.destroy();
   }
-
 
   private activateControl() {
 
@@ -94,7 +98,7 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
       isManaged: true
     };
 
-    const entityListComponentDescriptor = new EntityComponentDescriptor(PersonListComponent, listConfig);
+    const entityListComponentDescriptor = new EntityComponentDescriptor(this.listComponent, listConfig);
     this.loadListComponent(entityListComponentDescriptor);
   }
 
@@ -104,7 +108,7 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
     this.componentEntrypoint.viewContainerRef.clear();
     this.listComponentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
-    // Copy the configuration
+    // Copy the configuration to the component
     for (let key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
         console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
@@ -124,6 +128,7 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
     });
   }
 
+  // Common
 
   public displayWith(controlValue?: T | string | null): string {
     if (controlValue == null) {
@@ -136,6 +141,10 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
       console.warn('Unrecognized control value', controlValue);
       return '';
     }
+  }
+
+  clearValue(): void {
+    this.value = null;
   }
 
 

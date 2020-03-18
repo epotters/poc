@@ -55,12 +55,12 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
   firstChange: boolean = true;
 
   constructor(
-    _elementRef: ElementRef<HTMLElement>,
+    elementRef: ElementRef<HTMLElement>,
+    focusMonitor: FocusMonitor,
     public injector: Injector,
-    _focusMonitor: FocusMonitor,
     public router: Router
   ) {
-    super(_elementRef, injector, _focusMonitor, EntitySelectorComponent.controlType);
+    super(elementRef, focusMonitor, injector, EntitySelectorComponent.controlType);
   }
 
 
@@ -139,6 +139,9 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     this.router.navigate([this.meta.apiBase + '/new'], {queryParams: queryParams});
   }
 
+  clearValue(): void {
+    this.value = null;
+  }
 
   // Custom methods
   setValue(value: T) {

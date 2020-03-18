@@ -1,18 +1,20 @@
 import {ComponentFactoryResolver, Directive, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
-
-import {EntityService} from "./entity.service";
-import {EntityMeta} from "./domain/entity-meta.model";
 import {ActivatedRoute} from "@angular/router";
-import {EntityComponentDescriptor, EntityComponentDialogComponent} from "./dialog/entity-component-dialog.component";
-import {EntityDataSource} from "./entity-data-source";
-import {EntityLibConfig} from "./common/entity-lib-config";
-import {DataSourceState} from "./entity-list.component";
+
+import {EntityMeta} from "./domain/entity-meta.model";
 import {Identifiable} from "./domain/identifiable.model";
+import {EntityService} from "./entity.service";
+import {EntityDataSource} from "./entity-data-source";
+import {DataSourceState} from "./entity-list.component";
+import {EntityLibConfig} from "./common/entity-lib-config";
+import {EntityComponentDescriptor} from "./common/entity-component-entrypoint.directive";
+import {EntityComponentDialogComponent} from "./dialog/entity-component-dialog.component";
+
 
 
 @Directive()
-export abstract class EntityManagerComponent<T extends Identifiable> implements OnInit {
+export abstract class EntityManagerComponent<T extends Identifiable> {
 
   @Input() dataSourceState: DataSourceState;
   @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
@@ -28,7 +30,6 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   listVisible: boolean = true;
   editorVisible: boolean = true;
 
-  dataSource: EntityDataSource<T>;
 
   protected constructor(
     public meta: EntityMeta<T>,
@@ -37,18 +38,14 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     public componentFactoryResolver: ComponentFactoryResolver,
     public dialog: MatDialog
   ) {
-    console.debug('Constructing the EntityManagerComponent for type ' + this.meta.displayName);
+    console.debug(`Constructing the EntityManagerComponent for type ${this.meta.displayName}`);
     this.columns = meta[this.columnSetName] || meta.displayedColumns;
   }
 
-  ngOnInit() {
-    console.debug('Initializing the EntityManagerComponent for type ' + this.meta.displayName);
-  }
-
-  onEntitySelected($event) {
-    console.debug('EntitySelected event received', $event);
-    this.selectedEntity = $event;
-    this.openDialogWithEditor($event);
+  onEntitySelected(entity: T) {
+    console.debug('EntitySelected event received', entity);
+    this.selectedEntity = entity;
+    this.openDialogWithEditor(entity);
   }
 
   toggleList() {
@@ -82,6 +79,6 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   }
 
   onAnimationEvent(event: AnimationEvent) {
-    console.debug('---> EntityManagerComponent - AnimationEvent', event);
+    console.debug('EntityManagerComponent - AnimationEvent', event);
   }
 }

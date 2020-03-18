@@ -2,14 +2,12 @@ import {Component, ComponentFactoryResolver, Type} from "@angular/core";
 import {EntityManagerComponent} from "../lib/entity-module";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-
 import {MatDialog} from "@angular/material/dialog";
 
-import {EntityComponentDescriptor} from "../lib/entity-module/dialog/entity-component-dialog.component";
 import {FieldFilter} from "../lib/entity-module/domain/filter.model";
+import {EntityComponentDescriptor} from "../lib/entity-module/common/entity-component-entrypoint.directive";
 
 import {PocAnimations} from "../app-animations";
-
 import {Person} from "../core/domain/";
 import {personMeta} from "./person-meta";
 import {PersonService} from "./person.service";

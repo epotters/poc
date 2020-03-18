@@ -1,10 +1,12 @@
 import {BehaviorSubject} from "rxjs";
-import {ComponentFactoryResolver, Directive, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
+import {ComponentFactoryResolver, ComponentRef, Directive, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
 import {ColumnConfig, EntityMeta, RelationEntity} from "./domain/entity-meta.model";
 import {Identifiable} from "./domain/identifiable.model";
-import {EntityComponentDescriptor} from "./dialog/entity-component-dialog.component";
-import {EntityComponentEntryPointDirective} from "./dialog/entity-component-entrypoint.directive";
-import {EditableListConfig} from "./entity-list.component";
+import {
+  EntityComponentDescriptor,
+  EntityComponentEntryPointDirective
+} from "./common/entity-component-entrypoint.directive";
+import {EditableListConfig, EntityListComponent} from "./entity-list.component";
 
 
 @Directive()
@@ -15,6 +17,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   fieldName: string;
   component: Type<any>;
+  componentRef: ComponentRef<EntityListComponent<T>>;
   visible: boolean = false;
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
@@ -35,6 +38,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
   ngOnDestroy(): void {
     this.ownerSubject.complete();
+    this.componentRef.destroy();
   }
 
   private activateRelation(): void {
@@ -79,21 +83,16 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
       editorVisible: false
     };
 
-    console.debug('listConfig', listConfig);
-
-    const componentDescriptor: EntityComponentDescriptor =
-      new EntityComponentDescriptor(this.component, listConfig);
-
-    console.debug(this.componentEntrypoint);
-
+    const componentDescriptor: EntityComponentDescriptor = new EntityComponentDescriptor(this.component, listConfig);
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentDescriptor.component);
     this.componentEntrypoint.viewContainerRef.clear();
-    const componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
+    this.componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
+    // Copy the configuration to the component
     for (let key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
-        console.debug('Set @input', key, 'to value', componentDescriptor.data[key]);
-        (<EntityComponentDescriptor>componentRef.instance as any)[key] = componentDescriptor.data[key];
+        console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
+        this.componentRef.instance[key] = componentDescriptor.data[key];
       }
     }
   }

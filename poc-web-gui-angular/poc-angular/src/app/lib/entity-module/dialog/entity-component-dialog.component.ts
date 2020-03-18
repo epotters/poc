@@ -1,13 +1,11 @@
-import {Component, ComponentFactoryResolver, Inject, OnInit, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, ComponentRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {EntityComponentEntryPointDirective} from "./entity-component-entrypoint.directive";
-import {Identifiable} from "..";
+import {
+  EntityComponentDescriptor,
+  EntityComponentEntryPointDirective
+} from "../common/entity-component-entrypoint.directive";
+import {EntityListComponent, Identifiable} from "..";
 
-
-export class EntityComponentDescriptor {
-  constructor(public component: Type<any>, public data: any) {
-  }
-}
 
 export interface DialogData {
   componentFactoryResolver: ComponentFactoryResolver;
@@ -21,7 +19,9 @@ export interface DialogData {
   selector: 'entity-component-dialog',
   templateUrl: 'entity-component-dialog.component.html'
 })
-export class EntityComponentDialogComponent<T extends Identifiable> implements OnInit {
+export class EntityComponentDialogComponent<T extends Identifiable> implements OnDestroy, OnInit {
+
+  private componentRef: ComponentRef<EntityListComponent<T>>;
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
 
@@ -36,6 +36,10 @@ export class EntityComponentDialogComponent<T extends Identifiable> implements O
     this.loadComponent(this.dialogData.componentDescriptor);
   }
 
+  ngOnDestroy() {
+    this.componentRef.destroy();
+  }
+
   onCancel(): void {
     this.dialogRef.close();
   }
@@ -43,12 +47,13 @@ export class EntityComponentDialogComponent<T extends Identifiable> implements O
   loadComponent(componentDescriptor: EntityComponentDescriptor) {
     const componentFactory = this.dialogData.componentFactoryResolver.resolveComponentFactory(componentDescriptor.component);
     this.componentEntrypoint.viewContainerRef.clear();
-    const componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
+    this.componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
+    // Copy the configuration to the component
     for (let key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
-        console.debug('Set @input', key, 'to value', componentDescriptor.data[key]);
-        (<EntityComponentDescriptor>componentRef.instance as any)[key] = componentDescriptor.data[key];
+        console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
+        this.componentRef.instance[key] = componentDescriptor.data[key];
       }
     }
   }
