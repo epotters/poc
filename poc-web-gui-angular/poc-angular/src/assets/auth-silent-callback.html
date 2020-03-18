@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Silent Refresh page</title>
+  <title>Silent Refresh Page</title>
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.10.1/oidc-client.min.js"></script>
@@ -13,7 +13,7 @@
       if (location.search.indexOf('error=login_required') > 0) {
         console.debug('Login is required');
       }
-      console.info('User was refreshed silently');
+      console.info('User was refreshed silently', new Date());
     })
     .catch((err) => {
       console.error(err);

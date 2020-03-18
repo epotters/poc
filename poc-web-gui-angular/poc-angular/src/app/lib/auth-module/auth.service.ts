@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {User, UserManager} from 'oidc-client';
 import {ConfigService} from "../../app-config.service";
+import * as moment from 'moment';
 
 export {User};
 
@@ -13,6 +14,7 @@ export class AuthService {
   private readonly userManager: UserManager;
   private user: User | null = null;
   private readonly returnUrlKey: string = 'auth:redirect';
+  private readonly logDateFormat: string = 'YYYY-MM-DD HH:mm:ss';
 
 
   constructor(
@@ -111,6 +113,9 @@ export class AuthService {
       this.userManager.getUser().then(user => {
         this.user = user;
         console.info(`User ${((!!user) ? user.profile.name : 'unknown')} loaded`);
+
+        console.info(`${moment().format(this.logDateFormat)}: User ${((!!user) ? user.profile.name : 'unknown')} loaded`);
+
       });
     });
 
