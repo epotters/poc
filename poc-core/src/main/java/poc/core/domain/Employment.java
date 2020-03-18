@@ -38,4 +38,11 @@ public class Employment {
 
   private LocalDate endDate;
 
+  public Employment(Person employee, Organization employer, LocalDate startDate, LocalDate endDate) {
+    setEmployee(employee);
+    setEmployer(employer);
+    setStartDate(startDate);
+    setEndDate(endDate);
+  }
+
 }

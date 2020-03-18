@@ -33,11 +33,13 @@ export const employmentMeta: EntityMeta<Employment> = {
     },
     startDate: {
       label: 'Start date',
-      editor: {type: 'date'}
+      editor: {type: 'date'},
+      filter: {type: 'text'}
     },
     endDate: {
       label: 'End date',
-      editor: {type: 'date'}
+      editor: {type: 'date'},
+      filter: {type: 'text'}
     },
     employer: {
       label: 'Employer',

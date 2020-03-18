@@ -21,7 +21,6 @@ export class AuthService {
     private config: ConfigService) {
     console.info('Constructing the AuthService');
     this.userManager = new UserManager(config.userManagerSettings);
-
     this.registerEventlisteners();
   }
 

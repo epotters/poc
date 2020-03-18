@@ -28,9 +28,17 @@ public class BaseSpecification<T> implements Specification<T> {
       case NEGATION:
         return builder.notEqual(root.get(criteria.getKey()), criteria.getValue());
       case GREATER_THAN:
-        return builder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString());
+        if (criteria.getValue() instanceof Comparable) {
+          return builder.greaterThan(root.get(criteria.getKey()), (Comparable) criteria.getValue());
+        } else {
+          return builder.greaterThan(root.get(criteria.getKey()), criteria.getValue().toString());
+        }
       case LESS_THAN:
-        return builder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString());
+        if (criteria.getValue() instanceof Comparable) {
+          return builder.lessThan(root.get(criteria.getKey()), (Comparable) criteria.getValue());
+        } else {
+          return builder.lessThan(root.get(criteria.getKey()), criteria.getValue().toString());
+        }
       case LIKE:
         return builder.like(root.get(criteria.getKey()), criteria.getValue().toString());
       case STARTS_WITH:

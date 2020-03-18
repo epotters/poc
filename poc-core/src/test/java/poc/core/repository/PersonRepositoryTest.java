@@ -42,7 +42,7 @@ public class PersonRepositoryTest {
 
 
   @Test
-  public void savePeople() throws Exception {
+  public void findPeople() throws Exception {
 
     List<Person> peopleFound;
 

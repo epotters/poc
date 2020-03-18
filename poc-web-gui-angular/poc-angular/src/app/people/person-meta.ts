@@ -87,6 +87,9 @@ export const personMeta: EntityMeta<Person> = {
       label: 'Date of birth',
       editor: {
         type: 'date'
+      },
+      filter: {
+        type: 'text'
       }
     },
     birthPlace: {

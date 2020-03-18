@@ -1,12 +1,12 @@
 import {FieldFilter} from "../domain/filter.model";
-import {Moment} from "moment";
-import {EntityLibConfig} from "./entity-lib-config";
 import {ColumnConfig, EntityMeta, Identifiable} from "..";
+import {DateFilterHelper, SearchDate} from "./date-filter-helper";
 
 export class FilterBuilder<T extends Identifiable> {
 
-  exactMatchOperator = ':';
-  likeOperator = '~';
+  static exactMatchOperator = ':';
+  static likeOperator = '~';
+  static rangeDenominator: string = '...';
 
   constructor(public meta: EntityMeta<T>) {
   }
@@ -19,16 +19,21 @@ export class FilterBuilder<T extends Identifiable> {
     }
 
     for (let filter of filters) {
-      let operator: string = this.likeOperator;
+      let operator: string = FilterBuilder.likeOperator;
       let value: string = filter.rawValue;
       let editorType: string | null = this.getEditorType(filter.name);
       if (editorType == 'select') {
-        operator = this.exactMatchOperator;
+        operator = FilterBuilder.exactMatchOperator;
       } else if (editorType == 'date') {
-        operator = this.exactMatchOperator;
-        value = (<Moment>(<any>filter.rawValue)).format(EntityLibConfig.dateFormat);
+        operator = FilterBuilder.exactMatchOperator;
+        // value = (<Moment>(<any>filter.rawValue)).format(EntityLibConfig.dateFormat);
+
+        const dateFilterHelper = new DateFilterHelper();
+        const dateSearch: SearchDate = dateFilterHelper.processDateTerm(filter.rawValue);
+        value = (dateSearch.valid && dateSearch.normalizedTerm) ? dateSearch.normalizedTerm : '';
+
       } else if (filter.name === 'id' || filter.name.endsWith('.id')) {
-        operator = this.exactMatchOperator;
+        operator = FilterBuilder.exactMatchOperator;
       }
       filterParams.push(filter.name + operator + value);
     }
@@ -39,7 +44,6 @@ export class FilterBuilder<T extends Identifiable> {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     if (fieldName.includes('.')) {
       console.debug('Processing nested field', fieldName, this.meta.displayName);
-
       let fieldNameParts: string[] = fieldName.split('.');
       if (fieldNameParts.length != 2) {
         console.warn(this.meta.displayName, 'Only one level of nesting supported', fieldName);

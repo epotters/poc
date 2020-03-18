@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 
+
 @Slf4j
 public class SpecificationsBuilder<T> {
 
@@ -17,7 +18,7 @@ public class SpecificationsBuilder<T> {
   }
 
 
-  public SpecificationsBuilder with(String key, String operation, Object value) {
+  public SpecificationsBuilder<T> with(String key, String operation, Object value) {
     SearchOperation op = SearchOperation.getSimpleOperation(operation.charAt(0));
     if (op != null) {
       params.add(new SearchCriteria(key, op, value));
@@ -26,7 +27,7 @@ public class SpecificationsBuilder<T> {
   }
 
 
-  public SpecificationsBuilder with(String key, String operation, Object value, String prefix, String suffix) {
+  public SpecificationsBuilder<T> with(String key, String operation, Object value, String prefix, String suffix) {
     SearchOperation op = SearchOperation.getSimpleOperation(operation.charAt(0));
     if (op != null) {
       if (op == SearchOperation.EQUALITY) {
@@ -55,7 +56,7 @@ public class SpecificationsBuilder<T> {
       if (param.getKey().contains(".")) {
         String[] fieldNames = param.getKey().split("\\.");
         if (fieldNames.length != 2) {
-          log.warn("Only one level of nesting is supported");
+          log.warn("Only one level of nesting is supported. Skipping \"" + param.getKey() + "\"");
           continue;
         }
         param.setKey(fieldNames[1]);
