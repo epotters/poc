@@ -74,7 +74,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     });
 
     dialogRef.afterClosed().subscribe(entity => {
-      console.log('The dialog was closed');
+      console.debug('The dialog was closed');
       if (entity) {
         this.dialogEntity = entity;
       }

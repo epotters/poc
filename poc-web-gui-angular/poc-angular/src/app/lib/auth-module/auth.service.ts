@@ -71,10 +71,8 @@ export class AuthService {
 
   public startLogout(): Promise<void> {
     this.route.url.subscribe(url => {
-      console.debug(url);
-      console.log('About to set return url for logout to: ' + url.join('/'));
       this.setReturnUrl(url.join('/'));
-      console.debug('Return url was set to ' + this.getReturnUrl());
+      console.info(`Return url was set to ${this.getReturnUrl()}`);
     });
     return this.userManager.signoutRedirect();
   }

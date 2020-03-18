@@ -33,12 +33,12 @@ export class AppComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     let consoleStyle = ['display: block', 'padding: 2px', 'font-weight: bold', 'font-size: 14px'].join(";");
-    console.log('%c☯ ' + this.configService.applicationDisplayName + ' ☯', consoleStyle);
+    console.info('%c☯ ' + this.configService.applicationDisplayName + ' ☯', consoleStyle);
 
     this.errorHandlerService.awaitErrors().subscribe((error) => {
         console.debug('Inside subscription to awaitErrors');
         if (error != null) {
-          console.log('Received error with code ' + error.code);
+          console.info('Received error with code ' + error.code);
           this.openSnackBar(error.message, 'Close');
         }
       }

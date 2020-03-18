@@ -71,7 +71,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
   ngOnDestroy(): void {
-    console.log('Destroying EntityEditorComponent');
     this.entitySubject.complete();
   }
 
@@ -132,8 +131,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         this.snackbar.open(msg, undefined, {
           duration: 3000
         });
-
-        console.log('savedEntity:', savedEntity);
 
         this.entityForm.patchValue(savedEntity, {emitEvent: false});
         this.entitySubject.next(savedEntity);

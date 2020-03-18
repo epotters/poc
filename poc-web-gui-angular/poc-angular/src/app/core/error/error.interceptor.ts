@@ -48,7 +48,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               return next.handle(requestModified);
 
             } else if (error.status === 401) {
-              console.debug('Trying to reauthenticate the user.',
+              console.debug('API call unauthorized. Trying to reauthenticate the user.',
                 'Disabled because it makes the AuthService load before the external config, which it needs');
 
             } else if (error.status === 400 && request.url.endsWith('token')) {
