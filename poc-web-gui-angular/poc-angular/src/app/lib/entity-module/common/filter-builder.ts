@@ -1,12 +1,9 @@
 import {FieldFilter} from "../domain/filter.model";
 import {ColumnConfig, EntityMeta, Identifiable} from "..";
 import {DateFilterHelper, SearchDate} from "./date-filter-helper";
+import {FilterConstants} from "./filter-contants";
 
 export class FilterBuilder<T extends Identifiable> {
-
-  static exactMatchOperator = ':';
-  static likeOperator = '~';
-  static rangeDenominator: string = '...';
 
   constructor(public meta: EntityMeta<T>) {
   }
@@ -19,21 +16,18 @@ export class FilterBuilder<T extends Identifiable> {
     }
 
     for (let filter of filters) {
-      let operator: string = FilterBuilder.likeOperator;
+      let operator: string = FilterConstants.likeOperator;
       let value: string = filter.rawValue;
       let editorType: string | null = this.getEditorType(filter.name);
       if (editorType == 'select') {
-        operator = FilterBuilder.exactMatchOperator;
+        operator = FilterConstants.exactMatchOperator;
       } else if (editorType == 'date') {
-        operator = FilterBuilder.exactMatchOperator;
-        // value = (<Moment>(<any>filter.rawValue)).format(EntityLibConfig.dateFormat);
-
+        operator = FilterConstants.exactMatchOperator;
         const dateFilterHelper = new DateFilterHelper();
         const dateSearch: SearchDate = dateFilterHelper.processDateTerm(filter.rawValue);
         value = (dateSearch.valid && dateSearch.normalizedTerm) ? dateSearch.normalizedTerm : '';
-
       } else if (filter.name === 'id' || filter.name.endsWith('.id')) {
-        operator = FilterBuilder.exactMatchOperator;
+        operator = FilterConstants.exactMatchOperator;
       }
       filterParams.push(filter.name + operator + value);
     }

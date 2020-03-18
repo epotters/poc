@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {FilterBuilder} from "./filter-builder";
+import {FilterConstants} from "./filter-contants";
 
 export interface SearchDate {
   term: string;
@@ -15,8 +15,8 @@ export interface SearchDate {
 
 export class DateFilterHelper {
 
-  yearPattern: RegExp = new RegExp('^[0-9]{4}-?$');
-  yearMonthPattern: RegExp = new RegExp('^[0-9]{4}-[0-9]{2}-?$');
+  yearPattern: RegExp = new RegExp('^[0-9]{4}(-|-[012])?$');
+  yearMonthPattern: RegExp = new RegExp('^[0-9]{4}-[0-9]{2}(-|-[0123])?$');
   monthDayPattern: RegExp = new RegExp('^[0-9]{2}-[0-9]{2}$');
 
   defaultFormat: string = 'YYYY-MM-DD';
@@ -25,7 +25,7 @@ export class DateFilterHelper {
 
   parse(term: string): string | null {
     let filterValue: string | null = null;
-    const parts: string[] = term.split(FilterBuilder.rangeDenominator);
+    const parts: string[] = term.split(FilterConstants.rangeDenominator);
 
     if (parts.length == 1) {
       const searchDate: SearchDate = this.processDateTerm(term);
@@ -42,7 +42,7 @@ export class DateFilterHelper {
       if (startSearchDate && startSearchDate.valid) {
         filterValue = startSearchDate.normalizedTerm;
       }
-      filterValue += FilterBuilder.rangeDenominator;
+      filterValue += FilterConstants.rangeDenominator;
 
       if (endSearchDate && endSearchDate.valid) {
         // @ts-ignore
