@@ -60,7 +60,6 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
       let key: string = this.columns[idx];
       let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
       if (columnConfig && columnConfig.rowEditor) {
-        // console.debug('rowEditor config found for field', key, ':', columnConfig.rowEditor);
         editorColumns[key] = columnConfig.rowEditor;
       } else if (columnConfig && columnConfig.editor) {
         editorColumns[key] = columnConfig.editor;
@@ -80,7 +79,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
           // @ts-ignore
           editorEntity[key] = entity[key];
         } else {
-          console.debug('Skipping field "' + key + '" because there is no control for it');
+          console.debug(`Skipping field "${key}" because there is no control for it.`);
         }
       }
     );
