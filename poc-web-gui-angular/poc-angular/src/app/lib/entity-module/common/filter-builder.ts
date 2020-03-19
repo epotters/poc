@@ -37,14 +37,13 @@ export class FilterBuilder<T extends Identifiable> {
   private getEditorType(fieldName: string): string | null {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     if (fieldName.includes('.')) {
-      console.debug('Processing nested field', fieldName, this.meta.displayName);
+      console.debug(`Processing nested field ${fieldName} from type ${this.meta.displayName}`);
       let fieldNameParts: string[] = fieldName.split('.');
       if (fieldNameParts.length != 2) {
-        console.warn(this.meta.displayName, 'Only one level of nesting supported', fieldName);
+        console.warn(`Only one level of nesting supported. Skipping ${fieldName} from ${this.meta.displayName}`);
         return null;
       }
       columnConfig = this.meta.columnConfigs[fieldNameParts[0]];
-      console.debug('fieldName', this.meta.columnConfigs, fieldNameParts[0], columnConfig);
     }
 
     if (!columnConfig.editor) {

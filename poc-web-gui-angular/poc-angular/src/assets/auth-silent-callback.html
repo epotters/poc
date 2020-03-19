@@ -13,12 +13,17 @@
       if (location.search.indexOf('error=login_required') > 0) {
         console.debug('Login is required');
       }
-      console.info('User was refreshed silently', new Date());
+      console.info(currentDate() + ': User was refreshed silently');
     })
     .catch((err) => {
       console.error(err);
     });
 
+  function currentDate() {
+    var now = new Date();
+    return now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay() +
+      ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+  }
 </script>
 </body>
 </html>

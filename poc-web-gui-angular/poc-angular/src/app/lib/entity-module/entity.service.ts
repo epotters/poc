@@ -18,21 +18,17 @@ export class EntityService<T extends Identifiable> {
     public meta: EntityMeta<T>,
     public apiService: ApiService
   ) {
-    console.debug('Start constructing entity service for type', this.meta.displayName);
+    console.debug(`Start constructing an EntityService for type ${this.meta.displayName}`);
     this.filterBuilder = new FilterBuilder<T>(this.meta);
   }
 
   public list(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
-
-    console.debug('@EntityService<' + this.meta.displayName + '>.list - this.filterBuilder.buildFilterParams(filters): ', this.filterBuilder.buildFilterParams(filters));
 
     let params: HttpParams = new HttpParams()
       .set('filters', this.filterBuilder.buildFilterParams(filters))
       .set('sort', sortField + ',' + sortDirection)
       .set('page', pageNumber.toString())
       .set('size', pageSize.toString());
-
-    console.debug('@EntityService<' + this.meta.displayName + '>.list - HttpParams:', params);
 
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(
@@ -47,25 +43,25 @@ export class EntityService<T extends Identifiable> {
   }
 
   public get(id: string): Observable<any> {
-    console.debug('Get', this.meta.name, 'called for id', id);
+    console.debug(`About to get ${this.meta.displayName.toLowerCase()} with id  ${id}`);
     return this.apiService.get(this.meta.apiBase + id)
       .pipe(map((response: Response) => {
-        console.debug('@EntityService<' + this.meta.displayName + '>.get - Response: ', response);
         return response;
       }));
   }
 
   public save(entity: T): Observable<T> {
-    console.debug('entity.service.save:', entity);
     if (entity.id) { // Update existing entity
+      console.debug(`About to update ${this.meta.displayName.toLowerCase()} with id ${entity.id}`);
       return this.apiService.post(this.meta.apiBase + entity.id, entity);
     } else { // Create new entity
+      console.debug(`About to create a new ${this.meta.displayName.toLowerCase()}`);
       return this.apiService.put(this.meta.apiBase, entity);
     }
   }
 
   public delete(id: string): Observable<T> {
-    console.debug('About to delete', this.meta.displayName.toLowerCase(), 'with id', id);
+    console.debug(`About to delete ${this.meta.displayName.toLowerCase()} with id ${id}`);
     return this.apiService.delete(this.meta.apiBase + id);
   }
 

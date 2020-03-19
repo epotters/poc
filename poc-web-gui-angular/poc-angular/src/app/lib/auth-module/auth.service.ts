@@ -112,32 +112,33 @@ export class AuthService {
     this.userManager.events.addUserLoaded(() => {
       this.userManager.getUser().then(user => {
         this.user = user;
-        console.info(`User ${((!!user) ? user.profile.name : 'unknown')} loaded`);
-
-        console.info(`${moment().format(this.logDateFormat)}: User ${((!!user) ? user.profile.name : 'unknown')} loaded`);
-
+        console.info(this.prependDate(`User ${((!!user) ? user.profile.name : 'unknown')} loaded`));
       });
     });
 
-    this.userManager.events.addUserUnloaded(function () {
-      console.info('User unloaded');
+    this.userManager.events.addAccessTokenExpired(() => {
+      console.info(this.prependDate('Access token has expired'));
     });
 
-    this.userManager.events.addAccessTokenExpired(function () {
-      console.info('Access token has expired');
+    this.userManager.events.addSilentRenewError(() => {
+      console.error(this.prependDate('Error renewing token silently'));
     });
 
-    this.userManager.events.addSilentRenewError(function () {
-      console.error('Error renewing token silently');
-    });
-
-    this.userManager.events.addUserSignedOut(function () {
+    this.userManager.events.addUserSignedOut(() => {
       console.info('User signed out');
+    });
+
+    this.userManager.events.addUserUnloaded(() => {
+      console.info('User unloaded');
     });
   }
 
   private static capitalizeFirst(text: string): string {
     return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+  }
+
+  private prependDate(msg: string) {
+    return `${moment().format(this.logDateFormat)}: ${msg}`
   }
 
 }

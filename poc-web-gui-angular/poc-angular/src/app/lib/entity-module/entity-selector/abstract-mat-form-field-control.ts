@@ -54,7 +54,6 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
 
     // Hacky solution to avoid empty strings. The signature T | null shouldn't allow them but does
     if (!newValue && newValue !== null) {
-      // console.debug('New value is an empty string, changing value to null');
       newValue = null;
     }
 
