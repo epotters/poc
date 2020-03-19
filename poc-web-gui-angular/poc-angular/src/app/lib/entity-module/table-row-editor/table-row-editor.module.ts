@@ -5,6 +5,7 @@ import {EntityCommonModule} from "../common/entity-common.module";
 import {EntityMaterialModule} from "../common/entity-material.module";
 import {EntityEditorActionsComponent} from "./entity-editor-actions.component";
 import {EntitySelectorModule} from "../entity-selector/entity-selector.module";
+import {EditorFieldComponent} from "./editor-field.component";
 
 
 @NgModule({
@@ -16,17 +17,20 @@ import {EntitySelectorModule} from "../entity-selector/entity-selector.module";
   declarations: [
     EditorRowComponent,
     FilterRowComponent,
-    EntityEditorActionsComponent
+    EntityEditorActionsComponent,
+    EditorFieldComponent
   ],
   entryComponents: [
     EditorRowComponent,
     FilterRowComponent,
-    EntityEditorActionsComponent
+    EntityEditorActionsComponent,
+    EditorFieldComponent
   ],
   exports: [
     EditorRowComponent,
     FilterRowComponent,
-    EntityEditorActionsComponent
+    EntityEditorActionsComponent,
+    EditorFieldComponent
   ]
 })
 export class TableRowEditorModule {

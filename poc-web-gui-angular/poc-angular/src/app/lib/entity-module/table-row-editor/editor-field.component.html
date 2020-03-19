@@ -1,0 +1,66 @@
+<mat-form-field [floatLabel]="floatLabel">
+
+  <mat-label>${{columnConfig.label}}</mat-label>
+
+  <ng-container [ngSwitch]="getEditor().type" class="editor-type-switch">
+
+    <ng-container *ngSwitchCase="'none'">
+      <input formControlName="{{fieldName}}" matInput readonly>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'text'">
+      <input
+        formControlName="{{fieldName}}"
+        [matTooltipDisabled]="hasErrors()" [matTooltip]="getErrorMessage()"
+        matTooltipClass="red-tooltip"
+        matInput>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'textarea'">
+      <textarea
+        formControlName="{{fieldName}}"
+        [matTooltipDisabled]="hasErrors()" [matTooltip]="getErrorMessage()"
+        matTooltipClass="red-tooltip"
+        matInput></textarea>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'select'">
+      <mat-select formControlName="{{fieldName}}">
+        <mat-option [value]="">-</mat-option>
+        <mat-option
+          *ngFor="let option of getEditor().options"
+          [value]="option.value">{{option.label}}</mat-option>
+      </mat-select>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'date'">
+      <input [matDatepicker]="datePicker" formControlName="{{fieldName}}" matInput>
+      <mat-datepicker-toggle [for]="datePicker" matSuffix></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'entity-selector'">
+      <entity-selector
+        formControlName="{{fieldName}}"
+        [meta]="injector.get(getEditor().relatedEntity.serviceName).meta"
+        [service]="injector.get(getEditor().relatedEntity.serviceName)"
+        [autoActiveFirstOption]="true"
+        [showClearButton]="true">
+      </entity-selector>
+    </ng-container>
+
+  </ng-container>
+
+
+  <mat-hint *ngIf="columnConfig.helpText">${{columnConfig.helpText}}</mat-hint>
+  <mat-error *ngFor="let validation of columnConfig.validators">
+    <mat-error *ngIf="hasErrorOfType(validation.type)" class="error-message">
+      {{validation.message}}
+    </mat-error>
+  </mat-error>
+
+</mat-form-field>
+
+
+
+

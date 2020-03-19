@@ -3,6 +3,7 @@ import {debounceTime} from "rxjs/operators";
 
 import {AfterContentInit, Directive, EventEmitter, Injector, Input, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FloatLabelType} from "@angular/material/form-field";
 
 import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from ".";
 
@@ -12,7 +13,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   @Input() readonly meta: EntityMeta<T>;
   @Input() readonly columns: string[];
-  @Input() readonly floatLabel: string = 'never';
+  @Input() readonly floatLabel: FloatLabelType = 'never';
   @Output() readonly editorChange: EventEmitter<any> = new EventEmitter<any>();
 
   editorColumns: Record<string, FieldEditorConfig>;
@@ -124,7 +125,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   }
 
   private buildFormGroup(): FormGroup {
-    let group: {[key: string]: any} = {};
+    let group: { [key: string]: any } = {};
     for (let key in this.editorColumns) {
       if (this.editorColumns.hasOwnProperty(key)) {
         group[key] = new FormControl('', this.buildValidators(key));
