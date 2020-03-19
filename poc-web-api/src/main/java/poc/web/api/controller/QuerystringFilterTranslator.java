@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import poc.core.repository.specification.BaseSpecification;
@@ -29,6 +31,9 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
   private ObjectMapper mapper;
 
   private static final String SEPARATOR = ",";
+  private static final String RANGE_DENOMINATOR = "...";
+
+
   private final String operationSetExpr = "(" + String.join("|", SearchOperation.SIMPLE_OPERATION_SET) + ")";
   private final Pattern pattern = Pattern.compile("(\\w+\\.?\\w+)" + operationSetExpr + "(.*$)", Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -46,13 +51,14 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   @Override
   public Specification<T> translate(final String filterParam) {
+
     final SpecificationsBuilder<T> builder = new SpecificationsBuilder<>();
     final String[] labelValueParts = filterParam.split(SEPARATOR);
     Matcher matcher;
     String fieldName;
     String operator;
     String rawValue;
-    Object value = null;
+    Object value;
 
     for (String labelValue : labelValueParts) {
       if ("".equals(labelValue)) {
@@ -66,55 +72,60 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
         rawValue = matcher.group(3);
         log.debug("Matched filter: " + fieldName + operator + rawValue);
 
-        Class<?> fieldType = null;
-        if (fieldName.contains(".")) {
 
-          log.debug("Processing nested field");
-
-          String[] fieldNames = fieldName.split("\\.");
-          if (fieldNames.length > 2) {
-            log.warn("Only one level of nesting is supported. Skipping \"" + fieldName + "\"");
-          }
-
-          try {
-            Class<?> relatedEntityType = this.getFieldType(fieldNames[0]);
-            fieldType = this.getFieldType(relatedEntityType, fieldNames[1]);
-          } catch (NoSuchFieldException nsfe) {
-            nsfe.printStackTrace();
-            log.warn("Field \"" + fieldName + "\" does not exist. Skipping.");
-            continue;
-          }
-
-        } else {
-
-          try {
-            fieldType = this.getFieldType(fieldName);
-          } catch (NoSuchFieldException nsfe) {
-            log.warn("Field \"" + fieldName + "\" does not exist. Skipping.");
-            continue;
-          }
+        // Find field type
+        Class<?> fieldType = this.determineFieldType(fieldName);
+        if (fieldType == null) {
+          continue;
         }
 
+        // Detect ranges
+        if (rawValue.contains(RANGE_DENOMINATOR)) {
 
-        if (fieldType.getSimpleName().equals("String")) {
-          value = rawValue + (("~".equals(operator)) ? SearchOperation.WILDCARD : "");
+          log.debug("Range search detected");
+
+          String[] rangeEnds = rawValue.split("\\.{3}", -1);
+          log.debug("length: " + rangeEnds.length);
+
+          if (rangeEnds.length != 2) {
+            log.warn("Invalid range. Skipping \"" + rawValue + "\" length " + rangeEnds.length);
+          }
+
+          Object rangeStart = determineValue(rangeEnds[0], fieldName, fieldType, operator, builder);
+          Object rangeEnd = determineValue(rangeEnds[1], fieldName, fieldType, operator, builder);
+
+          if (rangeStart != null) {
+            if (rangeStart instanceof DateRange) {
+              rangeStart = ((DateRange) rangeStart).getStart();
+            }
+            log.debug("rangeStart: " + rangeStart);
+            builder.with(fieldName, ">", rangeStart);
+          }
+
+          if (rangeEnd != null) {
+            if (rangeEnd instanceof DateRange) {
+              rangeEnd = ((DateRange) rangeEnd).getEnd();
+            }
+            log.debug("rangeEnd: " + rangeEnd);
+            builder.with(fieldName, "<", rangeEnd);
+          }
+
         } else {
 
-          try {
-            value = this.mapStringValueToObject(fieldType, rawValue);
-          } catch (Exception e) {
+          // Process the raw value
+          value = determineValue(rawValue, fieldName, fieldType, operator, builder);
 
-            if (value == null & fieldType.getSimpleName().equals("LocalDate")) {
-              if (!this.partialDate(fieldName, rawValue, builder)) {
-                log.warn("Unable to translate value \"" + rawValue + "\" to " + fieldType.getSimpleName() + ". Skipping.");
-              }
+          if (value != null) {
+            if (value instanceof DateRange) {
+              builder.with(fieldName, ">", ((DateRange) value).getStart());
+              builder.with(fieldName, "<", ((DateRange) value).getEnd());
+            } else {
+              builder.with(fieldName, operator, value);
             }
           }
         }
-
-        if (value != null) {
-          builder.with(fieldName, operator, value);
-        }
+      } else {
+        log.warn("Not a valid labelValue pair: \"" + labelValue + "\". Skipping.");
       }
     }
 
@@ -122,15 +133,74 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
   }
 
 
-  private boolean partialDate(String fieldName, String rawValue, SpecificationsBuilder<T> builder) {
+  private Class<?> determineFieldType(String fieldName) {
+    Class<?> fieldType = null;
+    if (fieldName.contains(".")) {
+      log.debug("Processing nested field");
+      String[] fieldNames = fieldName.split("\\.");
+      if (fieldNames.length > 2) {
+        log.warn("Only one level of nesting is supported. Skipping \"" + fieldName + "\"");
+      }
+      try {
+        Class<?> relatedEntityType = this.getFieldType(fieldNames[0]);
+        fieldType = this.getFieldType(relatedEntityType, fieldNames[1]);
+      } catch (NoSuchFieldException nsfe) {
+        nsfe.printStackTrace();
+        log.warn("Field \"" + fieldName + "\" does not exist. Skipping.");
+      }
+    } else {
+      try {
+        fieldType = this.getFieldType(fieldName);
+      } catch (NoSuchFieldException nsfe) {
+        log.warn("Field \"" + fieldName + "\" does not exist. Skipping.");
+      }
+    }
+    return fieldType;
+  }
+
+
+  private Object determineValue(String rawValue, String fieldName, Class<?> fieldType, String operator, SpecificationsBuilder<T> builder) {
+    Object value = null;
+    if (fieldType.getSimpleName().equals("String")) {
+      value = rawValue + (("~".equals(operator)) ? SearchOperation.WILDCARD : "");
+    } else {
+      try {
+        value = this.mapStringValueToObject(fieldType, rawValue);
+      } catch (Exception e) {
+        if (!fieldType.getSimpleName().equals("LocalDate")) {
+          log.warn("Unable to translate value \"" + rawValue + "\" to " + fieldType.getSimpleName() + ". Skipping.");
+          return null;
+        }
+      }
+    }
+
+    if (value == null && fieldType.getSimpleName().equals("LocalDate")) {
+      value = this.partialDate(rawValue);
+    }
+    return value;
+  }
+
+
+  @Getter
+  @Setter
+  static class DateRange {
+    DateRange(LocalDate start, LocalDate end) {
+      setStart(start);
+      setEnd(end);
+    }
+
+    LocalDate start;
+    LocalDate end;
+  }
+
+
+  private DateRange partialDate(String rawValue) {
 
     if (YEAR_PATTERN.matcher(rawValue).matches()) {
       int year = Integer.parseInt(rawValue);
       log.debug("Match on a partial date (year) " + year);
-      builder.with(fieldName, ">", LocalDate.of(year, 1, 1).minusDays(1));
-      builder.with(fieldName, "<", LocalDate.of(year, 12, 31).plusDays(1));
 
-      return true;
+      return new DateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31));
     }
 
     if (YEAR_MONTH_PATTERN.matcher(rawValue).matches()) {
@@ -139,10 +209,8 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
       int month = Integer.parseInt(parts[1]);
       YearMonth ym = YearMonth.of(year, month);
       log.debug("Match on a partial date (year-month combination) " + ym.toString());
-      builder.with(fieldName, ">", ym.atDay(1).minusDays(1));
-      builder.with(fieldName, "<", ym.atEndOfMonth().plusDays(1));
 
-      return true;
+      return new DateRange(ym.atDay(1), ym.atEndOfMonth());
     }
 
     if (MONTH_DAY_PATTERN.matcher(rawValue).matches()) {
@@ -151,9 +219,9 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
       int day = Integer.parseInt(parts[1]);
       LocalDate tst = LocalDate.of(2004, month, day);
       log.debug("Match on a partial date (month-day combination) " + rawValue + ". Unimplemented, skipping");
-      return true;
+      return null;
     }
-    return false;
+    return null;
   }
 
 
@@ -207,6 +275,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
     return valueType;
   }
 
+
   private Class<?> getFieldType(String fieldName) throws NoSuchFieldException {
     return this.getFieldType(genericType, fieldName);
   }
@@ -222,6 +291,5 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
     Class<?> fieldType = this.getFieldType(fieldName);
     return mapStringValueToObject(fieldType, rawValue);
   }
-
 
 }

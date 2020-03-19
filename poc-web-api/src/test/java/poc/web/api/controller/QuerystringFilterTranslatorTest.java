@@ -51,6 +51,25 @@ public class QuerystringFilterTranslatorTest {
     queryString = "gender:blah";
     spec = filterTanslator.translate(queryString);
     Assert.assertNull(spec);
+
+    // Range without start
+    queryString = "birthDate:...1999-03-23";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+
+    // Range without end
+    queryString = "birthDate:1995-12-05...";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+
+    // Range
+    queryString = "birthDate:1995-12-05...1999-03-23";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
+
+    queryString = "birthDate:1995...2005";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNotNull(spec);
   }
 
 
