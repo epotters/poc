@@ -32,8 +32,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   private static final String SEPARATOR = ",";
   private static final String RANGE_DENOMINATOR = "...";
-
-
+  
   private final String operationSetExpr = "(" + String.join("|", SearchOperation.SIMPLE_OPERATION_SET) + ")";
   private final Pattern pattern = Pattern.compile("(\\w+\\.?\\w+)" + operationSetExpr + "(.*$)", Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -96,7 +95,7 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
           if (rangeStart != null) {
             if (rangeStart instanceof DateRange) {
-              rangeStart = ((DateRange) rangeStart).getStart();
+              rangeStart = ((DateRange) rangeStart).getStart().minusDays(1);
             }
             log.debug("rangeStart: " + rangeStart);
             builder.with(fieldName, ">", rangeStart);
@@ -104,21 +103,19 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
           if (rangeEnd != null) {
             if (rangeEnd instanceof DateRange) {
-              rangeEnd = ((DateRange) rangeEnd).getEnd();
+              rangeEnd = ((DateRange) rangeEnd).getEnd().plusDays(1);
             }
             log.debug("rangeEnd: " + rangeEnd);
             builder.with(fieldName, "<", rangeEnd);
           }
-
         } else {
-
           // Process the raw value
           value = determineValue(rawValue, fieldName, fieldType, operator, builder);
 
           if (value != null) {
             if (value instanceof DateRange) {
-              builder.with(fieldName, ">", ((DateRange) value).getStart());
-              builder.with(fieldName, "<", ((DateRange) value).getEnd());
+              builder.with(fieldName, ">", ((DateRange) value).getStart().minusDays(1));
+              builder.with(fieldName, "<", ((DateRange) value).getEnd().plusDays(1));
             } else {
               builder.with(fieldName, operator, value);
             }
@@ -128,7 +125,6 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
         log.warn("Not a valid labelValue pair: \"" + labelValue + "\". Skipping.");
       }
     }
-
     return builder.build();
   }
 
