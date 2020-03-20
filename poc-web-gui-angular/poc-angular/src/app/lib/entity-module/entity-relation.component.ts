@@ -28,8 +28,8 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
     public relatedMeta: EntityMeta<R>,
     public componentFactoryResolver: ComponentFactoryResolver
   ) {
-    console.debug('Constructing the EntityRelationComponent for relation ' + this.meta.displayName + ' between ' +
-      this.ownerMeta.displayName + ' and ' + this.relatedMeta.displayName);
+    console.debug(`Constructing the EntityRelationComponent for relation ${this.meta.displayName}` +
+      ` between ${this.ownerMeta.displayName} and ${this.relatedMeta.displayName}`);
   }
 
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   private activateRelation(): void {
     this.ownerSubject.asObservable().subscribe(owner => {
         if (!!owner && !!owner.id) {
-          console.debug('Owner loaded, about to build relation ' + this.fieldName);
+          console.debug(`Owner loaded, about to build relation ${this.fieldName}`);
           this.visible = true;
           this.loadRelationList(owner);
         } else {
@@ -69,7 +69,6 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
     const relationEntity: RelationEntity = columnConfig.editor.relationEntity;
     relationOverlay[relationEntity.owner] = owner;
-    console.debug('loadRelationList: ', owner, relationOverlay, this.ownerMeta, this.fieldName, columnConfig);
 
     const listConfig: EditableListConfig<T> = {
       title: columnConfig.label,
@@ -91,7 +90,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
     // Copy the configuration to the component
     for (let key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
-        console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
+        console.debug(`Set @input ${key} to ${componentDescriptor.data[key]}`);
         this.componentRef.instance[key] = componentDescriptor.data[key];
       }
     }
