@@ -24,7 +24,7 @@ export class FilterBuilder<T extends Identifiable> {
       } else if (editorType == 'date') {
         operator = FilterConstants.exactMatchOperator;
         const dateFilterHelper = new DateFilterHelper();
-        const dateSearch: SearchDate = dateFilterHelper.processDateTerm(filter.rawValue);
+        const dateSearch: SearchDate = dateFilterHelper.parse(filter.rawValue);
         value = (dateSearch.valid && dateSearch.normalizedTerm) ? dateSearch.normalizedTerm : '';
       } else if (filter.name === 'id' || filter.name.endsWith('.id')) {
         operator = FilterConstants.exactMatchOperator;

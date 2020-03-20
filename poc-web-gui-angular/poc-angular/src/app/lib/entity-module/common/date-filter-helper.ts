@@ -23,36 +23,35 @@ export class DateFilterHelper {
   supportedFormats: string[] = [this.defaultFormat, 'DD-MM-YYYY'];
 
 
-  parse(term: string): string | null {
-    let filterValue: string | null = null;
+  parse(term: string): SearchDate {
+    let result: SearchDate = {term: term, valid: false, normalizedTerm: null};
+
     const parts: string[] = term.split(FilterConstants.rangeDenominator);
 
     if (parts.length == 1) {
-      const searchDate: SearchDate = this.processDateTerm(term);
-      if (searchDate.valid) {
-        filterValue = searchDate.normalizedTerm;
-      } else {
-        console.debug('Invalid single search date');
-      }
+      result = this.processDateTerm(term);
     } else if (parts.length == 2) {
 
       const startSearchDate = (!!parts[0]) ? this.processDateTerm(parts[0]) : null;
       const endSearchDate = (!!parts[1]) ? this.processDateTerm(parts[1]) : null;
 
+      let filterValue: string = '';
       if (startSearchDate && startSearchDate.valid) {
-        filterValue = startSearchDate.normalizedTerm;
+        filterValue = (startSearchDate.normalizedTerm) ? startSearchDate.normalizedTerm : '';
+        result.valid = true;
       }
       filterValue += FilterConstants.rangeDenominator;
-
       if (endSearchDate && endSearchDate.valid) {
         // @ts-ignore
         filterValue += endSearchDate.normalizedTerm;
+        result.valid = true;
       }
+      result.normalizedTerm = filterValue;
     }
 
-    console.debug('filterValue:', filterValue);
+    console.debug('result.normalizedTerm:', result.normalizedTerm);
 
-    return filterValue;
+    return result;
   }
 
 
