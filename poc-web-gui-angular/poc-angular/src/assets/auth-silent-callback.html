@@ -21,8 +21,12 @@
 
   function currentDate() {
     var now = new Date();
-    return now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay() +
-      ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+    return now.getFullYear() + '-' + addZero(now.getMonth()) + '-' + addZero(now.getDay()) +
+      ' ' + addZero(now.getHours()) + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds());
+  }
+
+  function addZero(number) {
+    return (number < 10) ? '0' + number : '' + number;
   }
 </script>
 </body>
