@@ -89,7 +89,8 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
   openDialogWithEditor(entity?: Person) {
     const entityEditorComponentDescriptor = new EntityComponentDescriptor(this.editorComponent, {
-      entityToLoad: entity
+      entityToLoad: entity,
+      isManaged: true
     });
     this.openDialogWithEntityComponent(entityEditorComponentDescriptor);
   }
