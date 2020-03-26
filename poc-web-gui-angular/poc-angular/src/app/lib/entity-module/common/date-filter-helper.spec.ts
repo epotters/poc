@@ -1,4 +1,4 @@
-import {DateFilterHelper} from "./date-filter-helper";
+import {DateFilterHelper} from './date-filter-helper';
 
 
 describe('DateFilter tests', () => {
@@ -20,6 +20,9 @@ describe('DateFilter tests', () => {
     expect(helper.processDateTerm('15-23').valid).toBe(false);
     expect(helper.processDateTerm('23-03-1967').valid).toBe(true);
 
+    expect(helper.parse('1967...1970').valid).toBe(true);
+    expect(helper.parse('1967-03...1970-05').valid).toBe(true);
+    expect(helper.parse('1967-03-23...1971-08-20').valid).toBe(true);
   });
 
 });
