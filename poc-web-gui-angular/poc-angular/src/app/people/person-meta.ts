@@ -1,5 +1,5 @@
-import {EntityMeta, SelectOption} from "../lib/entity-module";
-import {Employment, Person} from "../core/domain";
+import {EntityMeta, SelectOption} from '../lib/entity-module';
+import {Employment, Person} from '../core/domain';
 
 const genderOptions: SelectOption[] = [
   {value: 'MALE', label: '♂'},
@@ -71,7 +71,7 @@ export const personMeta: EntityMeta<Person> = {
     gender: {
       label: 'M/F',
       renderer: (entity: Person, value) => {
-        for (let option of genderOptions) {
+        for (const option of genderOptions) {
           if (option.value === value) {
             return option.label;
           }
@@ -106,7 +106,7 @@ export const personMeta: EntityMeta<Person> = {
           owner: 'employee',
           columns: ['id', 'startDate', 'endDate', 'employer'],
           sort: 'employer.name',
-          sortDirection: "asc"
+          sortDirection: 'asc'
         }
       }
     }

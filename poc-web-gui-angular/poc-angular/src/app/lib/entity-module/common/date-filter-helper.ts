@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {FilterConstants} from "./filter-contants";
+import {FilterConstants} from './filter-contants';
 
 export interface SearchDate {
   term: string;
@@ -28,9 +28,9 @@ export class DateFilterHelper {
 
     const parts: string[] = term.split(FilterConstants.rangeDenominator);
 
-    if (parts.length == 1) {
+    if (parts.length === 1) {
       result = this.processDateTerm(term);
-    } else if (parts.length == 2) {
+    } else if (parts.length === 2) {
 
       const startSearchDate = (!!parts[0]) ? this.processDateTerm(parts[0]) : null;
       const endSearchDate = (!!parts[1]) ? this.processDateTerm(parts[1]) : null;
@@ -100,7 +100,7 @@ export class DateFilterHelper {
 
     } else {
 
-      for (let format of this.supportedFormats) {
+      for (const format of this.supportedFormats) {
         if (moment(term, format, true).isValid()) {
           console.debug(`Date pattern matched "${format}"`);
           result.valid = true;

@@ -1,6 +1,6 @@
-import {InjectionToken} from "@angular/core";
-import {EntityMeta} from "./domain/entity-meta.model";
-import {EntityService} from "./entity.service";
+import {InjectionToken} from '@angular/core';
+import {EntityMeta} from './domain/entity-meta.model';
+import {EntityService} from './entity.service';
 
 
 export const META = new InjectionToken<EntityMeta<any>>('Entity Meta');

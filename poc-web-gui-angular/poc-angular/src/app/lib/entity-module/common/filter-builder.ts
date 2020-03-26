@@ -1,7 +1,7 @@
-import {FieldFilter} from "../domain/filter.model";
-import {ColumnConfig, EntityMeta, Identifiable} from "..";
-import {DateFilterHelper, SearchDate} from "./date-filter-helper";
-import {FilterConstants} from "./filter-contants";
+import {FieldFilter} from '../domain/filter.model';
+import {ColumnConfig, EntityMeta, Identifiable} from '..';
+import {DateFilterHelper, SearchDate} from './date-filter-helper';
+import {FilterConstants} from './filter-contants';
 
 export class FilterBuilder<T extends Identifiable> {
 
@@ -10,18 +10,18 @@ export class FilterBuilder<T extends Identifiable> {
 
   public buildFilterParams(filters?: FieldFilter[]): string {
 
-    let filterParams: string[] = [];
-    if (!filters || filters.length == 0) {
+    const filterParams: string[] = [];
+    if (!filters || filters.length === 0) {
       return '';
     }
 
-    for (let filter of filters) {
+    for (const filter of filters) {
       let operator: string = FilterConstants.likeOperator;
       let value: string = filter.rawValue;
-      let editorType: string | null = this.getEditorType(filter.name);
-      if (editorType == 'select') {
+      const editorType: string | null = this.getEditorType(filter.name);
+      if (editorType === 'select') {
         operator = FilterConstants.exactMatchOperator;
-      } else if (editorType == 'date') {
+      } else if (editorType === 'date') {
         operator = FilterConstants.exactMatchOperator;
         const dateFilterHelper = new DateFilterHelper();
         const dateSearch: SearchDate = dateFilterHelper.parse(filter.rawValue);
@@ -38,8 +38,8 @@ export class FilterBuilder<T extends Identifiable> {
     let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     if (fieldName.includes('.')) {
       console.debug(`Processing nested field ${fieldName} from type ${this.meta.displayName}`);
-      let fieldNameParts: string[] = fieldName.split('.');
-      if (fieldNameParts.length != 2) {
+      const fieldNameParts: string[] = fieldName.split('.');
+      if (fieldNameParts.length !== 2) {
         console.warn(`Only one level of nesting supported. Skipping ${fieldName} from ${this.meta.displayName}`);
         return null;
       }

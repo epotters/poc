@@ -3,8 +3,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {
   EntityComponentDescriptor,
   EntityComponentEntryPointDirective
-} from "../common/entity-component-entrypoint.directive";
-import {EntityListComponent, Identifiable} from "..";
+} from '../common/entity-component-entrypoint.directive';
+import {EntityListComponent, Identifiable} from '..';
 
 
 export interface DialogData {
@@ -50,7 +50,7 @@ export class EntityComponentDialogComponent<T extends Identifiable> implements O
     this.componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
     // Copy the configuration to the component
-    for (let key in componentDescriptor.data) {
+    for (const key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
         console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
         this.componentRef.instance[key] = componentDescriptor.data[key];

@@ -3,9 +3,9 @@ import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
-import {AuthService} from "../../lib/auth-module";
-import {ApiService} from "../../lib/entity-module";
-import {ConfigService} from "../../app-config.service";
+import {AuthService} from '../../lib/auth-module';
+import {ApiService} from '../../lib/entity-module';
+import {ConfigService} from '../../app-config.service';
 
 
 @Injectable({
@@ -29,7 +29,7 @@ export class PocApiService implements ApiService {
 
 
   put(path: string, body: Object = {}): Observable<any> {
-    let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+    const headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
     return this.http.put(
       `${this.config.apiRoot}${path}`,
       JSON.stringify(body), {headers: headers}
@@ -38,7 +38,7 @@ export class PocApiService implements ApiService {
 
 
   post(path: string, body: Object = {}): Observable<any> {
-    let headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
+    const headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
     return this.http.post(
       `${this.config.apiRoot}${path}`,
       JSON.stringify(body), {headers: headers}

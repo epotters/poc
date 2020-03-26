@@ -1,11 +1,11 @@
-import {EntityListComponent} from "../lib/entity-module";
-import {Organization} from "../core/domain/";
-import {ChangeDetectionStrategy, Component} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import {OrganizationService} from "./organization.service";
-import {organizationMeta as meta} from "./organization-meta";
-import {EntityAnimations} from "../lib/entity-module/common/animations.animation";
+import {EntityListComponent} from '../lib/entity-module';
+import {Organization} from '../core/domain/';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import {OrganizationService} from './organization.service';
+import {organizationMeta as meta} from './organization-meta';
+import {EntityAnimations} from '../lib/entity-module/common/animations.animation';
 
 
 @Component({

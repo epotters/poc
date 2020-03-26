@@ -1,5 +1,5 @@
-import {HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 export interface ApiService {
 

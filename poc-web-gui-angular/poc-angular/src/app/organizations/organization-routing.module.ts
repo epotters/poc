@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {OrganizationListComponent} from "./organization-list.component";
-import {OrganizationEditorComponent} from "./organization-editor.component";
-import {AuthGuardService} from "../lib/auth-module";
-import {OrganizationManagerComponent} from "./organization-manager.component";
-import {OrganizationListOfCardsComponent} from "./organization-list-of-cards.component";
+import {OrganizationListComponent} from './organization-list.component';
+import {OrganizationEditorComponent} from './organization-editor.component';
+import {AuthGuardService} from '../lib/auth-module';
+import {OrganizationManagerComponent} from './organization-manager.component';
+import {OrganizationListOfCardsComponent} from './organization-list-of-cards.component';
 
 
 const base = '';  // For eager loading use: organizationMeta.namePlural;

@@ -1,5 +1,5 @@
-import {EntityMeta} from "../lib/entity-module";
-import {Employment, Organization, Person} from "../core/domain/";
+import {EntityMeta} from '../lib/entity-module';
+import {Employment, Organization, Person} from '../core/domain/';
 
 
 export const employmentMeta: EntityMeta<Employment> = {
@@ -68,7 +68,8 @@ export const employmentMeta: EntityMeta<Employment> = {
     employee: {
       label: 'Employee',
       renderer: (entity: Employment, value) => {
-        return entity.employee.firstName + ' ' + ((entity.employee.prefix) ? (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
+        return entity.employee.firstName + ' ' + ((entity.employee.prefix) ?
+          (entity.employee.prefix) + ' ' : '') + entity.employee.lastName;
       },
       editor: {
         type: 'entity-selector',

@@ -1,22 +1,20 @@
-import {AfterViewInit, Directive, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {MatMenuTrigger} from "@angular/material/menu";
+import {AfterViewInit, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatMenuTrigger} from '@angular/material/menu';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute, Router} from '@angular/router';
+import {merge, Observable, of as observableOf, Subject} from 'rxjs';
+import {catchError, delay, map, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
-import {merge, Observable, of as observableOf} from "rxjs";
-import {catchError, delay, map, startWith, switchMap} from "rxjs/operators";
-
-import {FieldFilter} from "./domain/filter.model";
-import {ColumnConfig, EntityMeta, RelatedEntity, SortDirectionType} from "./domain/entity-meta.model";
-
-import {EntityService} from "./entity.service";
-import {EntityDataSource} from "./entity-data-source";
-import {EditorRowComponent} from "./table-row-editor/editor-row.component";
-import {FilterRowComponent} from "./table-row-editor/filter-row.component";
-import {ActionResult, EntityEditorActionsComponent} from "./table-row-editor/entity-editor-actions.component";
-import {Identifiable} from "./domain/identifiable.model";
+import {ColumnConfig, EntityMeta, RelatedEntity, SortDirectionType} from './domain/entity-meta.model';
+import {FieldFilter} from './domain/filter.model';
+import {Identifiable} from './domain/identifiable.model';
+import {EntityDataSource} from './entity-data-source';
+import {EntityService} from './entity.service';
+import {EditorRowComponent} from './table-row-editor/editor-row.component';
+import {ActionResult, EntityEditorActionsComponent} from './table-row-editor/entity-editor-actions.component';
+import {FilterRowComponent} from './table-row-editor/filter-row.component';
 
 
 export interface ListConfig<T> {
@@ -58,7 +56,7 @@ export interface EditorViewState {
 }
 
 @Directive()
-export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit {
+export abstract class EntityListComponent<T extends Identifiable> implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() title: string = this.meta.displayNamePlural;
   @Input() columns: string[] = this.meta.displayedColumns;
@@ -78,6 +76,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
   selectedClass: string = 'selected';
+
+  private terminator: Subject<any> = new Subject();
 
   dataSource: EntityDataSource<T>;
   fieldFilters: FieldFilter[] = [];
@@ -123,7 +123,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     this.applyInitialDataState();
 
     // Reset the paginator after sorting
-    this.sort.sortChange
+    this.sort.sortChange.pipe(takeUntil(this.terminator))
       .subscribe(() => {
         this.paginator.pageIndex = 0;
       });
@@ -133,16 +133,21 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         startWith({}),
         delay(200), // Workarond for "Expression has changed" error
         switchMap(() => {
-          this.stopEditing().subscribe(); // editable only
+          this.stopEditing().pipe(takeUntil(this.terminator)).subscribe(); // editable only
           this.loadEntitiesPage();
           return this.dataSource.entities$;
         }),
         catchError(() => {
           return observableOf([]);
         })
-      ).subscribe(() => {
+      ).pipe(takeUntil(this.terminator)).subscribe(() => {
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.terminator.next();
+    this.terminator.complete();
   }
 
   private applyInitialDataState(): void {
@@ -191,7 +196,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
     this.markRow(targetElement);
 
-    let fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
+    const fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
     if (this.isFieldRelatedEntity(fieldName)) {
       this.goToRelatedEntity(fieldName, entity[fieldName]);
     }
@@ -203,11 +208,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   private markRow(targetElement: Element) {
-    let row: Element | null = targetElement.parentElement;
+    const row: Element | null = targetElement.parentElement;
     if (!!row) {
-      let table: Element | null = row.parentElement;
+      const table: Element | null = row.parentElement;
       if (!!table) {
-        let previousRow: Element | null = table.querySelector('.' + this.selectedClass);
+        const previousRow: Element | null = table.querySelector('.' + this.selectedClass);
         if (!!previousRow) {
           previousRow.classList.remove(this.selectedClass);
         }
@@ -221,7 +226,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     console.debug('Context menu for entity ', entity, 'idx: ' + idx);
     event.preventDefault();
     const targetElement: Element = ((event.target || event.currentTarget) as Element);
-    let fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
+    const fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
       entity: entity,
@@ -250,7 +255,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   goToRelatedEntity(fieldName: string, entity: Identifiable) {
     const columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
-    const relatedEntity: RelatedEntity | undefined = (!!columnConfig && !!columnConfig.editor) ? columnConfig.editor.relatedEntity : undefined;
+    const relatedEntity: RelatedEntity | undefined =
+      (!!columnConfig && !!columnConfig.editor) ? columnConfig.editor.relatedEntity : undefined;
     if (!!relatedEntity) {
       this.router.navigate([relatedEntity.namePlural, entity.id]);
     }
@@ -259,14 +265,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   //
 
   getCellDisplayValue(entity: T, fieldName: string): string {
-    let columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
+    const columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
     let value = entity[fieldName];
     if (fieldName.indexOf('.')) {
-      let fieldNameParts: string[] = fieldName.split('.');
-      let key: string | undefined = fieldNameParts.shift();
+      const fieldNameParts: string[] = fieldName.split('.');
+      const key: string | undefined = fieldNameParts.shift();
       if (!!key) {
         value = entity[key];
-        for (let fieldNamePart of fieldNameParts) {
+        for (const fieldNamePart of fieldNameParts) {
           value = value[fieldNamePart];
         }
       }
@@ -278,7 +284,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   private isFieldRelatedEntity(fieldName: string): boolean {
-    let config = this.meta.columnConfigs[fieldName];
+    const config = this.meta.columnConfigs[fieldName];
     return (!!config.editor && !!config.editor.relatedEntity);
   }
 
@@ -294,8 +300,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   private applyOverlay(filters: FieldFilter[]): FieldFilter[] {
     const newFieldFilters: FieldFilter[] = [];
-    for (let idx in Reflect.ownKeys(this.overlay)) {
-      let key = (Reflect.ownKeys(this.overlay)[idx] as string);
+    for (const idx in Reflect.ownKeys(this.overlay)) {
+      const key = (Reflect.ownKeys(this.overlay)[idx] as string);
       console.debug('-> applyOverlay', key, this.overlay[key]);
       if (this.overlay[key]['id']) {
         newFieldFilters.push({name: key + '.id', rawValue: this.overlay[key]['id']});
@@ -303,8 +309,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         newFieldFilters.push({name: key, rawValue: this.overlay[key]});
       }
     }
-    for (let idx in filters) {
-      let fieldFilter: FieldFilter = filters[idx];
+    for (const idx in filters) {
+      const fieldFilter: FieldFilter = filters[idx];
       if (!Reflect.ownKeys(this.overlay).includes(fieldFilter.name)) {
         newFieldFilters.push(fieldFilter);
       }
@@ -332,19 +338,18 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     console.debug('Save this ' + this.meta.displayName.toLowerCase());
 
     this.editorActions.saveEntity(this.editorRow.rowEditorForm, this.overlay)
-      .subscribe((result: ActionResult<T>) => {
-        if (result.success) {
-          this.stopEditing().subscribe(result => {
-            console.info(result.msg);
-          });
-          this.loadEntitiesPage();
-        }
-      });
+      .pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
+      if (result.success) {
+        this.stopEditing().pipe(takeUntil(this.terminator)).subscribe(result => {
+          console.info(result.msg);
+        });
+        this.loadEntitiesPage();
+      }
+    });
   }
 
   isSaveable() {
     if (!!this.editorRow && !!this.editorRow.rowEditorForm) {
-      // console.debug('isEditing:', this.isEditing(), 'dirty:', this.editorRow.rowEditorForm.dirty, 'invalid:', this.editorRow.rowEditorForm.invalid);
       return (this.isEditing() && this.editorRow.rowEditorForm.dirty && !this.editorRow.rowEditorForm.invalid);
     } else {
       return false;
@@ -355,14 +360,14 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (this.editorRow.rowEditorForm.dirty) {
       this.saveEntity();
     } else {
-      this.stopEditing().subscribe();
+      this.stopEditing().pipe(takeUntil(this.terminator)).subscribe();
     }
   }
 
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
     if (this.editorActions) {
-      this.editorActions.deleteEntity(entity).subscribe((result: ActionResult<T>) => {
+      this.editorActions.deleteEntity(entity).pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
         if (result.success) {
           console.debug('Entity deleted');
           this.loadEntitiesPage();
@@ -387,7 +392,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   toggleEditor(): void {
     if (this.editorVisible) {
-      this.stopEditing().subscribe();
+      this.stopEditing().pipe(takeUntil(this.terminator)).subscribe();
     } else {
       this.editorVisible = true;
     }
@@ -396,7 +401,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   public startEditing(entity: T, targetElement: Element, idx: number) {
     console.debug('Are we currently editing? ' + this.isEditing());
     if (this.isEditing()) {
-      this.stopEditing().subscribe((result: ActionResult<T>) => {
+      this.stopEditing().pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
         if (result.success) {
           console.debug('Start editing...');
           this.showAndPositionEditor(targetElement, idx);

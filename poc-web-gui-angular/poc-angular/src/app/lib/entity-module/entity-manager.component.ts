@@ -1,20 +1,20 @@
-import {ComponentFactoryResolver, Directive, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute} from "@angular/router";
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ComponentFactoryResolver, Directive, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute} from '@angular/router';
 
-import {EntityMeta} from "./domain/entity-meta.model";
-import {Identifiable} from "./domain/identifiable.model";
-import {EntityService} from "./entity.service";
-import {EntityDataSource} from "./entity-data-source";
-import {DataSourceState} from "./entity-list.component";
-import {EntityLibConfig} from "./common/entity-lib-config";
-import {EntityComponentDescriptor} from "./common/entity-component-entrypoint.directive";
-import {EntityComponentDialogComponent} from "./dialog/entity-component-dialog.component";
-
+import {EntityMeta} from './domain/entity-meta.model';
+import {Identifiable} from './domain/identifiable.model';
+import {EntityService} from './entity.service';
+import {DataSourceState} from './entity-list.component';
+import {EntityLibConfig} from './common/entity-lib-config';
+import {EntityComponentDescriptor} from './common/entity-component-entrypoint.directive';
+import {EntityComponentDialogComponent} from './dialog/entity-component-dialog.component';
 
 
 @Directive()
-export abstract class EntityManagerComponent<T extends Identifiable> {
+export abstract class EntityManagerComponent<T extends Identifiable> implements OnDestroy {
 
   @Input() dataSourceState: DataSourceState;
   @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
@@ -24,6 +24,8 @@ export abstract class EntityManagerComponent<T extends Identifiable> {
 
   columns: string[] = [];
   columnSetName: string = 'displayedColumnsDialog';
+
+  private terminator: Subject<any> = new Subject();
 
   selectedEntity?: T;
 
@@ -40,6 +42,11 @@ export abstract class EntityManagerComponent<T extends Identifiable> {
   ) {
     console.debug(`Constructing the EntityManagerComponent for type ${this.meta.displayName}`);
     this.columns = meta[this.columnSetName] || meta.displayedColumns;
+  }
+
+  ngOnDestroy(): void {
+    this.terminator.next();
+    this.terminator.complete();
   }
 
   onEntitySelected(entity: T) {
@@ -70,7 +77,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> {
       }
     });
 
-    dialogRef.afterClosed().subscribe(entity => {
+    dialogRef.afterClosed().pipe(takeUntil(this.terminator)).subscribe(entity => {
       console.debug('The dialog was closed');
       if (entity) {
         this.dialogEntity = entity;

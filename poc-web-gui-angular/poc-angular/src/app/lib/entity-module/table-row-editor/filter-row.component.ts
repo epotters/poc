@@ -1,8 +1,8 @@
 import {Component, Injector} from '@angular/core';
-import {AbstractControl, FormBuilder} from "@angular/forms";
-import {ColumnConfig, FieldEditorConfig, Identifiable} from ".";
-import {BaseEditorRowComponent} from "./base-editor-row.component";
-import {FieldFilter} from "../domain/filter.model";
+import {AbstractControl, FormBuilder} from '@angular/forms';
+import {ColumnConfig, FieldEditorConfig, Identifiable} from '.';
+import {BaseEditorRowComponent} from './base-editor-row.component';
+import {FieldFilter} from '../domain/filter.model';
 
 
 @Component({
@@ -35,9 +35,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
         if (!!value && value !== '') {
           let fieldName: string = key;
-          let type: any = this.getEditor(key).type;
-          let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
-          if (type == 'entity-selector') {
+          const type: any = this.getEditor(key).type;
+          const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+          if (type === 'entity-selector') {
             if (!(value as Identifiable)['id']) {
               console.debug('No related entity to search for selected yet. Skipping. ' + value);
               return;
@@ -45,7 +45,7 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
             fieldName = fieldName + '.id';
             value = (value as Identifiable)['id'];
             console.debug('Selected entity converted to id only for filter {', fieldName, ': ', value, '}');
-          } else if (type == 'text' && !!columnConfig.editor && !!columnConfig.editor.relatedEntity) {
+          } else if (type === 'text' && !!columnConfig.editor && !!columnConfig.editor.relatedEntity) {
             console.debug('Searching related field ' + fieldName + ' as text');
             fieldName = fieldName + '.' + columnConfig.editor.relatedEntity.displayField;
           }
@@ -63,9 +63,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   public setFilters(fieldFilters: FieldFilter[]): void {
     this.rowEditorForm.reset();
-    for (let idx in fieldFilters) {
-      let fieldFilter: FieldFilter = fieldFilters[idx];
-      let formControl: AbstractControl | null = this.rowEditorForm.get(fieldFilter.name);
+    for (const idx in fieldFilters) {
+      const fieldFilter: FieldFilter = fieldFilters[idx];
+      const formControl: AbstractControl | null = this.rowEditorForm.get(fieldFilter.name);
       if (!!formControl) {
         formControl.setValue(fieldFilter.rawValue, {emitEvent: false});
         console.debug('---> fieldFilter', fieldFilter.name, 'set to', fieldFilter.rawValue);
@@ -77,10 +77,10 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
 
   getColumns(): Record<string, FieldEditorConfig> {
-    let editorColumns: Record<string, FieldEditorConfig> = {};
-    for (let idx in this.columns) {
-      let key: string = this.columns[idx];
-      let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+    const editorColumns: Record<string, FieldEditorConfig> = {};
+    for (const idx in this.columns) {
+      const key: string = this.columns[idx];
+      const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
       if (columnConfig && columnConfig.filter) {
         // console.debug('filter config found for field', key, ':', columnConfig.filter);
         editorColumns[key] = columnConfig.filter;

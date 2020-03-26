@@ -1,4 +1,5 @@
 // Source: https://github.com/OasisDigital/angular-material-search-select/blob/master/src/app/search-select/base.ts
+import {FocusMonitor} from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,15 +7,16 @@ import {
   forwardRef,
   Injector,
   Input,
+  OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
 import {FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {MatFormFieldControl} from "@angular/material/form-field";
-import {FocusMonitor} from "@angular/cdk/a11y";
-import {EntityDataSource} from "../entity-data-source";
-import {EntityMeta, EntityService, Identifiable} from "..";
-import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
-import {Params, Router} from "@angular/router";
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {Params, Router} from '@angular/router';
+import {takeUntil} from 'rxjs/operators';
+import {EntityMeta, EntityService, Identifiable} from '..';
+import {EntityDataSource} from '../entity-data-source';
+import {AbstractMatFormFieldControl} from './abstract-mat-form-field-control';
 
 
 @Component({
@@ -35,7 +37,7 @@ import {Params, Router} from "@angular/router";
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EntitySelectorComponent<T extends Identifiable> extends AbstractMatFormFieldControl<T> {
+export class EntitySelectorComponent<T extends Identifiable> extends AbstractMatFormFieldControl<T> implements OnDestroy {
 
   static controlType: string = 'entity-selector';
 
@@ -61,6 +63,10 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     public router: Router
   ) {
     super(elementRef, focusMonitor, injector, EntitySelectorComponent.controlType);
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
 
@@ -97,7 +103,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
 
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
 
-    this.searchControl.valueChanges.subscribe(controlValue => {
+    this.searchControl.valueChanges.pipe(takeUntil(this.terminator)).subscribe(controlValue => {
       if (this.skipFirstChange && this.firstChange) {
         console.debug('Skip the first change');
         this.touched = false;
@@ -123,8 +129,8 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     });
 
 
-    this.dataSource.total$.subscribe(total => {
-      if (total == 0 && typeof this.searchControl.value === 'string' && this.searchControl.value.length > this.lengthToShowCreate) {
+    this.dataSource.total$.pipe(takeUntil(this.terminator)).subscribe(total => {
+      if (total === 0 && typeof this.searchControl.value === 'string' && this.searchControl.value.length > this.lengthToShowCreate) {
         this.createButtonVisible = true;
       } else {
         this.createButtonVisible = false;

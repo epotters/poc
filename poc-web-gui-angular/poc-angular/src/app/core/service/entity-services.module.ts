@@ -1,7 +1,7 @@
-import {NgModule} from "@angular/core";
-import {PersonService} from "../../people/person.service";
-import {OrganizationService} from "../../organizations/organization.service";
-import {EmploymentService} from "../../employments/employment.service";
+import {NgModule} from '@angular/core';
+import {PersonService} from '../../people/person.service';
+import {OrganizationService} from '../../organizations/organization.service';
+import {EmploymentService} from '../../employments/employment.service';
 
 
 @NgModule({

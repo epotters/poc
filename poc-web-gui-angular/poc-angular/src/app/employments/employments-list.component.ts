@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import {Component} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
 
-import {EntityListComponent} from "../lib/entity-module";
-import {employmentMeta as meta} from "./employment-meta";
-import {Employment} from "../core/domain/"
-import {EmploymentService} from "./employment.service";
-import {EntityAnimations} from "../lib/entity-module/common/animations.animation";
+import {EntityListComponent} from '../lib/entity-module';
+import {employmentMeta as meta} from './employment-meta';
+import {Employment} from '../core/domain/'
+import {EmploymentService} from './employment.service';
+import {EntityAnimations} from '../lib/entity-module/common/animations.animation';
 
 
 @Component({

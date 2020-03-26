@@ -1,12 +1,12 @@
-import {DataSource} from "@angular/cdk/collections";
+import {DataSource} from '@angular/cdk/collections';
 
-import {BehaviorSubject, Observable, of} from "rxjs";
-import {catchError, finalize} from "rxjs/operators";
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError, finalize} from 'rxjs/operators';
 
-import {FieldFilter} from "./domain/filter.model";
-import {EntityService} from "./entity.service";
-import {EntityMeta} from "./domain/entity-meta.model";
-import {Identifiable} from "./domain/identifiable.model";
+import {FieldFilter} from './domain/filter.model';
+import {EntityService} from './entity.service';
+import {EntityMeta} from './domain/entity-meta.model';
+import {Identifiable} from './domain/identifiable.model';
 
 
 export class EntityDataSource<T extends Identifiable> implements DataSource<T> {

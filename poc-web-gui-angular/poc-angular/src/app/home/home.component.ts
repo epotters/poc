@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {ConfigService} from "../app-config.service";
+import {ConfigService} from '../app-config.service';
 
 
 @Component({

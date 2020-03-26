@@ -1,4 +1,4 @@
-import {AppConfig} from "../app/app-config.service";
+import {AppConfig} from '../app/app-config.service';
 
 
 export const CommonEnvironment: Partial<AppConfig> = {

@@ -1,15 +1,15 @@
+import {BehaviorSubject, Subject} from 'rxjs';
+import {takeUntil, tap} from 'rxjs/operators';
 import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {tap} from "rxjs/operators";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
-import {ConfirmationDialogComponent} from "./dialog/confirmation-dialog.component";
-import {EntityService} from "./entity.service";
-import {EntityMeta, ValidatorDescriptor} from "./domain/entity-meta.model";
-import {BehaviorSubject} from "rxjs";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Identifiable} from "./domain/identifiable.model";
+import {ConfirmationDialogComponent} from './dialog/confirmation-dialog.component';
+import {EntityService} from './entity.service';
+import {EntityMeta, ValidatorDescriptor} from './domain/entity-meta.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Identifiable} from './domain/identifiable.model';
 
 
 @Directive()
@@ -22,8 +22,10 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   title: string;
   entityForm: FormGroup;
   entitySubject: BehaviorSubject<T> = new BehaviorSubject<T>({} as T); // Used by the relations submodules
-
   enableValidation: boolean = true;
+
+  terminator: Subject<any> = new Subject();
+
 
   protected constructor(
     public meta: EntityMeta<T>,
@@ -72,11 +74,13 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   ngOnDestroy(): void {
     this.entitySubject.complete();
+    this.terminator.next();
+    this.terminator.complete();
   }
 
   prefillFromQueryString() {
-    this.route.queryParams.subscribe(params => {
-      for (let key in params) {
+    this.route.queryParams.pipe(takeUntil(this.terminator)).subscribe(params => {
+      for (const key in params) {
         if (params.hasOwnProperty(key) && this.entityForm.controls.hasOwnProperty(key)) {
           const formControl: AbstractControl | null = this.entityForm.get(key);
           if (!!formControl && params.hasOwnProperty(key)) {
@@ -109,21 +113,21 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         console.info(`${this.meta.displayName} loaded in the editor`);
         this.entitySubject.next(entity);
       })
-    ).subscribe();
+    ).pipe(takeUntil(this.terminator)).subscribe();
   }
 
 
   saveEntity() {
     if (this.entityForm.valid) {
-      let entity: T = this.entityForm.getRawValue();
+      const entity: T = this.entityForm.getRawValue();
 
       console.debug('Ready to save ' + this.meta.displayName + ': ' + JSON.stringify(entity));
-      this.service.save(entity).subscribe((savedEntity) => {
+      this.service.save(entity).pipe(takeUntil(this.terminator)).subscribe((savedEntity) => {
         let msg: string;
         if (entity.id) {
-          msg = `${this.meta.displayName}  named "${this.meta.displayNameRenderer(entity)}" is updated successfully`;
+          msg = `${this.meta.displayName}  named '${this.meta.displayNameRenderer(entity)}' is updated successfully`;
         } else {
-          msg = `${this.meta.displayName}  named "${this.meta.displayNameRenderer(savedEntity)}" is created successfully with id ${savedEntity.id}`;
+          msg = `${this.meta.displayName}  named '${this.meta.displayNameRenderer(savedEntity)}' is created successfully with id ${savedEntity.id}`;
           if (!this.isManaged) {
             this.router.navigate([this.meta.apiBase + '/' + savedEntity.id]);
           }
@@ -152,18 +156,18 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
       return;
     }
 
-    let entity = this.entityForm.getRawValue();
+    const entity = this.entityForm.getRawValue();
     const dialogRef = this.openConfirmationDialog('Confirm delete',
       'Are you sure you want to delete ' + this.meta.displayName.toLowerCase() + ' named ' + this.meta.displayNameRenderer(entity) + '?');
 
-    dialogRef.afterClosed().subscribe(
+    dialogRef.afterClosed().pipe(takeUntil(this.terminator)).subscribe(
       data => {
-        console.debug("Dialog output:", data);
+        console.debug('Dialog output:', data);
         if (data.confirmed) {
           console.info('User confirmed delete action, so it will be executed');
-          this.service.delete(entity.id).subscribe((response) => {
+          this.service.delete(entity.id).pipe(takeUntil(this.terminator)).subscribe((response) => {
             console.info('response ', response);
-            let msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' is deleted successfully';
+            const msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' is deleted successfully';
             console.info(msg);
             this.snackbar.open(msg, undefined, {
               duration: 2000
@@ -180,7 +184,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
 
   revert() {
-    let entityId = this.entityForm.getRawValue().id;
+    const entityId = this.entityForm.getRawValue().id;
     if (entityId) {
       this.loadEntity(entityId);
     } else {
@@ -194,7 +198,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
   }
 
   isNew(): boolean {
-    let entity = this.entityForm.getRawValue();
+    const entity = this.entityForm.getRawValue();
     return (!entity || !entity.id);
   }
 
@@ -206,8 +210,8 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
 
   buildForm(formBuilder: FormBuilder): FormGroup {
-    let group = {};
-    for (let key in this.editorColumns) {
+    const group = {};
+    for (const key in this.editorColumns) {
       if (this.editorColumns.hasOwnProperty(key)) {
         group[key] = new FormControl('', this.buildValidators(key));
       }
@@ -228,10 +232,10 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     const validators: any[] = [];
     const validatorDescriptors = this.meta.columnConfigs[fieldName].validators;
     if (validatorDescriptors) {
-      for (let key in validatorDescriptors) {
+      for (const key in validatorDescriptors) {
         if (validatorDescriptors.hasOwnProperty(key)) {
-          let validatorDescriptor: ValidatorDescriptor = validatorDescriptors[key];
-          let validator = (validatorDescriptor.argument) ?
+          const validatorDescriptor: ValidatorDescriptor = validatorDescriptors[key];
+          const validator = (validatorDescriptor.argument) ?
             Validators[validatorDescriptor.type](validatorDescriptor.argument) :
             Validators[validatorDescriptor.type];
           validators.push(validator);

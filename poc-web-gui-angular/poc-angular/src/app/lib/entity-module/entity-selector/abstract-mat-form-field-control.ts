@@ -1,16 +1,21 @@
-import {Subject} from "rxjs";
-import {Directive, DoCheck, ElementRef, HostBinding, Injector, Input, OnDestroy, OnInit} from "@angular/core";
-import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {MatFormFieldControl} from "@angular/material/form-field";
-import {coerceBooleanProperty} from "@angular/cdk/coercion";
-import {FocusMonitor} from "@angular/cdk/a11y";
-import {Identifiable} from "..";
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {FocusMonitor} from '@angular/cdk/a11y';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import {Directive, DoCheck, ElementRef, HostBinding, Injector, Input, OnDestroy, OnInit} from '@angular/core';
+import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {MatFormFieldControl} from '@angular/material/form-field';
+
+
+import {Identifiable} from '..';
 
 
 // Source: https://medium.com/@sermicromegas/i-can-help-this-is-the-source-code-of-the-component-with-some-adjustments-tested-on-angular-9-b0d251c07651
 
 @Directive()
 export abstract class AbstractMatFormFieldControl<T extends Identifiable> implements OnInit, OnDestroy, DoCheck, ControlValueAccessor, MatFormFieldControl<T> {
+
+  terminator: Subject<any> = new Subject();
 
   protected constructor(
     public elementRef: ElementRef<HTMLElement>,
@@ -20,7 +25,8 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
 
     this.controlType = controlType;
 
-    focusMonitor.monitor(elementRef, true).subscribe(origin => {
+    focusMonitor.monitor(elementRef, true)
+      .pipe(takeUntil(this.terminator)).subscribe(origin => {
       if (this.focused && !origin) {
         this.onTouched();
       }
@@ -154,6 +160,8 @@ export abstract class AbstractMatFormFieldControl<T extends Identifiable> implem
   ngOnDestroy() {
     this.stateChanges.complete();
     this.focusMonitor.stopMonitoring(this.elementRef);
+    this.terminator.next();
+    this.terminator.complete();
   }
 
 

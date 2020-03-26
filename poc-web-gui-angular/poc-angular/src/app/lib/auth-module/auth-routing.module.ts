@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthLoginComponent} from "./auth-login.component";
-import {AuthLogoutComponent} from "./auth-logout.component";
+import {AuthLoginComponent} from './auth-login.component';
+import {AuthLogoutComponent} from './auth-logout.component';
 
-import {AuthLoginCallbackComponent} from "./auth-login-callback.component";
-import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
-import {AuthGuardService} from "./auth-guard.service";
+import {AuthLoginCallbackComponent} from './auth-login-callback.component';
+import {AuthLogoutCallbackComponent} from './auth-logout-callback.component';
+import {AuthGuardService} from './auth-guard.service';
 
 
 const routes: Routes = [

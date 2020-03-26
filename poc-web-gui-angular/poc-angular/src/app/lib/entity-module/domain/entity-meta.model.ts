@@ -1,4 +1,4 @@
-import {Identifiable} from "./identifiable.model";
+import {Identifiable} from './identifiable.model';
 
 export declare type EditorType = 'none' | 'text' | 'textarea' | 'select' | 'date' | 'entity-selector' | 'relation';
 export declare type SortDirectionType = 'asc' | 'desc';

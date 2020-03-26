@@ -1,15 +1,15 @@
 import {NgModule} from '@angular/core';
 
-import {AuthRoutingModule} from "./auth-routing.module";
+import {AuthRoutingModule} from './auth-routing.module';
 
-import {AuthLoginComponent} from "./auth-login.component";
-import {AuthLogoutComponent} from "./auth-logout.component";
-import {AuthLoginCallbackComponent} from "./auth-login-callback.component";
-import {AuthLogoutCallbackComponent} from "./auth-logout-callback.component";
+import {AuthLoginComponent} from './auth-login.component';
+import {AuthLogoutComponent} from './auth-logout.component';
+import {AuthLoginCallbackComponent} from './auth-login-callback.component';
+import {AuthLogoutCallbackComponent} from './auth-logout-callback.component';
 
-import {AuthGuardService} from "./auth-guard.service";
-import {AuthService} from "./auth.service";
-import {ConfigService} from "../../app-config.service";
+import {AuthGuardService} from './auth-guard.service';
+import {AuthService} from './auth.service';
+import {ConfigService} from '../../app-config.service';
 
 
 export interface RouteData {
@@ -44,7 +44,7 @@ export interface QueryParams {
       provide: 'accountUrlRedirectResolver',
       deps: [ConfigService],
       useFactory: (config: ConfigService) => {
-        let routeData: RouteData = {
+        const routeData: RouteData = {
           externalUrl: config.accountUrl,
           queryParams: {
             referer: config.clientRoot,
@@ -54,9 +54,9 @@ export interface QueryParams {
         let url = routeData.externalUrl;
         if (routeData.queryParams) {
           let isFirst = true;
-          for (let key in routeData.queryParams) {
+          for (const key in routeData.queryParams) {
             if (routeData.queryParams.hasOwnProperty(key)) {
-              let value = routeData.queryParams[key];
+              const value = routeData.queryParams[key];
               url += ((isFirst) ? '?' : '&') + key + '=' + value;
               isFirst = false;
             }

@@ -1,7 +1,7 @@
 import {ErrorHandler, Injectable} from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import {ConfigService} from "../../app-config.service";
-import {PocError} from "./errors";
+import {Observable, Subject} from 'rxjs';
+import {ConfigService} from '../../app-config.service';
+import {PocError} from './errors';
 
 @Injectable({
   providedIn: 'root'

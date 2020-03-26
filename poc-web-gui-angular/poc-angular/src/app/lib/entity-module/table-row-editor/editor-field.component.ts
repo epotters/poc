@@ -1,7 +1,7 @@
-import {Component, Injector, Input} from "@angular/core";
-import {AbstractControl} from "@angular/forms";
-import {FloatLabelType} from "@angular/material/form-field";
-import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable} from "..";
+import {Component, Injector, Input} from '@angular/core';
+import {AbstractControl} from '@angular/forms';
+import {FloatLabelType} from '@angular/material/form-field';
+import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable} from '..';
 
 @Component({
   selector: 'editor-field',
@@ -38,7 +38,7 @@ export class EditorFieldComponent<T extends Identifiable> {
     }
     const errorMessages: string[] = [];
     if (!!this.columnConfig.validators && this.columnConfig.validators.length > 0) {
-      for (let validation of this.columnConfig.validators) {
+      for (const validation of this.columnConfig.validators) {
         if (this.hasErrorOfType(validation.type)) {
           errorMessages.push(validation.message);
         }

@@ -1,8 +1,8 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, Subject, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
-import {Injectable} from "@angular/core";
-import {PocError} from "./errors";
+import {Injectable} from '@angular/core';
+import {PocError} from './errors';
 
 
 // Source: https://scotch.io/bar-talk/error-handling-with-angular-6-tips-and-best-practices192
@@ -40,7 +40,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
             if (error.status === 404 && request.url.endsWith('poc-config.json')) {
               console.debug('Redirecting to local copy of poc-config.json');
-              let requestModified: HttpRequest<any> = request.clone({
+              const requestModified: HttpRequest<any> = request.clone({
                 url: './assets/poc-config.json',
                 headers: request.headers.set('Content-Type', 'application/json')
               });

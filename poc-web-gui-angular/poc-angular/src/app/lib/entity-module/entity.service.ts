@@ -2,12 +2,12 @@ import {HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-import {FieldFilter} from "./domain/filter.model";
-import {EntityMeta} from "./domain/entity-meta.model";
-import {EntityResult} from "./domain/entity-result.model";
-import {ApiService} from "./domain/api-service.model";
-import {FilterBuilder} from "./common/filter-builder";
-import {Identifiable} from "./domain/identifiable.model";
+import {FieldFilter} from './domain/filter.model';
+import {EntityMeta} from './domain/entity-meta.model';
+import {EntityResult} from './domain/entity-result.model';
+import {ApiService} from './domain/api-service.model';
+import {FilterBuilder} from './common/filter-builder';
+import {Identifiable} from './domain/identifiable.model';
 
 
 export class EntityService<T extends Identifiable> {
@@ -24,7 +24,7 @@ export class EntityService<T extends Identifiable> {
 
   public list(filters?: FieldFilter[], sortField = 'id', sortDirection = 'asc', pageNumber = 0, pageSize = 100): Observable<any> {
 
-    let params: HttpParams = new HttpParams()
+    const params: HttpParams = new HttpParams()
       .set('filters', this.filterBuilder.buildFilterParams(filters))
       .set('sort', sortField + ',' + sortDirection)
       .set('page', pageNumber.toString())
@@ -33,8 +33,8 @@ export class EntityService<T extends Identifiable> {
     return this.apiService.get(this.meta.apiBase, params)
       .pipe(
         map((response: Response) => {
-          let result: EntityResult<T> = {
-            entities: response["content"],
+          const result: EntityResult<T> = {
+            entities: response['content'],
             total: response['totalElements']
           };
           return result;

@@ -1,8 +1,8 @@
 import {Component, Injector, OnInit} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
-import {BaseEditorRowComponent} from "./base-editor-row.component";
-import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/material/tooltip";
-import {ColumnConfig, FieldEditorConfig, Identifiable} from ".";
+import {FormBuilder} from '@angular/forms';
+import {BaseEditorRowComponent} from './base-editor-row.component';
+import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
+import {ColumnConfig, FieldEditorConfig, Identifiable} from '.';
 
 
 export const InlineEditorTooltipDefaults: MatTooltipDefaultOptions = {
@@ -41,7 +41,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     if (entity) {
 
       console.debug('Entity to load in the row editor:', entity);
-      let editorEntity: Partial<T> = this.prepareEntity(entity);
+      const editorEntity: Partial<T> = this.prepareEntity(entity);
 
       console.debug('Prepared entity to load in the row editor:', editorEntity);
 
@@ -55,10 +55,10 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
   }
 
   getColumns(): Record<string, FieldEditorConfig> {
-    let editorColumns: Record<string, FieldEditorConfig> = {};
-    for (let idx in this.columns) {
-      let key: string = this.columns[idx];
-      let columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+    const editorColumns: Record<string, FieldEditorConfig> = {};
+    for (const idx in this.columns) {
+      const key: string = this.columns[idx];
+      const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
       if (columnConfig && columnConfig.rowEditor) {
         editorColumns[key] = columnConfig.rowEditor;
       } else if (columnConfig && columnConfig.editor) {
@@ -72,7 +72,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   // Only include fields that are in the form
   private prepareEntity(entity: T): Partial<T> {
-    let editorEntity: Partial<T> = {};
+    const editorEntity: Partial<T> = {};
     Object.entries(entity).forEach(
       ([key, value]) => {
         if (this.rowEditorForm.contains(key)) {

@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
-import {EntityCommonModule} from "../common/entity-common.module";
-import {EntityMaterialModule} from "../common/entity-material.module";
-import {EntitySelectorComponent} from "./entity-selector.component";
-import {EntitySelectorListComponent} from "./entity-selector-list.component";
-import {DialogModule} from "../dialog/dialog.module";
+import {EntityCommonModule} from '../common/entity-common.module';
+import {EntityMaterialModule} from '../common/entity-material.module';
+import {DialogModule} from '../dialog/dialog.module';
+import {EntitySelectorListComponent} from './entity-selector-list.component';
+import {EntitySelectorComponent} from './entity-selector.component';
 
 
 @NgModule({

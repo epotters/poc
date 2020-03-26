@@ -1,15 +1,15 @@
-import {Subject, Subscription} from "rxjs";
-import {debounceTime} from "rxjs/operators";
+import {Subject, Subscription} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 
-import {AfterContentInit, Directive, EventEmitter, Injector, Input, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {FloatLabelType} from "@angular/material/form-field";
+import {AfterContentInit, Directive, EventEmitter, Injector, Input, OnDestroy, Output} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FloatLabelType} from '@angular/material/form-field';
 
-import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from ".";
+import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from '.';
 
 
 @Directive()
-export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit {
+export abstract class BaseEditorRowComponent<T extends Identifiable> implements AfterContentInit, OnDestroy {
 
   @Input() readonly meta: EntityMeta<T>;
   @Input() readonly columns: string[];
@@ -24,7 +24,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   debouncer: Subject<string> = new Subject<string>();
   visible: boolean = true;
 
-  subscription: Subscription;
+  private terminator: Subject<any> = new Subject();
   firstChangeEvent: boolean = true;
 
   debounceTime: number = 300;
@@ -39,7 +39,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.editorColumns = this.getColumns();
     this.rowEditorForm = this.buildFormGroup();
     this.debouncer.pipe(debounceTime(this.debounceTime))
-      .subscribe(() => {
+      .pipe(takeUntil(this.terminator)).subscribe(() => {
         if (this.firstChangeEvent) {
           this.firstChangeEvent = false;
         } else {
@@ -49,8 +49,13 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.onChanges();
   }
 
+  ngOnDestroy(): void {
+    this.terminator.next();
+    this.terminator.complete();
+  }
+
   onChanges(): void {
-    this.rowEditorForm.valueChanges.subscribe(entityData => {
+    this.rowEditorForm.valueChanges.pipe(takeUntil(this.terminator)).subscribe(entityData => {
       this.debouncer.next(entityData);
     });
   }
@@ -75,10 +80,10 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     const validators: any[] = [];
     const validatorDescriptors = this.meta.columnConfigs[fieldName].validators;
     if (validatorDescriptors) {
-      for (let key in validatorDescriptors) {
+      for (const key in validatorDescriptors) {
         if (validatorDescriptors.hasOwnProperty(key)) {
-          let validatorDescriptor: ValidatorDescriptor = validatorDescriptors[key];
-          let validator = (validatorDescriptor.argument) ?
+          const validatorDescriptor: ValidatorDescriptor = validatorDescriptors[key];
+          const validator = (validatorDescriptor.argument) ?
             Validators[validatorDescriptor.type](validatorDescriptor.argument) :
             Validators[validatorDescriptor.type];
           validators.push(validator);
@@ -95,7 +100,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   }
 
   hasErrors(key: string): boolean {
-    let control: AbstractControl | null = this.rowEditorForm.get(key);
+    const control: AbstractControl | null = this.rowEditorForm.get(key);
     return (this.enableValidation) ? ((!!control) ? control.valid : false) : false;
   }
 
@@ -106,7 +111,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     const errorMessages: string[] = [];
     const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
     if (!!columnConfig.validators && columnConfig.validators.length > 0) {
-      for (let validation of columnConfig.validators) {
+      for (const validation of columnConfig.validators) {
         if (this.hasErrorOfType(key, validation.type)) {
           errorMessages.push(validation.message);
         }
@@ -125,8 +130,8 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   }
 
   private buildFormGroup(): FormGroup {
-    let group: { [key: string]: any } = {};
-    for (let key in this.editorColumns) {
+    const group: { [key: string]: any } = {};
+    for (const key in this.editorColumns) {
       if (this.editorColumns.hasOwnProperty(key)) {
         group[key] = new FormControl('', this.buildValidators(key));
       }

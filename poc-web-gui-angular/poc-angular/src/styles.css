@@ -177,8 +177,7 @@ mat-table mat-row:focus {
 .mat-footer-cell,
 .editor-cell,
 .filter-cell,
-input.mat-input-element,
-.mat-radio-label-content {
+input.mat-input-element {
   font-size: 15px;
 }
 
@@ -343,18 +342,8 @@ TODO: Move to entity-list-of-cards.component.css
 }
 
 
-/* Experimental */
-mat-header-row {
-  position: sticky;
-  z-index: 51;
-  top: 0;
-}
-
 
 /* Entity Selector */
-
-entity-selector {
-}
 
 entity-selector .mat-input-element,
 entity-selector-list .mat-input-element {
@@ -398,20 +387,3 @@ entity-selector-list .mat-icon-button {
   background: rgba(0, 0, 0, .04);
 }
 
-
-
-/* Not for production */
-
-.buttons-vertical button {
-  display: block;
-  margin-bottom: 6px;
-}
-
-filter-row {
-  overflow: hidden;
-  transition: all .3s;
-}
-
-person-editor-card {
-  opacity: 1;
-}

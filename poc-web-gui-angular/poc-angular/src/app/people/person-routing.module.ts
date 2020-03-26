@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuardService} from "../lib/auth-module";
-import {PersonListComponent} from "./person-list.component";
-import {PersonEditorComponent} from "./person-editor.component";
-import {PersonManagerComponent} from "./person-manager.component";
-import {PersonListOfCardsComponent} from "./person-list-of-cards.component";
+import {AuthGuardService} from '../lib/auth-module';
+import {PersonListComponent} from './person-list.component';
+import {PersonEditorComponent} from './person-editor.component';
+import {PersonManagerComponent} from './person-manager.component';
+import {PersonListOfCardsComponent} from './person-list-of-cards.component';
 
 const base = '';
 

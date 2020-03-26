@@ -1,5 +1,5 @@
-import {EntityMeta} from "../lib/entity-module";
-import {Organization} from "../core/domain";
+import {EntityMeta} from '../lib/entity-module';
+import {Organization} from '../core/domain';
 
 
 export const organizationMeta: EntityMeta<Organization> = {
@@ -51,7 +51,7 @@ export const organizationMeta: EntityMeta<Organization> = {
           owner: 'employer',
           columns: ['id', 'startDate', 'endDate', 'employee'],
           sort: 'employee.lastName',
-          sortDirection: "asc"
+          sortDirection: 'asc'
         }
       }
     }

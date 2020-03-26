@@ -1,19 +1,19 @@
-import {Component, ComponentFactoryResolver, Input} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import {Component, ComponentFactoryResolver, Input} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject} from 'rxjs';
 
-import {Employment, Organization, Person} from "../core/domain/";
-import {organizationMeta} from "./organization-meta";
-import {employmentMeta} from "../employments/employment-meta";
-import {personMeta} from "../people/person-meta";
-import {OrganizationService} from "./organization.service";
-import {EmploymentListComponent} from "../employments/employments-list.component";
-import {EntityEditorComponent} from "../lib/entity-module";
-import {EntityRelationComponent} from "../lib/entity-module/entity-relation.component";
+import {Employment, Organization, Person} from '../core/domain/';
+import {organizationMeta} from './organization-meta';
+import {employmentMeta} from '../employments/employment-meta';
+import {personMeta} from '../people/person-meta';
+import {OrganizationService} from './organization.service';
+import {EmploymentListComponent} from '../employments/employments-list.component';
+import {EntityEditorComponent} from '../lib/entity-module';
+import {EntityRelationComponent} from '../lib/entity-module/entity-relation.component';
 
 
 @Component({

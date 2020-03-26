@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {User, UserManager} from 'oidc-client';
-import {ConfigService} from "../../app-config.service";
+import {ConfigService} from '../../app-config.service';
 import * as moment from 'moment';
 
 export {User};
@@ -122,6 +122,7 @@ export class AuthService {
 
     this.userManager.events.addSilentRenewError(() => {
       console.error(this.prependDate('Error renewing token silently'));
+      this.startAuthentication(this.router.url);
     });
 
     this.userManager.events.addUserSignedOut(() => {

@@ -1,12 +1,23 @@
-import {BehaviorSubject} from "rxjs";
-import {ComponentFactoryResolver, ComponentRef, Directive, Input, OnDestroy, OnInit, Type, ViewChild} from "@angular/core";
-import {ColumnConfig, EntityMeta, RelationEntity} from "./domain/entity-meta.model";
-import {Identifiable} from "./domain/identifiable.model";
+import {
+  ComponentFactoryResolver,
+  ComponentRef,
+  Directive,
+  Input,
+  OnDestroy,
+  OnInit,
+  Type,
+  ViewChild
+} from '@angular/core';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {
   EntityComponentDescriptor,
   EntityComponentEntryPointDirective
-} from "./common/entity-component-entrypoint.directive";
-import {EditableListConfig, EntityListComponent} from "./entity-list.component";
+} from './common/entity-component-entrypoint.directive';
+import {ColumnConfig, EntityMeta, RelationEntity} from './domain/entity-meta.model';
+import {Identifiable} from './domain/identifiable.model';
+import {EditableListConfig, EntityListComponent} from './entity-list.component';
 
 
 @Directive()
@@ -19,7 +30,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   component: Type<any>;
   componentRef: ComponentRef<EntityListComponent<T>>;
   visible: boolean = false;
-
+  private terminator: Subject<any> = new Subject();
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
 
   protected constructor(
@@ -39,10 +50,13 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   ngOnDestroy(): void {
     this.ownerSubject.complete();
     this.componentRef.destroy();
+    this.terminator.next();
+    this.terminator.complete();
   }
 
+
   private activateRelation(): void {
-    this.ownerSubject.asObservable().subscribe(owner => {
+    this.ownerSubject.asObservable().pipe(takeUntil(this.terminator)).subscribe(owner => {
         if (!!owner && !!owner.id) {
           console.debug(`Owner loaded, about to build relation ${this.fieldName}`);
           this.visible = true;
@@ -88,7 +102,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
     this.componentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
     // Copy the configuration to the component
-    for (let key in componentDescriptor.data) {
+    for (const key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
         console.debug(`Set @input ${key} to ${componentDescriptor.data[key]}`);
         this.componentRef.instance[key] = componentDescriptor.data[key];

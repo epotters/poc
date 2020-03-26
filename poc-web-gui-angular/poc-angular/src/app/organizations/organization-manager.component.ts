@@ -1,15 +1,15 @@
-import {Component, ComponentFactoryResolver} from "@angular/core";
-import {Organization} from "../core/domain/";
-import {OrganizationService} from "./organization.service";
-import {EntityManagerComponent} from "../lib/entity-module";
-import {ActivatedRoute} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import {Component, ComponentFactoryResolver} from '@angular/core';
+import {Organization} from '../core/domain/';
+import {OrganizationService} from './organization.service';
+import {EntityManagerComponent} from '../lib/entity-module';
+import {ActivatedRoute} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
 
-import {OrganizationListComponent} from "./organization-list.component";
-import {OrganizationEditorComponent} from "./organization-editor.component";
-import {organizationMeta} from "./organization-meta";
-import {PocAnimations} from "../app-animations";
-import {EntityComponentDescriptor} from "../lib/entity-module/common/entity-component-entrypoint.directive";
+import {OrganizationListComponent} from './organization-list.component';
+import {OrganizationEditorComponent} from './organization-editor.component';
+import {organizationMeta} from './organization-meta';
+import {PocAnimations} from '../app-animations';
+import {EntityComponentDescriptor} from '../lib/entity-module/common/entity-component-entrypoint.directive';
 
 @Component({
   selector: 'organization-manager',

@@ -1,16 +1,18 @@
-import {Component} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {Component} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {takeUntil} from 'rxjs/operators';
 
-import {EntityEditorComponent} from "../lib/entity-module";
-import {EmploymentService} from "./employment.service";
-import {PersonService} from "../people/person.service";
-import {OrganizationService} from "../organizations/organization.service";
-import {Employment} from "../core/domain";
-import {employmentMeta} from "./employment-meta";
-import {FieldFilter} from "../lib/entity-module/domain/filter.model";
+
+import {EntityEditorComponent} from '../lib/entity-module';
+import {EmploymentService} from './employment.service';
+import {PersonService} from '../people/person.service';
+import {OrganizationService} from '../organizations/organization.service';
+import {Employment} from '../core/domain';
+import {employmentMeta} from './employment-meta';
+import {FieldFilter} from '../lib/entity-module/domain/filter.model';
 
 
 @Component({
@@ -20,6 +22,12 @@ import {FieldFilter} from "../lib/entity-module/domain/filter.model";
 })
 export class EmploymentEditorComponent extends EntityEditorComponent<Employment> {
 
+  // Experimental
+  showRelations: boolean = false;
+  personColumns: string[] = ['id'];
+  personFilters: FieldFilter[] = [];
+  organizationColumns: string[] = ['id'];
+  organizationFilters: FieldFilter[] = [];
 
   constructor(
     public service: EmploymentService,
@@ -52,18 +60,18 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
 
 
   prefillFromParameters(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(takeUntil(this.terminator)).subscribe(params => {
       if (params['employee.id']) {
         const personId = params['employee.id'];
         this.personService.get(personId)
-          .subscribe(person => {
+          .pipe(takeUntil(this.terminator)).subscribe(person => {
             this.entityForm.patchValue({employee: person}, {emitEvent: false});
           });
       }
       if (params['employer.id']) {
         const employerId = params['employer.id'];
         this.organizationService.get(employerId)
-          .subscribe(organization => {
+          .pipe(takeUntil(this.terminator)).subscribe(organization => {
             this.entityForm.patchValue({employer: organization}, {emitEvent: false});
           })
       }
@@ -71,16 +79,8 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
   }
 
 
-  // Experimental
-  showRelations: boolean = false;
-  personColumns: string[] = ['id'];
-  personFilters: FieldFilter[] = [];
-  organizationColumns: string[] = ['id'];
-  organizationFilters: FieldFilter[] = [];
-
-
   private activateExperimentalRelatedEntityList(): void {
-    this.entitySubject.asObservable().subscribe(owner => {
+    this.entitySubject.asObservable().pipe(takeUntil(this.terminator)).subscribe(owner => {
         if (owner) {
 
           console.debug('---> Loaded employment', owner);

@@ -1,19 +1,18 @@
-import { AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild, Directive } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {merge} from "rxjs";
-import {tap} from "rxjs/operators";
+import {merge, Subject} from 'rxjs';
+import {takeUntil, tap} from 'rxjs/operators';import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild, Directive, OnDestroy} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
-import {EntityMeta, SortDirectionType} from "./domain/entity-meta.model";
-import {EntityService} from "./entity.service";
-import {EntityDataSource} from "./entity-data-source";
-import {Identifiable} from "./domain/identifiable.model";
+import {EntityMeta, SortDirectionType} from './domain/entity-meta.model';
+import {EntityService} from './entity.service';
+import {EntityDataSource} from './entity-data-source';
+import {Identifiable} from './domain/identifiable.model';
 
 
 @Directive()
-export abstract class EntityListOfCardsComponent<T extends Identifiable> implements OnInit, AfterViewInit {
+export abstract class EntityListOfCardsComponent<T extends Identifiable> implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
@@ -22,6 +21,7 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
   @Input() pageSize: number = 2;
   startPage: number = 0;
 
+  private terminator: Subject<any> = new Subject();
   dataSource: EntityDataSource<T>;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -57,8 +57,13 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
         tap(() => {
           this.loadEntitiesPage();
         })
-      )
-      .subscribe();
+      ).pipe(takeUntil(this.terminator)).subscribe();
+  }
+
+
+  ngOnDestroy(): void {
+    this.terminator.next();
+    this.terminator.complete();
   }
 
 

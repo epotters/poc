@@ -1,20 +1,20 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {APP_BASE_HREF} from "@angular/common";
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
+import {APP_BASE_HREF} from '@angular/common';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {MaterialModule} from './material.module';
-import {AuthGuardService, AuthModule, AuthService} from "./lib/auth-module/";
+import {AuthGuardService, AuthModule, AuthService} from './lib/auth-module/';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {ConfigService, initApp} from "./app-config.service";
-import {EntityServicesModule} from "./core/service/entity-services.module";
+import {ConfigService, initApp} from './app-config.service';
+import {EntityServicesModule} from './core/service/entity-services.module';
 
-import {HomeModule} from "./home/home.module";
-import {InfoModule} from "./info/info.module";
-import {ErrorModule} from "./core/error/error.module";
-import {HttpErrorInterceptor} from "./core/error/error.interceptor";
+import {HomeModule} from './home/home.module';
+import {InfoModule} from './info/info.module';
+import {ErrorModule} from './core/error/error.module';
+import {HttpErrorInterceptor} from './core/error/error.interceptor';
 
 
 @NgModule({

@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
-import {EntityService} from "../lib/entity-module";
-import {Organization} from "../core/domain";
-import {PocApiService} from "../core/service";
-import {organizationMeta} from "./organization-meta";
+import {EntityService} from '../lib/entity-module';
+import {Organization} from '../core/domain';
+import {PocApiService} from '../core/service';
+import {organizationMeta} from './organization-meta';
 
 @Injectable({
   providedIn: 'root'

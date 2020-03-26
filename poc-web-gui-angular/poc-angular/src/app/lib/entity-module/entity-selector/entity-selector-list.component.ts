@@ -1,3 +1,4 @@
+import {FocusMonitor} from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,22 +12,20 @@ import {
   Type,
   ViewChild,
   ViewEncapsulation
-} from "@angular/core";
+} from '@angular/core';
 
-import {FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {MatFormFieldControl} from "@angular/material/form-field";
-import {MatAutocompleteTrigger} from "@angular/material/autocomplete";
-import {Router} from "@angular/router";
-import {FocusMonitor} from "@angular/cdk/a11y"
-
-import {AbstractMatFormFieldControl} from "./abstract-mat-form-field-control";
-import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Identifiable} from "..";
+import {FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {Router} from '@angular/router';
+import {takeUntil} from 'rxjs/operators';
+import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Identifiable} from '..';
 import {
   EntityComponentDescriptor,
   EntityComponentEntryPointDirective
-} from "../common/entity-component-entrypoint.directive";
+} from '../common/entity-component-entrypoint.directive';
 
-
+import {AbstractMatFormFieldControl} from './abstract-mat-form-field-control';
 
 
 @Component({
@@ -109,7 +108,7 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
     this.listComponentRef = this.componentEntrypoint.viewContainerRef.createComponent(componentFactory);
 
     // Copy the configuration to the component
-    for (let key in componentDescriptor.data) {
+    for (const key in componentDescriptor.data) {
       if (componentDescriptor.data.hasOwnProperty(key)) {
         console.debug(`Set @input ${key} to value ${componentDescriptor.data[key]}`);
         this.listComponentRef.instance[key] = componentDescriptor.data[key];
@@ -122,7 +121,7 @@ export class EntitySelectorListComponent<T extends Identifiable> extends Abstrac
     };
 
     // Listen for selected entities
-    this.listComponentRef.instance.selectedEntity.subscribe(entity => {
+    this.listComponentRef.instance.selectedEntity.pipe(takeUntil(this.terminator)).subscribe(entity => {
       console.debug('Entity selected', entity);
       this.value = entity;
     });

@@ -1,11 +1,11 @@
-import {Organization} from "../core/domain/";
-import {Component} from "@angular/core";
-import {ActivatedRoute, Router} from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import {OrganizationService} from "./organization.service";
-import {organizationMeta} from "./organization-meta";
-import {EntityListOfCardsComponent} from "../lib/entity-module/entity-list-of-cards.component";
-import {animate, style, transition, trigger} from "@angular/animations";
+import {Organization} from '../core/domain/';
+import {Component} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import {OrganizationService} from './organization.service';
+import {organizationMeta} from './organization-meta';
+import {EntityListOfCardsComponent} from '../lib/entity-module/entity-list-of-cards.component';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'organization-list-of-cards',

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 
-import {Observable, ObservableInput, of} from "rxjs";
-import {catchError, map} from "rxjs/operators";
+import {Observable, ObservableInput, of} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 import {CommonEnvironment, Environment} from '../environments/';
-import {UserManagerSettings} from "oidc-client";
+import {UserManagerSettings} from 'oidc-client';
 
 
 export interface AppConfig {
@@ -58,6 +58,9 @@ export class ConfigService implements AppConfig {
   userManagerSettings!: UserManagerSettings;
   defaultSnackbarDuration!: number;
 
+  // TODO: use code to enable config caching
+  private readonly configKey: string = 'config';
+
 
   constructor() {
     console.info('Constructing ConfigService');
@@ -67,7 +70,7 @@ export class ConfigService implements AppConfig {
 
 
   public loadConfig(partialConfig: Partial<AppConfig>): void {
-    for (let [key, value] of Object.entries(partialConfig)) {
+    for (const [key, value] of Object.entries(partialConfig)) {
       this[key] = value;
     }
     this.accountUrl = this.oidcProviderRoot + 'realms/' + this.realm + '/account';
@@ -79,7 +82,7 @@ export class ConfigService implements AppConfig {
     return {
       authority: `${this.oidcProviderRoot}realms/${this.realm}`,
       client_id: this.clientId,
-      response_type: "code",
+      response_type: 'code',
       scope: 'openid profile email',
       redirect_uri: `${this.clientRoot}/auth-callback`,
       automaticSilentRenew: true, // Advised against by the authors of oidc-client
@@ -91,8 +94,6 @@ export class ConfigService implements AppConfig {
   }
 
 
-  // TODO: use code to enable config caching
-  private readonly configKey: string = 'config';
 
   public isConfigStored(): boolean {
     return !!sessionStorage.sessionStorage.getItem(this.configKey);
@@ -100,10 +101,10 @@ export class ConfigService implements AppConfig {
 
 
   private readConfig(): void {
-    let json: string | null = sessionStorage.getItem(this.configKey);
+    const json: string | null = sessionStorage.getItem(this.configKey);
     if (!!json) {
       try {
-        let config: AppConfig = JSON.parse(json);
+        const config: AppConfig = JSON.parse(json);
         this.loadConfig(config);
       } catch (error) {
         if (error instanceof SyntaxError) {

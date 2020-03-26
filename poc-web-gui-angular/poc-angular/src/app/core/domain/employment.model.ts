@@ -1,7 +1,7 @@
-import {Moment} from "moment";
-import {Identifiable} from "../../lib/entity-module";
-import {Organization} from "./organization.model";
-import {Person} from "./person.model";
+import {Moment} from 'moment';
+import {Identifiable} from '../../lib/entity-module';
+import {Organization} from './organization.model';
+import {Person} from './person.model';
 
 
 export class Employment implements Identifiable {
