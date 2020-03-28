@@ -192,8 +192,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   // User actions
   onClick(event: MouseEvent, entity: T) {
 
-    const targetElement: Element = ((event.target || event.currentTarget) as Element);
-
+    let targetElement: Element = ((event.target || event.currentTarget) as Element);
+    targetElement = targetElement.parentElement as Element;
     this.markRow(targetElement);
 
     const fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);

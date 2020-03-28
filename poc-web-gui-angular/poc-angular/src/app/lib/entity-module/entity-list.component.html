@@ -77,7 +77,7 @@
       <mat-header-cell *matHeaderCellDef>
         <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{getCellDisplayValue(row, column)}}</mat-cell>
+      <mat-cell *matCellDef="let row"><span class="mat-cell-content">{{getCellDisplayValue(row, column)}}</span></mat-cell>
     </ng-container>
 
     <ng-container *matHeaderRowDef="columns">
