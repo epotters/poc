@@ -47,14 +47,14 @@ export class AppRoutingModule {
 
     this.router.events.subscribe(async routerEvent => {
       if (routerEvent instanceof NavigationStart) {
-        console.info('Start navigation to url', routerEvent.url);
+        console.info(`Start navigation to url "${routerEvent.url}"`);
       }
       else if (routerEvent instanceof RouteConfigLoadEnd) {
-        console.info('Module loaded lazily from path', routerEvent.route.path);
+        console.info(`Module loaded lazily from path "${routerEvent.route.path}"`);
       }
 
       if (routerEvent instanceof NavigationEnd) {
-        console.info('End navigation to url', routerEvent.url);
+        console.info(`End navigation to url "${routerEvent.url}"`);
       }
 
     });

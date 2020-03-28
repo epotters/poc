@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import * as moment from 'moment';
 import {User, UserManager} from 'oidc-client';
 import {ConfigService} from '../../app-config.service';
-import * as moment from 'moment';
 
 export {User};
 
@@ -15,6 +15,7 @@ export class AuthService {
   private user: User | null = null;
   private readonly returnUrlKey: string = 'auth:redirect';
   private readonly logDateFormat: string = 'YYYY-MM-DD HH:mm:ss';
+  private readonly logoutFrameId = 'logout-frame';
 
 
   constructor(
@@ -66,7 +67,7 @@ export class AuthService {
   }
 
   public startSilentAuthentication(returnUrl?: string): Promise<User> {
-    console.debug('Silent authentication - About to set return url to ' + returnUrl || this.router.url);
+    console.debug(`Silent authentication - About to set return url to "${returnUrl || this.router.url}"`);
     this.setReturnUrl(returnUrl || this.router.url);
     return this.userManager.signinSilent();
   }
@@ -74,7 +75,7 @@ export class AuthService {
   public startLogout(): Promise<void> {
     this.route.url.subscribe(url => {
       this.setReturnUrl(url.join('/'));
-      console.info(`Return url was set to ${this.getReturnUrl()}`);
+      console.info(`Return url was set to "${this.getReturnUrl()}"`);
     });
     return this.userManager.signoutRedirect();
   }
@@ -86,8 +87,50 @@ export class AuthService {
     });
   }
 
+  public startSilentLogout() {
+    this.userManager.createSignoutRequest().then(signoutRequest => {
+      console.debug(`Signout URL is "${signoutRequest.url}"`);
+      const iframe: HTMLIFrameElement | null = this.getSessionStatusFrame();
+      if (iframe) {
+        iframe.setAttribute('src', signoutRequest.url);
+      } else {
+        console.warn('Session status iframe not found');
+      }
+    });
+  }
+
+  private getSessionStatusFrame(): HTMLIFrameElement | null {
+    let sessionStatusFrame: HTMLIFrameElement | null = null;
+    const iframes: NodeListOf<HTMLIFrameElement> = document.querySelectorAll('iframe');
+    iframes.forEach((iframe, idx) => {
+      if (iframe.getAttribute('src')!.indexOf('login-status-iframe.html') > 0) {
+        sessionStatusFrame = iframe;
+      }
+    });
+    return sessionStatusFrame;
+  }
+
+  private getLogoutFrame(): HTMLIFrameElement {
+    let iframe: HTMLElement | null = document.getElementById(this.logoutFrameId);
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.setAttribute('id', this.logoutFrameId);
+      iframe.setAttribute('class', 'hidden-frame');
+      document.body.append(iframe);
+      iframe.addEventListener('load', (event) => {
+        console.debug('Logout frame load event from parent', event);
+        this.userManager.removeUser().then(() => {
+          console.debug('UserManager user removed');
+          this.user = null;
+          this.returnToUrl();
+        });
+      });
+    }
+    return (iframe as HTMLIFrameElement);
+  }
+
   public setReturnUrl(returnUrl: string): void {
-    console.debug('Setting return url to ' + returnUrl);
+    console.debug(`Setting return url to "${returnUrl}"`);
     sessionStorage.setItem(this.returnUrlKey, returnUrl);
   }
 
@@ -98,7 +141,7 @@ export class AuthService {
   public returnToUrl(): void {
     const returnUrl: string | null = this.getReturnUrl();
     if (!!returnUrl) {
-      console.debug('Returning to URL ' + returnUrl);
+      console.debug(`Returning to URL "${returnUrl}"`);
       sessionStorage.removeItem(this.returnUrlKey);
       this.router.navigate([returnUrl]);
     } else {
@@ -112,8 +155,17 @@ export class AuthService {
     this.userManager.events.addUserLoaded(() => {
       this.userManager.getUser().then(user => {
         this.user = user;
-        console.info(this.prependDate(`User ${((!!user) ? user.profile.name : 'unknown')} loaded`));
+        console.info(this.prependDate(`User "${((!!user) ? user.profile.name : 'unknown')}" loaded. ` +
+          `User session has been established (or re-established)`));
       });
+    });
+
+    this.userManager.events.addUserSessionChanged(() => {
+      console.info(this.prependDate('User session changed'));
+    });
+
+    this.userManager.events.addAccessTokenExpiring(() => {
+      console.info(this.prependDate('Access token is about to expire'));
     });
 
     this.userManager.events.addAccessTokenExpired(() => {
@@ -121,16 +173,16 @@ export class AuthService {
     });
 
     this.userManager.events.addSilentRenewError(() => {
-      console.error(this.prependDate('Error renewing token silently'));
-      this.startAuthentication(this.router.url);
+      console.error(this.prependDate('The automatic silent renew has failed'));
+      // this.startAuthentication(this.router.url);
     });
 
     this.userManager.events.addUserSignedOut(() => {
-      console.info('User signed out');
+      console.info(this.prependDate('User signed out. The user\'s sign-in status at the OIDC Provider has changed'));
     });
 
     this.userManager.events.addUserUnloaded(() => {
-      console.info('User unloaded');
+      console.info(this.prependDate('User unloaded. The user\'s session has been terminated'));
     });
   }
 
@@ -139,7 +191,7 @@ export class AuthService {
   }
 
   private prependDate(msg: string) {
-    return `${moment().format(this.logDateFormat)}: ${msg}`
+    return `${moment().format(this.logDateFormat)}: ${msg}`;
   }
 
 }

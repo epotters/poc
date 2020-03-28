@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {UserManagerSettings} from 'oidc-client';
 
 import {Observable, ObservableInput, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {CommonEnvironment, Environment} from '../environments/';
-import {UserManagerSettings} from 'oidc-client';
 
 
 export interface AppConfig {
@@ -86,13 +86,13 @@ export class ConfigService implements AppConfig {
       scope: 'openid profile email',
       redirect_uri: `${this.clientRoot}/auth-callback`,
       automaticSilentRenew: true, // Advised against by the authors of oidc-client
-      silent_redirect_uri: `${location.protocol}//${location.host}/assets/auth-silent-callback.html`,
+      silent_redirect_uri: `${location.protocol}//${location.host}/assets/auth-silent-refresh-callback.html`,
       post_logout_redirect_uri: `${this.clientRoot}/auth-logout-callback`,
+      // for silent: post_logout_redirect_uri: `${location.protocol}//${location.host}/assets/auth-silent-logout-callback.html`,
       filterProtocolClaims: true,
       loadUserInfo: true
     };
   }
-
 
 
   public isConfigStored(): boolean {

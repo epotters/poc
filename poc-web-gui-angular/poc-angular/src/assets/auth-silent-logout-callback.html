@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Silent Logout Callback Page</title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.10.1/oidc-client.min.js"></script>
+<script>
+
+  window.onload = function() {
+    console.debug('Inside Logout iframe, load event occurred');
+  };
+
+  (new Oidc.UserManager()).signoutCallback()
+    .then((signoutResponse) => {
+      console.info(currentDate() + ': User was signed out silently', signoutResponse);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+  function currentDate() {
+    var now = new Date();
+    return now.getFullYear() + '-' + addZero(now.getMonth()) + '-' + addZero(now.getDay()) +
+      ' ' + addZero(now.getHours()) + ':' + addZero(now.getMinutes()) + ':' + addZero(now.getSeconds());
+  }
+
+  function addZero(number) {
+    return (number < 10) ? '0' + number : '' + number;
+  }
+</script>
+</body>
+</html>
