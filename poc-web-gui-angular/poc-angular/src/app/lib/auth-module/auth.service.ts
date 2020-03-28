@@ -173,8 +173,8 @@ export class AuthService {
     });
 
     this.userManager.events.addSilentRenewError(() => {
-      console.error(this.prependDate('The automatic silent renew has failed'));
-      // this.startAuthentication(this.router.url);
+      console.info(this.prependDate('The automatic silent renew failed. Redirect to login page.'));
+      this.startAuthentication(this.router.url);
     });
 
     this.userManager.events.addUserSignedOut(() => {
