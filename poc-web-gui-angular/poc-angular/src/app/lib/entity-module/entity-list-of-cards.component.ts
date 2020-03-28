@@ -34,12 +34,12 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
     public route: ActivatedRoute,
     public dialog: MatDialog
   ) {
-    console.debug('Constructing the EntityListOfCardsComponent for type ' + this.meta.displayNamePlural);
+    console.debug(`Constructing the EntityListOfCardsComponent for type ${this.meta.displayNamePlural}`);
   }
 
 
   ngOnInit() {
-    console.debug('Initializing the EntityListOfCardsComponent for type ' + this.meta.displayNamePlural);
+    console.debug(`Initializing the EntityListOfCardsComponent for type ${this.meta.displayNamePlural}`);
 
     this.activeSort = this.meta.defaultSortField;
     this.sortDirection = this.meta.defaultSortDirection;
