@@ -225,7 +225,8 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   onContextMenu(event: MouseEvent, entity: T, idx: number) {
     console.debug('Context menu for entity ', entity, 'idx: ' + idx);
     event.preventDefault();
-    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+    let targetElement: Element = ((event.target || event.currentTarget) as Element);
+    targetElement = targetElement.parentElement  as Element;
     const fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
