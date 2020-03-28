@@ -1,5 +1,5 @@
-import {FieldFilter} from '../domain/filter.model';
-import {ColumnConfig, EntityMeta, Identifiable} from '..';
+import {FieldFilter} from '../../domain/filter.model';
+import {ColumnConfig, EntityMeta, Identifiable} from '../../index';
 import {DateFilterHelper, SearchDate} from './date-filter-helper';
 import {FilterConstants} from './filter-contants';
 

@@ -24,22 +24,22 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
     return this.getFilters()
   }
 
+
   public getFilters(): FieldFilter[] {
 
-    console.debug('Start building form output value');
+    console.debug('Start collecting field filters');
     const entityFilter: any = this.rowEditorForm.getRawValue();
     const fieldFilters: FieldFilter[] = [];
 
     Object.entries(entityFilter).forEach(
       ([key, value]) => {
-
         if (!!value && value !== '') {
           let fieldName: string = key;
           const type: any = this.getEditor(key).type;
           const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
           if (type === 'entity-selector') {
             if (!(value as Identifiable)['id']) {
-              console.debug('No related entity to search for selected yet. Skipping. ' + value);
+              console.debug(`No related entity to search for selected yet. Skipping ${value}.`);
               return;
             }
             fieldName = fieldName + '.id';
@@ -68,9 +68,9 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
       const formControl: AbstractControl | null = this.rowEditorForm.get(fieldFilter.name);
       if (!!formControl) {
         formControl.setValue(fieldFilter.rawValue, {emitEvent: false});
-        console.debug('---> fieldFilter', fieldFilter.name, 'set to', fieldFilter.rawValue);
+        console.debug(`FieldFilter ${fieldFilter.name} set to ${fieldFilter.rawValue}`);
       } else {
-        console.debug('---> No field control for', fieldFilter.name);
+        console.debug(`No field control for ${fieldFilter.name}. Skipping.`);
       }
     }
   }
@@ -82,10 +82,8 @@ export class FilterRowComponent<T extends Identifiable> extends BaseEditorRowCom
       const key: string = this.columns[idx];
       const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
       if (columnConfig && columnConfig.filter) {
-        // console.debug('filter config found for field', key, ':', columnConfig.filter);
         editorColumns[key] = columnConfig.filter;
       } else if (columnConfig && columnConfig.rowEditor) {
-        // console.debug('rowEditor config found for field', key, ':', columnConfig.rowEditor);
         editorColumns[key] = columnConfig.rowEditor;
       } else if (columnConfig && columnConfig.editor) {
         editorColumns[key] = columnConfig.editor;

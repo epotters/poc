@@ -6,7 +6,7 @@ import {FieldFilter} from './domain/filter.model';
 import {EntityMeta} from './domain/entity-meta.model';
 import {EntityResult} from './domain/entity-result.model';
 import {ApiService} from './domain/api-service.model';
-import {FilterBuilder} from './common/filter-builder';
+import {FilterBuilder} from './common/filter/filter-builder';
 import {Identifiable} from './domain/identifiable.model';
 
 
