@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {
   EntityComponentDescriptor,
   EntityComponentEntryPointDirective
-} from '../common/entity-component-entrypoint.directive';
+} from '../common/component-loader/entity-component-entrypoint.directive';
 import {EntityListComponent, Identifiable} from '..';
 
 

@@ -14,7 +14,7 @@ import {takeUntil} from 'rxjs/operators';
 import {
   EntityComponentDescriptor,
   EntityComponentEntryPointDirective
-} from './common/entity-component-entrypoint.directive';
+} from './common/component-loader/entity-component-entrypoint.directive';
 import {ColumnConfig, EntityMeta, RelationEntity} from './domain/entity-meta.model';
 import {Identifiable} from './domain/identifiable.model';
 import {EditableListConfig, EntityListComponent} from './entity-list.component';
@@ -27,11 +27,13 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   @Input() readonly ownerSubject: BehaviorSubject<S>;
 
   fieldName: string;
-  component: Type<any>;
-  componentRef: ComponentRef<EntityListComponent<T>>;
   visible: boolean = false;
   private terminator: Subject<any> = new Subject();
+
+  component: Type<any>;
+  componentRef: ComponentRef<EntityListComponent<T>>;
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
+
 
   protected constructor(
     public meta: EntityMeta<T>,

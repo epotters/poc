@@ -9,7 +9,7 @@ import {Identifiable} from './domain/identifiable.model';
 import {EntityService} from './entity.service';
 import {DataSourceState} from './entity-list.component';
 import {EntityLibConfig} from './common/entity-lib-config';
-import {EntityComponentDescriptor} from './common/entity-component-entrypoint.directive';
+import {EntityComponentDescriptor} from './common/component-loader/entity-component-entrypoint.directive';
 import {EntityComponentDialogComponent} from './dialog/entity-component-dialog.component';
 
 

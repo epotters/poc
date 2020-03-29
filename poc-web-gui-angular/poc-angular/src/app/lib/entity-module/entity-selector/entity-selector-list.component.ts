@@ -23,7 +23,7 @@ import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Iden
 import {
   EntityComponentDescriptor,
   EntityComponentEntryPointDirective
-} from '../common/entity-component-entrypoint.directive';
+} from '../common/component-loader/entity-component-entrypoint.directive';
 
 import {AbstractMatFormFieldControl} from './abstract-mat-form-field-control';
 
