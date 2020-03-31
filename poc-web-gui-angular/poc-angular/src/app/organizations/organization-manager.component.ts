@@ -1,15 +1,16 @@
 import {Component, ComponentFactoryResolver} from '@angular/core';
-import {Organization} from '../core/domain/';
-import {OrganizationService} from './organization.service';
-import {EntityManagerComponent} from '../lib/entity-module';
-import {ActivatedRoute} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute} from '@angular/router';
+import {PocAnimations} from '../app-animations';
+import {Organization} from '../core/domain/';
+import {EntityManagerComponent} from '../lib/entity-module';
+import {ComponentLoader} from '../lib/entity-module/common/component-loader/component-loader';
+import {EntityComponentDescriptor} from '../lib/entity-module/common/component-loader/entity-component-entrypoint.directive';
+import {OrganizationEditorComponent} from './organization-editor.component';
 
 import {OrganizationListComponent} from './organization-list.component';
-import {OrganizationEditorComponent} from './organization-editor.component';
 import {organizationMeta} from './organization-meta';
-import {PocAnimations} from '../app-animations';
-import {EntityComponentDescriptor} from '../lib/entity-module/common/entity-component-entrypoint.directive';
+import {OrganizationService} from './organization.service';
 
 @Component({
   selector: 'organization-manager',
@@ -26,7 +27,8 @@ export class OrganizationManagerComponent extends EntityManagerComponent<Organiz
     public service: OrganizationService,
     public route: ActivatedRoute,
     public componentFactoryResolver: ComponentFactoryResolver,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public componentLoader: ComponentLoader<Organization>
   ) {
     super(organizationMeta, service, route, componentFactoryResolver, dialog);
 

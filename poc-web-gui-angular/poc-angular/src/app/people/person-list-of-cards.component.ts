@@ -1,11 +1,12 @@
-import {Person} from '../core/domain/';
 import {Component} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import {EntityListOfCardsComponent} from '../lib/entity-module/entity-list-of-cards.component';
-import {PersonService} from './person.service';
-import {personMeta} from './person-meta';
 import {PocAnimations} from '../app-animations';
+import {Person} from '../core/domain/';
+import {ComponentLoader} from '../lib/entity-module/common/component-loader/component-loader';
+import {EntityListOfCardsComponent} from '../lib/entity-module/entity-list-of-cards.component';
+import {personMeta} from './person-meta';
+import {PersonService} from './person.service';
 
 
 @Component({
@@ -24,11 +25,11 @@ export class PersonListOfCardsComponent extends EntityListOfCardsComponent<Perso
     public service: PersonService,
     public router: Router,
     public route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public componentLoader: ComponentLoader<Person>
   ) {
 
-    super(personMeta, service, router, route, dialog);
+    super(personMeta, service, router, route, dialog, componentLoader);
   }
-
 
 }

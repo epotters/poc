@@ -1,14 +1,29 @@
-import {merge, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';import {AfterViewInit, EventEmitter, Input, OnInit, Output, ViewChild, Directive, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {
+  AfterViewInit,
+  ComponentRef,
+  Directive,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Type,
+  ViewChild
+} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute, Router} from '@angular/router';
+import {merge, Subject} from 'rxjs';
+import {takeUntil, tap} from 'rxjs/operators';
+import {ComponentLoader} from './common/component-loader/component-loader';
+import {EntityComponentEntryPointDirective} from './common/component-loader/entity-component-entrypoint.directive';
 
 import {EntityMeta, SortDirectionType} from './domain/entity-meta.model';
-import {EntityService} from './entity.service';
-import {EntityDataSource} from './entity-data-source';
 import {Identifiable} from './domain/identifiable.model';
+import {EntityDataSource} from './entity-data-source';
+import {EntityEditorComponent} from './entity-editor.component';
+import {EntityService} from './entity.service';
 
 
 @Directive()
@@ -24,15 +39,21 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
   private terminator: Subject<any> = new Subject();
   dataSource: EntityDataSource<T>;
 
+  component: Type<any>;
+  componentRef: ComponentRef<EntityEditorComponent<T>>;
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
+
 
   protected constructor(
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
     public router: Router,
     public route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public componentLoader: ComponentLoader<T>
   ) {
     console.debug(`Constructing the EntityListOfCardsComponent for type ${this.meta.displayNamePlural}`);
   }
@@ -62,6 +83,7 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
 
   ngOnDestroy(): void {
+    this.componentRef.destroy();
     this.terminator.next();
     this.terminator.complete();
   }

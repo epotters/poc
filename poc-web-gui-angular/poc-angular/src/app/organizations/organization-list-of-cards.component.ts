@@ -1,11 +1,13 @@
-import {Organization} from '../core/domain/';
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import {OrganizationService} from './organization.service';
-import {organizationMeta} from './organization-meta';
-import {EntityListOfCardsComponent} from '../lib/entity-module/entity-list-of-cards.component';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {Component} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
+
+import {Organization} from '../core/domain/';
+import {ComponentLoader} from '../lib/entity-module/common/component-loader/component-loader';
+import {EntityListOfCardsComponent} from '../lib/entity-module/entity-list-of-cards.component';
+import {organizationMeta} from './organization-meta';
+import {OrganizationService} from './organization.service';
 
 @Component({
   selector: 'organization-list-of-cards',
@@ -31,10 +33,11 @@ export class OrganizationListOfCardsComponent extends EntityListOfCardsComponent
     public service: OrganizationService,
     public router: Router,
     public route: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public componentLoader: ComponentLoader<Organization>
   ) {
 
-    super(organizationMeta, service, router, route, dialog);
+    super(organizationMeta, service, router, route, dialog, componentLoader);
   }
 
 
