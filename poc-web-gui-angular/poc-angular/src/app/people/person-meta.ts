@@ -105,8 +105,8 @@ export const personMeta: EntityMeta<Person> = {
           relationClass: 'Employment',
           owner: 'employee',
           columns: ['id', 'startDate', 'endDate', 'employer'],
-          sort: 'employer.name',
-          sortDirection: 'asc'
+          sort: 'startDate',
+          sortDirection: 'desc'
         }
       }
     }

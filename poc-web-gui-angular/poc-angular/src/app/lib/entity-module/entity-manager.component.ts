@@ -52,7 +52,7 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   onEntitySelected(entity: T) {
     console.debug('EntitySelected event received', entity);
     this.selectedEntity = entity;
-    this.openDialogWithEditor(entity);
+    // this.openDialogWithEditor(entity);
   }
 
   toggleList() {
