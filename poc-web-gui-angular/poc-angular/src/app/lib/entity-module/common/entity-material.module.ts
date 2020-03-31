@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
@@ -33,6 +34,7 @@ import {ENTITY_DATE_FORMATS} from './entity-lib-config';
   imports: [
     MatAutocompleteModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatIconModule,
     MatCardModule,
     MatToolbarModule,
@@ -57,6 +59,7 @@ import {ENTITY_DATE_FORMATS} from './entity-lib-config';
   exports: [
     MatAutocompleteModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatIconModule,
     MatCardModule,
     MatToolbarModule,

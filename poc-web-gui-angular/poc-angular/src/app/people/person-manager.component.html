@@ -11,28 +11,57 @@
   <button (click)="openDialogWithList()" mat-button>List in dialog</button>
   <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
 
+  <mat-button-toggle-group #group="matButtonToggleGroup">
+    <mat-button-toggle value="list" aria-label="List view">
+      <mat-icon>list</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="cards" aria-label="Small cards">
+      <mat-icon>view_module</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="detail" aria-label="Detail view">
+      <mat-icon>crop_3_2</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
 </mat-toolbar>
 
+<div class="example-selected-value">Selected view: {{group.value}}</div>
 
-<person-editor-card
-  [entityToLoad]="selectedEntity"
-  [isManaged]="true"
-  *ngIf="editorVisible"
-  [@fadeInOut]
-  (@fadeInOut.start)="onAnimationEvent($event)"
-  (@fadeInOut.done)="onAnimationEvent($event)">
-</person-editor-card>
+<div>Selected entity: {{((!!selectedEntity) ? 'Person with id ' + selectedEntity.id : 'No person') + ' selected'}}</div>
 
 
-<person-list-card
-  (selectedEntity)="onEntitySelected($event)"
-  [columns]="meta.displayedColumns"
-  [filterVisible]="false"
-  [isManaged]="true"
-  [title]="'Managed people list'"
-  *ngIf="listVisible"
-  [@fadeInOut]>
-</person-list-card>
+<div class="multiview-columns" style="display: flex;">
+
+
+  <div class="multiview-column-right" style="flex: 2;">
+
+    <person-list-card
+      (selectedEntity)="onEntitySelected($event)"
+      [columns]="meta.displayedColumns"
+      [filterVisible]="false"
+      [isManaged]="true"
+      [title]="'Managed people list'"
+      *ngIf="listVisible"
+      [@fadeInOut]>
+    </person-list-card>
+
+  </div>
+
+  <div class="multiview-column-left" style="flex: 1; padding-right: 48px;">
+    <person-detail [entity]="selectedEntity"></person-detail>
+
+    <person-editor-card
+      [entityToLoad]="selectedEntity"
+      [isManaged]="true"
+      *ngIf="editorVisible"
+      [@fadeInOut]
+      (@fadeInOut.start)="onAnimationEvent($event)"
+      (@fadeInOut.done)="onAnimationEvent($event)">
+    </person-editor-card>
+
+  </div>
+
+</div>
 
 
 <person-list-of-cards

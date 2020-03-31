@@ -1,0 +1,20 @@
+<mat-card class="detail" *ngIf="entity">
+  <mat-card-header>
+    <mat-card-title>
+      {{entity.firstName}} {{entity.prefix}} {{entity.lastName}}
+    </mat-card-title>
+
+  </mat-card-header>
+  <mat-card-content>
+    {{entity.firstName}} {{entity.prefix}} {{entity.lastName}} was born
+    on {{moment(entity.birthDate, "YYYY-MM-DD").format('MMMM Do YYYY')}} in {{entity.birthPlace}}.
+  </mat-card-content>
+</mat-card>
+
+
+<div *ngIf="!entity">No person loaded</div>
+
+
+
+
+

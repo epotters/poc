@@ -1,18 +1,18 @@
 import {Component, ComponentFactoryResolver, Type} from '@angular/core';
-import {EntityManagerComponent} from '../lib/entity-module';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-
-import {FieldFilter} from '../lib/entity-module/domain/filter.model';
-import {EntityComponentDescriptor} from '../lib/entity-module/common/entity-component-entrypoint.directive';
+import {ActivatedRoute} from '@angular/router';
 
 import {PocAnimations} from '../app-animations';
+
 import {Person} from '../core/domain/';
+import {EntityManagerComponent} from '../lib/entity-module';
+import {EntityComponentDescriptor} from '../lib/entity-module/common/component-loader/entity-component-entrypoint.directive';
+import {FieldFilter} from '../lib/entity-module/domain/filter.model';
+import {PersonEditorComponent} from './person-editor.component';
+import {PersonListComponent} from './person-list.component';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
-import {PersonListComponent} from './person-list.component';
-import {PersonEditorComponent} from './person-editor.component';
 
 
 @Component({
@@ -31,7 +31,6 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   demoFormVisible: boolean = false;
 
   entityForm: FormGroup;
-
   listComponent: Type<any> = PersonListComponent;
   editorComponent: Type<any> = PersonEditorComponent;
 
