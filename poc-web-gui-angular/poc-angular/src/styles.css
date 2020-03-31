@@ -182,18 +182,17 @@ input.mat-input-element {
 }
 
 .mat-cell, .mat-footer-cell {
-
 }
 
-
 .mat-cell .mat-cell-content {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding-top: 1px;
-  box-sizing: border-box;
+  padding-right: 12px;
 }
 
 mat-cell.related-entity-link {
@@ -201,7 +200,7 @@ mat-cell.related-entity-link {
 }
 
 mat-row.selected {
-  /* border-bottom-color: rgba(0,0,0,.30); */
+  border-bottom-color: rgba(0, 0, 0, .30);
 }
 
 mat-footer-row, mat-row {
@@ -218,6 +217,40 @@ mat-footer-cell {
 
 .form-card .mat-form-field-infix {
   width: auto;
+}
+
+
+mat-cell.mat-column-id {
+  color: silver;
+}
+
+[component-style='entity-list'] .mat-column-id,
+[component-style='entity-list'] .editor-cell.mat-column-id {
+  width: 72px;
+  max-width: 72px;
+  user-select: none;
+}
+
+[component-style='entity-list'] mat-cell.mat-column-id .mat-cell-content,
+[component-style='entity-list'] .editor-cell.mat-column-id input {
+  box-sizing: border-box;
+  text-align: right;
+  padding-right: 24px;
+}
+
+[component-style='entity-list'] .editor-cell.mat-column-id .editor-type-switch {
+  /*margin-right: -24px;*/
+}
+
+[component-style='entity-list'] .editor-cell.mat-column-id input .mat-form-field-flex {
+  /*margin-right: -24px;*/
+}
+
+[component-style='entity-list'] mat-header-cell.column-type-date,
+[component-style='entity-list'] mat-cell.column-type-date,
+[component-style='entity-list'] .editor-cell.column-type-date {
+  width: 120px;
+  flex: none;
 }
 
 
@@ -291,6 +324,7 @@ TODO: Move to entity-relation.component.css
 
 .relation mat-toolbar.mat-toolbar-single-row {
   height: 48px !important;
+  border-bottom: 1px solid rgba(0,0,0,.12);
 }
 
 .relation .mat-toolbar h4 {
@@ -302,7 +336,7 @@ TODO: Move to entity-relation.component.css
 }
 
 .relation editor-row {
-  width: auto;
+  width: calc(100% - 32px);
   margin-right: 16px;
 }
 
@@ -352,7 +386,9 @@ TODO: Move to entity-list-of-cards.component.css
 
 entity-selector .mat-input-element,
 entity-selector-list .mat-input-element {
-  margin-right: -1.6em;
+  width: calc(100% - 30px);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 entity-selector .mat-icon-button,
