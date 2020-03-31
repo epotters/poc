@@ -58,14 +58,7 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
     const editorColumns: Record<string, FieldEditorConfig> = {};
     for (const idx in this.columns) {
       const key: string = this.columns[idx];
-      const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
-      if (columnConfig && columnConfig.rowEditor) {
-        editorColumns[key] = columnConfig.rowEditor;
-      } else if (columnConfig && columnConfig.editor) {
-        editorColumns[key] = columnConfig.editor;
-      } else {
-        editorColumns[key] = this.defaultFieldEditorConfig;
-      }
+      editorColumns[key] = this.getColumnEditor(key);
     }
     return editorColumns;
   }

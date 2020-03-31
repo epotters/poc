@@ -32,7 +32,7 @@
     </button>
 
 
-    <button #batchActionsMenuTrigger [matMenuTriggerFor]="titlebarMenu" mat-icon-button>
+    <button [matMenuTriggerFor]="titlebarMenu" mat-icon-button>
       <mat-icon>more_vert</mat-icon>
     </button>
 
@@ -74,10 +74,12 @@
     matSortDisableClear>
 
     <ng-container *ngFor="let column of columns" matColumnDef="{{column}}">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef class="column-type-{{getType(column)}}">
         <span mat-sort-header>{{meta.columnConfigs[column].label}}</span>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row"><span class="mat-cell-content">{{getCellDisplayValue(row, column)}}</span></mat-cell>
+      <mat-cell *matCellDef="let row" class="column-type-{{getType(column)}}">
+        <span class="mat-cell-content">{{getCellDisplayValue(row, column)}}</span>
+      </mat-cell>
     </ng-container>
 
     <ng-container *matHeaderRowDef="columns">
@@ -107,12 +109,10 @@
         <!--                  (@slideTo.done)="onAnimationEvent($event)"-->
       </editor-row>
 
-      <!--                  [hidden]="!editorVisible"-->
-
     </ng-container>
 
     <mat-row
-      (click)="onClick($event, row)"
+      (click)="onClick($event, row, idx)"
       (contextmenu)="onContextMenu($event, row, idx)"
       (dblclick)="onDblClick($event, row, idx)"
       *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
@@ -150,6 +150,7 @@
     <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit inline</button>
     <button (click)="stopEditing().subscribe()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
     <button (click)="selectEntity(entity)" mat-menu-item>Edit in editor</button>
+    <button (click)="duplicateEntity(entity)" mat-menu-item>Duplicate</button>
     <button (click)="deleteEntity(entity)" mat-menu-item>Delete</button>
   </ng-template>
 </mat-menu>

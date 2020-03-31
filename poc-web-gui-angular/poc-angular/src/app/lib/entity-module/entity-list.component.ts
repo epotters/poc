@@ -75,7 +75,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   @Input() isManaged: boolean = false;
 
   @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
-  selectedClass: string = 'selected';
+  readonly selectedClass: string = 'selected';
 
   private terminator: Subject<any> = new Subject();
 
@@ -84,8 +84,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   startPage: number = 0;
 
   contextMenuPosition: Position = {x: '0px', y: '0px'};
-
-  editable: boolean = true;
 
   editorViewState: EditorViewState = {
     rowElement: undefined,
@@ -108,13 +106,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     public route: ActivatedRoute,
     public dialog: MatDialog
   ) {
-    console.debug('Constructing the EntityListComponent for type ' + this.meta.displayNamePlural);
+    console.debug(`Constructing the EntityListComponent for type ${this.meta.displayNamePlural}`);
 
     this.title = meta.displayNamePlural;
   }
 
   ngOnInit() {
-    console.debug('Initializing the EntityListComponent for type ' + this.meta.displayNamePlural);
+    console.debug(`Initializing the EntityListComponent for type ${this.meta.displayNamePlural}`);
     this.dataSource = new EntityDataSource<T>(this.meta, this.service);
   }
 
@@ -190,43 +188,25 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   // User actions
-  onClick(event: MouseEvent, entity: T) {
-
-    let targetElement: Element = ((event.target || event.currentTarget) as Element);
-    targetElement = targetElement.parentElement as Element;
+  onClick(event: MouseEvent, entity: T, idx: number) {
+    let targetElement: Element = EntityListComponent.getCellClicked(event);
     this.markRow(targetElement);
-
     const fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
     if (this.isFieldRelatedEntity(fieldName)) {
       this.goToRelatedEntity(fieldName, entity[fieldName]);
     }
-
     if (event.shiftKey) {
-      console.debug('onShiftClick');
       this.selectEntity(entity);
     }
-  }
-
-  private markRow(targetElement: Element) {
-    const row: Element | null = targetElement.parentElement;
-    if (!!row) {
-      const table: Element | null = row.parentElement;
-      if (!!table) {
-        const previousRow: Element | null = table.querySelector('.' + this.selectedClass);
-        if (!!previousRow) {
-          previousRow.classList.remove(this.selectedClass);
-        }
-      }
-      row.classList.add(this.selectedClass);
+    if (this.isEditing() && this.editorViewState!.rowIndex != idx) {
+      this.startEditing(entity, targetElement, idx);
     }
   }
-
 
   onContextMenu(event: MouseEvent, entity: T, idx: number) {
     console.debug('Context menu for entity ', entity, 'idx: ' + idx);
     event.preventDefault();
-    let targetElement: Element = ((event.target || event.currentTarget) as Element);
-    targetElement = targetElement.parentElement  as Element;
+    let targetElement: Element = EntityListComponent.getCellClicked(event);
     const fieldName: string = EntityListComponent.fieldNameFromCellElement(targetElement);
     this.contextMenuPosition = {x: event.clientX + 'px', y: event.clientY + 'px'};
     this.contextMenuTrigger.menuData = {
@@ -284,6 +264,25 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     return value;
   }
 
+  getType(fieldName: string): string {
+    const columnConfig: ColumnConfig = this.meta.columnConfigs[fieldName];
+    return (!!columnConfig && columnConfig.editor && columnConfig.editor.type) ? columnConfig.editor.type : 'text';
+  }
+
+  private markRow(targetElement: Element) {
+    const row: Element | null = targetElement.parentElement;
+    if (!!row) {
+      const table: Element | null = row.parentElement;
+      if (!!table) {
+        const previousRow: Element | null = table.querySelector('.' + this.selectedClass);
+        if (!!previousRow) {
+          previousRow.classList.remove(this.selectedClass);
+        }
+      }
+      row.classList.add(this.selectedClass);
+    }
+  }
+
   private isFieldRelatedEntity(fieldName: string): boolean {
     const config = this.meta.columnConfigs[fieldName];
     return (!!config.editor && !!config.editor.relatedEntity);
@@ -297,6 +296,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       }
     });
     return fieldName;
+  }
+
+  private static getCellClicked(event: MouseEvent): Element {
+    let targetElement: Element = ((event.target || event.currentTarget) as Element);
+    return ((targetElement.tagName.toLowerCase() === 'mat-cell') ? targetElement : targetElement.parentElement) as Element;
   }
 
   private applyOverlay(filters: FieldFilter[]): FieldFilter[] {
@@ -336,7 +340,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   }
 
   saveEntity(): void {
-    console.debug('Save this ' + this.meta.displayName.toLowerCase());
+    console.debug(`Save this ${this.meta.displayName.toLowerCase()}`);
 
     this.editorActions.saveEntity(this.editorRow.rowEditorForm, this.overlay)
       .pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
@@ -365,10 +369,20 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
+
+  duplicateEntity(entity: T) {
+    this.toggleEditor(true);
+    let idField: any = this.editorRow.rowEditorForm.get('id');
+    this.editorRow.loadEntity(entity);
+    idField.setValue(undefined);
+  }
+
+
   deleteEntity(entity: T): void {
     console.debug('Delete ' + this.meta.displayName);
     if (this.editorActions) {
-      this.editorActions.deleteEntity(entity).pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
+      this.editorActions.deleteEntity(entity)
+        .pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
         if (result.success) {
           console.debug('Entity deleted');
           this.loadEntitiesPage();
@@ -391,11 +405,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   // Editor Row
 
-  toggleEditor(): void {
-    if (this.editorVisible) {
-      this.stopEditing().pipe(takeUntil(this.terminator)).subscribe();
+  toggleEditor(show?: boolean): void {
+    if (this.isEditing()) {
+      this.stopEditing().pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
+        this.editorVisible = (show != undefined) ? show : true;
+      });
     } else {
-      this.editorVisible = true;
+      this.editorVisible = (show != undefined) ? show : !this.editorVisible;
     }
   }
 
@@ -448,13 +464,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
   onDblClick(event: MouseEvent, entity: T, idx: number) {
     console.debug('Double click on entity ', entity);
     event.preventDefault();
-    const targetElement: Element = ((event.target || event.currentTarget) as Element);
+    const targetElement: Element = EntityListComponent.getCellClicked(event);
     this.startEditing(entity, targetElement, idx);
   }
 
-  private showAndPositionEditor(targetElement: Element, idx: number) {
+  private showAndPositionEditor(cellElement: Element, idx: number) {
     this.editorVisible = true;
-    this.editorViewState.rowElement = (targetElement.parentElement as HTMLElement);
+    this.editorViewState.rowElement = (cellElement.parentElement as HTMLElement);
     this.editorViewState.transform = 'translateY(' + (idx * this.editorViewState.rowElement.offsetHeight) + 'px)';
     this.editorViewState.rowElement.style.opacity = '0.5';
   }

@@ -1,26 +1,24 @@
 <div [formGroup]="rowEditorForm" class="editor-row">
-  <div *ngFor="let key of columns" class="editor-cell mat-column-{{key}}">
+  <div *ngFor="let key of columns" class="editor-cell mat-column-{{key}} column-type-{{getColumnEditor(key).type}}">
     <div [ngSwitch]="getEditor(key).type" class="editor-type-switch">
 
       <mat-form-field *ngSwitchCase="'none'" [floatLabel]="floatLabel">
         <input formControlName="{{key}}" matInput readonly>
       </mat-form-field>
 
-      <mat-form-field *ngSwitchCase="'text'" [floatLabel]="'never'">
+      <mat-form-field *ngSwitchCase="'text'" [floatLabel]="floatLabel">
         <input
+          formControlName="{{key}}" matInput
           [matTooltipDisabled]="hasErrors(key)"
           [matTooltip]="getErrorMessage(key)"
-          formControlName="{{key}}"
-          matInput
           matTooltipClass="red-tooltip"
         >
       </mat-form-field>
 
       <mat-form-field *ngSwitchCase="'textarea'" [floatLabel]="floatLabel">
         <textarea
+          formControlName="{{key}}" matInput
           [matTooltipDisabled]="hasErrors(key)" [matTooltip]="getErrorMessage(key)"
-          formControlName="{{key}}"
-          matInput
           matTooltipClass="red-tooltip"
         ></textarea>
       </mat-form-field>
@@ -40,7 +38,7 @@
         <mat-datepicker #datePicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field *ngSwitchCase="'entity-selector'" [floatLabel]="'never'">
+      <mat-form-field *ngSwitchCase="'entity-selector'" [floatLabel]="floatLabel">
         <entity-selector
           formControlName="{{key}}"
           [meta]="injector.get(editorColumns[key].relatedEntity.serviceName).meta"

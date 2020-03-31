@@ -21,9 +21,9 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
   enableValidation: boolean = false;
-  debouncer: Subject<string> = new Subject<string>();
   visible: boolean = true;
 
+  private debouncer: Subject<string> = new Subject<string>();
   private terminator: Subject<any> = new Subject();
   firstChangeEvent: boolean = true;
 
@@ -52,6 +52,7 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
   ngOnDestroy(): void {
     this.terminator.next();
     this.terminator.complete();
+    this.debouncer.complete();
   }
 
   onChanges(): void {
@@ -99,6 +100,18 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     return (this.editorColumns[key]) ? this.editorColumns[key] : this.defaultFieldEditorConfig;
   }
 
+  getColumnEditor(key: string): FieldEditorConfig {
+    const columnConfig: ColumnConfig = this.meta.columnConfigs[key];
+    if (columnConfig && columnConfig.rowEditor) {
+      return columnConfig.rowEditor;
+    } else if (columnConfig && columnConfig.editor) {
+      return columnConfig.editor;
+    } else {
+      return this.defaultFieldEditorConfig;
+    }
+  }
+
+  // Validation
   hasErrors(key: string): boolean {
     const control: AbstractControl | null = this.rowEditorForm.get(key);
     return (this.enableValidation) ? ((!!control) ? control.valid : false) : false;
