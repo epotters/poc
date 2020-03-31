@@ -12,7 +12,6 @@ import {OrganizationService} from './organization.service';
 @Component({
   selector: 'organization-list-of-cards',
   templateUrl: './organization-list-of-cards.component.html',
-  styleUrls: ['../lib/entity-module/entity-list.component.css'],
   animations: [
     trigger('slideInOut', [
       transition(':enter', [
