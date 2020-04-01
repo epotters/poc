@@ -6,6 +6,7 @@ import {Observable, ObservableInput, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {CommonEnvironment, Environment} from '../environments/';
+import {AuthConfig} from './lib/auth-lib';
 
 
 export interface AppConfig {
@@ -39,7 +40,7 @@ export interface AppConfig {
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService implements AppConfig {
+export class ConfigService implements AppConfig, AuthConfig {
 
   [index: string]: any;
 
