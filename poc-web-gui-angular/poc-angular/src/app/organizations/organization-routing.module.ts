@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {OrganizationListComponent} from './organization-list.component';
 import {OrganizationEditorComponent} from './organization-editor.component';
-import {AuthGuardService} from '../lib/auth-module';
+import {AuthGuardService} from '../lib/auth-lib';
 import {OrganizationManagerComponent} from './organization-manager.component';
 import {OrganizationListOfCardsComponent} from './organization-list-of-cards.component';
 

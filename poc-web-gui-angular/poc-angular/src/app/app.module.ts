@@ -4,7 +4,7 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/h
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {MaterialModule} from './material.module';
-import {AuthGuardService, AuthModule, AuthService} from './lib/auth-module/';
+import {AuthGuardService, AuthModule, AuthService} from './lib/auth-lib/';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';

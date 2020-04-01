@@ -2,7 +2,7 @@ import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
-import {AuthService} from './lib/auth-module/';
+import {AuthService} from './lib/auth-lib/';
 import {PocAnimations} from './app-animations';
 import {ErrorService} from './core/error/error.service';
 import {ConfigService} from './app-config.service';

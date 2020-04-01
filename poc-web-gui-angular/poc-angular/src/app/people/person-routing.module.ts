@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuardService} from '../lib/auth-module';
+import {AuthGuardService} from '../lib/auth-lib';
 import {PersonListComponent} from './person-list.component';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonManagerComponent} from './person-manager.component';

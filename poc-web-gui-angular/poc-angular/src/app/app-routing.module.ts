@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router, RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {InfoComponent} from './info/info.component';
-import {AuthGuardService} from './lib/auth-module';
+import {AuthGuardService} from './lib/auth-lib';
 
 const routes: Routes = [
   {
