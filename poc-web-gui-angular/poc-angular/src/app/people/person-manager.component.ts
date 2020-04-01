@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, Type} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, Type} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
@@ -24,7 +24,7 @@ import {PersonService} from './person.service';
     PocAnimations.slideInOut
   ]
 })
-export class PersonManagerComponent extends EntityManagerComponent<Person> {
+export class PersonManagerComponent extends EntityManagerComponent<Person> implements OnInit {
 
   initialFilters: FieldFilter[];
   listOfCardsVisible: boolean = false;
@@ -37,11 +37,11 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
   constructor(
     public service: PersonService,
     public route: ActivatedRoute,
-    public componentFactoryResolver: ComponentFactoryResolver,
     public dialog: MatDialog,
+    public componentFactoryResolver: ComponentFactoryResolver,
     private formBuilder: FormBuilder
   ) {
-    super(personMeta, service, route, componentFactoryResolver, dialog);
+    super(personMeta, service, route, dialog, componentFactoryResolver);
 
     this.initialFilters = [
       {name: 'lastName', rawValue: 'po'}
@@ -50,14 +50,20 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     this.editorVisible = false;
     this.listVisible = false;
 
-    this.entityForm = this.buildSelectDemoForm(formBuilder);
+    this.entityForm = this.buildSelectDemoForm(this.formBuilder);
   }
 
+  ngOnInit() {
+  }
 
   buildSelectDemoForm(formBuilder: FormBuilder): FormGroup {
     const group = {};
     group['entitySelector'] = new FormControl('');
     group['entitySelectorList'] = new FormControl('');
+
+    group['lastName'] = new FormControl('');
+    group['gender'] = new FormControl('');
+
     return formBuilder.group(group);
   }
 

@@ -1,6 +1,6 @@
-<mat-form-field [floatLabel]="floatLabel">
+<mat-form-field [formGroup]="formGroup" [floatLabel]="floatLabel">
 
-  <mat-label>${{columnConfig.label}}</mat-label>
+  <mat-label>{{columnConfig.label}}</mat-label>
 
   <ng-container [ngSwitch]="getEditor().type" class="editor-type-switch">
 

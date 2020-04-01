@@ -2,18 +2,9 @@
 
 <mat-toolbar>
 
-  <button (click)="toggleList()" mat-button>{{(listVisible) ? 'Hide' : 'Show'}} List</button>
-  <button (click)="toggleEditor()" mat-button>{{(editorVisible) ? 'Hide' : 'Show'}} Editor</button>
-
-  <button (click)="toggleListOfCards()" mat-button>{{(listOfCardsVisible) ? 'Hide' : 'Show'}} List of Cards</button>
-  <button (click)="toggleDemoForm()" mat-button>{{(demoFormVisible) ? 'Hide' : 'Show'}} Custom controls</button>
-
-  <button (click)="openDialogWithList()" mat-button>List in dialog</button>
-  <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
-
   <mat-button-toggle-group #group="matButtonToggleGroup">
     <mat-button-toggle value="list" aria-label="List view">
-      <mat-icon>list</mat-icon>
+      <mat-icon>menu</mat-icon>
     </mat-button-toggle>
     <mat-button-toggle value="cards" aria-label="Small cards">
       <mat-icon>view_module</mat-icon>
@@ -23,15 +14,20 @@
     </mat-button-toggle>
   </mat-button-toggle-group>
 
+  <button (click)="toggleList()" mat-button>{{(listVisible) ? 'Hide' : 'Show'}} List</button>
+  <button (click)="toggleListOfCards()" mat-button>{{(listOfCardsVisible) ? 'Hide' : 'Show'}} List of Cards</button>
+  <button (click)="toggleEditor()" mat-button>{{(editorVisible) ? 'Hide' : 'Show'}} Editor</button>
+
+  <button (click)="toggleDemoForm()" mat-button>{{(demoFormVisible) ? 'Hide' : 'Show'}} Custom controls</button>
+  <button (click)="openDialogWithList()" mat-button>List in dialog</button>
+  <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
+
+
+  <div class="example-selected-value">Selected view: {{group.value}}</div>
+
 </mat-toolbar>
 
-<div class="example-selected-value">Selected view: {{group.value}}</div>
-
-<div>Selected entity: {{((!!selectedEntity) ? 'Person with id ' + selectedEntity.id : 'No person') + ' selected'}}</div>
-
-
 <div class="multiview-columns" style="display: flex;">
-
 
   <div class="multiview-column-right" style="flex: 2;">
 
@@ -48,17 +44,19 @@
   </div>
 
   <div class="multiview-column-left" style="flex: 1; padding-right: 48px;">
-    <person-detail [entity]="selectedEntity"></person-detail>
+    <div style="position: fixed;">
+
+    <person-detail [entity]="selectedEntity | async"></person-detail>
 
     <person-editor-card
-      [entityToLoad]="selectedEntity"
+      [entitySubject]="selectedEntity"
       [isManaged]="true"
       *ngIf="editorVisible"
       [@fadeInOut]
       (@fadeInOut.start)="onAnimationEvent($event)"
       (@fadeInOut.done)="onAnimationEvent($event)">
     </person-editor-card>
-
+    </div>
   </div>
 
 </div>
@@ -113,7 +111,20 @@
       <div class="form-row">
         Selected: {{entityForm.value | json}}
       </div>
+
+      <div class="form-row">
+        <editor-field
+          [formGroup]="entityForm"
+          [fieldName]="'lastName'"
+          [columnConfig]="meta.columnConfigs['lastName']" style="flex: 3;"></editor-field>
+
+        <editor-field [formGroup]="entityForm" [fieldName]="'gender'" [columnConfig]="meta.columnConfigs['gender']" style="flex: 2;"></editor-field>
+
+      </div>
+
     </form>
+
+
 
   </mat-card-content>
 </mat-card>

@@ -1,26 +1,32 @@
-import {Component, Injector, Input} from '@angular/core';
-import {AbstractControl} from '@angular/forms';
+import {Component, Injector, Input, OnInit} from '@angular/core';
+import {AbstractControl, FormGroup} from '@angular/forms';
 import {FloatLabelType} from '@angular/material/form-field';
-import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable} from '..';
+import {ColumnConfig, FieldEditorConfig, Identifiable} from '..';
 
 @Component({
   selector: 'editor-field',
   templateUrl: './editor-field.component.html'
 })
-export class EditorFieldComponent<T extends Identifiable> {
+export class EditorFieldComponent<T extends Identifiable> implements OnInit {
 
-  @Input() readonly meta: EntityMeta<T>;
+  @Input() readonly formGroup: FormGroup;
   @Input() readonly fieldName: string;
-  @Input() readonly control: AbstractControl | null;
+  @Input() readonly columnConfig: ColumnConfig;
+
   @Input() readonly floatLabel: FloatLabelType = 'auto';
 
-  columnConfig: ColumnConfig;
+
   defaultFieldEditorConfig: FieldEditorConfig = {type: 'text'};
   enableValidation: boolean = false;
 
+  private control: AbstractControl | null;
+
 
   constructor(public injector: Injector) {
-    this.columnConfig = this.meta.columnConfigs[this.fieldName];
+  }
+
+  ngOnInit(): void {
+    this.control = this.formGroup.get(this.fieldName);
   }
 
 
