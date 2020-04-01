@@ -39,14 +39,10 @@ export class EditorRowComponent<T extends Identifiable> extends BaseEditorRowCom
 
   public loadEntity(entity: T) {
     if (entity) {
-
       console.debug('Entity to load in the row editor:', entity);
       const editorEntity: Partial<T> = this.prepareEntity(entity);
-
       console.debug('Prepared entity to load in the row editor:', editorEntity);
-
       this.rowEditorForm.setValue(editorEntity);
-      console.debug('About to mark form as pristine');
       this.rowEditorForm.markAsPristine();
     } else {
       console.debug('Clearing the editor');

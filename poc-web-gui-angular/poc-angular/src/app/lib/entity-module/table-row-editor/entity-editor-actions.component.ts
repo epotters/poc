@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog/dialog-ref';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -175,7 +176,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
   }
 
   updateEntities() {
-    const dialogRef = this.openConfirmationDialog('Confirm batch update',
+    const dialogRef: MatDialogRef<any> = this.openConfirmationDialog('Confirm batch update',
       'Are you sure you want to update all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
     dialogRef.afterClosed().subscribe(
       data => {
@@ -190,7 +191,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
   }
 
   deleteEntities() {
-    const dialogRef = this.openConfirmationDialog('Confirm deletion',
+    const dialogRef: MatDialogRef<any> = this.openConfirmationDialog('Confirm batch deletion',
       'Are you sure you want to delete all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
     dialogRef.afterClosed().subscribe(
       data => {
@@ -204,10 +205,10 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
     );
   }
 
-  openConfirmationDialog(title: string, message: string): any {
-    const dialogConfig = new MatDialogConfig();
+  openConfirmationDialog(title: string, message: string): MatDialogRef<ConfirmationDialogComponent> {
+    const dialogConfig: MatDialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
+    dialogConfig.autoFocus = false;
     dialogConfig.data = {
       title: title,
       message: message
@@ -225,7 +226,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
   }
 
 
-  private static listInvalidFields(entityForm: FormGroup) {
+  private static listInvalidFields(entityForm: FormGroup): void {
     const controls = entityForm.controls;
     for (const name in controls) {
       if (controls[name].invalid) {

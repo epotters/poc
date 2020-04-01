@@ -5,7 +5,7 @@ import {Identifiable} from './domain/identifiable.model';
 import {EntityService} from './entity.service';
 
 @Directive()
-export abstract class EntityDetailComponent<T extends Identifiable> implements OnChanges{
+export abstract class EntityDetailComponent<T extends Identifiable> implements OnChanges {
 
   @Input() entity: T;
 
@@ -20,7 +20,6 @@ export abstract class EntityDetailComponent<T extends Identifiable> implements O
   ngOnChanges(changes: SimpleChanges) {
     console.debug('Detail ngOnChanges', changes);
   }
-
 
 
   // WIP

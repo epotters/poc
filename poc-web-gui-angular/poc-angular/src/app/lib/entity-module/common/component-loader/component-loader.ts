@@ -12,6 +12,9 @@ import {Identifiable} from '../..';
 import {EntityComponentEntryPointDirective} from './entity-component-entrypoint.directive';
 
 
+
+// Source for component loader: https://angular.io/guide/dynamic-component-loader
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,13 +34,10 @@ export class ComponentLoader<T extends Identifiable> implements OnInit, OnDestro
   }
 
   ngOnInit() {
-
     if (!!this.componentEntrypoint) {
       console.warn('Component loader needs an entrypoint to be defined');
     }
-
   }
-
 
   ngOnDestroy(): void {
     this.componentRef.destroy();
