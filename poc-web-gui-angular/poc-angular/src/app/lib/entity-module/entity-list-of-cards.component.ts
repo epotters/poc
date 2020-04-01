@@ -14,7 +14,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
-import {merge, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
 import {ComponentLoader} from './common/component-loader/component-loader';
 import {EntityComponentEntryPointDirective} from './common/component-loader/entity-component-entrypoint.directive';
@@ -31,13 +31,14 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
   @Output() entitySelector: EventEmitter<T> = new EventEmitter<T>();
 
+  @Input() dataSource: EntityDataSource<T>;
+
   @Input() activeSort: string = 'id';
   @Input() sortDirection: SortDirectionType = 'asc';
   @Input() pageSize: number = 2;
   startPage: number = 0;
 
   private terminator: Subject<any> = new Subject();
-  dataSource: EntityDataSource<T>;
 
   component: Type<any>;
   componentRef: ComponentRef<EntityEditorComponent<T>>;
@@ -65,7 +66,9 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
     this.activeSort = this.meta.defaultSortField;
     this.sortDirection = this.meta.defaultSortDirection;
 
-    this.dataSource = new EntityDataSource<T>(this.meta, this.service);
+    if (!this.dataSource) {
+      this.dataSource = new EntityDataSource<T>(this.meta, this.service);
+    }
 
     this.dataSource.loadEntities([], this.meta.defaultSortField, this.meta.defaultSortDirection,
       this.startPage, this.pageSize);
@@ -73,12 +76,12 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
 
   ngAfterViewInit(): void {
-    merge(this.paginator.page)
-      .pipe(
-        tap(() => {
-          this.loadEntitiesPage();
-        })
-      ).pipe(takeUntil(this.terminator)).subscribe();
+
+    this.paginator.page.pipe(
+      tap(() => {
+        this.loadEntitiesPage();
+      })
+    ).pipe(takeUntil(this.terminator)).subscribe();
   }
 
 

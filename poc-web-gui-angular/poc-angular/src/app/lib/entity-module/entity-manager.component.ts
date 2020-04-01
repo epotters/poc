@@ -1,16 +1,16 @@
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 import {ComponentFactoryResolver, Directive, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {EntityComponentDescriptor} from './common/component-loader/entity-component-entrypoint.directive';
+import {EntityLibConfig} from './common/entity-lib-config';
+import {EntityComponentDialogComponent} from './dialog/entity-component-dialog.component';
 
 import {EntityMeta} from './domain/entity-meta.model';
 import {Identifiable} from './domain/identifiable.model';
-import {EntityService} from './entity.service';
 import {DataSourceState} from './entity-list.component';
-import {EntityLibConfig} from './common/entity-lib-config';
-import {EntityComponentDescriptor} from './common/component-loader/entity-component-entrypoint.directive';
-import {EntityComponentDialogComponent} from './dialog/entity-component-dialog.component';
+import {EntityService} from './entity.service';
 
 
 @Directive()
@@ -19,15 +19,16 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
   @Input() dataSourceState: DataSourceState;
   @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
 
-  title: string = this.meta.displayName + ' manager';
-  dialogEntity: T;
+  title: string = `${this.meta.displayName} manager`;
 
   columns: string[] = [];
   columnSetName: string = 'displayedColumnsDialog';
 
   private terminator: Subject<any> = new Subject();
 
-  selectedEntity?: T;
+
+  selectedEntity: BehaviorSubject<T | null> = new BehaviorSubject<T | null>(null);
+  private dialogEntity: T;
 
   listVisible: boolean = true;
   editorVisible: boolean = true;
@@ -37,8 +38,8 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     public meta: EntityMeta<T>,
     public service: EntityService<T>,
     public route: ActivatedRoute,
-    public componentFactoryResolver: ComponentFactoryResolver,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public componentFactoryResolver: ComponentFactoryResolver
   ) {
     console.debug(`Constructing the EntityManagerComponent for type ${this.meta.displayName}`);
     this.columns = meta[this.columnSetName] || meta.displayedColumns;
@@ -51,8 +52,8 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
 
   onEntitySelected(entity: T) {
     console.debug('EntitySelected event received', entity);
-    this.selectedEntity = entity;
-    // this.openDialogWithEditor(entity);
+    this.selectedEntity.next(entity);
+    // this.openDialogWithEditor(this.selectedEntity.getValue());
   }
 
   toggleList() {

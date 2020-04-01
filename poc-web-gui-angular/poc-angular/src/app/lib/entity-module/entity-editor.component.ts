@@ -1,27 +1,30 @@
+import {Directive, Input, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil, tap} from 'rxjs/operators';
-import {Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {EntityLibConfig} from './common/entity-lib-config';
 
 import {ConfirmationDialogComponent} from './dialog/confirmation-dialog.component';
-import {EntityService} from './entity.service';
 import {EntityMeta, ValidatorDescriptor} from './domain/entity-meta.model';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {Identifiable} from './domain/identifiable.model';
+import {EntityService} from './entity.service';
 
 
 @Directive()
-export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnChanges, OnDestroy {
+export abstract class EntityEditorComponent<T extends Identifiable> implements OnInit, OnDestroy {
 
-  @Input() entityToLoad?: T;
+  // entitySubject is used by both the relations submodules and the manager
+  @Input() entitySubject: BehaviorSubject<T | null> = new BehaviorSubject<T | null>(null);
   @Input() isManaged: boolean = false;
   @Input() editorColumns: string[] = this.meta.displayedColumns;
 
+
   title: string;
   entityForm: FormGroup;
-  entitySubject: BehaviorSubject<T> = new BehaviorSubject<T>({} as T); // Used by the relations submodules
+
   enableValidation: boolean = true;
 
   terminator: Subject<any> = new Subject();
@@ -36,44 +39,39 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     public dialog: MatDialog,
     public snackbar: MatSnackBar
   ) {
-    console.debug('Constructing the EntityEditorComponent for type ' + this.meta.displayName);
+    console.debug(`Constructing the EntityEditorComponent for type ${this.meta.displayName}`);
     this.entityForm = this.buildForm(formBuilder);
   }
 
 
   ngOnInit() {
-    console.debug('Initializing the EntityEditorComponent');
 
+    console.debug(`Initializing the EntityEditorComponent for type ${this.meta.displayName}`);
+
+    this.entitySubject.pipe(takeUntil(this.terminator)).subscribe((entity: T | null) => {
+      console.debug('Entity changed', entity);
+
+      if (!!entity) {
+        this.title = `${this.meta.displayName} Editor`;
+        this.entityForm.patchValue(entity);
+      } else {
+        console.info('Editor for a new entity');
+        this.title = `New ${this.meta.displayName}`;
+        this.clearEditor();
+        this.prefillFromQueryString();
+      }
+    });
+
+    // Load id from path
     const entityIdToLoad = this.getIdFromPath();
     if (entityIdToLoad) {
       this.loadEntity(entityIdToLoad);
-      this.title = this.meta.displayName + ' Editor';
-    } else if (this.entityToLoad != null) {
-      console.debug('Editor - entityToLoad has been set externally');
-      this.loadNewEntity(this.entityToLoad);
-      this.title = this.meta.displayName + ' Editor';
-    } else {
-      console.info('Editor for a new entity');
-      this.title = 'New ' + this.meta.displayName;
-      this.prefillFromQueryString();
     }
+
   }
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.debug('Editor ngOnChanges', changes);
-    if (changes.entityToLoad.currentValue && !changes.entityToLoad.previousValue
-      ||
-      changes.entityToLoad.currentValue &&
-      changes.entityToLoad.currentValue.id !== changes.entityToLoad.previousValue.id) {
-
-      console.debug('EntityToLoad has changed. Loading...');
-      this.loadNewEntity(changes.entityToLoad.currentValue);
-    }
-  }
 
   ngOnDestroy(): void {
-    this.entitySubject.complete();
     this.terminator.next();
     this.terminator.complete();
   }
@@ -90,27 +88,14 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
           }
         }
       }
-
     });
-  }
-
-
-  loadNewEntity(entity: T | null) {
-    if (entity !== null) {
-      this.loadEntity(entity.id);
-    } else {
-      this.entityToLoad = undefined;
-      this.clearEditor();
-    }
   }
 
 
   loadEntity(entityId) {
     this.service.get(entityId).pipe(
       tap(entity => {
-        console.debug('About to patch the entity loaded');
         this.entityForm.patchValue(entity);
-        console.info(`${this.meta.displayName} loaded in the editor`);
         this.entitySubject.next(entity);
       })
     ).pipe(takeUntil(this.terminator)).subscribe();
@@ -121,13 +106,13 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     if (this.entityForm.valid) {
       const entity: T = this.entityForm.getRawValue();
 
-      console.debug('Ready to save ' + this.meta.displayName + ': ' + JSON.stringify(entity));
+      console.debug(`Ready to save ${this.meta.displayName} :` + JSON.stringify(entity));
       this.service.save(entity).pipe(takeUntil(this.terminator)).subscribe((savedEntity) => {
         let msg: string;
         if (entity.id) {
-          msg = `${this.meta.displayName}  named '${this.meta.displayNameRenderer(entity)}' is updated successfully`;
+          msg = `${this.meta.displayName} named "${this.meta.displayNameRenderer(entity)}" is updated successfully`;
         } else {
-          msg = `${this.meta.displayName}  named '${this.meta.displayNameRenderer(savedEntity)}' is created successfully with id ${savedEntity.id}`;
+          msg = `${this.meta.displayName} named "${this.meta.displayNameRenderer(savedEntity)}" is created successfully with id ${savedEntity.id}`;
           if (!this.isManaged) {
             this.router.navigate([this.meta.apiBase + '/' + savedEntity.id]);
           }
@@ -135,7 +120,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         console.info(msg);
 
         this.snackbar.open(msg, undefined, {
-          duration: 3000
+          duration: EntityLibConfig.defaultSnackbarDuration
         });
 
         this.entityForm.patchValue(savedEntity, {emitEvent: false});
@@ -158,7 +143,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
     const entity = this.entityForm.getRawValue();
     const dialogRef = this.openConfirmationDialog('Confirm delete',
-      'Are you sure you want to delete ' + this.meta.displayName.toLowerCase() + ' named ' + this.meta.displayNameRenderer(entity) + '?');
+      `Are you sure you want to delete ${this.meta.displayName.toLowerCase()} named ${this.meta.displayNameRenderer(entity)}?`);
 
     dialogRef.afterClosed().pipe(takeUntil(this.terminator)).subscribe(
       data => {
@@ -167,12 +152,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
           console.info('User confirmed delete action, so it will be executed');
           this.service.delete(entity.id).pipe(takeUntil(this.terminator)).subscribe((response) => {
             console.info('response ', response);
-            const msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' is deleted successfully';
+            const msg = `${this.meta.displayName} named  ${this.meta.displayNameRenderer(entity)} is deleted successfully`;
             console.info(msg);
             this.snackbar.open(msg, undefined, {
-              duration: 2000
+              duration: EntityLibConfig.defaultSnackbarDuration
             });
-            // Redirect to the list view
             this.goToList();
           });
         } else {
@@ -188,7 +172,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     if (entityId) {
       this.loadEntity(entityId);
     } else {
-      // TODO: Clear the form
+      this.entitySubject.next(null);
     }
   }
 

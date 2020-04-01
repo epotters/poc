@@ -104,6 +104,14 @@ footer .right {
 }
 
 
+/* Detail */
+
+.entity-detail-card .mat-card-header-text,
+.form-card .mat-card-header-text {
+  margin: 0;
+}
+
+
 /*
 Editor Forms
 TODO: Move to entity-editor.component.css
@@ -193,6 +201,7 @@ input.mat-input-element {
   text-overflow: ellipsis;
   padding-top: 1px;
   padding-right: 12px;
+  user-select: none;
 }
 
 mat-cell.related-entity-link {
@@ -324,7 +333,7 @@ TODO: Move to entity-relation.component.css
 
 .relation mat-toolbar.mat-toolbar-single-row {
   height: 48px !important;
-  border-bottom: 1px solid rgba(0,0,0,.12);
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
 }
 
 .relation .mat-toolbar h4 {
@@ -426,4 +435,10 @@ entity-selector-list .mat-icon-button {
 .mat-autocomplete-panel mat-table mat-row:hover,
 .mat-autocomplete-panel mat-table mat-row:focus {
   background: rgba(0, 0, 0, .04);
+}
+
+/* Editor fields */
+
+editor-field mat-form-field {
+  width: 100%;
 }

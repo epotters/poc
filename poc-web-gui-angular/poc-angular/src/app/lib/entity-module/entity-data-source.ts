@@ -11,7 +11,7 @@ import {Identifiable} from './domain/identifiable.model';
 
 export class EntityDataSource<T extends Identifiable> implements DataSource<T> {
 
-  private entitiesSubject: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
+  public entitiesSubject: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
   private totalSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 

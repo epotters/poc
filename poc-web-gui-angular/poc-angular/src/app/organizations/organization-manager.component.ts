@@ -30,7 +30,7 @@ export class OrganizationManagerComponent extends EntityManagerComponent<Organiz
     public dialog: MatDialog,
     public componentLoader: ComponentLoader<Organization>
   ) {
-    super(organizationMeta, service, route, componentFactoryResolver, dialog);
+    super(organizationMeta, service, route, dialog, componentFactoryResolver);
 
     this.editorVisible = false;
     this.listVisible = false;

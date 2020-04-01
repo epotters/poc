@@ -74,11 +74,12 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
 
   @Input() isManaged: boolean = false;
 
-  @Output() selectedEntity: EventEmitter<T> = new EventEmitter<T>();
+  @Output() selectedEntity: EventEmitter<T | null> = new EventEmitter<T | null>();
   readonly selectedClass: string = 'selected';
 
   private terminator: Subject<any> = new Subject();
 
+  editable: boolean = true;
   dataSource: EntityDataSource<T>;
   fieldFilters: FieldFilter[] = [];
   startPage: number = 0;
@@ -164,7 +165,6 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     }
   }
 
-
   loadEntitiesPage(): void {
     this.dataSource.loadEntities(
       this.fieldFilters,
@@ -195,9 +195,11 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
     if (this.isFieldRelatedEntity(fieldName)) {
       this.goToRelatedEntity(fieldName, entity[fieldName]);
     }
-    if (event.shiftKey) {
+
+    if (this.isManaged || event.shiftKey) {
       this.selectEntity(entity);
     }
+
     if (this.isEditing() && this.editorViewState!.rowIndex != idx) {
       this.startEditing(entity, targetElement, idx);
     }
@@ -346,9 +348,13 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
       .pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
       if (result.success) {
         this.stopEditing().pipe(takeUntil(this.terminator)).subscribe(result => {
-          console.info(result.msg);
+          console.info(`After save ${result.msg}`);
         });
         this.loadEntitiesPage();
+        if (result.entity) {
+          console.debug('Save result', result);
+          this.selectedEntity.emit(result.entity);
+        }
       }
     });
   }
@@ -385,6 +391,7 @@ export abstract class EntityListComponent<T extends Identifiable> implements OnI
         .pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
         if (result.success) {
           console.debug('Entity deleted');
+          this.selectedEntity.emit(null);
           this.loadEntitiesPage();
         }
       });

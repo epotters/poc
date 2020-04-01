@@ -50,7 +50,6 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   }
 
   ngOnDestroy(): void {
-    this.ownerSubject.complete();
     this.componentRef.destroy();
     this.terminator.next();
     this.terminator.complete();
@@ -58,7 +57,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
 
 
   private activateRelation(): void {
-    this.ownerSubject.asObservable().pipe(takeUntil(this.terminator)).subscribe(owner => {
+    this.ownerSubject.pipe(takeUntil(this.terminator)).subscribe(owner => {
         if (!!owner && !!owner.id) {
           console.debug(`Owner loaded, about to build relation ${this.fieldName}`);
           this.visible = true;
