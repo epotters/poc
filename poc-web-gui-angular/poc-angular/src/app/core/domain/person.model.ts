@@ -1,5 +1,5 @@
 import {Moment} from 'moment';
-import {Identifiable} from '../../lib/entity-module';
+import {Identifiable} from '../../lib/entity-lib';
 
 
 export class Person implements Identifiable {

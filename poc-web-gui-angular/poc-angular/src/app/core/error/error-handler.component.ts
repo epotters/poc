@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {EntityLibConfig} from '../../lib/entity-module/common/entity-lib-config';
+import {EntityLibConfig} from '../../lib/entity-lib/common/entity-lib-config';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 

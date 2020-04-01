@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 import {AuthService} from '../../lib/auth-module';
-import {ApiService} from '../../lib/entity-module';
+import {ApiService} from '../../lib/entity-lib';
 import {ConfigService} from '../../app-config.service';
 
 

@@ -1,5 +1,5 @@
 import {Moment} from 'moment';
-import {Identifiable} from '../../lib/entity-module';
+import {Identifiable} from '../../lib/entity-lib';
 import {Organization} from './organization.model';
 import {Person} from './person.model';
 

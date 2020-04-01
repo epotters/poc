@@ -5,8 +5,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
-import {EntityEditorComponent, SelectOption} from '../lib/entity-module';
-import {EntityRelationComponent} from '../lib/entity-module/entity-relation.component';
+import {EntityEditorComponent, SelectOption} from '../lib/entity-lib';
+import {EntityRelationComponent} from '../lib/entity-lib/entity-relation.component';
 
 import {Employment, Organization, Person} from '../core/domain/';
 import {personMeta} from './person-meta';
@@ -61,7 +61,7 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
 
 @Component({
   selector: 'person-employers-relation',
-  templateUrl: '../lib/entity-module/entity-relation.component.html'
+  templateUrl: '../lib/entity-lib/entity-relation.component.html'
 })
 export class PersonEmployersRelationComponent extends EntityRelationComponent<Employment, Person, Organization> {
   @Input() readonly ownerSubject: BehaviorSubject<Person>;

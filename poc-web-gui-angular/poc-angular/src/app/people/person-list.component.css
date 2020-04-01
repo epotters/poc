@@ -1,7 +1,4 @@
-@import url('../lib/entity-module/table-row-editor/editor-row.component.css');
-
 /* Styles for the person-list-component */
-
 
 [component-style='entity-list'] .mat-column-firstName,
 [component-style='entity-list'] .editor-cell.mat-column-firstName {

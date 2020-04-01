@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 
-import {EntityModule} from '../lib/entity-module/entity.module';
-import {META, SERVICE} from '../lib/entity-module/entity-tokens';
+import {EntityModule} from '../lib/entity-lib/entity.module';
+import {META, SERVICE} from '../lib/entity-lib/entity-tokens';
 
 import {EmploymentListComponent} from './employments-list.component';
 import {EmploymentService} from './employment.service';

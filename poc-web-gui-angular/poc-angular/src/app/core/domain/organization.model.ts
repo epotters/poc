@@ -1,4 +1,4 @@
-import {Identifiable} from '../../lib/entity-module';
+import {Identifiable} from '../../lib/entity-lib';
 
 export class Organization implements Identifiable {
   id: number;

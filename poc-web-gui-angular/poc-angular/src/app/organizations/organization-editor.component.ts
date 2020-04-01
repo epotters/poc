@@ -12,14 +12,14 @@ import {employmentMeta} from '../employments/employment-meta';
 import {personMeta} from '../people/person-meta';
 import {OrganizationService} from './organization.service';
 import {EmploymentListComponent} from '../employments/employments-list.component';
-import {EntityEditorComponent} from '../lib/entity-module';
-import {EntityRelationComponent} from '../lib/entity-module/entity-relation.component';
+import {EntityEditorComponent} from '../lib/entity-lib';
+import {EntityRelationComponent} from '../lib/entity-lib/entity-relation.component';
 
 
 @Component({
   selector: 'organization-editor-card',
   templateUrl: './organization-editor.component.html',
-  styleUrls: ['../lib/entity-module/entity-editor.component.css']
+  styleUrls: ['../lib/entity-lib/entity-editor.component.css']
 })
 export class OrganizationEditorComponent extends EntityEditorComponent<Organization> {
 
@@ -47,7 +47,7 @@ export class OrganizationEditorComponent extends EntityEditorComponent<Organizat
 
 @Component({
   selector: 'organization-employees-relation',
-  templateUrl: '../lib/entity-module/entity-relation.component.html'
+  templateUrl: '../lib/entity-lib/entity-relation.component.html'
 })
 export class OrganizationEmployeesRelationComponent extends EntityRelationComponent<Employment, Organization, Person> {
 

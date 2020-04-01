@@ -1,4 +1,4 @@
-import {EntityMeta} from '../lib/entity-module';
+import {EntityMeta} from '../lib/entity-lib';
 import {Employment, Organization, Person} from '../core/domain/';
 
 

@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {EmploymentModule} from '../employments/employment.module';
-import {META, SERVICE} from '../lib/entity-module/entity-tokens';
+import {META, SERVICE} from '../lib/entity-lib/entity-tokens';
 
-import {EntityModule} from '../lib/entity-module/entity.module';
+import {EntityModule} from '../lib/entity-lib/entity.module';
 import {PersonDetailComponent} from './person-detail.component';
 import {PersonEditorComponent, PersonEmployersRelationComponent} from './person-editor.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';

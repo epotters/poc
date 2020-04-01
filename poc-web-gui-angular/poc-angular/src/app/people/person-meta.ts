@@ -1,4 +1,4 @@
-import {EntityMeta, SelectOption} from '../lib/entity-module';
+import {EntityMeta, SelectOption} from '../lib/entity-lib';
 import {Employment, Person} from '../core/domain';
 
 const genderOptions: SelectOption[] = [

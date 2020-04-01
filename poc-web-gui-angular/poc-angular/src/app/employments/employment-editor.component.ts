@@ -6,19 +6,19 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {takeUntil} from 'rxjs/operators';
 
 
-import {EntityEditorComponent} from '../lib/entity-module';
+import {EntityEditorComponent} from '../lib/entity-lib';
 import {EmploymentService} from './employment.service';
 import {PersonService} from '../people/person.service';
 import {OrganizationService} from '../organizations/organization.service';
 import {Employment} from '../core/domain';
 import {employmentMeta} from './employment-meta';
-import {FieldFilter} from '../lib/entity-module/domain/filter.model';
+import {FieldFilter} from '../lib/entity-lib/domain/filter.model';
 
 
 @Component({
   selector: 'organization-employee-card',
   templateUrl: './employment-editor.component.html',
-  styleUrls: ['../lib/entity-module/entity-editor.component.css']
+  styleUrls: ['../lib/entity-lib/entity-editor.component.css']
 })
 export class EmploymentEditorComponent extends EntityEditorComponent<Employment> {
 

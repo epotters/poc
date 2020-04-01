@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 
 import {EmploymentModule} from '../employments/employment.module';
-import {META, SERVICE} from '../lib/entity-module/entity-tokens';
-import {EntityModule} from '../lib/entity-module/entity.module';
+import {META, SERVICE} from '../lib/entity-lib/entity-tokens';
+import {EntityModule} from '../lib/entity-lib/entity.module';
 import {OrganizationEditorComponent, OrganizationEmployeesRelationComponent} from './organization-editor.component';
 import {OrganizationListOfCardsComponent} from './organization-list-of-cards.component';
 import {OrganizationListComponent} from './organization-list.component';
