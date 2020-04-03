@@ -1,6 +1,8 @@
-import * as moment from 'moment';
+import * as momentImported from 'moment';
 import {Moment} from 'moment';
 import {FilterConstants} from './filter-contants';
+
+const moment = momentImported;
 
 export interface SearchDate {
   term: string;
@@ -120,7 +122,7 @@ export class DateFilterHelper {
       console.debug(`endDate: "${(result.endDate) ? result.endDate.format(this.defaultFormat) : ''}"`);
     } else {
       result.validationMessage = (!!result.validationMessage) ? result.validationMessage :
-        `Term ${term} does not match any supported pattern`;
+        `Term "${term}" does not match any supported pattern`;
 
       console.debug(result.validationMessage);
     }
