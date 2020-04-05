@@ -11,4 +11,4 @@ Most classes are meant to be extended for each entity used.
 
 ####Auth Module
 
-Angular classes for implementing OIDC.
+Angular classes for implementing OIDC using oidc-client.js.

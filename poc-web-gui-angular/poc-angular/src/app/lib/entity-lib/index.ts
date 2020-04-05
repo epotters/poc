@@ -6,6 +6,7 @@ export * from './domain/identifiable.model';
 export * from './entity.service';
 export * from './entity-data-source';
 
+export * from './entity-detail.component';
 export * from './entity-editor.component';
 export * from './entity-list.component';
 export * from './entity-manager.component';
