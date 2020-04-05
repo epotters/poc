@@ -1,0 +1,83 @@
+<h1>{{title}}</h1>
+
+<mat-toolbar>
+
+  <button (click)="toggleDemoForm()" mat-button>{{(demoFormVisible) ? 'Hide' : 'Show'}} Custom controls</button>
+  <button (click)="openDialogWithList()" mat-button>List in dialog</button>
+  <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
+
+</mat-toolbar>
+
+
+<mat-card class="entity-card entity-editor-card" *ngIf="demoFormVisible">
+  <mat-card-header>
+    <mat-card-title>Custom form controls</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="entityForm">
+
+      <h4>Values</h4>
+      <div class="form-row">
+        Selected: {{entityForm.value | json}}
+      </div>
+
+      <h4>Editor fields</h4>
+      <div class="form-row">
+        <editor-field
+          [formGroup]="entityForm"
+          [fieldName]="'lastName'"
+          [columnConfig]="meta.columnConfigs['lastName']" style="flex: 3;"></editor-field>
+
+        <editor-field
+          [formGroup]="entityForm"
+          [fieldName]="'gender'"
+          [columnConfig]="meta.columnConfigs['gender']"
+          style="flex: 2;"></editor-field>
+
+      </div>
+
+      <h4>Entity selectors</h4>
+      <div class="form-row">
+
+        <mat-form-field style="flex: 1">
+          <mat-label>Employee</mat-label>
+          <entity-selector
+            formControlName="entitySelector"
+            [meta]="meta"
+            [service]="service"
+            [autoActiveFirstOption]="true"
+            required>
+          </entity-selector>
+          <mat-hint>Choose an employee</mat-hint>
+          <mat-error>This field cannot be empty!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field style="flex: 1">
+          <mat-label>Employee from List</mat-label>
+          <entity-selector-list
+            formControlName="entitySelectorList"
+            [meta]="meta"
+            [service]="service"
+            [columns]="meta.displayedColumnsDialog"
+            [listComponent]="listComponent"
+            [panelWidth]="'450px'"
+            required>
+          </entity-selector-list>
+          <mat-hint>Choose an employee</mat-hint>
+          <mat-error>This field cannot be empty!</mat-error>
+        </mat-form-field>
+
+      </div>
+
+
+      <h4>Relation list</h4>
+      <div class="form-row">
+        <person-employers-relation [ownerSubject]="entitySubject" class="relation"></person-employers-relation>
+      </div>
+
+    </form>
+
+
+  </mat-card-content>
+</mat-card>
+
