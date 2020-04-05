@@ -1,16 +1,11 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
-import {User, UserManager, UserManagerSettings} from 'oidc-client';
-
-
-import {ConfigService} from '../../app-config.service';
+import {User, UserManager} from 'oidc-client';
+import {AuthConfigService} from './auth-config.service';
 
 export {User};
 
-export interface AuthConfig {
-  userManagerSettings: UserManagerSettings;
-};
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +18,11 @@ export class AuthService {
   private readonly logDateFormat: string = 'YYYY-MM-DD HH:mm:ss';
   private readonly logoutFrameId = 'logout-frame';
 
-  // TODO: Get Rid of the ConfigService dependency
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private config: ConfigService) {
+    private config: AuthConfigService) {
     console.info('Constructing the AuthService');
     this.userManager = new UserManager(config.userManagerSettings);
     this.registerEventlisteners();
