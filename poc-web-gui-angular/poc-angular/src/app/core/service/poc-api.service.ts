@@ -1,11 +1,10 @@
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-
+import {ConfigService} from '../../app-config.service';
 import {AuthService} from '../../lib/auth-lib';
 import {ApiService} from '../../lib/entity-lib';
-import {ConfigService} from '../../app-config.service';
 
 
 @Injectable({
@@ -21,7 +20,7 @@ export class PocApiService implements ApiService {
 
 
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
-    console.debug('PocApiService - URL to get: ', `${this.config.apiRoot}${path}`);
+    console.debug(`PocApiService, URL to get: ${this.config.apiRoot}${path}`);
     return this.http.get(
       `${this.config.apiRoot}${path}`,
       {params, headers: this.getHeaders()});
