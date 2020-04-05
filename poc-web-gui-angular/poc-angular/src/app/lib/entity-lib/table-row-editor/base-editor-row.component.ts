@@ -1,9 +1,8 @@
-import {Subject, Subscription} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
-
 import {AfterContentInit, Directive, EventEmitter, Injector, Input, OnDestroy, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {FloatLabelType} from '@angular/material/form-field';
+import {Subject} from 'rxjs';
+import {debounceTime, skip, takeUntil} from 'rxjs/operators';
 
 import {ColumnConfig, EntityMeta, FieldEditorConfig, Identifiable, ValidatorDescriptor} from '.';
 
@@ -25,7 +24,6 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
 
   private debouncer: Subject<string> = new Subject<string>();
   private terminator: Subject<any> = new Subject();
-  firstChangeEvent: boolean = true;
 
   debounceTime: number = 300;
 
@@ -39,13 +37,9 @@ export abstract class BaseEditorRowComponent<T extends Identifiable> implements 
     this.editorColumns = this.getColumns();
     this.rowEditorForm = this.buildFormGroup();
     this.debouncer.pipe(debounceTime(this.debounceTime))
-      .pipe(takeUntil(this.terminator)).subscribe(() => {
-        if (this.firstChangeEvent) {
-          this.firstChangeEvent = false;
-        } else {
-          this.editorChange.emit(this.getOutputValue());
-        }
-      });
+      .pipe(skip(1), takeUntil(this.terminator)).subscribe(() => {
+      this.editorChange.emit(this.getOutputValue());
+    });
     this.onChanges();
   }
 

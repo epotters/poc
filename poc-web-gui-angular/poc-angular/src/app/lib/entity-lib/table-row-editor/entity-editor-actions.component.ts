@@ -1,10 +1,10 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatDialogRef} from '@angular/material/dialog/dialog-ref';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 import {EntityMeta, Identifiable} from '.';
 import {EntityLibConfig} from '../common/entity-lib-config';
@@ -24,23 +24,15 @@ export interface ActionResult<T> {
   selector: 'editor-actions',
   template: ''
 })
-export class EntityEditorActionsComponent<T extends Identifiable> implements OnDestroy {
+export class EntityEditorActionsComponent<T extends Identifiable> {
 
   @Input() meta: EntityMeta<T>;
   @Input() service: EntityService<T>;
-
-  private terminator: Subject<any> = new Subject();
 
   constructor(
     public dialog: MatDialog,
     public snackbar: MatSnackBar
   ) {
-  }
-
-
-  ngOnDestroy(): void {
-    this.terminator.next();
-    this.terminator.complete();
   }
 
 
@@ -63,7 +55,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
 
       console.debug('Ready to save', this.meta.displayName, ':', entity);
       this.service.save(entity)
-        .pipe(takeUntil(this.terminator)).subscribe((savedEntity) => {
+        .pipe(take(1)).subscribe((savedEntity) => {
         let msg: string;
         if (entity.id) {
           msg = `${this.meta.displayName}  named ${this.meta.displayNameRenderer(entity)} is updated successfully`;
@@ -113,7 +105,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
     const dialogRef = this.openConfirmationDialog('Confirm delete ' + this.meta.displayName.toLowerCase(),
       `Are you sure you want to delete ${this.meta.displayNameRenderer(entity)}?`);
 
-    dialogRef.afterClosed().subscribe(
+    dialogRef.afterClosed().pipe(take(1)).subscribe(
       data => {
         console.debug('Dialog output:', data);
         if (data.confirmed) {
@@ -121,7 +113,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
           console.info('User confirmed delete action, so it will be executed');
 
           return this.service.delete(('' + entity.id))
-            .pipe(takeUntil(this.terminator)).subscribe(response => {
+            .pipe(take(1)).subscribe(response => {
               const msg = this.meta.displayName + ' named ' + this.meta.displayNameRenderer(entity) + ' was deleted successfully';
               console.info(msg);
               this.snackbar.open(msg, undefined, {
@@ -153,7 +145,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
         this.saveSilently(unsavedChangesSubject, entityForm, overlay);
       } else {
         const dialogRef = this.openConfirmationDialog('Unsaved changes', 'Do you want to save the changes?');
-        dialogRef.afterClosed().subscribe(
+        dialogRef.afterClosed().pipe(take(1)).subscribe(
           data => {
             if (data.confirmed) {
               console.info('User confirmed he wants to save changes to ' + this.meta.displayName.toLowerCase());
@@ -178,7 +170,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
   updateEntities() {
     const dialogRef: MatDialogRef<any> = this.openConfirmationDialog('Confirm batch update',
       'Are you sure you want to update all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
-    dialogRef.afterClosed().subscribe(
+    dialogRef.afterClosed().pipe(take(1)).subscribe(
       data => {
         if (data.confirmed) {
           console.info('User confirmed batch update action, so it will be executed');
@@ -193,7 +185,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
   deleteEntities() {
     const dialogRef: MatDialogRef<any> = this.openConfirmationDialog('Confirm batch deletion',
       'Are you sure you want to delete all selected ' + this.meta.displayNamePlural.toLowerCase() + '?');
-    dialogRef.afterClosed().subscribe(
+    dialogRef.afterClosed().pipe(take(1)).subscribe(
       data => {
         if (data.confirmed) {
           console.info('User confirmed batch delete action, so it will be executed');
@@ -218,7 +210,7 @@ export class EntityEditorActionsComponent<T extends Identifiable> implements OnD
 
   private saveSilently(unsavedChangesSubject: BehaviorSubject<ActionResult<T>>, entityForm: FormGroup, overlay?: any) {
     this.saveEntity(entityForm, overlay)
-      .pipe(takeUntil(this.terminator)).subscribe((result: ActionResult<T>) => {
+      .pipe(take(1)).subscribe((result: ActionResult<T>) => {
       const msg = 'Entity saved, no more unsaved changes';
       console.debug(msg);
       unsavedChangesSubject.next(result);

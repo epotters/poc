@@ -4,7 +4,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {takeUntil, tap} from 'rxjs/operators';
+import {take, takeUntil, tap} from 'rxjs/operators';
 import {EntityLibConfig} from './common/entity-lib-config';
 
 import {ConfirmationDialogComponent} from './dialog/confirmation-dialog.component';
@@ -24,9 +24,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
   title: string;
   entityForm: FormGroup;
-
   enableValidation: boolean = true;
-
   terminator: Subject<any> = new Subject();
 
 
@@ -50,10 +48,11 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
 
     this.entitySubject.pipe(takeUntil(this.terminator)).subscribe((entity: T | null) => {
       console.debug('Entity changed', entity);
-
       if (!!entity) {
         this.title = `${this.meta.displayName} Editor`;
-        this.entityForm.patchValue(entity);
+        this.entityForm.patchValue(entity, {emitEvent: false});
+        this.entityForm.markAsPristine();
+        this.entityForm.markAsUntouched();
       } else {
         console.info('Editor for a new entity');
         this.title = `New ${this.meta.displayName}`;
@@ -67,7 +66,6 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     if (entityIdToLoad) {
       this.loadEntity(entityIdToLoad);
     }
-
   }
 
 
@@ -98,7 +96,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
         this.entityForm.patchValue(entity);
         this.entitySubject.next(entity);
       })
-    ).pipe(takeUntil(this.terminator)).subscribe();
+    ).pipe(take(1)).subscribe();
   }
 
 
@@ -107,7 +105,7 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
       const entity: T = this.entityForm.getRawValue();
 
       console.debug(`Ready to save ${this.meta.displayName} :` + JSON.stringify(entity));
-      this.service.save(entity).pipe(takeUntil(this.terminator)).subscribe((savedEntity) => {
+      this.service.save(entity).pipe(take(1)).subscribe((savedEntity) => {
         let msg: string;
         if (entity.id) {
           msg = `${this.meta.displayName} named "${this.meta.displayNameRenderer(entity)}" is updated successfully`;
@@ -145,12 +143,12 @@ export abstract class EntityEditorComponent<T extends Identifiable> implements O
     const dialogRef = this.openConfirmationDialog('Confirm delete',
       `Are you sure you want to delete ${this.meta.displayName.toLowerCase()} named ${this.meta.displayNameRenderer(entity)}?`);
 
-    dialogRef.afterClosed().pipe(takeUntil(this.terminator)).subscribe(
+    dialogRef.afterClosed().pipe(take(1)).subscribe(
       data => {
         console.debug('Dialog output:', data);
         if (data.confirmed) {
           console.info('User confirmed delete action, so it will be executed');
-          this.service.delete(entity.id).pipe(takeUntil(this.terminator)).subscribe((response) => {
+          this.service.delete(entity.id).pipe(take(1)).subscribe((response) => {
             console.info('response ', response);
             const msg = `${this.meta.displayName} named  ${this.meta.displayNameRenderer(entity)} is deleted successfully`;
             console.info(msg);
