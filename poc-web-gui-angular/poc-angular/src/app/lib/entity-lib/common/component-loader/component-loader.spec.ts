@@ -19,7 +19,7 @@ describe('Component loader tests', () => {
   });
 
 
-  it('should validate terms for date searches', () => {
+  it('should load an entity component', () => {
 
     const loader = new ComponentLoader(componentFactoryResolver);
 

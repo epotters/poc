@@ -1,16 +1,13 @@
-import {Directive, Type, ViewContainerRef} from '@angular/core';
-
-
-export class EntityComponentDescriptor {
-  constructor(public component: Type<any>, public data: any) {
-  }
-}
+import {Directive, Input, ViewContainerRef} from '@angular/core';
 
 
 @Directive({
   selector: '[entity-component-entrypoint]',
 })
 export class EntityComponentEntryPointDirective {
+
+  @Input() entrypointId: string;
+
   constructor(public viewContainerRef: ViewContainerRef) {
   }
 }

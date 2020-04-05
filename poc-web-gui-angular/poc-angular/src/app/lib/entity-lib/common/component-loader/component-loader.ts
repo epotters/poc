@@ -1,17 +1,12 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  ComponentRef,
-  Injectable,
-  OnDestroy,
-  OnInit,
-  Type,
-  ViewChild
-} from '@angular/core';
+import {ComponentFactoryResolver, ComponentRef, Injectable, OnDestroy, OnInit, Type, ViewChild} from '@angular/core';
 import {Identifiable} from '../..';
 import {EntityComponentEntryPointDirective} from './entity-component-entrypoint.directive';
 
 
+export class EntityComponentDescriptor {
+  constructor(public component: Type<any>, public data: any) {
+  }
+}
 
 // Source for component loader: https://angular.io/guide/dynamic-component-loader
 
@@ -22,8 +17,7 @@ export class ComponentLoader<T extends Identifiable> implements OnInit, OnDestro
 
   component: Type<any>;
   config: any;
-
-  componentRef: ComponentRef<Component>;
+  componentRef: ComponentRef<any>;
 
   @ViewChild(EntityComponentEntryPointDirective, {static: true}) componentEntrypoint: EntityComponentEntryPointDirective;
 
@@ -40,7 +34,9 @@ export class ComponentLoader<T extends Identifiable> implements OnInit, OnDestro
   }
 
   ngOnDestroy(): void {
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
   }
 
 
@@ -58,6 +54,10 @@ export class ComponentLoader<T extends Identifiable> implements OnInit, OnDestro
         this.componentRef.instance[key] = this.config[key];
       }
     }
+  }
+
+  private unload() {
+    this.componentEntrypoint.viewContainerRef.clear();
   }
 
 }
