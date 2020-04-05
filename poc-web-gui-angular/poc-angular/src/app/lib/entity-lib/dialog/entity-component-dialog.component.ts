@@ -1,10 +1,8 @@
 import {Component, ComponentFactoryResolver, ComponentRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {
-  EntityComponentDescriptor,
-  EntityComponentEntryPointDirective
-} from '../common/component-loader/entity-component-entrypoint.directive';
 import {EntityListComponent, Identifiable} from '..';
+import {EntityComponentDescriptor} from '../common/component-loader/component-loader';
+import {EntityComponentEntryPointDirective} from '../common/component-loader/entity-component-entrypoint.directive';
 
 
 export interface DialogData {
@@ -37,7 +35,9 @@ export class EntityComponentDialogComponent<T extends Identifiable> implements O
   }
 
   ngOnDestroy() {
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
   }
 
   onCancel(): void {

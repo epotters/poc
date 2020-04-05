@@ -10,11 +10,9 @@ import {
 } from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {EntityComponentDescriptor} from './common/component-loader/component-loader';
 
-import {
-  EntityComponentDescriptor,
-  EntityComponentEntryPointDirective
-} from './common/component-loader/entity-component-entrypoint.directive';
+import {EntityComponentEntryPointDirective} from './common/component-loader/entity-component-entrypoint.directive';
 import {ColumnConfig, EntityMeta, RelationEntity} from './domain/entity-meta.model';
 import {Identifiable} from './domain/identifiable.model';
 import {EditableListConfig, EntityListComponent} from './entity-list.component';
@@ -50,7 +48,9 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   }
 
   ngOnDestroy(): void {
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
     this.terminator.next();
     this.terminator.complete();
   }
@@ -71,7 +71,7 @@ export abstract class EntityRelationComponent<T extends Identifiable, S extends 
   }
 
 
-  // Load the table
+  // Load the list
   private loadRelationList(owner: S) {
 
     const columnConfig: ColumnConfig = this.ownerMeta.columnConfigs[this.fieldName];

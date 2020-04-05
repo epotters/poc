@@ -20,8 +20,8 @@ import {MatFormFieldControl} from '@angular/material/form-field';
 import {Router} from '@angular/router';
 import {takeUntil} from 'rxjs/operators';
 import {EditableListConfig, EntityListComponent, EntityMeta, EntityService, Identifiable} from '..';
+import {EntityComponentDescriptor} from '../common/component-loader/component-loader';
 import {
-  EntityComponentDescriptor,
   EntityComponentEntryPointDirective
 } from '../common/component-loader/entity-component-entrypoint.directive';
 

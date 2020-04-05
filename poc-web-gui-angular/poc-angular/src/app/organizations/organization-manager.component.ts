@@ -4,8 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {PocAnimations} from '../app-animations';
 import {Organization} from '../core/domain/';
 import {EntityManagerComponent} from '../lib/entity-lib';
-import {ComponentLoader} from '../lib/entity-lib/common/component-loader/component-loader';
-import {EntityComponentDescriptor} from '../lib/entity-lib/common/component-loader/entity-component-entrypoint.directive';
+import {ComponentLoader, EntityComponentDescriptor} from '../lib/entity-lib/common/component-loader/component-loader';
 import {OrganizationEditorComponent} from './organization-editor.component';
 
 import {OrganizationListComponent} from './organization-list.component';

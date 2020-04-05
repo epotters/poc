@@ -86,7 +86,9 @@ export abstract class EntityListOfCardsComponent<T extends Identifiable> impleme
 
 
   ngOnDestroy(): void {
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
     this.terminator.next();
     this.terminator.complete();
   }
