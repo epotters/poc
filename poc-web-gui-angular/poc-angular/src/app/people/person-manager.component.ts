@@ -1,15 +1,17 @@
-import {Component, ComponentFactoryResolver, OnInit, Type} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Component, ComponentFactoryResolver, Type, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute} from '@angular/router';
 
 import {PocAnimations} from '../app-animations';
-
 import {Person} from '../core/domain/';
+
 import {EntityManagerComponent} from '../lib/entity-lib';
-import {EntityComponentDescriptor} from '../lib/entity-lib/common/component-loader/entity-component-entrypoint.directive';
-import {FieldFilter} from '../lib/entity-lib/domain/filter.model';
+import {EntityComponentDescriptor} from '../lib/entity-lib/common/component-loader/component-loader';
+import {EntityRelativeNavigationComponent} from '../lib/entity-lib/entity-relative-navigation.component';
+import {PersonDetailComponent} from './person-detail.component';
 import {PersonEditorComponent} from './person-editor.component';
+import {PersonListOfCardsComponent} from './person-list-of-cards.component';
 import {PersonListComponent} from './person-list.component';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
@@ -24,58 +26,26 @@ import {PersonService} from './person.service';
     PocAnimations.slideInOut
   ]
 })
-export class PersonManagerComponent extends EntityManagerComponent<Person> implements OnInit {
+export class PersonManagerComponent extends EntityManagerComponent<Person> {
 
-  initialFilters: FieldFilter[];
-  listOfCardsVisible: boolean = false;
-  demoFormVisible: boolean = false;
 
-  entityForm: FormGroup;
   listComponent: Type<any> = PersonListComponent;
+  cardsComponent: Type<any> = PersonListOfCardsComponent;
+  detailComponent: Type<any> = PersonDetailComponent;
   editorComponent: Type<any> = PersonEditorComponent;
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(EntityRelativeNavigationComponent, {static: true}) relNav: EntityRelativeNavigationComponent<Person>;
 
   constructor(
     public service: PersonService,
     public route: ActivatedRoute,
     public dialog: MatDialog,
-    public componentFactoryResolver: ComponentFactoryResolver,
-    private formBuilder: FormBuilder
+    public componentFactoryResolver: ComponentFactoryResolver
   ) {
     super(personMeta, service, route, dialog, componentFactoryResolver);
 
-    this.initialFilters = [
-      {name: 'lastName', rawValue: 'po'}
-    ];
-
-    this.editorVisible = false;
-    this.listVisible = false;
-
-    this.entityForm = this.buildSelectDemoForm(this.formBuilder);
   }
-
-  ngOnInit() {
-  }
-
-  buildSelectDemoForm(formBuilder: FormBuilder): FormGroup {
-    const group = {};
-    group['entitySelector'] = new FormControl('');
-    group['entitySelectorList'] = new FormControl('');
-
-    group['lastName'] = new FormControl('');
-    group['gender'] = new FormControl('');
-
-    return formBuilder.group(group);
-  }
-
-
-  toggleListOfCards() {
-    this.listOfCardsVisible = !this.listOfCardsVisible;
-  }
-
-  toggleDemoForm() {
-    this.demoFormVisible = !this.demoFormVisible;
-  }
-
 
   openDialogWithList() {
     const entityListComponentDescriptor = new EntityComponentDescriptor(this.listComponent,
@@ -86,15 +56,14 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> imple
         paginatorVisible: false,
         filterVisible: false,
         editorVisible: false,
-        initialFilters: this.initialFilters
+        initialFilters: []
       });
     this.openDialogWithEntityComponent(entityListComponentDescriptor);
   }
 
-
-  openDialogWithEditor(entity?: Person) {
+  openDialogWithEditor() {
     const entityEditorComponentDescriptor = new EntityComponentDescriptor(this.editorComponent, {
-      entityToLoad: entity,
+      entityToLoad: this.selectedEntity,
       isManaged: true
     });
     this.openDialogWithEntityComponent(entityEditorComponentDescriptor);

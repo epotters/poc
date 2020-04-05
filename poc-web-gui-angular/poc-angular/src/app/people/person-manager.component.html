@@ -1,29 +1,37 @@
-<h1>{{title}}</h1>
-
 <mat-toolbar>
 
+  <h4>{{title}}</h4>
+
+  <span class="fill-remaining-space"></span>
+
   <mat-button-toggle-group #group="matButtonToggleGroup">
-    <mat-button-toggle value="list" aria-label="List view">
+    <mat-button-toggle value="list" aria-label="List view" (click)="listView()">
       <mat-icon>menu</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="cards" aria-label="Small cards">
+    <mat-button-toggle value="cards" aria-label="Small cards" (click)="cardView()">
       <mat-icon>view_module</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="detail" aria-label="Detail view">
+    <mat-button-toggle value="detail" aria-label="Detail view" (click)="editorView()">
       <mat-icon>crop_3_2</mat-icon>
     </mat-button-toggle>
+    <mat-button-toggle value="combi" aria-label="Detail view" (click)="combiView()">
+      <mat-icon>vertical_split</mat-icon>
+    </mat-button-toggle>
+
   </mat-button-toggle-group>
 
-  <button (click)="toggleList()" mat-button>{{(listVisible) ? 'Hide' : 'Show'}} List</button>
-  <button (click)="toggleListOfCards()" mat-button>{{(listOfCardsVisible) ? 'Hide' : 'Show'}} List of Cards</button>
-  <button (click)="toggleEditor()" mat-button>{{(editorVisible) ? 'Hide' : 'Show'}} Editor</button>
-
-  <button (click)="toggleDemoForm()" mat-button>{{(demoFormVisible) ? 'Hide' : 'Show'}} Custom controls</button>
-  <button (click)="openDialogWithList()" mat-button>List in dialog</button>
-  <button (click)="openDialogWithEditor()" mat-button>Editor in dialog</button>
+  <entity-relative-navigation style="position: fixed; background-color: white;"
+    [dataSource]="dataSource"
+    [selectedEntity]="selectedEntity"
+    [paginator]="paginator">
+  </entity-relative-navigation>
 
 
-  <div class="example-selected-value">Selected view: {{group.value}}</div>
+  <mat-paginator
+    [length]="dataSource.totalSubject | async"
+    [pageSize]="pageSize"
+    [hidePageSize]="true">
+  </mat-paginator>
 
 </mat-toolbar>
 
@@ -31,8 +39,12 @@
 
   <div class="multiview-column-right" style="flex: 2;">
 
+
+    <ng-template entity-component-entrypoint entrypoint-id="entity-list"></ng-template>
+
     <person-list-card
-      (selectedEntity)="onEntitySelected($event)"
+      [selectedEntity]="selectedEntity"
+      [dataSource]="dataSource"
       [columns]="meta.displayedColumns"
       [filterVisible]="false"
       [isManaged]="true"
@@ -41,91 +53,37 @@
       [@fadeInOut]>
     </person-list-card>
 
+    <ng-template entity-component-entrypoint entrypoint-id="entity-list-cards"></ng-template>
+
+    <person-list-of-cards
+      [dataSource]="dataSource"
+      *ngIf="cardsVisible"
+      [@fadeInOut]>
+    </person-list-of-cards>
+
   </div>
 
   <div class="multiview-column-left" style="flex: 1; padding-right: 48px;">
     <div style="position: fixed;">
 
-    <person-detail [entity]="selectedEntity | async"></person-detail>
+      <ng-template entity-component-entrypoint entrypoint-id="entity-detail"></ng-template>
 
-    <person-editor-card
-      [entitySubject]="selectedEntity"
-      [isManaged]="true"
-      *ngIf="editorVisible"
-      [@fadeInOut]
-      (@fadeInOut.start)="onAnimationEvent($event)"
-      (@fadeInOut.done)="onAnimationEvent($event)">
-    </person-editor-card>
+      <person-detail
+        [entity]="selectedEntity | async"
+        *ngIf="detailVisible">
+      </person-detail>
+
+      <ng-template entity-component-entrypoint entrypoint-id="entity-editor"></ng-template>
+
+      <person-editor-card
+        [entitySubject]="selectedEntity"
+        [isManaged]="true"
+        *ngIf="editorVisible"
+        [@fadeInOut]>
+      </person-editor-card>
+
     </div>
   </div>
 
 </div>
-
-
-<person-list-of-cards
-  *ngIf="listOfCardsVisible"
-  [@fadeInOut]>
-</person-list-of-cards>
-
-
-<mat-card class="entity-editor-card" *ngIf="demoFormVisible">
-  <mat-card-header>
-    <mat-card-title>Custom form controls</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="entityForm">
-
-      <h4>Entity Selector</h4>
-      <div class="form-row">
-
-        <mat-form-field>
-          <mat-label>Employee</mat-label>
-          <entity-selector
-            formControlName="entitySelector"
-            [meta]="meta"
-            [service]="service"
-            [autoActiveFirstOption]="true"
-            required>
-          </entity-selector>
-          <mat-hint>Choose an employee</mat-hint>
-          <mat-error>This field cannot be empty!</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Employee from List</mat-label>
-          <entity-selector-list
-            formControlName="entitySelectorList"
-            [meta]="meta"
-            [service]="service"
-            [columns]="meta.displayedColumnsDialog"
-            [listComponent]="listComponent"
-            [panelWidth]="'450px'"
-            required>
-          </entity-selector-list>
-          <mat-hint>Choose an employee</mat-hint>
-          <mat-error>This field cannot be empty!</mat-error>
-        </mat-form-field>
-
-      </div>
-
-      <div class="form-row">
-        Selected: {{entityForm.value | json}}
-      </div>
-
-      <div class="form-row">
-        <editor-field
-          [formGroup]="entityForm"
-          [fieldName]="'lastName'"
-          [columnConfig]="meta.columnConfigs['lastName']" style="flex: 3;"></editor-field>
-
-        <editor-field [formGroup]="entityForm" [fieldName]="'gender'" [columnConfig]="meta.columnConfigs['gender']" style="flex: 2;"></editor-field>
-
-      </div>
-
-    </form>
-
-
-
-  </mat-card-content>
-</mat-card>
 

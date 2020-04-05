@@ -1,12 +1,11 @@
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {Component, ElementRef, Renderer2} from '@angular/core';
+import {Router} from '@angular/router';
+import {Employment} from '../core/domain/';
 
 import {EntityListComponent} from '../lib/entity-lib';
-import {employmentMeta as meta} from './employment-meta';
-import {Employment} from '../core/domain/'
-import {EmploymentService} from './employment.service';
 import {EntityAnimations} from '../lib/entity-lib/common/animations.animation';
+import {employmentMeta as meta} from './employment-meta';
+import {EmploymentService} from './employment.service';
 
 
 @Component({
@@ -22,9 +21,9 @@ export class EmploymentListComponent extends EntityListComponent<Employment> {
   constructor(
     public service: EmploymentService,
     public router: Router,
-    public route: ActivatedRoute,
-    public dialog: MatDialog
+    renderer: Renderer2,
+    public el: ElementRef
   ) {
-    super(meta, service, router, route, dialog);
+    super(meta, service, router, renderer, el);
   }
 }

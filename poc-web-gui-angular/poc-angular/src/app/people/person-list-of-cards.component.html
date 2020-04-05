@@ -1,29 +1,27 @@
-<mat-card class="list-of-cards-card">
+<mat-paginator
+  [hidePageSize]="true"
+  [length]="dataSource.totalSubject | async"
+  [pageSize]="pageSize"
+  class="list-of-cards-paginator">
+</mat-paginator>
 
-  <mat-card-content>
+<div class="entity-cards">
 
-    <mat-paginator
-      [hidePageSize]="true"
-      [length]="dataSource.total$ | async"
-      [pageSize]="pageSize"
-      class="list-of-cards-paginator">
-    </mat-paginator>
+  <mat-card *ngFor="let entity of dataSource.entitiesSubject | async" class="entity-card entity-detail-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{entity.firstName}} {{entity.prefix}} {{entity.lastName}}
+      </mat-card-title>
 
-    <mat-grid-list cols="2" rowHeight="fit" style="height: 480px">
-      <mat-grid-tile *ngFor="let person of dataSource.entities$ | async">
-        <person-editor-card
-          [entityToLoad]="person"
-          [isManaged]="true"
-          *ngIf="!(dataSource.loading$ | async)"
-          [@slideInOut]>
-        </person-editor-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+    </mat-card-header>
+    <mat-card-content>
+      {{entity.firstName}} {{entity.prefix}} {{entity.lastName}} was born
+      on {{moment(entity.birthDate, "YYYY-MM-DD").format('MMMM Do YYYY')}} in {{entity.birthPlace}}.
+    </mat-card-content>
+  </mat-card>
 
-  </mat-card-content>
+</div>
 
-
-</mat-card>
 
 
 

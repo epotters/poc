@@ -4,7 +4,7 @@
     <mat-paginator
       (page)="showEvent($event)"
       [hidePageSize]="true"
-      [length]="dataSource.total$ | async"
+      [length]="dataSource.totalSubject | async"
       [pageSize]="pageSize"
       class="list-of-cards-paginator">
     </mat-paginator>
@@ -14,7 +14,7 @@
 
     <div class="list-of-cards" fxFill fxLayout="column" fxLayoutAlign="space-between">
       <div fxLayout="row wrap">
-        <ng-container *ngFor="let organization of dataSource.entities$ | async">
+        <ng-container *ngFor="let organization of dataSource.entitiesSubject | async">
           <organization-editor-card
             [entityToLoad]="organization"
             [isManaged]="true">

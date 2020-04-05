@@ -32,13 +32,13 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: base + ':id',
-    component: OrganizationEditorComponent,
+    path: base + 'cards',
+    component: OrganizationListOfCardsComponent,
     canActivate: [AuthGuardService]
   },
   {
-    path: base + 'list-of-cards',
-    component: OrganizationListOfCardsComponent,
+    path: base + ':id',
+    component: OrganizationEditorComponent,
     canActivate: [AuthGuardService]
   }
 ];

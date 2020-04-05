@@ -2,10 +2,11 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {AuthGuardService} from '../lib/auth-lib';
-import {PersonListComponent} from './person-list.component';
+import {PersonDemoComponent} from './person-demo.component';
 import {PersonEditorComponent} from './person-editor.component';
-import {PersonManagerComponent} from './person-manager.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';
+import {PersonListComponent} from './person-list.component';
+import {PersonManagerComponent} from './person-manager.component';
 
 const base = '';
 
@@ -24,15 +25,19 @@ const routes: Routes = [
     path: base + 'new',
     component: PersonEditorComponent,
     canActivate: [AuthGuardService]
+  },  {
+    path: base + 'cards',
+    component: PersonListOfCardsComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: base + 'demo',
+    component: PersonDemoComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: base + ':id',
     component: PersonEditorComponent,
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: base + 'list-of-cards',
-    component: PersonListOfCardsComponent,
     canActivate: [AuthGuardService]
   }
 ];

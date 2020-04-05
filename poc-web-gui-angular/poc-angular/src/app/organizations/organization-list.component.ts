@@ -1,11 +1,10 @@
-import {EntityListComponent} from '../lib/entity-lib';
+import {ChangeDetectionStrategy, Component, ElementRef, Renderer2} from '@angular/core';
+import {Router} from '@angular/router';
 import {Organization} from '../core/domain/';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import {OrganizationService} from './organization.service';
-import {organizationMeta as meta} from './organization-meta';
+import {EntityListComponent} from '../lib/entity-lib';
 import {EntityAnimations} from '../lib/entity-lib/common/animations.animation';
+import {organizationMeta as meta} from './organization-meta';
+import {OrganizationService} from './organization.service';
 
 
 @Component({
@@ -19,12 +18,13 @@ import {EntityAnimations} from '../lib/entity-lib/common/animations.animation';
 })
 export class OrganizationListComponent extends EntityListComponent<Organization> {
 
+
   constructor(
     public service: OrganizationService,
     public router: Router,
-    public route: ActivatedRoute,
-    public dialog: MatDialog
+    renderer: Renderer2,
+    public el: ElementRef
   ) {
-    super(meta, service, router, route, dialog);
+    super(meta, service, router, renderer, el);
   }
 }

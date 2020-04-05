@@ -3,6 +3,7 @@ import {EmploymentModule} from '../employments/employment.module';
 import {META, SERVICE} from '../lib/entity-lib/entity-tokens';
 
 import {EntityModule} from '../lib/entity-lib/entity.module';
+import {PersonDemoComponent} from './person-demo.component';
 import {PersonDetailComponent} from './person-detail.component';
 import {PersonEditorComponent, PersonEmployersRelationComponent} from './person-editor.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';
@@ -25,7 +26,8 @@ import {PersonService} from './person.service';
     PersonDetailComponent,
     PersonEditorComponent,
     PersonEmployersRelationComponent,
-    PersonListOfCardsComponent
+    PersonListOfCardsComponent,
+    PersonDemoComponent
   ],
   entryComponents: [
     PersonManagerComponent,
@@ -33,7 +35,8 @@ import {PersonService} from './person.service';
     PersonDetailComponent,
     PersonEditorComponent,
     PersonEmployersRelationComponent,
-    PersonListOfCardsComponent
+    PersonListOfCardsComponent,
+    PersonDemoComponent
   ],
   providers: [
     {provide: META, useValue: personMeta},

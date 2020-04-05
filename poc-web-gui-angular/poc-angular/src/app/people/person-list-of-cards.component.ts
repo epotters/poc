@@ -8,6 +8,8 @@ import {EntityListOfCardsComponent} from '../lib/entity-lib/entity-list-of-cards
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
 
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'person-list-of-cards',
@@ -19,7 +21,9 @@ import {PersonService} from './person.service';
 })
 export class PersonListOfCardsComponent extends EntityListOfCardsComponent<Person> {
 
-  pageSize = 1;
+
+  moment: any = moment;
+  pageSize = 30;
 
   constructor(
     public service: PersonService,

@@ -1,11 +1,10 @@
-import {EntityListComponent} from '../lib/entity-lib';
+import {ChangeDetectionStrategy, Component, ElementRef, Renderer2} from '@angular/core';
+import {Router} from '@angular/router';
 import {Person} from '../core/domain/';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {PersonService} from './person.service';
-import {personMeta as meta} from './person-meta';
+import {EntityListComponent} from '../lib/entity-lib';
 import {EntityAnimations} from '../lib/entity-lib/common/animations.animation';
+import {personMeta as meta} from './person-meta';
+import {PersonService} from './person.service';
 
 @Component({
   selector: 'person-list-card',
@@ -16,13 +15,15 @@ import {EntityAnimations} from '../lib/entity-lib/common/animations.animation';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent extends EntityListComponent<Person> {
+
   constructor(
     public service: PersonService,
     public router: Router,
-    public route: ActivatedRoute,
-    public dialog: MatDialog
+    renderer: Renderer2,
+    public el: ElementRef
   ) {
-    super(meta, service, router, route, dialog);
+    super(meta, service, router, renderer, el);
   }
+
 }
 

@@ -1,18 +1,18 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {takeUntil} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {take, takeUntil} from 'rxjs/operators';
+import {Employment} from '../core/domain';
 
 
 import {EntityEditorComponent} from '../lib/entity-lib';
-import {EmploymentService} from './employment.service';
-import {PersonService} from '../people/person.service';
-import {OrganizationService} from '../organizations/organization.service';
-import {Employment} from '../core/domain';
-import {employmentMeta} from './employment-meta';
 import {FieldFilter} from '../lib/entity-lib/domain/filter.model';
+import {OrganizationService} from '../organizations/organization.service';
+import {PersonService} from '../people/person.service';
+import {employmentMeta} from './employment-meta';
+import {EmploymentService} from './employment.service';
 
 
 @Component({
@@ -60,20 +60,20 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
 
 
   prefillFromParameters(): void {
-    this.route.queryParams.pipe(takeUntil(this.terminator)).subscribe(params => {
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
       if (params['employee.id']) {
         const personId = params['employee.id'];
         this.personService.get(personId)
-          .pipe(takeUntil(this.terminator)).subscribe(person => {
-            this.entityForm.patchValue({employee: person}, {emitEvent: false});
-          });
+          .pipe(take(1)).subscribe(person => {
+          this.entityForm.patchValue({employee: person}, {emitEvent: false});
+        });
       }
       if (params['employer.id']) {
         const employerId = params['employer.id'];
         this.organizationService.get(employerId)
-          .pipe(takeUntil(this.terminator)).subscribe(organization => {
-            this.entityForm.patchValue({employer: organization}, {emitEvent: false});
-          })
+          .pipe(take(1)).subscribe(organization => {
+          this.entityForm.patchValue({employer: organization}, {emitEvent: false});
+        });
       }
     });
   }

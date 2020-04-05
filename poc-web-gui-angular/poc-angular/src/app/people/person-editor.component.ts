@@ -1,14 +1,16 @@
 import {BehaviorSubject} from 'rxjs';
-import {Component, ComponentFactoryResolver, Input} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 import {EntityEditorComponent, SelectOption} from '../lib/entity-lib';
+import {EntityComponentEntryPointDirective} from '../lib/entity-lib/common/component-loader/entity-component-entrypoint.directive';
 import {EntityRelationComponent} from '../lib/entity-lib/entity-relation.component';
 
 import {Employment, Organization, Person} from '../core/domain/';
+import {EntityRelativeNavigationComponent} from '../lib/entity-lib/entity-relative-navigation.component';
 import {personMeta} from './person-meta';
 import {employmentMeta} from '../employments/employment-meta';
 import {organizationMeta} from '../organizations/organization-meta';
@@ -64,6 +66,7 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
   templateUrl: '../lib/entity-lib/entity-relation.component.html'
 })
 export class PersonEmployersRelationComponent extends EntityRelationComponent<Employment, Person, Organization> {
+
   @Input() readonly ownerSubject: BehaviorSubject<Person>;
 
   constructor(
