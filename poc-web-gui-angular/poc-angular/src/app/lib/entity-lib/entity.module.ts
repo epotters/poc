@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {EntityCommonModule} from './common/entity-common.module';
 import {EntityMaterialModule} from './common/entity-material.module';
+import {EntityRelativeNavigationComponent} from './entity-relative-navigation.component';
 
 import {TableRowEditorModule} from './table-row-editor/table-row-editor.module';
 import {EntitySelectorModule} from './entity-selector/entity-selector.module';
@@ -27,10 +28,12 @@ import {EntityLinkDirective} from './common/entity-link.directive';
     EntityMaterialModule,
     TableRowEditorModule,
     EntitySelectorModule,
-    DialogModule
+    DialogModule,
+    EntityRelativeNavigationComponent
   ],
   declarations: [
     EntityComponentStyleOverrideDirective,
+    EntityRelativeNavigationComponent,
     EntityLinkDirective
   ]
 })

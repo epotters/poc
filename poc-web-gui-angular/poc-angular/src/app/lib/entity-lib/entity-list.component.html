@@ -15,6 +15,23 @@
 
     <span class="fill-remaining-space"></span>
 
+
+    <button
+      (click)="selectPrevious()" color="primary"
+      matTooltip="Select the previous {{meta.displayName.toLowerCase()}}"
+      *ngIf="isManaged"
+      mat-icon-button>
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <button
+      (click)="selectNext()" color="primary"
+      matTooltip="Select the next {{meta.displayName.toLowerCase()}}"
+      *ngIf="isManaged"
+      mat-icon-button>
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+
     <button (click)="checkAndSave()" [disabled]="!isSaveable()" *ngIf="editable"
             color="primary" matTooltip="Save {{meta.displayName.toLowerCase()}}" mat-icon-button>
       <mat-icon>done</mat-icon>
@@ -30,7 +47,6 @@
             matTooltip="{{(filterVisible) ? 'Hide' : 'Show'}} the filter" color="primary" mat-icon-button>
       <mat-icon>search</mat-icon>
     </button>
-
 
     <button [matMenuTriggerFor]="titlebarMenu" mat-icon-button>
       <mat-icon>more_vert</mat-icon>
@@ -95,7 +111,7 @@
 
       <editor-row
         (keydown.enter)="onKeyEnter()"
-        (keydown.escape)="stopEditing()"
+        (keydown.escape)="justStopEditing()"
         [class.editor-inline]="true"
         [class.editor-moved]="!!editorViewState.rowElement"
         [columns]="columns"
@@ -103,25 +119,24 @@
         [meta]="meta"
         [style.transform]="editorViewState.transform">
 
-        <!-- These animations cause the initial row editor positioning to fail -->
-        <!--                  [@slideTo]="editorVisible ? '*' : 'invisible'"-->
-        <!--                  (@slideTo.start)="onAnimationEvent($event)"-->
-        <!--                  (@slideTo.done)="onAnimationEvent($event)"-->
       </editor-row>
 
     </ng-container>
 
+<!--    matRipple-->
+
     <mat-row
-      matRipple
       (click)="onClick($event, row, idx)"
       (contextmenu)="onContextMenu($event, row, idx)"
       (dblclick)="onDblClick($event, row, idx)"
+      (keydown.arrowDown)="onKeyArrowDown($event)"
+      (keydown.arrowUp)="onKeyArrowUp($event)"
       *matRowDef="let row; columns: columns; let idx = index;"></mat-row>
 
     <ng-container matColumnDef="paginator">
       <mat-footer-cell *matFooterCellDef>
         <mat-paginator
-          [length]="dataSource.total$ | async"
+          [length]="dataSource.totalSubject | async"
           [pageSize]="meta.defaultPageSize">
         </mat-paginator>
       </mat-footer-cell>
@@ -149,7 +164,7 @@
     <mat-divider *ngIf="related"></mat-divider>
 
     <button (click)="startEditing(entity, target, idx)" *ngIf="!isEditing()" mat-menu-item>Edit inline</button>
-    <button (click)="stopEditing().subscribe()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
+    <button (click)="justStopEditing()" *ngIf="isEditing()" mat-menu-item>Stop editing</button>
     <button (click)="selectEntity(entity)" mat-menu-item>Edit in editor</button>
     <button (click)="duplicateEntity(entity)" mat-menu-item>Duplicate</button>
     <button (click)="deleteEntity(entity)" mat-menu-item>Delete</button>
