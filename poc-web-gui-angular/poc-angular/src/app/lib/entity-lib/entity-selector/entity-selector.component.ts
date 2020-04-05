@@ -129,7 +129,7 @@ export class EntitySelectorComponent<T extends Identifiable> extends AbstractMat
     });
 
 
-    this.dataSource.total$.pipe(takeUntil(this.terminator)).subscribe(total => {
+    this.dataSource.totalSubject.pipe(takeUntil(this.terminator)).subscribe(total => {
       if (total === 0 && typeof this.searchControl.value === 'string' && this.searchControl.value.length > this.lengthToShowCreate) {
         this.createButtonVisible = true;
       } else {

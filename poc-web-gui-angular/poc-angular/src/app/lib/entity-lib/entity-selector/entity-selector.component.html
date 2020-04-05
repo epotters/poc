@@ -16,7 +16,7 @@
   #auto="matAutocomplete"
   [displayWith]="displayWith.bind(this)">
   <mat-option
-    *ngFor="let entity of dataSource.entities$ | async"
+    *ngFor="let entity of dataSource.entitiesSubject | async"
     [value]="entity"
     (onSelectionChange)="optionSelected($event)">
     {{ entity ? meta.displayNameRenderer(entity) : '' }}

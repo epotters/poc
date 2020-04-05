@@ -5,16 +5,19 @@
 }
 
 /*
+Entity Cards in general
+*/
+.entity-card .mat-card-header-text {
+  margin: 0;
+}
+
+/*
 Entity Detail Component
 */
-.entity-detail {
+.entity-detail-card {
   max-width: var(--entity-card-max-width);
 }
 
-.entity-detail .mat-card-header-text,
-.entity-editor .mat-card-header-text {
-  margin: 0;
-}
 
 
 /*
@@ -44,7 +47,6 @@ Entity Editor Component
 }
 
 
-
 /*
 Entity List Component and Table Row Editor
 */
@@ -62,12 +64,11 @@ Entity List Component and Table Row Editor
 
 .entity-list mat-row:hover,
 .entity-list mat-row:focus {
-  /*background: rgba(0, 0, 0, .04);*/
   border-bottom-color: rgba(0, 0, 0, .20);
 }
 
 .entity-list mat-row.selected {
-  border-bottom-color: rgba(0, 0, 0, .40);
+  border-bottom-color: rgba(0, 0, 0, .30);
 }
 
 .entity-list mat-cell.column-type-entity-selector:hover .mat-cell-content::after {
@@ -332,35 +333,21 @@ Entity Relation Component
 }
 
 
-
-
 /*
 Entity List Of Cards Component
 */
 
-.list-of-cards {
-  background-color: #fafafa;
-  min-height: 300px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  border-top: 1px rgba(0, 0, 0, .12);
-  border-bottom: 1px rgba(0, 0, 0, .12);
+.entity-cards .entity-detail-card {
+  display: inline-block;
+  margin: 12px;
+  min-height: 90px;
+  width: 360px;
+  min-width: 240px;
 }
 
-.list-of-cards mat-card {
-  display: inline-block;
-  min-width: 240px;
-  min-height: 90px;
-  margin: 6px;
-}
 
 .list-of-cards .list-of-cards-paginator .mat-paginator-range-label {
   display: none;
-}
-
-
-.list-of-cards .row-of-cards {
-  justify-items: center;
 }
 
 

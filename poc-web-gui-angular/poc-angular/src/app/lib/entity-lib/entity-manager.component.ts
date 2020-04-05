@@ -1,37 +1,43 @@
-import {ComponentFactoryResolver, Directive, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {ComponentFactoryResolver, Directive, OnDestroy, OnInit, Type} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {EntityComponentDescriptor} from './common/component-loader/entity-component-entrypoint.directive';
+import {take} from 'rxjs/operators';
+import {EntityComponentDescriptor} from './common/component-loader/component-loader';
 import {EntityLibConfig} from './common/entity-lib-config';
 import {EntityComponentDialogComponent} from './dialog/entity-component-dialog.component';
 
 import {EntityMeta} from './domain/entity-meta.model';
 import {Identifiable} from './domain/identifiable.model';
-import {DataSourceState} from './entity-list.component';
+import {EntityDataSource} from './entity-data-source';
 import {EntityService} from './entity.service';
 
 
 @Directive()
-export abstract class EntityManagerComponent<T extends Identifiable> implements OnDestroy {
+export abstract class EntityManagerComponent<T extends Identifiable> implements OnInit, OnDestroy {
 
-  @Input() dataSourceState: DataSourceState;
-  @Output() dataSourceStateEmitter: EventEmitter<DataSourceState> = new EventEmitter<DataSourceState>();
+  dataSource: EntityDataSource<T>;
+  selectedEntity: BehaviorSubject<T | null> = new BehaviorSubject<T | null>(null);
 
-  title: string = `${this.meta.displayName} manager`;
-
-  columns: string[] = [];
-  columnSetName: string = 'displayedColumnsDialog';
-
+  pageSize = 10;
   private terminator: Subject<any> = new Subject();
 
 
-  selectedEntity: BehaviorSubject<T | null> = new BehaviorSubject<T | null>(null);
-  private dialogEntity: T;
+  title: string = `${this.meta.displayName} manager`;
+  columns: string[] = [];
+  columnSetName: string = 'displayedColumnsDialog';
 
-  listVisible: boolean = true;
-  editorVisible: boolean = true;
+
+  listComponent: Type<any>;
+  cardsComponent: Type<any>;
+  detailComponent: Type<any>;
+  editorComponent: Type<any>;
+
+
+  listVisible: boolean = false;
+  cardsVisible: boolean = false;
+  detailVisible: boolean = false;
+  editorVisible: boolean = false;
 
 
   protected constructor(
@@ -45,24 +51,66 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
     this.columns = meta[this.columnSetName] || meta.displayedColumns;
   }
 
-  ngOnDestroy(): void {
-    this.terminator.next();
-    this.terminator.complete();
+  ngOnInit() {
+    this.dataSource = new EntityDataSource<T>(this.meta, this.service);
+    this.dataSource.connect();
+
+    this.listView();
   }
 
-  onEntitySelected(entity: T) {
-    console.debug('EntitySelected event received', entity);
-    this.selectedEntity.next(entity);
-    // this.openDialogWithEditor(this.selectedEntity.getValue());
+  ngOnDestroy(): void {
+    if (this.dataSource) {
+      this.dataSource.disconnect();
+    }
+    this.terminator.next();
+    this.terminator.complete();
   }
 
   toggleList() {
     this.listVisible = !this.listVisible;
   }
 
+  toggleCards() {
+    this.cardsVisible = !this.cardsVisible;
+  }
+
+  toggleDetail() {
+    this.detailVisible = !this.detailVisible;
+  }
+
   toggleEditor() {
     this.editorVisible = !this.editorVisible;
   }
+
+  listView() {
+    this.listVisible = true;
+    this.cardsVisible = false;
+    this.detailVisible = true;
+    this.editorVisible = false;
+  }
+
+  cardView() {
+    this.listVisible = false;
+    this.cardsVisible = true;
+    this.detailVisible = false;
+    this.editorVisible = false;
+  }
+
+  editorView() {
+    this.listVisible = false;
+    this.cardsVisible = false;
+    this.detailVisible = false;
+    this.editorVisible = true;
+  }
+
+  combiView() {
+    if (!this.listVisible && !this.cardsVisible) {
+      this.listVisible = true;
+    }
+    this.detailVisible = false;
+    this.editorVisible = true;
+  }
+
 
   abstract openDialogWithList();
 
@@ -74,19 +122,15 @@ export abstract class EntityManagerComponent<T extends Identifiable> implements 
       data: {
         componentFactoryResolver: this.componentFactoryResolver,
         componentDescriptor: componentToShow,
-        entity: this.dialogEntity
+        entity: this.selectedEntity.getValue()
       }
     });
 
-    dialogRef.afterClosed().pipe(takeUntil(this.terminator)).subscribe(entity => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(entity => {
       console.debug('The dialog was closed');
       if (entity) {
-        this.dialogEntity = entity;
+        this.selectedEntity.next(entity);
       }
     });
-  }
-
-  onAnimationEvent(event: AnimationEvent) {
-    console.debug('EntityManagerComponent - AnimationEvent', event);
   }
 }
