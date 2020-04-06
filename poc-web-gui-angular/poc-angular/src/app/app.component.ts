@@ -1,13 +1,13 @@
 import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Title} from '@angular/platform-browser';
 
-import {AuthService} from './lib/auth-lib/';
-import {PocAnimations} from './app-animations';
-import {ErrorService} from './core/error/error.service';
-import {ConfigService} from './app-config.service';
+import {AuthService} from 'auth-lib';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {PocAnimations} from './app-animations';
+import {ConfigService} from './app-config.service';
+import {ErrorService} from './core/error/error.service';
 
 
 @Component({
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     const consoleStyle = ['display: block', 'padding: 2px', 'font-weight: bold', 'font-size: 14px'].join(';');
     console.info('%c☯ ' + this.configService.applicationDisplayName + ' ☯', consoleStyle);
 
-    this.errorHandlerService.awaitErrors().pipe(takeUntil(this.terminator)).subscribe((error) => {
+    this.errorHandlerService.errorSubject.pipe(takeUntil(this.terminator)).subscribe((error) => {
         console.debug('Inside subscription to awaitErrors');
         if (error != null) {
           console.info('Received error with code ' + error.code);
@@ -61,9 +61,5 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     this.snackBar.open(message, action, {
       duration: 2000
     });
-  }
-
-  onAnimationEvent(event: AnimationEvent) {
-    // console.debug('---> AppComponent - AnimationEvent', event);
   }
 }

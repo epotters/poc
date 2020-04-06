@@ -1,8 +1,6 @@
 <mat-sidenav-container
   *ngIf="visible"
-  [@fadeInOut]
-  (@fadeInOut.start)="onAnimationEvent($event)"
-  (@fadeInOut.done)="onAnimationEvent($event)">
+  [@fadeInOut]>
 
 
   <mat-sidenav #sidenav fixedInViewport="true" mode="over">

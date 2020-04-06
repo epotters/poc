@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router, RouterModule, Routes} from '@angular/router';
+import {AuthGuardService} from 'auth-lib';
 import {HomeComponent} from './home/home.component';
 import {InfoComponent} from './info/info.component';
-import {AuthGuardService} from './lib/auth-lib';
 
 const routes: Routes = [
   {
@@ -48,8 +48,7 @@ export class AppRoutingModule {
     this.router.events.subscribe(async routerEvent => {
       if (routerEvent instanceof NavigationStart) {
         console.info(`Start navigation to url "${routerEvent.url}"`);
-      }
-      else if (routerEvent instanceof RouteConfigLoadEnd) {
+      } else if (routerEvent instanceof RouteConfigLoadEnd) {
         console.info(`Module loaded lazily from path "${routerEvent.route.path}"`);
       }
 

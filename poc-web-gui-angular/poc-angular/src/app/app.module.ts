@@ -1,20 +1,19 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {APP_BASE_HREF} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AuthConfigService, AuthGuardService, AuthModule, AuthService} from 'auth-lib';
 
-import {MaterialModule} from './material.module';
-import {AuthGuardService, AuthModule, AuthService} from './lib/auth-lib/';
-
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app-routing.module';
 import {ConfigService, initApp} from './app-config.service';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HttpErrorInterceptor} from './core/error/error.interceptor';
+import {ErrorModule} from './core/error/error.module';
 import {EntityServicesModule} from './core/service/entity-services.module';
-
 import {HomeModule} from './home/home.module';
 import {InfoModule} from './info/info.module';
-import {ErrorModule} from './core/error/error.module';
-import {HttpErrorInterceptor} from './core/error/error.interceptor';
+
+import {MaterialModule} from './material.module';
 
 
 @NgModule({
@@ -42,17 +41,18 @@ import {HttpErrorInterceptor} from './core/error/error.interceptor';
       multi: true
     },
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptor,
-      multi: true
-    },
-    {
       provide: APP_BASE_HREF,
       deps: [ConfigService],
       useFactory: (config: ConfigService) => config.applicationBasePath
     },
-    AuthGuardService,
-    AuthService
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
+    {provide: AuthConfigService, useExisting: ConfigService},
+    AuthService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })

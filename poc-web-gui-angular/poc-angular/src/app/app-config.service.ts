@@ -1,12 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {AuthConfig} from 'auth-lib';
 import {UserManagerSettings} from 'oidc-client';
-
 import {Observable, ObservableInput, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-
 import {CommonEnvironment, Environment} from '../environments/';
-import {AuthConfig} from './lib/auth-lib';
 
 
 export interface AppConfig {
@@ -22,15 +20,14 @@ export interface AppConfig {
 
   clientRoot: string;
 
-  // API
-  apiRoot: string;
-
-  // OIDC authentication
+  // OIDC
+  accountUrl: string;
   oidcProviderRoot: string;
   realm: string;
   clientId: string;
-  accountUrl: string;
-  userManagerSettings: UserManagerSettings;
+
+  // API
+  apiRoot: string;
 
   // GUI
   defaultSnackbarDuration: number;
@@ -50,14 +47,17 @@ export class ConfigService implements AppConfig, AuthConfig {
   locale!: string;
   applicationDisplayName!: string;
   applicationBasePath!: string;
-  clientRoot!: string;
   apiRoot!: string;
+  clientRoot!: string;
+
   oidcProviderRoot!: string;
   realm!: string;
   clientId!: string;
   accountUrl!: string;
   userManagerSettings!: UserManagerSettings;
+
   defaultSnackbarDuration!: number;
+
 
   // TODO: use code to enable config caching
   private readonly configKey: string = 'config';
@@ -76,8 +76,12 @@ export class ConfigService implements AppConfig, AuthConfig {
     }
     this.accountUrl = this.oidcProviderRoot + 'realms/' + this.realm + '/account';
     this.userManagerSettings = this.buildUserManagerSettings();
+    console.debug(this);
   }
 
+  public isConfigStored(): boolean {
+    return !!sessionStorage.sessionStorage.getItem(this.configKey);
+  }
 
   private buildUserManagerSettings(): UserManagerSettings {
     return {
@@ -94,12 +98,6 @@ export class ConfigService implements AppConfig, AuthConfig {
       loadUserInfo: true
     };
   }
-
-
-  public isConfigStored(): boolean {
-    return !!sessionStorage.sessionStorage.getItem(this.configKey);
-  }
-
 
   private readConfig(): void {
     const json: string | null = sessionStorage.getItem(this.configKey);
