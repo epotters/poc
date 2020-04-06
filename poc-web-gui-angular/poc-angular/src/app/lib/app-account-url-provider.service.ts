@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {AuthConfigService} from './lib/auth-lib/auth-config.service';
 
 
 export interface RouteData {
@@ -8,10 +7,10 @@ export interface RouteData {
 }
 
 export interface QueryParams {
-  [index: string]: any;
-
   referer: string;
   referrer_uri: string;
+
+  [index: string]: any;
 }
 
 /*
