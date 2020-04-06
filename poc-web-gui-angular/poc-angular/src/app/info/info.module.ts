@@ -1,8 +1,8 @@
+import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
+import {MaterialModule} from '../material.module';
 
 import {InfoComponent} from './info.component';
-import {MaterialModule} from '../material.module';
-import {CommonModule} from '@angular/common';
 
 @NgModule({
   imports: [
