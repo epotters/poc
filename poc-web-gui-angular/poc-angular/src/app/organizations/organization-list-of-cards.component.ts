@@ -3,9 +3,8 @@ import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 
+import {ComponentLoader, EntityListOfCardsComponent} from 'entity-lib';
 import {Organization} from '../core/domain/';
-import {ComponentLoader} from '../lib/entity-lib/common/component-loader/component-loader';
-import {EntityListOfCardsComponent} from '../lib/entity-lib/entity-list-of-cards.component';
 import {organizationMeta} from './organization-meta';
 import {OrganizationService} from './organization.service';
 

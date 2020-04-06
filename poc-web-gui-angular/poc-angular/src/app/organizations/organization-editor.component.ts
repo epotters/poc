@@ -1,25 +1,23 @@
 import {Component, ComponentFactoryResolver, Input} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {EntityEditorComponent, EntityRelationComponent} from 'entity-lib';
 
 import {BehaviorSubject} from 'rxjs';
 
 import {Employment, Organization, Person} from '../core/domain/';
-import {organizationMeta} from './organization-meta';
 import {employmentMeta} from '../employments/employment-meta';
-import {personMeta} from '../people/person-meta';
-import {OrganizationService} from './organization.service';
 import {EmploymentListComponent} from '../employments/employments-list.component';
-import {EntityEditorComponent} from '../lib/entity-lib';
-import {EntityRelationComponent} from '../lib/entity-lib/entity-relation.component';
+import {personMeta} from '../people/person-meta';
+import {organizationMeta} from './organization-meta';
+import {OrganizationService} from './organization.service';
 
 
 @Component({
   selector: 'organization-editor-card',
-  templateUrl: './organization-editor.component.html',
-  styleUrls: ['../lib/entity-lib/entity-editor.component.css']
+  templateUrl: './organization-editor.component.html'
 })
 export class OrganizationEditorComponent extends EntityEditorComponent<Organization> {
 
@@ -47,7 +45,7 @@ export class OrganizationEditorComponent extends EntityEditorComponent<Organizat
 
 @Component({
   selector: 'organization-employees-relation',
-  templateUrl: '../lib/entity-lib/entity-relation.component.html'
+  templateUrl: '../lib/entity-relation.component.html'
 })
 export class OrganizationEmployeesRelationComponent extends EntityRelationComponent<Employment, Organization, Person> {
 

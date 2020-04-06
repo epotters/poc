@@ -1,4 +1,4 @@
-import {EntityMeta} from '../lib/entity-lib';
+import {EntityMeta} from 'entity-lib';
 import {Organization} from '../core/domain';
 
 
@@ -39,7 +39,7 @@ export const organizationMeta: EntityMeta<Organization> = {
       label: 'Name',
       validators: [
         {type: 'required', message: 'Last name is required'}
-        ]
+      ]
     },
 
     employees: {
