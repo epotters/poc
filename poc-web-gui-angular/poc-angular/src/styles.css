@@ -1,9 +1,6 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import 'app/lib/entity-lib/entity-lib.css';
-
-/*@import 'app/people/person-list.component.css';*/
-
+@import '~entity-lib/src/assets/entity-lib.css';
 
 
 html, body {
