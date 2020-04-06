@@ -1,10 +1,10 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {AuthService} from 'auth-lib';
+import {ApiService} from 'entity-lib';
 import {Observable} from 'rxjs';
 
 import {ConfigService} from '../../app-config.service';
-import {AuthService} from '../../lib/auth-lib';
-import {ApiService} from '../../lib/entity-lib';
 
 
 @Injectable({
