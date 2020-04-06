@@ -5,32 +5,33 @@
   <span class="fill-remaining-space"></span>
 
   <mat-button-toggle-group #group="matButtonToggleGroup">
-    <mat-button-toggle value="list" aria-label="List view" (click)="listView()">
+    <mat-button-toggle (click)="listView()" aria-label="List view" value="list">
       <mat-icon>menu</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="cards" aria-label="Small cards" (click)="cardView()">
+    <mat-button-toggle (click)="cardView()" aria-label="Small cards" value="cards">
       <mat-icon>view_module</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="detail" aria-label="Detail view" (click)="editorView()">
+    <mat-button-toggle (click)="editorView()" aria-label="Detail view" value="detail">
       <mat-icon>crop_3_2</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="combi" aria-label="Detail view" (click)="combiView()">
+    <mat-button-toggle (click)="combiView()" aria-label="Detail view" value="combi">
       <mat-icon>vertical_split</mat-icon>
     </mat-button-toggle>
 
   </mat-button-toggle-group>
 
-  <entity-relative-navigation style="position: fixed; background-color: white;"
+  <entity-relative-navigation
     [dataSource]="dataSource"
+    [paginator]="paginator"
     [selectedEntity]="selectedEntity"
-    [paginator]="paginator">
+    style="position: fixed; background-color: white;">
   </entity-relative-navigation>
 
 
   <mat-paginator
+    [hidePageSize]="true"
     [length]="dataSource.totalSubject | async"
-    [pageSize]="pageSize"
-    [hidePageSize]="true">
+    [pageSize]="pageSize">
   </mat-paginator>
 
 </mat-toolbar>
@@ -43,22 +44,22 @@
     <ng-template entity-component-entrypoint entrypoint-id="entity-list"></ng-template>
 
     <person-list-card
-      [selectedEntity]="selectedEntity"
-      [dataSource]="dataSource"
+      *ngIf="listVisible"
+      [@fadeInOut]
       [columns]="meta.displayedColumns"
+      [dataSource]="dataSource"
       [filterVisible]="false"
       [isManaged]="true"
-      [title]="'Managed people list'"
-      *ngIf="listVisible"
-      [@fadeInOut]>
+      [selectedEntity]="selectedEntity"
+      [title]="'Managed people list'">
     </person-list-card>
 
     <ng-template entity-component-entrypoint entrypoint-id="entity-list-cards"></ng-template>
 
     <person-list-of-cards
-      [dataSource]="dataSource"
       *ngIf="cardsVisible"
-      [@fadeInOut]>
+      [@fadeInOut]
+      [dataSource]="dataSource">
     </person-list-of-cards>
 
   </div>
@@ -69,17 +70,17 @@
       <ng-template entity-component-entrypoint entrypoint-id="entity-detail"></ng-template>
 
       <person-detail
-        [entity]="selectedEntity | async"
-        *ngIf="detailVisible">
+        *ngIf="detailVisible"
+        [entity]="selectedEntity | async">
       </person-detail>
 
       <ng-template entity-component-entrypoint entrypoint-id="entity-editor"></ng-template>
 
       <person-editor-card
-        [entitySubject]="selectedEntity"
-        [isManaged]="true"
         *ngIf="editorVisible"
-        [@fadeInOut]>
+        [@fadeInOut]
+        [entitySubject]="selectedEntity"
+        [isManaged]="true">
       </person-editor-card>
 
     </div>

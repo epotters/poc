@@ -1,21 +1,18 @@
-import {BehaviorSubject} from 'rxjs';
-import {Component, ComponentFactoryResolver, Input, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, ComponentFactoryResolver, Input} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import {EntityEditorComponent, SelectOption} from '../lib/entity-lib';
-import {EntityComponentEntryPointDirective} from '../lib/entity-lib/common/component-loader/entity-component-entrypoint.directive';
-import {EntityRelationComponent} from '../lib/entity-lib/entity-relation.component';
+import {EntityEditorComponent, EntityRelationComponent, SelectOption} from 'entity-lib';
+import {BehaviorSubject} from 'rxjs';
 
 import {Employment, Organization, Person} from '../core/domain/';
-import {EntityRelativeNavigationComponent} from '../lib/entity-lib/entity-relative-navigation.component';
-import {personMeta} from './person-meta';
 import {employmentMeta} from '../employments/employment-meta';
-import {organizationMeta} from '../organizations/organization-meta';
-import {PersonService} from './person.service';
 import {EmploymentListComponent} from '../employments/employments-list.component';
+import {organizationMeta} from '../organizations/organization-meta';
+import {personMeta} from './person-meta';
+import {PersonService} from './person.service';
 
 
 @Component({
@@ -63,7 +60,7 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
 
 @Component({
   selector: 'person-employers-relation',
-  templateUrl: '../lib/entity-lib/entity-relation.component.html'
+  templateUrl: '../lib/entity-relation.component.html'
 })
 export class PersonEmployersRelationComponent extends EntityRelationComponent<Employment, Person, Organization> {
 

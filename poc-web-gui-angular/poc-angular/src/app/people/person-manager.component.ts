@@ -3,12 +3,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute} from '@angular/router';
 
+import {EntityComponentDescriptor, EntityManagerComponent, EntityRelativeNavigationComponent} from 'entity-lib';
+
 import {PocAnimations} from '../app-animations';
 import {Person} from '../core/domain/';
-
-import {EntityManagerComponent} from '../lib/entity-lib';
-import {EntityComponentDescriptor} from '../lib/entity-lib/common/component-loader/component-loader';
-import {EntityRelativeNavigationComponent} from '../lib/entity-lib/entity-relative-navigation.component';
 import {PersonDetailComponent} from './person-detail.component';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';

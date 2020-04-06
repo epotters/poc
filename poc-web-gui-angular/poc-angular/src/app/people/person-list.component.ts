@@ -1,17 +1,13 @@
 import {ChangeDetectionStrategy, Component, ElementRef, Renderer2} from '@angular/core';
 import {Router} from '@angular/router';
+import {EntityListComponent} from 'entity-lib';
 import {Person} from '../core/domain/';
-import {EntityListComponent} from '../lib/entity-lib';
-import {EntityAnimations} from '../lib/entity-lib/common/animations.animation';
 import {personMeta as meta} from './person-meta';
 import {PersonService} from './person.service';
 
 @Component({
   selector: 'person-list-card',
-  templateUrl: '../lib/entity-lib/entity-list.component.html',
-  animations: [
-    EntityAnimations.slideTo
-  ],
+  templateUrl: '../lib/entity-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonListComponent extends EntityListComponent<Person> {

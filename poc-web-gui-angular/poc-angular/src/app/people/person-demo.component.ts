@@ -2,14 +2,12 @@ import {Component, ComponentFactoryResolver, OnInit, Type} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
+import {EntityComponentDescriptor, EntityManagerComponent, FieldFilter} from 'entity-lib';
 import {BehaviorSubject} from 'rxjs';
 
 import {PocAnimations} from '../app-animations';
 
 import {Person} from '../core/domain/';
-import {EntityManagerComponent} from '../lib/entity-lib';
-import {EntityComponentDescriptor} from '../lib/entity-lib/common/component-loader/component-loader';
-import {FieldFilter} from '../lib/entity-lib/domain/filter.model';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonListComponent} from './person-list.component';
 import {personMeta} from './person-meta';

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {EntityService} from '../lib/entity-lib';
-import {PocApiService} from '../core/service';
+import {EntityService} from 'entity-lib';
 import {Person} from '../core/domain';
+import {PocApiService} from '../core/service';
 import {personMeta} from './person-meta';
 
 

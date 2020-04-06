@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuardService} from '../lib/auth-lib';
+import {AuthGuardService} from 'auth-lib';
 import {PersonDemoComponent} from './person-demo.component';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';
@@ -25,7 +25,7 @@ const routes: Routes = [
     path: base + 'new',
     component: PersonEditorComponent,
     canActivate: [AuthGuardService]
-  },  {
+  }, {
     path: base + 'cards',
     component: PersonListOfCardsComponent,
     canActivate: [AuthGuardService]

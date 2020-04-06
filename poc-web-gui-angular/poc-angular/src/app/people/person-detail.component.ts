@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
+import {EntityDetailComponent} from 'entity-lib';
 import * as moment from 'moment';
 import {Person} from '../core/domain/';
-import {EntityDetailComponent} from '../lib/entity-lib/entity-detail.component';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
 

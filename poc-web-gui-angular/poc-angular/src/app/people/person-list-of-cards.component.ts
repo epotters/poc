@@ -1,20 +1,18 @@
 import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import * as moment from 'moment';
+import {ComponentLoader, EntityListOfCardsComponent} from 'entity-lib';
+
 import {PocAnimations} from '../app-animations';
 import {Person} from '../core/domain/';
-import {ComponentLoader} from '../lib/entity-lib/common/component-loader/component-loader';
-import {EntityListOfCardsComponent} from '../lib/entity-lib/entity-list-of-cards.component';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
-
-import * as moment from 'moment';
 
 
 @Component({
   selector: 'person-list-of-cards',
   templateUrl: './person-list-of-cards.component.html',
-  styleUrls: ['../lib/entity-lib/entity-list.component.css'],
   animations: [
     PocAnimations.slideInOut
   ]
