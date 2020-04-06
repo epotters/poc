@@ -15,6 +15,7 @@ import 'zone.js/dist/zone-error'; // Included with Angular CLI.
 
 
 export const Environment: Partial<AppConfig> = {
-  production: false
+  production: false,
+  externalConfig: "http://localhost:4200/assets/poc-config.json"
 };
 
