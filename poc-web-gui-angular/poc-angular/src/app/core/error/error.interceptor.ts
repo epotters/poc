@@ -1,7 +1,8 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable, Subject, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
+
 import {PocError} from './errors';
 
 
@@ -31,7 +32,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             pocError = {
               code: 'CLIENT_SIDE',
               message: `Error: ${error.error.message}`
-            }
+            };
           } else {
             pocError = {
               code: 'SERVER_SIDE',
@@ -63,14 +64,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           this.errorSubject.next(pocError);
           console.debug(pocError);
           return throwError(pocError.message);
-          // Observable.throwError(error.statusText);
-          // if (rethrowError) {
-          //   return throwError(pocError.message);
-          // } else {
-          //   return null;
-          // }
         })
-      )
+      );
   }
 
   awaitErrors(): Observable<PocError> {

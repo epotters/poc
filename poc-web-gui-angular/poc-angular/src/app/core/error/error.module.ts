@@ -1,8 +1,7 @@
-// ERROR HANDLER MODULE
-import {ErrorHandler, ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ErrorService} from './error.service';
+import {ErrorHandler, ModuleWithProviders, NgModule} from '@angular/core';
 import {ErrorHandlerComponent} from './error-handler.component';
+import {ErrorService} from './error.service';
 
 
 // Source: https://www.freecodecamp.org/news/global-error-handling-in-angular-with-the-help-of-the-cdk/

@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {EntityLibConfig} from '../../lib/entity-lib/common/entity-lib-config';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 
@@ -16,7 +15,7 @@ export class ErrorHandlerComponent {
 
   showError(msg: string): void {
     this.snackbar.open(msg, undefined, {
-      duration: EntityLibConfig.defaultSnackbarDuration
+      duration: 3000
     });
   }
 
