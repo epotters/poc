@@ -1,13 +1,11 @@
 import {NgModule} from '@angular/core';
 
-import {EntityModule} from '../lib/entity-lib/entity.module';
-import {META, SERVICE} from '../lib/entity-lib/entity-tokens';
-
-import {EmploymentListComponent} from './employments-list.component';
-import {EmploymentService} from './employment.service';
+import {EntityModule} from 'entity-lib';
 import {EmploymentEditorComponent} from './employment-editor.component';
 import {EmploymentRoutingModule} from './employment-routing.module';
-import {employmentMeta} from './employment-meta';
+import {EmploymentListComponent} from './employments-list.component';
+
+// import {META, SERVICE} from 'entity-lib';
 
 
 @NgModule({
@@ -22,10 +20,6 @@ import {employmentMeta} from './employment-meta';
   entryComponents: [
     EmploymentListComponent,
     EmploymentEditorComponent
-  ],
-  providers: [
-    {provide: META, useValue: employmentMeta},
-    {provide: SERVICE, useExisting: EmploymentService}
   ]
 })
 export class EmploymentModule {

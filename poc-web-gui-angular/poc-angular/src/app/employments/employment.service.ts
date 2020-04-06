@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
+import {EntityService} from 'entity-lib';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {EntityService} from '../lib/entity-lib';
-import {PocApiService} from '../core/service';
 import {Employment} from '../core/domain';
+import {PocApiService} from '../core/service';
 import {employmentMeta} from './employment-meta';
 
 

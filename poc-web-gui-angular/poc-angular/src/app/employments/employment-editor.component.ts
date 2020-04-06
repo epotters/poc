@@ -3,12 +3,11 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
+
+
+import {EntityEditorComponent, FieldFilter} from 'entity-lib';
 import {take, takeUntil} from 'rxjs/operators';
 import {Employment} from '../core/domain';
-
-
-import {EntityEditorComponent} from '../lib/entity-lib';
-import {FieldFilter} from '../lib/entity-lib/domain/filter.model';
 import {OrganizationService} from '../organizations/organization.service';
 import {PersonService} from '../people/person.service';
 import {employmentMeta} from './employment-meta';
@@ -18,7 +17,6 @@ import {EmploymentService} from './employment.service';
 @Component({
   selector: 'organization-employee-card',
   templateUrl: './employment-editor.component.html',
-  styleUrls: ['../lib/entity-lib/entity-editor.component.css']
 })
 export class EmploymentEditorComponent extends EntityEditorComponent<Employment> {
 

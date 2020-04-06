@@ -47,10 +47,10 @@
         <mat-form-field style="flex: 2">
           <mat-label>Employer</mat-label>
           <entity-selector
-            formControlName="employer"
+            [autoActiveFirstOption]=true
             [meta]="organizationService.meta"
             [service]="organizationService"
-            [autoActiveFirstOption]=true
+            formControlName="employer"
             required>
           </entity-selector>
           <mat-hint>Choose an employer</mat-hint>
@@ -59,16 +59,16 @@
 
         <!-- Employee -->
         <mat-form-field style="flex: 2">
-            <mat-label>Employee</mat-label>
-            <entity-selector
-              formControlName="employee"
-              [meta]="personService.meta"
-              [service]="personService"
-              [autoActiveFirstOption]=true
-              required>
-            </entity-selector>
-            <mat-hint>Choose an employee</mat-hint>
-            <mat-error>Employee is required</mat-error>
+          <mat-label>Employee</mat-label>
+          <entity-selector
+            [autoActiveFirstOption]=true
+            [meta]="personService.meta"
+            [service]="personService"
+            formControlName="employee"
+            required>
+          </entity-selector>
+          <mat-hint>Choose an employee</mat-hint>
+          <mat-error>Employee is required</mat-error>
         </mat-form-field>
       </div>
 
