@@ -40,10 +40,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               message: `Error Status: ${error.status}\nMessage: ${error.message}`
             };
 
-            if (error.status === 404 && request.url.endsWith('poc-config.json')) {
-              this.logger.debug('Redirecting to local copy of poc-config.json');
+            if (error.status === 404 && request.url.endsWith('app-config.json')) {
+              this.logger.debug('Redirecting to local copy of app-config.json');
               const requestModified: HttpRequest<any> = request.clone({
-                url: './assets/poc-config.json',
+                url: './assets/app-config.json',
                 headers: request.headers.set('Content-Type', 'application/json')
               });
               rethrowError = false;

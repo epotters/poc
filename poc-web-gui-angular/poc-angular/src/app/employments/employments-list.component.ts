@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Renderer2} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {EntityListComponent} from 'entity-lib';
@@ -18,12 +18,11 @@ export class EmploymentListComponent extends EntityListComponent<Employment> {
   constructor(
     public service: EmploymentService,
     public router: Router,
-    renderer: Renderer2,
     public el: ElementRef,
     public logger: NGXLogger
   ) {
 
-    super(meta, service, router, renderer, el, logger);
+    super(meta, service, router, el, logger);
 
   }
 }

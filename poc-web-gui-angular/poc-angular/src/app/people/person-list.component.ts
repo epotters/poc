@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Renderer2} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {EntityListComponent} from 'entity-lib';
 import {NGXLogger} from 'ngx-logger';
@@ -16,11 +16,10 @@ export class PersonListComponent extends EntityListComponent<Person> {
   constructor(
     public service: PersonService,
     public router: Router,
-    renderer: Renderer2,
     public el: ElementRef,
     public logger: NGXLogger
   ) {
-    super(meta, service, router, renderer, el, logger);
+    super(meta, service, router, el, logger);
   }
 
 }

@@ -25,7 +25,12 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/entity-lib/src/lib/entity-list-component.html",
+                "output": "./assets/templates"
+              }
             ],
             "styles": [
               "src/styles.css"

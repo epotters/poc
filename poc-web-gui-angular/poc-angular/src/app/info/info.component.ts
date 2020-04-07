@@ -12,6 +12,5 @@ export class InfoComponent {
   public pageTitle = 'General information';
 
   constructor(private router: Router,) {
-    console.debug('Constructing the InfoComponent');
   }
 }

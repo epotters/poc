@@ -12,6 +12,5 @@ export class HomeComponent {
   constructor(
     private router: Router,
     public config: ConfigService) {
-    console.debug('Constructing the HomeComponent');
   }
 }

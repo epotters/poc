@@ -2,7 +2,7 @@ import {AppConfig} from '../app/app-config.service';
 
 
 export const CommonEnvironment: Partial<AppConfig> = {
-  externalConfig: './poc/config/poc-config.json',
+  externalConfig: './poc/config/app-config.json',
   timezone: 'Europe/Amsterdam',
   locale: 'NL-NL',
   applicationDisplayName: 'Proof of concept in Angular',
