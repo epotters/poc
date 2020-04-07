@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router, RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from 'auth-lib';
+import {NGXLogger} from 'ngx-logger';
 import {HomeComponent} from './home/home.component';
 import {InfoComponent} from './info/info.component';
 
@@ -43,17 +44,19 @@ const routes: Routes = [
 export class AppRoutingModule {
 
   // Source: https://medium.com/@davidgolverdingen/adding-routes-dynamically-to-lazy-loaded-modules-in-angular-a8daecfaebf9
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    public logger: NGXLogger) {
 
     this.router.events.subscribe(async routerEvent => {
       if (routerEvent instanceof NavigationStart) {
-        console.info(`Start navigation to url "${routerEvent.url}"`);
+        this.logger.info(`Start navigation to url "${routerEvent.url}"`);
       } else if (routerEvent instanceof RouteConfigLoadEnd) {
-        console.info(`Module loaded lazily from path "${routerEvent.route.path}"`);
+        this.logger.info(`Module loaded lazily from path "${routerEvent.route.path}"`);
       }
 
       if (routerEvent instanceof NavigationEnd) {
-        console.info(`End navigation to url "${routerEvent.url}"`);
+        this.logger.info(`End navigation to url "${routerEvent.url}"`);
       }
 
     });

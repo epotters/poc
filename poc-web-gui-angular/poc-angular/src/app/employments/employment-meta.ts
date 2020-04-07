@@ -54,7 +54,6 @@ export const employmentMeta: EntityMeta<Employment> = {
           serviceName: 'OrganizationService',
           displayField: 'name',
           displayOption: (entity: Organization) => {
-            console.debug('Displaying organization');
             return (entity) ? entity['name'] : null;
           }
         }
@@ -79,9 +78,8 @@ export const employmentMeta: EntityMeta<Employment> = {
           serviceName: 'PersonService',
           displayField: 'lastName',
           displayOption: (entity: Person) => {
-            console.debug('Displaying person');
             return (entity) ?
-              entity.firstName + ' ' + ((entity.prefix) ? (entity.prefix) + ' ' : '') + entity.lastName :
+              `${entity.firstName} ${((entity.prefix) ? (entity.prefix) + ' ' : '')}${entity.lastName}` :
               null;
           }
         }

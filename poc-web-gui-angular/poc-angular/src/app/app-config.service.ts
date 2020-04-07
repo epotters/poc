@@ -1,6 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AuthConfig} from 'auth-lib';
+import {NGXLogger} from 'ngx-logger';
 import {UserManagerSettings} from 'oidc-client';
 import {Observable, ObservableInput, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';

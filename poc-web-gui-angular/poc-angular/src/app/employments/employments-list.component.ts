@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, ElementRef, Renderer2} from '@angula
 import {Router} from '@angular/router';
 
 import {EntityListComponent} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {Employment} from '../core/domain/';
 import {employmentMeta as meta} from './employment-meta';
 import {EmploymentService} from './employment.service';
@@ -18,8 +19,11 @@ export class EmploymentListComponent extends EntityListComponent<Employment> {
     public service: EmploymentService,
     public router: Router,
     renderer: Renderer2,
-    public el: ElementRef
+    public el: ElementRef,
+    public logger: NGXLogger
   ) {
-    super(meta, service, router, renderer, el);
+
+    super(meta, service, router, renderer, el, logger);
+
   }
 }

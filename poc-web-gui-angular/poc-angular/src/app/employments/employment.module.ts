@@ -5,8 +5,6 @@ import {EmploymentEditorComponent} from './employment-editor.component';
 import {EmploymentRoutingModule} from './employment-routing.module';
 import {EmploymentListComponent} from './employments-list.component';
 
-// import {META, SERVICE} from 'entity-lib';
-
 
 @NgModule({
   imports: [

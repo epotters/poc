@@ -4,8 +4,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 
-
 import {EntityEditorComponent, FieldFilter} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {take, takeUntil} from 'rxjs/operators';
 import {Employment} from '../core/domain';
 import {OrganizationService} from '../organizations/organization.service';
@@ -35,9 +35,10 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     public dialog: MatDialog,
     public organizationService: OrganizationService,
     public personService: PersonService,
-    public snackbar: MatSnackBar
+    public snackbar: MatSnackBar,
+    public logger: NGXLogger
   ) {
-    super(employmentMeta, service, router, route, formBuilder, dialog, snackbar);
+    super(employmentMeta, service, router, route, formBuilder, dialog, snackbar, logger);
   }
 
 
@@ -81,7 +82,7 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
     this.entitySubject.asObservable().pipe(takeUntil(this.terminator)).subscribe(owner => {
         if (owner) {
 
-          console.debug('---> Loaded employment', owner);
+          this.logger.debug('Loaded employment', owner);
 
           this.personColumns = ['id', 'startDate', 'endDate', 'employer'];
           this.organizationColumns = ['id', 'startDate', 'endDate', 'employee'];
@@ -92,7 +93,7 @@ export class EmploymentEditorComponent extends EntityEditorComponent<Employment>
           this.showRelations = true;
 
         } else {
-          console.debug('No owner entity yet');
+          this.logger.debug('No owner entity yet');
         }
       }
     );

@@ -3,6 +3,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Title} from '@angular/platform-browser';
 
 import {AuthService} from 'auth-lib';
+import {NGXLogger} from 'ngx-logger';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {PocAnimations} from './app-animations';
@@ -28,9 +29,10 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     public configService: ConfigService,
     public authService: AuthService,
     public errorHandlerService: ErrorService,
+    public logger: NGXLogger,
     public snackBar: MatSnackBar
   ) {
-    console.debug(`Constructing the AppComponent "${configService.applicationDisplayName}"`);
+    this.logger.debug(`Constructing the AppComponent "${configService.applicationDisplayName}"`);
     this.titleService.setTitle(configService.applicationDisplayName);
   }
 
@@ -39,9 +41,9 @@ export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
     console.info('%c☯ ' + this.configService.applicationDisplayName + ' ☯', consoleStyle);
 
     this.errorHandlerService.errorSubject.pipe(takeUntil(this.terminator)).subscribe((error) => {
-        console.debug('Inside subscription to awaitErrors');
+      this.logger.debug('Inside subscription to awaitErrors');
         if (error != null) {
-          console.info('Received error with code ' + error.code);
+          this.logger.info('Received error with code ' + error.code);
           this.openSnackBar(error.message, 'Close');
         }
       }

@@ -4,6 +4,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute} from '@angular/router';
 
 import {EntityComponentDescriptor, EntityManagerComponent, EntityRelativeNavigationComponent} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 
 import {PocAnimations} from '../app-animations';
 import {Person} from '../core/domain/';
@@ -39,9 +40,10 @@ export class PersonManagerComponent extends EntityManagerComponent<Person> {
     public service: PersonService,
     public route: ActivatedRoute,
     public dialog: MatDialog,
-    public componentFactoryResolver: ComponentFactoryResolver
+    public componentFactoryResolver: ComponentFactoryResolver,
+    public logger: NGXLogger
   ) {
-    super(personMeta, service, route, dialog, componentFactoryResolver);
+    super(personMeta, service, route, dialog, componentFactoryResolver, logger);
 
   }
 

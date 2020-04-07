@@ -5,6 +5,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {EntityEditorComponent, EntityRelationComponent, SelectOption} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject} from 'rxjs';
 
 import {Employment, Organization, Person} from '../core/domain/';
@@ -30,9 +31,10 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
     public dialog: MatDialog,
-    public snackbar: MatSnackBar
+    public snackbar: MatSnackBar,
+    public logger: NGXLogger
   ) {
-    super(personMeta, service, router, route, formBuilder, dialog, snackbar);
+    super(personMeta, service, router, route, formBuilder, dialog, snackbar, logger);
 
     this.genderOptions = ((!!personMeta.columnConfigs['gender'].editor && !!personMeta.columnConfigs['gender'].editor.options) ?
       personMeta.columnConfigs['gender'].editor.options : []);
@@ -67,9 +69,10 @@ export class PersonEmployersRelationComponent extends EntityRelationComponent<Em
   @Input() readonly ownerSubject: BehaviorSubject<Person>;
 
   constructor(
-    public componentFactoryResolver: ComponentFactoryResolver
+    public componentFactoryResolver: ComponentFactoryResolver,
+    public logger: NGXLogger
   ) {
-    super(employmentMeta, personMeta, organizationMeta, componentFactoryResolver);
+    super(employmentMeta, personMeta, organizationMeta, componentFactoryResolver, logger);
     this.fieldName = 'employers';
     this.component = EmploymentListComponent;
   }

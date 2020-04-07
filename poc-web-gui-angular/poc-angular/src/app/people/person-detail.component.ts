@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {EntityDetailComponent} from 'entity-lib';
 import * as moment from 'moment';
+import {NGXLogger} from 'ngx-logger';
 import {Person} from '../core/domain/';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
@@ -16,8 +17,9 @@ export class PersonDetailComponent extends EntityDetailComponent<Person> {
 
   constructor(
     public service: PersonService,
+    public logger: NGXLogger
   ) {
-    super(personMeta, service);
+    super(personMeta, service, logger);
   }
 
 }

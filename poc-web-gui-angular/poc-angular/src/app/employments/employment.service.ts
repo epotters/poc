@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityService} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Employment} from '../core/domain';
@@ -13,8 +14,9 @@ import {employmentMeta} from './employment-meta';
 export class EmploymentService extends EntityService<Employment> {
 
   constructor(
-    public apiService: PocApiService) {
-    super(employmentMeta, apiService);
+    public apiService: PocApiService,
+  public logger: NGXLogger) {
+    super(employmentMeta, apiService, logger);
   }
 
 
@@ -26,7 +28,6 @@ export class EmploymentService extends EntityService<Employment> {
   listEmployeesByPerson(personId: number): Observable<Employment[]> {
     return this.apiService.get('/people/' + personId + '/employers')
       .pipe(map((response: Response) => {
-        console.debug(response);
         return response['content'];
       }));
   }

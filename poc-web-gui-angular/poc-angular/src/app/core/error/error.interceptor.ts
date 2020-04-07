@@ -1,5 +1,6 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {NGXLogger} from 'ngx-logger';
 import {Observable, Subject, throwError} from 'rxjs';
 import {catchError, retry} from 'rxjs/operators';
 
@@ -14,8 +15,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
   errorSubject: Subject<PocError> = new Subject<PocError>();
 
-  constructor() {
-    console.debug('Constructing the HttpErrorInterceptor');
+  constructor(public logger: NGXLogger) {
+    this.logger.debug('Constructing the HttpErrorInterceptor');
   }
 
 
@@ -40,7 +41,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             };
 
             if (error.status === 404 && request.url.endsWith('poc-config.json')) {
-              console.debug('Redirecting to local copy of poc-config.json');
+              this.logger.debug('Redirecting to local copy of poc-config.json');
               const requestModified: HttpRequest<any> = request.clone({
                 url: './assets/poc-config.json',
                 headers: request.headers.set('Content-Type', 'application/json')
@@ -49,27 +50,27 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               return next.handle(requestModified);
 
             } else if (error.status === 401) {
-              console.debug('API call unauthorized. Trying to reauthenticate the user.',
+              this.logger.debug('API call unauthorized. Trying to reauthenticate the user.',
                 'Disabled because it makes the AuthService load before the external config, which it needs');
 
             } else if (error.status === 400 && request.url.endsWith('token')) {
-              console.debug('Refreshing the access token failed. Refresh token probably expired.');
-              console.debug('Error:', error);
+              this.logger.debug('Refreshing the access token failed. Refresh token probably expired.');
+              this.logger.debug('Error:', error);
 
             } else if (error.message.contains('Error: invalid_grant')) {
-              console.debug('Invalid grant detected. Probably a failed reauthentication...');
+              this.logger.debug('Invalid grant detected. Probably a failed reauthentication...');
             }
 
           }
           this.errorSubject.next(pocError);
-          console.debug(pocError);
+          this.logger.debug(pocError);
           return throwError(pocError.message);
         })
       );
   }
 
   awaitErrors(): Observable<PocError> {
-    console.debug('Inside ErrorInterceptor.awaitErrors');
+    this.logger.debug('Inside ErrorInterceptor.awaitErrors');
     return this.errorSubject.asObservable();
   }
 

@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {EntityComponentDescriptor, EntityManagerComponent, FieldFilter} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject} from 'rxjs';
 
 import {PocAnimations} from '../app-animations';
@@ -40,9 +41,10 @@ export class PersonDemoComponent extends EntityManagerComponent<Person> implemen
     public route: ActivatedRoute,
     public dialog: MatDialog,
     public componentFactoryResolver: ComponentFactoryResolver,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public logger: NGXLogger
   ) {
-    super(personMeta, service, route, dialog, componentFactoryResolver);
+    super(personMeta, service, route, dialog, componentFactoryResolver, logger);
 
     this.title = `Demo componenten ${this.meta.displayNamePlural.toLowerCase()}`;
     this.initialFilters = [

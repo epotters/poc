@@ -2,6 +2,7 @@ import {Component, ComponentFactoryResolver} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {ComponentLoader, EntityComponentDescriptor, EntityManagerComponent} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {PocAnimations} from '../app-animations';
 import {Organization} from '../core/domain/';
 import {OrganizationEditorComponent} from './organization-editor.component';
@@ -26,9 +27,10 @@ export class OrganizationManagerComponent extends EntityManagerComponent<Organiz
     public route: ActivatedRoute,
     public componentFactoryResolver: ComponentFactoryResolver,
     public dialog: MatDialog,
-    public componentLoader: ComponentLoader<Organization>
+    public componentLoader: ComponentLoader<Organization>,
+    public logger: NGXLogger
   ) {
-    super(organizationMeta, service, route, dialog, componentFactoryResolver);
+    super(organizationMeta, service, route, dialog, componentFactoryResolver, logger);
 
     this.editorVisible = false;
     this.listVisible = false;

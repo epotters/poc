@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {NGXLogger} from 'ngx-logger';
 
 
 @Component({
@@ -9,8 +10,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class ErrorHandlerComponent {
 
   constructor(
-    public snackbar: MatSnackBar) {
-    console.debug('Constructing the ErrorHandlerComponent');
+    public snackbar: MatSnackBar, public logger: NGXLogger) {
+    this.logger.debug('Constructing the ErrorHandlerComponent');
   }
 
   showError(msg: string): void {

@@ -4,6 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {ComponentLoader, EntityListOfCardsComponent} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {Organization} from '../core/domain/';
 import {organizationMeta} from './organization-meta';
 import {OrganizationService} from './organization.service';
@@ -32,16 +33,17 @@ export class OrganizationListOfCardsComponent extends EntityListOfCardsComponent
     public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog,
-    public componentLoader: ComponentLoader<Organization>
+    public componentLoader: ComponentLoader<Organization>,
+    public logger: NGXLogger
   ) {
 
-    super(organizationMeta, service, router, route, dialog, componentLoader);
+    super(organizationMeta, service, router, route, dialog, componentLoader, logger);
   }
 
 
   showEvent($event) {
-    console.debug('PageEvent received:');
-    console.debug($event);
+    this.logger.debug('PageEvent received:');
+    this.logger.debug($event);
   }
 
 }

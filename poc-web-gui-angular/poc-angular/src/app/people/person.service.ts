@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityService} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 import {Person} from '../core/domain';
 import {PocApiService} from '../core/service';
 import {personMeta} from './person-meta';
@@ -10,7 +11,8 @@ import {personMeta} from './person-meta';
 })
 export class PersonService extends EntityService<Person> {
   constructor(
-    public apiService: PocApiService) {
-    super(personMeta, apiService);
+    public apiService: PocApiService,
+    public logger: NGXLogger) {
+    super(personMeta, apiService, logger);
   }
 }

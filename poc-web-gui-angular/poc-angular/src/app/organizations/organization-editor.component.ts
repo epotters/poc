@@ -4,6 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EntityEditorComponent, EntityRelationComponent} from 'entity-lib';
+import {NGXLogger} from 'ngx-logger';
 
 import {BehaviorSubject} from 'rxjs';
 
@@ -27,9 +28,10 @@ export class OrganizationEditorComponent extends EntityEditorComponent<Organizat
     public route: ActivatedRoute,
     public formBuilder: FormBuilder,
     public dialog: MatDialog,
-    public snackbar: MatSnackBar
+    public snackbar: MatSnackBar,
+    public logger: NGXLogger
   ) {
-    super(organizationMeta, service, router, route, formBuilder, dialog, snackbar);
+    super(organizationMeta, service, router, route, formBuilder, dialog, snackbar, logger);
   }
 
   buildForm(formBuilder: FormBuilder): FormGroup {
@@ -52,9 +54,10 @@ export class OrganizationEmployeesRelationComponent extends EntityRelationCompon
   @Input() readonly ownerSubject: BehaviorSubject<Organization>;
 
   constructor(
-    public componentFactoryResolver: ComponentFactoryResolver
+    public componentFactoryResolver: ComponentFactoryResolver,
+    public logger: NGXLogger
   ) {
-    super(employmentMeta, organizationMeta, personMeta, componentFactoryResolver);
+    super(employmentMeta, organizationMeta, personMeta, componentFactoryResolver, logger);
     this.fieldName = 'employees';
     this.component = EmploymentListComponent;
   }
