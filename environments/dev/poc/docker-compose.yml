@@ -15,10 +15,8 @@ services:
     restart: always
     environment:
       ENVIRONMENT: ${ENV}
-
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_ROOT_HOST: "%"
-
       MYSQL_DATABASE: "poc"
       MYSQL_USER: "poc"
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -39,7 +37,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.poc-web-api.rule=Host(`poc.${HOST}`)"
       - "traefik.http.routers.poc-web-api.entrypoints=web"
-#      - "traefik.http.routers.poc-web-api.middlewares=traefik-forward-auth@file"
+    #      - "traefik.http.routers.poc-web-api.middlewares=traefik-forward-auth@file"
     environment:
       ENVIRONMENT: "${ENV}"
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
@@ -53,9 +51,9 @@ services:
     image: epotters/poc-web-gui-angular:1.0-SNAPSHOT
     container_name: poc-web-gui
     ports:
-    - 4200:80 # Can not be run together with ng serve (same port)
+      - 4200:80 # Can not be run together with ng serve (same port)
     volumes:
-    - ./poc-web-gui/app-config:/usr/share/nginx/app-config
+      - ./poc-web-gui/app-config:/usr/share/nginx/app-config
     networks:
       - poc
       - epo-external
