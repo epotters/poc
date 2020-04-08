@@ -45,9 +45,15 @@ public class LocalizedMessageServiceImplTest {
     System.out.println("Current locale's language: " + messageService.currentLocale().getDisplayLanguage());
     String message = messageService.getMessage("person.lastName.label");
     System.out.println(message);
+    Assert.assertEquals("Last name", message);
+
+    Locale locale = new Locale("nl");
+    LocaleContextHolder.setLocale(locale);
+    message = messageService.getMessage("person.lastName.label");
+    System.out.println(message);
     Assert.assertEquals("Achternaam", message);
 
-    Locale locale = new Locale("es");
+    locale = new Locale("es");
     LocaleContextHolder.setLocale(locale);
     message = messageService.getMessage("person.lastName.label");
     System.out.println(message);
