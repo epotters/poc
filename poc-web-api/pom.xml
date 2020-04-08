@@ -26,10 +26,6 @@
 
     <docker-port>8002</docker-port>
     <war-start-class>poc.web.api.config.WebInitializer</war-start-class>
-
-    <!--TODO: Remove with next spring-boot upgrade-->
-    <jackson.version>2.10.2</jackson.version>
-
   </properties>
 
   <dependencyManagement>
