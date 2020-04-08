@@ -1,4 +1,4 @@
-package poc.web.api.controller;
+package poc.web.api.controller.common;
 
 
 import java.util.Map;

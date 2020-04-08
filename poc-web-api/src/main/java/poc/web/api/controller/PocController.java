@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import poc.core.domain.Country;
 import poc.core.service.CountryService;
 import poc.core.service.impl.GreetingGenerator;
+import poc.web.api.controller.common.MessageContainer;
 import poc.web.api.service.LocalizedMessageService;
 
 

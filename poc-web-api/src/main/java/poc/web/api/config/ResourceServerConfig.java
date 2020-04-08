@@ -39,7 +39,6 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // exte
     // @formatter:off
     http
         .cors(withDefaults())
-        //.and()
         .authorizeRequests()
         .antMatchers("/").permitAll()
         .requestMatchers(EndpointRequest.to("health", "info")).permitAll()

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import poc.core.domain.Employment;
 import poc.core.domain.Gender;
 import poc.core.domain.Person;
+import poc.web.api.controller.common.QuerystringFilterTranslator;
 
 
 public class QuerystringFilterTranslatorTest {

@@ -1,4 +1,4 @@
-package poc.web.api.controller;
+package poc.web.api.controller.common;
 
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ import poc.core.repository.specification.SpecificationsBuilder;
 
 
 @Slf4j
-class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
+public class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
 
   private final Class<T> genericType;
 
@@ -277,13 +277,13 @@ class QuerystringFilterTranslator<T> implements FilterTranslator<T> {
   }
 
 
-  private Object mapStringValueToObject(Class<?> fieldType, String rawValue) throws IOException {
+  Object mapStringValueToObject(Class<?> fieldType, String rawValue) throws IOException {
     ObjectMapper mapper = this.objectMapper();
     return mapper.readValue(mapper.writeValueAsString(rawValue), fieldType);
   }
 
 
-  Object mapStringValueToObject(String fieldName, String rawValue) throws IOException, NoSuchFieldException {
+  public Object mapStringValueToObject(String fieldName, String rawValue) throws IOException, NoSuchFieldException {
     Class<?> fieldType = this.getFieldType(fieldName);
     return mapStringValueToObject(fieldType, rawValue);
   }

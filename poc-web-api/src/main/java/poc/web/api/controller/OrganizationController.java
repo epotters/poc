@@ -22,6 +22,8 @@ import poc.core.domain.Employment;
 import poc.core.domain.Organization;
 import poc.core.repository.EmploymentRepository;
 import poc.core.repository.OrganizationRepository;
+import poc.web.api.controller.common.JsonSchemaGenerator;
+import poc.web.api.controller.common.QuerystringFilterTranslator;
 
 
 @Slf4j
