@@ -71,6 +71,10 @@ public class QuerystringFilterTranslatorTest {
     queryString = "birthDate:1995...2005";
     spec = filterTanslator.translate(queryString);
     Assert.assertNotNull(spec);
+
+    queryString = "nonExistingFieldName~test";
+    spec = filterTanslator.translate(queryString);
+    Assert.assertNull(spec);
   }
 
 
@@ -104,7 +108,7 @@ public class QuerystringFilterTranslatorTest {
 
 
   @Test
-  public void ConvertStringsToObjects() {
+  public void convertStringsToObjects() {
 
     QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>(Person.class);
 

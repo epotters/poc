@@ -15,10 +15,8 @@ public class JsonSchemaGeneratorTest {
 
   @Test
   public void printJsonSchema() throws IOException {
-
     JsonSchemaGenerator generator = new JsonSchemaGenerator();
     System.out.println(generator.generate(Person.class));
-
   }
 
 }

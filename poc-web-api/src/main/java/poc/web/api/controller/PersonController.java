@@ -66,7 +66,6 @@ public class PersonController {
     if (filters != null & !"".equals(filters)) {
       Specification<Person> spec = filterTanslator.translate(filters);
       return personRepository.findAll(spec, pageable);
-
     } else {
       log.debug("No filters provided");
       return personRepository.findAll(pageable);

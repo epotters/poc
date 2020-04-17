@@ -35,10 +35,10 @@ public class OrganizationControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private PersonRepository personRepository;
+  private OrganizationRepository organizationRepository;
 
   @MockBean
-  private OrganizationRepository organizationRepository;
+  private PersonRepository personRepository;
 
   @MockBean
   private EmploymentRepository employmentRepository;
@@ -53,6 +53,25 @@ public class OrganizationControllerTest {
   public void contexLoads() throws Exception {
     assertThat(mockMvc).isNotNull();
     assertThat(organizationRepository).isNotNull();
+  }
+
+
+  @Test
+  @WithMockUser(value = "testuser")
+  public void getOrganizations() throws Exception {
+
+    String uri = "/api/organizations/";
+
+    assert (mockMvc != null);
+
+    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+    int status = mvcResult.getResponse().getStatus();
+    assertEquals(200, status);
+
+    String content = mvcResult.getResponse().getContentAsString();
+    System.out.print(content);
   }
 
 
