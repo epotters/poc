@@ -15,8 +15,6 @@
   <name>POC Jobs</name>
 
   <properties>
-    <!--TODO: Remove with next spring-boot upgrade-->
-    <jackson.version>2.10.2</jackson.version>
     <gedcom4j.version>RELEASE</gedcom4j.version>
   </properties>
 
