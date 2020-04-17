@@ -16,5 +16,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"poc.core.service"})
 @EnableTransactionManagement
 public class CoreContext {
-
 }

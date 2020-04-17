@@ -19,6 +19,8 @@ import poc.core.config.CoreContext;
 import poc.core.domain.Gender;
 import poc.core.domain.Person;
 import poc.core.repository.specification.SpecificationsBuilder;
+import poc.core.repository.statistics.AgeGroup;
+import poc.core.repository.statistics.GenderGroup;
 
 
 @DataJpaTest
@@ -74,6 +76,19 @@ public class PersonRepositoryTest {
 
   }
 
+  @Test
+  public void findPeopleGenderGroups() {
+    List<GenderGroup> genderSpread = personRepository.countTotalPeopleByGenderClass();
+    System.out.println(genderSpread);
+    Assert.assertEquals("There should be 2 search results", 2, genderSpread.size());
+  }
+
+  @Test
+  public void findPeopleAgeGroup() {
+    List<AgeGroup> ageSpread = personRepository.countTotalPeopleByAgeClass();
+    System.out.println(ageSpread);
+//    Assert.assertEquals("There should be 2 search results", 2, genderSpread.size());
+  }
 
   private void loadPeople() {
     // Save a couple of people
