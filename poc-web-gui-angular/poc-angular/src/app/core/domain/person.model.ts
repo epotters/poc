@@ -1,13 +1,14 @@
 import {Identifiable} from 'entity-lib/lib';
 import {Moment} from 'moment';
 
+declare type Gender = 'MALE' | 'FEMALE'
 
 export class Person implements Identifiable {
   id: number;
   firstName: string;
   prefix: string;
   lastName: string;
-  gender: string;
+  gender: Gender;
   birthDate: Moment;
   birthPlace: string;
   household: string;

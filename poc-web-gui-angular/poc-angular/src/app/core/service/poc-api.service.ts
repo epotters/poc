@@ -29,7 +29,7 @@ export class PocApiService implements ApiService {
   }
 
 
-  put(path: string, body: Object = {}): Observable<any> {
+  put(path: string, body: any = {}): Observable<any> {
     const headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
     return this.http.put(
       `${this.config.apiRoot}${path}`,
@@ -38,7 +38,7 @@ export class PocApiService implements ApiService {
   }
 
 
-  post(path: string, body: Object = {}): Observable<any> {
+  post(path: string, body: any = {}): Observable<any> {
     const headers: HttpHeaders = this.getHeaders().append('Content-Type', 'application/json');
     return this.http.post(
       `${this.config.apiRoot}${path}`,
