@@ -53,8 +53,8 @@ export const employmentMeta: EntityMeta<Employment> = {
           namePlural: 'organizations',
           serviceName: 'OrganizationService',
           displayField: 'name',
-          displayOption: (entity: Organization) => {
-            return (entity) ? entity['name'] : null;
+          displayOption: (organization: Organization) => {
+            return (organization) ? organization.name : null;
           }
         }
       },
@@ -77,9 +77,9 @@ export const employmentMeta: EntityMeta<Employment> = {
           namePlural: 'people',
           serviceName: 'PersonService',
           displayField: 'lastName',
-          displayOption: (entity: Person) => {
-            return (entity) ?
-              `${entity.firstName} ${((entity.prefix) ? (entity.prefix) + ' ' : '')}${entity.lastName}` :
+          displayOption: (person: Person) => {
+            return (person) ?
+              `${person.firstName} ${((person.prefix) ? (person.prefix) + ' ' : '')}${person.lastName}` :
               null;
           }
         }
