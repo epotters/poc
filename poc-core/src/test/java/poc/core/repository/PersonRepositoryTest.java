@@ -58,7 +58,6 @@ public class PersonRepositoryTest {
     peopleFound = personRepository.findByLastName("Bauer");
     listPeople(peopleFound, "Person found with findByLastName('Bauer')");
     Assert.assertEquals("There should be 2 search results", 2, peopleFound.size());
-
   }
 
 
@@ -74,20 +73,6 @@ public class PersonRepositoryTest {
     listPeople(peopleFound, "Search for people by partial first and last name");
     Assert.assertEquals("There should be 1 search result", 1, peopleFound.size());
 
-  }
-
-  @Test
-  public void findPeopleGenderGroups() {
-    List<GenderGroup> genderSpread = personRepository.countTotalPeopleByGenderClass();
-    System.out.println(genderSpread);
-    Assert.assertEquals("There should be 2 search results", 2, genderSpread.size());
-  }
-
-  @Test
-  public void findPeopleAgeGroup() {
-    List<AgeGroup> ageSpread = personRepository.countTotalPeopleByAgeClass();
-    System.out.println(ageSpread);
-//    Assert.assertEquals("There should be 2 search results", 2, genderSpread.size());
   }
 
   private void loadPeople() {
