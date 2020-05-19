@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.2.6.RELEASE</version>
+    <version>2.3.0.RELEASE</version>
   </parent>
 
   <groupId>nl.xs4all.epotters</groupId>
@@ -116,6 +116,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>
+    </dependency>
+
+    <!-- Migration (temporary) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-properties-migrator</artifactId>
+      <scope>runtime</scope>
     </dependency>
 
   </dependencies>
