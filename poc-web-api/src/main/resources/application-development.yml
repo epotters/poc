@@ -37,4 +37,5 @@ spring:
 debug: true
 
 logging:
-  file: target/log/poc.log
+  file:
+    name: target/log/poc.log

@@ -20,5 +20,3 @@ node/
 # Custom
 environments/dev/poc/poc-web-gui/app/
 environments/dev/poc/poc-web-gui/app-dojo/
-/poc-web-gui-angular/poc-angular/src/app/lib/auth-lib/
-/poc-web-gui-angular/poc-angular/src/app/lib/entity-lib/
