@@ -8,12 +8,14 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -21,6 +23,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(CorsProperties.class)
+@Import(SecurityProblemSupport.class)
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // extends ResourceServerConfigurerAdapter {
 
   private final CorsProperties corsProperties;
@@ -29,6 +32,9 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // exte
   public ResourceServerConfig(CorsProperties corsProperties) {
     this.corsProperties = corsProperties;
   }
+
+  @Autowired
+  private SecurityProblemSupport problemSupport;
 
   /*
   https://docs.spring.io/spring-security/site/docs/5.2.x/api/org/springframework/security/config/annotation/web/configurers/oauth2/server/resource/OAuth2ResourceServerConfigurer.html
@@ -45,8 +51,13 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // exte
         .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("admin")
         .antMatchers("/api/**").authenticated()
         .and()
+        .exceptionHandling()
+        .authenticationEntryPoint(problemSupport)
+        .accessDeniedHandler(problemSupport)
+        .and()
         .oauth2ResourceServer()
         .jwt();
+
 
     // @formatter:on
   }

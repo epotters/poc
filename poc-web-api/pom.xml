@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -26,6 +26,8 @@
 
     <docker-port>8002</docker-port>
     <war-start-class>poc.web.api.config.WebInitializer</war-start-class>
+
+    <problem-spring-web.version>0.24.0</problem-spring-web.version>
   </properties>
 
   <dependencyManagement>
@@ -43,6 +45,15 @@
         <artifactId>jackson-datatype-hibernate5</artifactId>
         <version>${jackson-bom.version}</version>
       </dependency>
+
+
+      <!-- https://mvnrepository.com/artifact/org.zalando/problem -->
+      <dependency>
+        <groupId>org.zalando</groupId>
+        <artifactId>problem-spring-web</artifactId>
+        <version>${problem-spring-web.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -82,6 +93,11 @@
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-jsonSchema</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.zalando</groupId>
+      <artifactId>problem-spring-web</artifactId>
     </dependency>
 
     <dependency>

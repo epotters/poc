@@ -21,6 +21,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.zalando.problem.ProblemModule;
+import org.zalando.problem.violations.ConstraintViolationProblemModule;
 import poc.core.config.CoreContext;
 
 
@@ -75,6 +77,13 @@ public class RestContext implements WebMvcConfigurer {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
       }
     }
+  }
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper().registerModules(
+        new ProblemModule().withStackTraces(),
+        new ConstraintViolationProblemModule());
   }
 
 }

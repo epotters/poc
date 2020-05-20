@@ -2,6 +2,8 @@
 server:
   servlet:
     contextPath: /poc
+    encoding:
+      force: true
   port: 8002
 
 
@@ -11,6 +13,7 @@ management:
     web:
       base-path: /actuator
 
+
 # REST
 spring:
   jackson:
@@ -18,6 +21,13 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
   banner:
     location: classpath:banner.txt
+
+  # Problem
+  resources:
+    add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
 
 
   #  # Persistence: DB will be provided externally, see: docker-compose.yml
