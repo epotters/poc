@@ -1,0 +1,49 @@
+
+
+image: maven:latest
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+services:
+  - docker:dind
+
+before_script:
+  - echo "Running before script"
+
+
+stages:
+  - build
+  - test
+
+#  - trigger integration test
+#  - deploy dev
+#  - deploy test
+
+
+build:
+  stage: build
+  script:
+    - echo "Running job build"
+    - mvn $MAVEN_CLI_OPTS compile
+
+test:
+  stage: test
+  script:
+    - echo "Running job test"
+    - mvn $MAVEN_CLI_OPTS test
+
+
+#deploy:
+#  stage: deploy
+#  script:
+#    - echo "Running job deploy"
+#    - mvn $MAVEN_CLI_OPTS deploy
+#  only:
+#    - master
