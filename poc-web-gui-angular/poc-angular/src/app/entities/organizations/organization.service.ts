@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 
 import {EntityService}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
-import {Organization} from '../core/domain';
-import {PocApiService} from '../core/service';
+import {Organization} from '../../core/domain';
+import {PocApiService} from '../../core/service';
 import {organizationMeta} from './organization-meta';
 
 @Injectable({

@@ -1,5 +1,5 @@
 import {EntityMeta}  from '@epotters/entities';
-import {Employment, Organization, Person} from '../core/domain/';
+import {Employment, Organization, Person} from '../../core/domain';
 
 
 export const employmentMeta: EntityMeta<Employment> = {

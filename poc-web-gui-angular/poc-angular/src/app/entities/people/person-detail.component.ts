@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {EntityDetailComponent}  from '@epotters/entities';
 import * as moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
-import {Person} from '../core/domain/';
+import {Person} from '../../core/domain';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
 

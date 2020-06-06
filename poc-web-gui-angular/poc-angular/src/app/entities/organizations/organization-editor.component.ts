@@ -8,7 +8,7 @@ import {NGXLogger} from 'ngx-logger';
 
 import {BehaviorSubject} from 'rxjs';
 
-import {Employment, Organization, Person} from '../core/domain/';
+import {Employment, Organization, Person} from '../../core/domain';
 import {employmentMeta} from '../employments/employment-meta';
 import {EmploymentListComponent} from '../employments/employments-list.component';
 import {personMeta} from '../people/person-meta';
@@ -47,7 +47,7 @@ export class OrganizationEditorComponent extends EntityEditorComponent<Organizat
 
 @Component({
   selector: 'organization-employees-relation',
-  templateUrl: '../lib/entity-relation.component.html'
+  templateUrl: '../../lib/entity-relation.component.html'
 })
 export class OrganizationEmployeesRelationComponent extends EntityRelationComponent<Employment, Organization, Person> {
 

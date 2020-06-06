@@ -3,8 +3,8 @@ import {EntityService}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Employment} from '../core/domain';
-import {PocApiService} from '../core/service';
+import {Employment} from '../../core/domain';
+import {PocApiService} from '../../core/service';
 import {employmentMeta} from './employment-meta';
 
 

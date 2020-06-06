@@ -5,8 +5,8 @@ import * as moment from 'moment';
 import {ComponentLoader, EntityListOfCardsComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 
-import {PocAnimations} from '../app-animations';
-import {Person} from '../core/domain/';
+import {PocAnimations} from '../../app-animations';
+import {Person} from '../../core/domain';
 import {personMeta} from './person-meta';
 import {PersonService} from './person.service';
 

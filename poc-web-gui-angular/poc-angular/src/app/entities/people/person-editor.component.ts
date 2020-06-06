@@ -8,7 +8,7 @@ import {EntityEditorComponent, EntityRelationComponent, SelectOption}  from '@ep
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject} from 'rxjs';
 
-import {Employment, Organization, Person} from '../core/domain/';
+import {Employment, Organization, Person} from '../../core/domain';
 import {employmentMeta} from '../employments/employment-meta';
 import {EmploymentListComponent} from '../employments/employments-list.component';
 import {organizationMeta} from '../organizations/organization-meta';
@@ -62,7 +62,7 @@ export class PersonEditorComponent extends EntityEditorComponent<Person> {
 
 @Component({
   selector: 'person-employers-relation',
-  templateUrl: '../lib/entity-relation.component.html'
+  templateUrl: '../../lib/entity-relation.component.html'
 })
 export class PersonEmployersRelationComponent extends EntityRelationComponent<Employment, Person, Organization> {
 

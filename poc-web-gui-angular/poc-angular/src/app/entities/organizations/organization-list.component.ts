@@ -3,26 +3,26 @@ import {Router} from '@angular/router';
 
 import {EntityListComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
-import {Employment} from '../core/domain/';
-import {employmentMeta as meta} from './employment-meta';
-import {EmploymentService} from './employment.service';
+
+import {Organization} from '../../core/domain';
+import {organizationMeta as meta} from './organization-meta';
+import {OrganizationService} from './organization.service';
 
 
 @Component({
-  selector: 'employment-list-card',
-  templateUrl: '../lib/entity-list.component.html',
+  selector: 'organization-list-card',
+  templateUrl: '../../lib/entity-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmploymentListComponent extends EntityListComponent<Employment> {
+export class OrganizationListComponent extends EntityListComponent<Organization> {
+
 
   constructor(
-    public service: EmploymentService,
+    public service: OrganizationService,
     public router: Router,
     public el: ElementRef,
     public logger: NGXLogger
   ) {
-
     super(meta, service, router, el, logger);
-
   }
 }

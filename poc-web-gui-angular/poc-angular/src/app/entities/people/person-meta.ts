@@ -1,5 +1,5 @@
 import {EntityMeta, SelectOption}  from '@epotters/entities';
-import {Employment, Person} from '../core/domain';
+import {Employment, Person} from '../../core/domain';
 
 const genderOptions: SelectOption[] = [
   {value: 'MALE', label: '♂'},

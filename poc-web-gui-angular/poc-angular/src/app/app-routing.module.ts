@@ -21,17 +21,17 @@ const routes: Routes = [
   },
   {
     path: 'people',
-    loadChildren: () => import('./people/person.module').then(mod => mod.PersonModule),
+    loadChildren: () => import('./entities/people/person.module').then(mod => mod.PersonModule),
     canActivate: [AuthGuardService]
   },
   {
     path: 'organizations',
-    loadChildren: () => import('./organizations/organization.module').then(mod => mod.OrganizationModule),
+    loadChildren: () => import('./entities/organizations/organization.module').then(mod => mod.OrganizationModule),
     canActivate: [AuthGuardService]
   },
   {
     path: 'employments',
-    loadChildren: () => import('./employments/employment.module').then(mod => mod.EmploymentModule),
+    loadChildren: () => import('./entities/employments/employment.module').then(mod => mod.EmploymentModule),
     canActivate: [AuthGuardService],
   },
 ];

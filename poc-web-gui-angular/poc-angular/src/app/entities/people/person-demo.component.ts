@@ -6,9 +6,9 @@ import {EntityComponentDescriptor, EntityManagerComponent, FieldFilter}  from '@
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject} from 'rxjs';
 
-import {PocAnimations} from '../app-animations';
+import {PocAnimations} from '../../app-animations';
 
-import {Person} from '../core/domain/';
+import {Person} from '../../core/domain';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonListComponent} from './person-list.component';
 import {personMeta} from './person-meta';

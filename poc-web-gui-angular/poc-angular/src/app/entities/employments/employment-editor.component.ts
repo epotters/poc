@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {EntityEditorComponent, FieldFilter}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {take, takeUntil} from 'rxjs/operators';
-import {Employment} from '../core/domain';
+import {Employment} from '../../core/domain';
 import {OrganizationService} from '../organizations/organization.service';
 import {PersonService} from '../people/person.service';
 import {employmentMeta} from './employment-meta';

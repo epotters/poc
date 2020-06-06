@@ -1,5 +1,5 @@
 import {EntityMeta}  from '@epotters/entities';
-import {Organization} from '../core/domain';
+import {Organization} from '../../core/domain';
 
 
 export const organizationMeta: EntityMeta<Organization> = {

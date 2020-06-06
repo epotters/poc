@@ -6,8 +6,8 @@ import {ActivatedRoute} from '@angular/router';
 import {EntityComponentDescriptor, EntityManagerComponent, EntityRelativeNavigationComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 
-import {PocAnimations} from '../app-animations';
-import {Person} from '../core/domain/';
+import {PocAnimations} from '../../app-animations';
+import {Person} from '../../core/domain';
 import {PersonDetailComponent} from './person-detail.component';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';

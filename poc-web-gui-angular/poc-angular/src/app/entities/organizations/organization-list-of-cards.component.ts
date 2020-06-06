@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {ComponentLoader, EntityListOfCardsComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
-import {Organization} from '../core/domain/';
+import {Organization} from '../../core/domain';
 import {organizationMeta} from './organization-meta';
 import {OrganizationService} from './organization.service';
 
