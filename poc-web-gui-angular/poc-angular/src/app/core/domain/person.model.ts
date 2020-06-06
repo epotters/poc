@@ -1,4 +1,4 @@
-import {Identifiable} from 'entity-lib/lib';
+import {Identifiable} from '@epotters/entities/lib';
 import {Moment} from 'moment';
 
 declare type Gender = 'MALE' | 'FEMALE'

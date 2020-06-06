@@ -28,7 +28,7 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/entity-lib/src/lib/entity-list-component.html",
+                "input": "./node_modules/epotters/entities/src/lib/entity-list-component.html",
                 "output": "./assets/templates"
               }
             ],

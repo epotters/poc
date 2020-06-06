@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {EntityModule} from 'entity-lib';
+import {EntityModule}  from '@epotters/entities';
 
 import {EmploymentModule} from '../employments/employment.module';
 import {OrganizationEditorComponent, OrganizationEmployeesRelationComponent} from './organization-editor.component';

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {EntityDetailComponent} from 'entity-lib';
+import {EntityDetailComponent}  from '@epotters/entities';
 import * as moment from 'moment';
 import {NGXLogger} from 'ngx-logger';
 import {Person} from '../core/domain/';

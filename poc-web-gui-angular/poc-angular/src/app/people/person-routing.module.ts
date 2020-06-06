@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuardService} from 'auth-lib';
+import {AuthGuardService} from '@epotters/auth';
 import {PersonDemoComponent} from './person-demo.component';
 import {PersonEditorComponent} from './person-editor.component';
 import {PersonListOfCardsComponent} from './person-list-of-cards.component';

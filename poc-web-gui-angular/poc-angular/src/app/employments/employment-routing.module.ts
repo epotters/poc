@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from 'auth-lib';
+import {AuthGuardService} from '@epotters/auth';
 import {EmploymentEditorComponent} from './employment-editor.component';
 import {EmploymentListComponent} from './employments-list.component';
 

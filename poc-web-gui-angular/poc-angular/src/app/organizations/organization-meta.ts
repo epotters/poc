@@ -1,4 +1,4 @@
-import {EntityMeta} from 'entity-lib';
+import {EntityMeta}  from '@epotters/entities';
 import {Organization} from '../core/domain';
 
 

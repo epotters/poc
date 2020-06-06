@@ -1,6 +1,6 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~entity-lib/src/assets/entity-lib.css';
+@import '~@epotters/entities/src/assets/entity-lib.css';
 
 
 html, body {

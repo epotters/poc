@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, ElementRef} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {EntityListComponent} from 'entity-lib';
+import {EntityListComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 
 import {Organization} from '../core/domain/';

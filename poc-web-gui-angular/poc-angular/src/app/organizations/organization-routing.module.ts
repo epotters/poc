@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from 'auth-lib';
+import {AuthGuardService} from '@epotters/auth';
 import {OrganizationEditorComponent} from './organization-editor.component';
 import {OrganizationListOfCardsComponent} from './organization-list-of-cards.component';
 

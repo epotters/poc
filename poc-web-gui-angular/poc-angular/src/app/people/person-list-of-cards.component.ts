@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
-import {ComponentLoader, EntityListOfCardsComponent} from 'entity-lib';
+import {ComponentLoader, EntityListOfCardsComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 
 import {PocAnimations} from '../app-animations';

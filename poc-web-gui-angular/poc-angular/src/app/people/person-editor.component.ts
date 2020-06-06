@@ -4,7 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {EntityEditorComponent, EntityRelationComponent, SelectOption} from 'entity-lib';
+import {EntityEditorComponent, EntityRelationComponent, SelectOption}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject} from 'rxjs';
 

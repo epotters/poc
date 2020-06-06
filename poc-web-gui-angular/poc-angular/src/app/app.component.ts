@@ -5,7 +5,7 @@ import {Title} from '@angular/platform-browser';
 import {NGXLogger} from 'ngx-logger';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AuthService} from 'auth-lib';
+import {AuthService} from '@epotters/auth';
 import {PocAnimations} from './app-animations';
 import {ConfigService} from './app-config.service';
 import {ErrorService} from './core/error/error.service';

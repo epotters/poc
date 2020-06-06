@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AuthService} from 'auth-lib';
-import {ApiService} from 'entity-lib';
+import {AuthService} from '@epotters/auth';
+import {ApiService}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {Observable} from 'rxjs';
 

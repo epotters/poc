@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute} from '@angular/router';
 
-import {EntityComponentDescriptor, EntityManagerComponent, EntityRelativeNavigationComponent} from 'entity-lib';
+import {EntityComponentDescriptor, EntityManagerComponent, EntityRelativeNavigationComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 
 import {PocAnimations} from '../app-animations';

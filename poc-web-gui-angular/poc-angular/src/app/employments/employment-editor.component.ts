@@ -4,7 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {EntityEditorComponent, FieldFilter} from 'entity-lib';
+import {EntityEditorComponent, FieldFilter}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {take, takeUntil} from 'rxjs/operators';
 import {Employment} from '../core/domain';

@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import {ComponentLoader, EntityListOfCardsComponent} from 'entity-lib';
+import {ComponentLoader, EntityListOfCardsComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {Organization} from '../core/domain/';
 import {organizationMeta} from './organization-meta';

@@ -33,8 +33,8 @@
     "tslib": "^1.13.0",
     "webdriver-manager": "^12.1.7",
     "zone.js": "^0.10.3",
-    "auth-lib": "^1.0.0-SNAPSHOT",
-    "entity-lib": "^1.0.0-SNAPSHOT"
+    "@epotters/auth": "^1.0.0-SNAPSHOT",
+    "@epotters/entities": "^1.0.0-SNAPSHOT"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.901.6",

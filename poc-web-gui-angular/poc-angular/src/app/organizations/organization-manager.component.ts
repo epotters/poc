@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
-import {ComponentLoader, EntityComponentDescriptor, EntityManagerComponent} from 'entity-lib';
+import {ComponentLoader, EntityComponentDescriptor, EntityManagerComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {PocAnimations} from '../app-animations';
 import {Organization} from '../core/domain/';

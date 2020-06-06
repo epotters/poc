@@ -2,7 +2,7 @@ import {Component, ComponentFactoryResolver, OnInit, Type} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
-import {EntityComponentDescriptor, EntityManagerComponent, FieldFilter} from 'entity-lib';
+import {EntityComponentDescriptor, EntityManagerComponent, FieldFilter}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {BehaviorSubject} from 'rxjs';
 

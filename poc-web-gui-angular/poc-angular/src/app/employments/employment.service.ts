@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {EntityService} from 'entity-lib';
+import {EntityService}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';

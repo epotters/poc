@@ -1,4 +1,4 @@
-import {EntityMeta, SelectOption} from 'entity-lib';
+import {EntityMeta, SelectOption}  from '@epotters/entities';
 import {Employment, Person} from '../core/domain';
 
 const genderOptions: SelectOption[] = [

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router, RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from 'auth-lib';
+import {AuthGuardService} from '@epotters/auth';
 import {NGXLogger} from 'ngx-logger';
 import {HomeComponent} from './home/home.component';
 import {InfoComponent} from './info/info.component';

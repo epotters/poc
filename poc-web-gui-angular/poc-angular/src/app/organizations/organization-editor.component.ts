@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EntityEditorComponent, EntityRelationComponent} from 'entity-lib';
+import {EntityEditorComponent, EntityRelationComponent}  from '@epotters/entities';
 import {NGXLogger} from 'ngx-logger';
 
 import {BehaviorSubject} from 'rxjs';

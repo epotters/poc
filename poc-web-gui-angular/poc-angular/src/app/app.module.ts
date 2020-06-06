@@ -2,7 +2,7 @@ import {APP_BASE_HREF} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AuthConfigService, AuthGuardService, AuthModule, AuthService} from 'auth-lib';
+import {AuthConfigService, AuthGuardService, AuthModule, AuthService} from '@epotters/auth';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
 import {ConfigService, initApp} from './app-config.service';
