@@ -75,15 +75,13 @@ public class RestContext implements WebMvcConfigurer {
         ObjectMapper mapper = ((MappingJackson2HttpMessageConverter) converter).getObjectMapper();
         mapper.registerModule(new Hibernate5Module());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        // Mapper for the Problem module
+        mapper.registerModules(
+            new ProblemModule().withStackTraces(),
+            new ConstraintViolationProblemModule());
       }
     }
-  }
-
-  @Bean
-  public ObjectMapper objectMapper() {
-    return new ObjectMapper().registerModules(
-        new ProblemModule().withStackTraces(),
-        new ConstraintViolationProblemModule());
   }
 
 }
