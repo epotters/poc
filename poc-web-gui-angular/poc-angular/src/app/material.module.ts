@@ -1,5 +1,9 @@
 import {NgModule} from '@angular/core';
-import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MatMomentDateModule,
+  MomentDateAdapter
+} from '@angular/material-moment-adapter';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import {MatButtonModule} from '@angular/material/button';
@@ -78,6 +82,7 @@ import {POC_DATE_FORMATS} from '../environments/';
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}},
     {provide: MAT_DATE_FORMATS, useValue: POC_DATE_FORMATS}
   ]
 })
