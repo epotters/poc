@@ -13,8 +13,7 @@ import {ErrorService} from './error.service';
   ],
   exports: [
     ErrorHandlerComponent
-  ],
-  entryComponents: [ErrorHandlerComponent]
+  ]
 })
 export class ErrorModule {
   public static forRoot(): ModuleWithProviders<ErrorModule> {

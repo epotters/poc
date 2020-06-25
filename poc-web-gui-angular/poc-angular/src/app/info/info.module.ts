@@ -12,9 +12,6 @@ import {InfoComponent} from './info.component';
   declarations: [
     InfoComponent
   ],
-  entryComponents: [
-    InfoComponent
-  ],
   providers: []
 })
 export class InfoModule {

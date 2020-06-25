@@ -14,10 +14,6 @@ import {EmploymentListComponent} from './employments-list.component';
   declarations: [
     EmploymentListComponent,
     EmploymentEditorComponent,
-  ],
-  entryComponents: [
-    EmploymentListComponent,
-    EmploymentEditorComponent
   ]
 })
 export class EmploymentModule {

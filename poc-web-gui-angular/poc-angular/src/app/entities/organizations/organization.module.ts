@@ -22,13 +22,6 @@ import {OrganizationRoutingModule} from './organization-routing.module';
     OrganizationEmployeesRelationComponent,
     OrganizationListOfCardsComponent
   ],
-  entryComponents: [
-    OrganizationManagerComponent,
-    OrganizationListComponent,
-    OrganizationEditorComponent,
-    OrganizationEmployeesRelationComponent,
-    OrganizationListOfCardsComponent
-  ],
   exports: [
     OrganizationListComponent
   ]

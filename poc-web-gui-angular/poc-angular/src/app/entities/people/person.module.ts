@@ -24,15 +24,6 @@ import {PersonRoutingModule} from './person-routing.module';
     PersonEmployersRelationComponent,
     PersonListOfCardsComponent,
     PersonDemoComponent
-  ],
-  entryComponents: [
-    PersonManagerComponent,
-    PersonListComponent,
-    PersonDetailComponent,
-    PersonEditorComponent,
-    PersonEmployersRelationComponent,
-    PersonListOfCardsComponent,
-    PersonDemoComponent
   ]
 })
 export class PersonModule {
