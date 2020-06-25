@@ -9,42 +9,41 @@
     [service]="service">
   </editor-actions>
 
-  <mat-toolbar *ngIf="toolbarVisible" class="list-toolbar-top">
+  <mat-toolbar class="list-toolbar-top" *ngIf="toolbarVisible">
 
     <h4>{{title}}</h4>
 
     <span class="fill-remaining-space"></span>
 
-
     <button
-      (click)="selectPrevious()" *ngIf="isManaged"
-      color="primary"
-      mat-icon-button
-      matTooltip="Select the previous {{meta.displayName.toLowerCase()}}">
+      (click)="selectPrevious()" color="primary"
+      matTooltip="Select the previous {{meta.displayName.toLowerCase()}}"
+      *ngIf="isManaged"
+      mat-icon-button>
       <mat-icon>chevron_left</mat-icon>
     </button>
 
     <button
-      (click)="selectNext()" *ngIf="isManaged"
-      color="primary"
-      mat-icon-button
-      matTooltip="Select the next {{meta.displayName.toLowerCase()}}">
+      (click)="selectNext()" color="primary"
+      matTooltip="Select the next {{meta.displayName.toLowerCase()}}"
+      *ngIf="isManaged"
+      mat-icon-button>
       <mat-icon>chevron_right</mat-icon>
     </button>
 
-    <button (click)="checkAndSave()" *ngIf="editable" [disabled]="!isSaveable()"
-            color="primary" mat-icon-button matTooltip="Save {{meta.displayName.toLowerCase()}}">
+    <button (click)="checkAndSave()" [disabled]="!isSaveable()" *ngIf="editable"
+            color="primary" matTooltip="Save {{meta.displayName.toLowerCase()}}" mat-icon-button>
       <mat-icon>done</mat-icon>
     </button>
 
-    <button (click)="toggleEditor()" *ngIf="editable" color="primary"
-            mat-icon-button
-            matTooltip="{{(editorVisible) ? 'Hide' : 'Show'}} a new {{meta.displayName.toLowerCase()}} editor">
+    <button (click)="toggleEditor()" color="primary" *ngIf="editable"
+            matTooltip="{{(editorVisible) ? 'Hide' : 'Show'}} a new {{meta.displayName.toLowerCase()}} editor"
+            mat-icon-button>
       <mat-icon>add</mat-icon>
     </button>
 
     <button (click)="toggleFilter()"
-            color="primary" mat-icon-button matTooltip="{{(filterVisible) ? 'Hide' : 'Show'}} the filter">
+            matTooltip="{{(filterVisible) ? 'Hide' : 'Show'}} the filter" color="primary" mat-icon-button>
       <mat-icon>search</mat-icon>
     </button>
 
@@ -118,7 +117,6 @@
         [hidden]="!editorVisible"
         [meta]="meta"
         [style.transform]="editorViewState.transform">
-
       </editor-row>
 
     </ng-container>
