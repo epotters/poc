@@ -36,7 +36,6 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "es5BrowserSupport": true,
             "preserveSymlinks": true
           },
           "configurations": {
