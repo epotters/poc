@@ -43,7 +43,7 @@ public class PersonController {
   private final PersonRepository personRepository;
   private final EmploymentRepository employmentRepository;
 
-  private QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>(Person.class);
+  private final QuerystringFilterTranslator<Person> filterTanslator = new QuerystringFilterTranslator<>(Person.class);
 
   @Autowired
   PersonController(

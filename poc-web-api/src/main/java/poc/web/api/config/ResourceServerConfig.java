@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,6 +43,10 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // exte
   @Override
   public void configure(HttpSecurity http) throws Exception {
 
+    final JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter()); // delegate to custom converter
+
+
     // @formatter:off
     http
         .cors(withDefaults())
@@ -56,7 +61,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter { // exte
         .accessDeniedHandler(problemSupport)
         .and()
         .oauth2ResourceServer()
-        .jwt();
+        .jwt()
+        .jwtAuthenticationConverter(jwtAuthenticationConverter);
 
 
     // @formatter:on
