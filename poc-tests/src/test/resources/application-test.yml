@@ -39,7 +39,8 @@ spring:
 debug: true
 
 logging:
-  file: target/log/poc.log
+  file:
+    name: target/log/poc.log
   level:
     org.springframework.boot.autoconfigure.logging: INFO
     org.springframework.boot.core.io.support: INFO
