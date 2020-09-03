@@ -22,7 +22,7 @@ import {ErrorService} from './core/error/error.service';
 export class AppComponent implements OnInit, AfterContentInit, OnDestroy {
 
   visible: boolean = false;
-  private terminator: Subject<any> = new Subject();
+  private readonly terminator: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private titleService: Title,
