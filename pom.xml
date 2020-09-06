@@ -62,7 +62,7 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
 
-    <jib-maven-plugin.version>2.2.0</jib-maven-plugin.version>
+    <jib-maven-plugin.version>2.5.2</jib-maven-plugin.version>
   </properties>
 
 
