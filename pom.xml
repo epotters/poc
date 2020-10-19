@@ -24,8 +24,7 @@
     <module>poc-web-api</module>
 
     <module>poc-web-gui-angular</module>
-    <module>poc-web-gui-dojo</module>
-    <module>poc-web-gui-react</module>
+<!--    <module>poc-web-gui-dojo</module>-->
 
     <module>poc-jobs</module>
     <module>poc-tests</module>
@@ -153,6 +152,7 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
+        <version>${git-commit-id-plugin.version}</version>
 
         <!-- TODO: make this plugin run only for poc-core -->
         <configuration>
@@ -164,6 +164,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
+        <version>${versions-maven-plugin.version}</version>
       </plugin>
     </plugins>
   </build>

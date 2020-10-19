@@ -27,7 +27,7 @@
     <docker-port>8002</docker-port>
     <war-start-class>poc.web.api.config.WebInitializer</war-start-class>
 
-    <problem-spring-web.version>0.24.0</problem-spring-web.version>
+    <problem-spring-web.version>0.26.2</problem-spring-web.version>
   </properties>
 
   <dependencyManagement>
