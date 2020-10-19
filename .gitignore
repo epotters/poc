@@ -20,3 +20,4 @@ node/
 # Custom
 environments/dev/poc/poc-web-gui/app/
 environments/dev/poc/poc-web-gui/app-dojo/
+/poc-jobs/src/main/resources/collectors/accounts.properties
