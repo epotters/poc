@@ -1,9 +1,9 @@
-version: "3.2"
+version: "3.7"
 
 services:
 
   poc-db:
-    image: mysql/mysql-server:8.0.15
+    image: mysql/mysql-server:8.0.21
     container_name: poc-db-tst
     ports:
       - 23307:3306
